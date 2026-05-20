@@ -128,6 +128,58 @@ document.addEventListener('mousemove', e => { if (!mDrag) return; mTx += e.clien
 document.addEventListener('mouseup', () => { mDrag = false; mapInner.classList.remove('grabbing'); });
 mapStage.addEventListener('dblclick', () => { mScale = 1; mTx = 0; mTy = 0; applyMap(); });
 
+// ── Touch / pinch ──────────────────────────────────────────────────────────────
+let tPinching = false, tPanning = false;
+let tPinchStart = 0, tFadeStart = 0, tScaleStart = 0;
+let tDragLx = 0, tDragLy = 0;
+
+function pinchDist(touches) {
+  return Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
+}
+
+mapStage.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    tPinching = true; tPanning = false;
+    tPinchStart = pinchDist(e.touches);
+    tFadeStart  = fadeT;
+    tScaleStart = mScale;
+    e.preventDefault();
+  } else if (e.touches.length === 1 && fadeT >= 1 && mScale > 1) {
+    tPanning = true;
+    tDragLx = e.touches[0].clientX;
+    tDragLy = e.touches[0].clientY;
+    e.preventDefault();
+  }
+}, { passive: false });
+
+mapStage.addEventListener('touchmove', e => {
+  if (tPinching && e.touches.length === 2) {
+    const ratio = pinchDist(e.touches) / tPinchStart;
+    if (tFadeStart < 1) {
+      // fade fazı — yavaş: parmak mesafesi 2x olunca fade tamamlanır
+      setFade(tFadeStart + (ratio - 1));
+    } else {
+      const s = Math.max(0.8, Math.min(8, tScaleStart * ratio));
+      mScale = s <= 1 ? 1 : s;
+      if (mScale === 1) { mTx = 0; mTy = 0; }
+      applyMap();
+    }
+    e.preventDefault();
+  } else if (tPanning && e.touches.length === 1) {
+    mTx += e.touches[0].clientX - tDragLx;
+    mTy += e.touches[0].clientY - tDragLy;
+    tDragLx = e.touches[0].clientX;
+    tDragLy = e.touches[0].clientY;
+    applyMap();
+    e.preventDefault();
+  }
+}, { passive: false });
+
+mapStage.addEventListener('touchend', e => {
+  if (e.touches.length < 2) tPinching = false;
+  if (e.touches.length === 0) tPanning = false;
+});
+
 const infoToggle = document.getElementById('info-toggle');
 const infoPanel  = document.getElementById('info-panel');
 infoToggle.addEventListener('click', () => {
