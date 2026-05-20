@@ -105,7 +105,7 @@
 
 <nav>
   <div class="nav-left">
-    <a href="index.html">← Atlas</a>
+    <a href="ground.html">← Atlas</a>
   </div>
   <ul class="view-tabs">
     <li><button class="active" data-view="map">By Map</button></li>
@@ -161,7 +161,7 @@
 </div>
 
 <footer>
-  <span class="footer-meta">© 2025 — ODTÜ</span>
+  <span class="footer-meta">© 2026 — ODTÜ</span>
   <a href="#" class="btn-library">
     Open Library
     <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 6h8M7 3l3 3-3 3"/></svg>
@@ -171,7 +171,7 @@
 <script>
   const activeYears = [2026];
   const YEARS = [];
-  for (let y = 2025; y <= 2030; y++) YEARS.push(y);
+  for (let y = 2026; y <= 2030; y++) YEARS.push(y);
 
   const stack   = document.getElementById('year-stack');
   const yearBg  = document.getElementById('year-bg');
@@ -222,7 +222,7 @@
   ];
 
   function updateBg(year) {
-    const idx = (year - 2025) % SHAPES.length;
+    const idx = (year - 2026) % SHAPES.length;
     const color = PASTEL[idx];
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 200 200');
@@ -248,7 +248,7 @@
 
   const items = stack.querySelectorAll('.year-item');
 
-  const yearHtmlMap = { 2025: '#', 2026: '2026.html', 2027: '2027.html', 2028: '#', 2029: '#', 2030: '#' };
+  const yearHtmlMap = { 2026: '2026.html', 2027: '2027.html', 2028: '#', 2029: '#', 2030: '#' };
 
   function renderYears() {
     items.forEach((item, i) => {
