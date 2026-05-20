@@ -37,6 +37,24 @@
   .credit-group ul { list-style:none; }
   .credit-group li { font-size:0.88rem; line-height:1.9; opacity:0.65; }
   footer { border-top:1px solid var(--border); padding:2rem 2.5rem; text-align:center; font-size:0.78rem; opacity:0.35; letter-spacing:0.05em; line-height:2; }
+
+  @media (max-width: 640px) {
+    .bg-map img { height:70vh; opacity:0.05; transform:translateX(20%) translateY(5%); }
+    .hero-title { font-size:clamp(2.4rem,11vw,3.2rem); letter-spacing:0.1em; }
+    .hero-subtitle { font-size:1rem; margin-bottom:1.6rem; }
+    .hero-editors { font-size:0.8rem; margin-bottom:2.4rem; line-height:1.9; }
+    .btn-enter { padding:0.85rem 2.4rem; font-size:0.85rem; letter-spacing:0.2em; }
+    .btn-enter:active::before { transform:translateY(0); }
+    .btn-enter:active span { color:var(--black); }
+    .btn-enter:active { border-color:var(--white); }
+    .scroll-hint { display:none; }
+    .description { padding:3.5rem 1.4rem 3rem; }
+    .description p { font-size:1rem; }
+    .quotes { padding:1rem 1.4rem 3.5rem; }
+    .quote-text { font-size:1rem; }
+    .credits { padding:3rem 1.4rem 2rem; gap:2rem 1.4rem; }
+    footer { padding:1.8rem 1.4rem; }
+  }
 </style>
 </head>
 <body>
@@ -81,6 +99,10 @@
   <div class="credit-group">
     <h3>Institution</h3>
     <ul><li>METU · Department of Architecture</li></ul>
+  </div>
+  <div class="credit-group">
+    <h3>Powered and Developed by</h3>
+    <ul><li>Oğuzhan Kaya</li></ul>
   </div>
 </div>
 <footer><p>© 2026 METU · ARCH 728 · Spring Semester</p></footer>
