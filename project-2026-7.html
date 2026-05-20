@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 2026-7 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); height:100%; overflow:hidden; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .map-stage { position:fixed; top:52px; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:var(--black); }
+  .map-inner { position:relative; display:inline-block; line-height:0; font-size:0; cursor:grab; user-select:none; }
+  .map-inner.grabbing { cursor:grabbing; }
+  .map-inner > img { display:block; max-width:100vw; max-height:calc(100vh - 52px); width:auto; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  #nisa-layer { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:80; display:flex; align-items:center; justify-content:center; background:var(--black); pointer-events:none; }
+  #nisa-layer img { max-width:100%; max-height:100%; object-fit:contain; display:block; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  .node { position:absolute; transform:translate(-50%,-50%); width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; z-index:10; opacity:0; transition:opacity 0.5s ease; }
+  .node-dot { width:6px; height:6px; border-radius:50%; background:#c0392b; opacity:0.5; position:relative; flex-shrink:0; transition:opacity 0.35s ease,transform 0.35s ease; }
+  .node-dot::after { content:''; position:absolute; top:50%; left:50%; width:20px; height:20px; border-radius:50%; border:1px solid var(--white); transform:translate(-50%,-50%) scale(0.4); opacity:0; transition:opacity 0.35s ease,transform 0.35s ease; }
+  .node-label { position:absolute; bottom:calc(100% + 14px); left:50%; transform:translateX(-50%) translateY(8px); white-space:nowrap; font-family:var(--font); font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--white); opacity:0; pointer-events:none; transition:opacity 0.35s ease,transform 0.35s ease; }
+  .node-label::after { content:''; position:absolute; top:calc(100% + 4px); left:50%; width:1px; height:10px; background:rgba(245,242,235,0.3); transform:translateX(-50%) scaleY(0); transform-origin:top; transition:transform 0.3s ease 0.05s; }
+  .node:hover .node-dot { opacity:0.95; transform:scale(1.6); }
+  .node:hover .node-dot::after { opacity:0.3; transform:translate(-50%,-50%) scale(1); }
+  .node:hover .node-label { opacity:0.9; transform:translateX(-50%) translateY(0); }
+  .node:hover .node-label::after { transform:translateX(-50%) scaleY(1); }
+  .node-preview { position:absolute; bottom:calc(100% + 52px); left:50%; transform:translateX(-50%) translateY(10px); width:62px; height:62px; border:1px solid rgba(245,242,235,0.25); overflow:hidden; opacity:0; pointer-events:none; transition:opacity 0.35s ease,transform 0.35s ease; }
+  .node-preview img { width:100%; height:100%; object-fit:cover; display:block; }
+  .node:hover .node-preview { opacity:1; transform:translateX(-50%) translateY(0); }
+  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
+  .info-btn:hover { opacity:1; }
+  .info-btn.open { opacity:1; }
+  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:380px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
+  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
+  #info-panel h2:first-child { margin-top:0; }
+  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; font-family:var(--font); }
+  #info-panel em { font-style:italic; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;">
+    <a href="2026.html" class="nav-back">← 2026</a>
+    <button class="info-btn" id="info-toggle">Project Info</button>
+  </div>
+  <span class="nav-tag">Field Report</span>
+</nav>
+
+<div id="info-panel">
+  <h2>Project Title</h2>
+  <p>Migrant Ground: Excavation, Kinopolitics, and the Political Geography of Soil Displacement in Ankara — Ilker Street</p>
+  <h2>Research Question</h2>
+  <p>How does the movement of soil through Ankara's excavation apparatus constitute it as a migrant subject — one that traverses five ontological identities from nomadic ground to civilized concrete — and what political geography does this trajectory produce?</p>
+  <h2>Position Statement</h2>
+  <p>This study proposes that Ankara's soil operates as a migrant figure in Thomas Nail's sense — not a stable substrate beneath urban transformation, but a social and political subject constituted through movement: excavated, expelled, rerouted, and redeposited across the city's transformation corridors. Drawing on Nail's kinopolitics and <em>The Figure of the Migrant</em>, this study reads the excavation apparatus — its truck routes as migration corridors, its dump sites as de-subjectivizing camps, its potted and landscaped soils as disciplined laborers — as the infrastructural regime that governs Ankara's migrant ground. The central argument is that the political geography of Ankara is not produced by buildings or masterplans alone, but by the managed movement of soil: a kinopolitical order in which matter is assigned differential social identities across five ontological stages — nomadic, barbaric, vagabond, proletarianized, and civilized — as it moves from gecekondu ground to artificial mountain to concrete tower. The excavation dump site, where all migrant soils converge and lose their territorial memory, is not a marginal infrastructural node but the political center of this geography: the camp where ground is made anonymous before it is made monumental.</p>
+  <h2>Proposed Method</h2>
+  <p>This study employs a multi-scalar qualitative methodology combining critical cartography, ethnographic fieldwork, and regulatory document analysis. At the macro scale, excavation truck routes are mapped as migration corridors to visualize the kinopolitical infrastructure governing soil movement across Ankara. At the meso scale, the excavation dump site in Mamak is treated as the primary field site — observed, documented, and read as a political space of de-subjectivization. At the micro scale, the five-stage ontological typology (nomadic → barbaric → vagabond → proletarianized → civilized) is applied as an analytical grid to classify soil matter encountered across different urban conditions. Theoretical analysis proceeds through close reading of kinopolitics, triangulated with criticism of current Turkish excavation legislation and urban transformation policy.</p>
+  <h2>Data</h2>
+  <p>Field photography documenting soil in transit — excavation trucks, active dump operations, material accumulation — forms the visual core of the study, supplemented by historical aerial imagery and satellite overlays that trace the Mamak dump site's transformation from early formation to its current artificial topography. Ecological records of vegetation loss, hydrological shifts, and landslide events register what the soil's movement has cost the ground it left behind. Geology and urban engineering theses held in the YÖK National Thesis Center — particularly master's theses on excavation site selection and soil composition in the Ankara basin — provide the technical substrate for reading the site's spatial logic as simultaneously geological and political. Nail's <em>The Figure of the Migrant</em> and <em>Kinopolitics</em> function not as objects of analysis but as theoretical lenses, orienting the study toward movement, expulsion, and subject-formation rather than static spatial categories.</p>
+</div>
+
+<div id="nisa-layer">
+  <img src="https://i.postimg.cc/fbTTFg7T/Nisa-Map.png" alt="Overview">
+</div>
+
+<div class="map-stage">
+  <div class="map-inner">
+
+    <img id="map-main" src="https://i.postimg.cc/tCx8DCWf/main-image-20-05.webp" alt="Project 2026-7">
+
+    <a class="node" id="node-debris" href="project-2026-7-debris.html" style="left:38%;top:80%;" title="Debris">
+      <div class="node-dot"></div>
+      <span class="node-label">Debris</span>
+    </a>
+
+    <a class="node" id="node-civilized" href="project-2026-7-civilized-soil.html" style="left:50%;top:50%;" title="Civilized Soil">
+      <div class="node-dot"></div>
+      <span class="node-label">Civilized Soil</span>
+    </a>
+
+    <a class="node" id="node-soil" href="project-2026-7-soil-layers.html" style="left:65%;top:50%;" title="Soil Layers">
+      <div class="node-dot"></div>
+      <span class="node-label">Soil Layers</span>
+    </a>
+
+  </div>
+</div>
+
+<script>
+const mapInner  = document.querySelector('.map-inner');
+const mapStage  = document.querySelector('.map-stage');
+const nisaLayer = document.getElementById('nisa-layer');
+const nodes     = document.querySelectorAll('.node');
+let mScale = 1, mTx = 0, mTy = 0, mDrag = false, mLx, mLy, mMoved = false;
+let fadeT = 0;
+const FADE_STEP = 0.07;
+
+function setFade(t) {
+  fadeT = Math.max(0, Math.min(1, t));
+  nisaLayer.style.opacity = (1 - fadeT).toFixed(3);
+  nodes.forEach(n => { n.style.opacity = fadeT >= 1 ? '1' : '0'; });
+}
+
+function applyMap() {
+  mapInner.style.transform = `translate(${mTx}px,${mTy}px) scale(${mScale})`;
+}
+
+mapStage.addEventListener('wheel', e => {
+  e.preventDefault();
+  const zoomIn = e.deltaY < 0;
+  if (fadeT < 1 || (!zoomIn && mScale <= 1)) {
+    setFade(fadeT + (zoomIn ? FADE_STEP : -FADE_STEP));
+    return;
+  }
+  mScale = Math.max(0.8, Math.min(8, mScale * (zoomIn ? 1.1 : 0.91)));
+  if (mScale <= 1) { mScale = 1; mTx = 0; mTy = 0; }
+  applyMap();
+}, { passive: false });
+
+mapInner.addEventListener('mousedown', e => { mDrag = true; mMoved = false; mLx = e.clientX; mLy = e.clientY; mapInner.classList.add('grabbing'); });
+document.addEventListener('mousemove', e => { if (!mDrag) return; mTx += e.clientX - mLx; mTy += e.clientY - mLy; mLx = e.clientX; mLy = e.clientY; mMoved = true; applyMap(); });
+document.addEventListener('mouseup', () => { mDrag = false; mapInner.classList.remove('grabbing'); });
+mapStage.addEventListener('dblclick', () => { mScale = 1; mTx = 0; mTy = 0; applyMap(); });
+
+const infoToggle = document.getElementById('info-toggle');
+const infoPanel  = document.getElementById('info-panel');
+infoToggle.addEventListener('click', () => {
+  const open = infoPanel.classList.toggle('open');
+  infoToggle.classList.toggle('open', open);
+});
+
+setFade(0);
+</script>
+</body>
+</html>

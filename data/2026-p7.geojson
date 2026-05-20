@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [32.83740, 39.85584],
+          [32.84210, 39.85584],
+          [32.84210, 39.85964],
+          [32.83740, 39.85964],
+          [32.83740, 39.85584]
+        ]]
+      },
+      "properties": { "name": "İlker Mahallesi" }
+    }
+  ]
+}

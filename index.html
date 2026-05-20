@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { width:100%; background:var(--black); color:var(--white); font-family:var(--font); }
+  .hero-screen { position:relative; width:100%; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .bg-map { position:absolute; inset:0; display:flex; align-items:center; justify-content:flex-end; pointer-events:none; z-index:0; }
+  .bg-map img { height:90vh; width:auto; opacity:0.07; filter:invert(1); transform:translateX(8%); user-select:none; }
+  .hero-content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .hero-title { font-size:clamp(3.0rem,8vw,5rem); font-weight:400; letter-spacing:0.16em; text-transform:uppercase; line-height:1.15; color:var(--white); margin-bottom:0.55rem; }
+  .hero-subtitle { font-size:clamp(0.9rem,2vw,1.2rem); font-style:italic; color:var(--mid); letter-spacing:0.04em; margin-bottom:2rem; }
+  .hero-editors { font-size:0.82rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); opacity:0.45; margin-bottom:3.2rem; line-height:2; }
+  .hero-editors .label { display:block; font-size:0.68rem; opacity:0.7; margin-bottom:0.2rem; }
+  .btn-enter { display:inline-block; padding:0.85rem 3.8rem; border:1px solid rgba(245,242,235,0.4); color:var(--white); font-family:var(--font); font-size:0.92rem; letter-spacing:0.28em; text-transform:uppercase; text-decoration:none; position:relative; overflow:hidden; transition:border-color 0.3s; cursor:pointer; }
+  .btn-enter::before { content:''; position:absolute; inset:0; background:var(--white); transform:translateY(101%); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1); z-index:0; }
+  .btn-enter span { position:relative; z-index:1; transition:color 0.35s; }
+  .btn-enter:hover { border-color:var(--white); }
+  .btn-enter:hover::before { transform:translateY(0); }
+  .btn-enter:hover span { color:var(--black); }
+  .scroll-hint { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.2; z-index:1; }
+  .description { max-width:680px; margin:0 auto; padding:5rem 2rem 4rem; border-top:1px solid var(--border); }
+  .description p { font-size:1.1rem; line-height:1.85; opacity:0.82; margin-bottom:1.5rem; }
+  .description p:last-child { margin-bottom:0; }
+  .quotes { max-width:720px; margin:0 auto; padding:2rem 2rem 5rem; }
+  .quote-item { padding:2.2rem 0; border-top:1px solid var(--border); }
+  .quote-item:last-child { border-bottom:1px solid var(--border); }
+  .quote-text { font-size:1.05rem; font-style:italic; line-height:1.8; opacity:0.78; margin-bottom:0.6rem; }
+  .quote-attr { font-size:0.8rem; letter-spacing:0.08em; color:var(--mid); opacity:0.7; }
+  .credits { padding:4rem 2rem 3rem; border-top:1px solid var(--border); max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:3rem 2rem; }
+  .credit-group h3 { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.6; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); font-weight:400; }
+  .credit-group ul { list-style:none; }
+  .credit-group li { font-size:0.88rem; line-height:1.9; opacity:0.65; }
+  footer { border-top:1px solid var(--border); padding:2rem 2.5rem; text-align:center; font-size:0.78rem; opacity:0.35; letter-spacing:0.05em; line-height:2; }
+</style>
+</head>
+<body>
+<div class="hero-screen">
+  <div class="bg-map">
+    <img src="../map.jpg" alt="">
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-title">Reflections on Landscape</h1>
+    <p class="hero-subtitle">Urban Soil Metabolism · Spring 2026</p>
+    <div class="hero-editors">
+      <span class="label">Curated and Taught by</span>
+      Funda Baş Bütüner, Gizem Deniz Güneri Söğüt, Ebru Evin<br>
+      METU · Department of Architecture
+    </div>
+    <a href="explore.html" class="btn-enter"><span>Enter the Atlas</span></a>
+  </div>
+  <p class="scroll-hint">&#8595; scroll</p>
+</div>
+<section class="description">
+  <p>Soil is examined as a metabolically active urban medium — continuously produced, displaced, transformed, and regulated through intertwined human and non-human forces. In this context, Ankara foregrounds the soil's agency, revealing the ground as a dynamic force within the city's transformations.</p>
+</section>
+<section class="quotes">
+  <div class="quote-item">
+    <p class="quote-text">"When does soil become visible — and when is it rendered invisible in the city?"</p>
+    <p class="quote-attr">— Visibility</p>
+  </div>
+  <div class="quote-item">
+    <p class="quote-text">"When is soil alive, inert, or waste? And whose labor sustains it?"</p>
+    <p class="quote-attr">— (In)Habitability</p>
+  </div>
+  <div class="quote-item">
+    <p class="quote-text">"What does soil carry and transform as it moves?"</p>
+    <p class="quote-attr">— Transportability</p>
+  </div>
+</section>
+<div class="credits">
+  <div class="credit-group">
+    <h3>Curated and Taught by</h3>
+    <ul><li>Funda Baş Bütüner</li><li>Gizem Deniz Güneri Söğüt</li><li>Ebru Evin</li></ul>
+  </div>
+  <div class="credit-group">
+    <h3>Institution</h3>
+    <ul><li>METU · Department of Architecture</li></ul>
+  </div>
+</div>
+<footer><p>© 2026 METU · ARCH 728 · Spring Semester</p></footer>
+<script>
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') window.location.href = 'explore.html';
+  });
+</script>
+</body>
+</html>

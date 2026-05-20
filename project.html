@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { width:100%; min-height:100vh; background:var(--black); color:var(--white); font-family:var(--font); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-title { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.3; }
+  .project-page { max-width:780px; margin:0 auto; padding:7rem 2rem 5rem; }
+  .project-number { font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase; opacity:0.35; margin-bottom:1.2rem; }
+  .project-title { font-size:clamp(2rem,5vw,3.5rem); font-weight:400; letter-spacing:0.06em; line-height:1.2; margin-bottom:1rem; }
+  .project-subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); opacity:0.8; margin-bottom:3rem; }
+  .project-divider { border:none; border-top:1px solid var(--border); margin-bottom:3rem; }
+  .project-body { font-size:1.05rem; line-height:1.9; opacity:0.78; }
+  .project-body p { margin-bottom:1.5rem; }
+  .project-body p:last-child { margin-bottom:0; }
+  .project-body h2 { font-size:1.4rem; font-weight:400; margin:2.5rem 0 1rem; opacity:0.9; }
+  .project-body img { max-width:100%; height:auto; margin:2rem 0; opacity:0.9; }
+  .project-meta { margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border); display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:2rem; }
+  .meta-group h4 { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.55; margin-bottom:0.5rem; font-weight:400; }
+  .meta-group p { font-size:0.88rem; line-height:1.8; opacity:0.65; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="explore.html" class="nav-back">← Back to Atlas</a>
+  <span class="nav-title">ARCH 728 · Urban Soil Metabolism</span>
+</nav>
+<div class="project-page">
+  <p class="project-number">Field Report</p>
+  <h1 class="project-title">Project</h1>
+  <hr class="project-divider">
+  <div class="project-body"></div>
+  <div class="project-meta">
+    <div class="meta-group"><h4>Dönem</h4><p>Spring 2026</p></div>
+  </div>
+</div>
+</body>
+</html>
