@@ -138,6 +138,7 @@ function pinchDist(touches) {
 }
 
 mapStage.addEventListener('touchstart', e => {
+  if (e.target.closest('.node')) return; // node'a tıklandıysa map handler'a girme
   if (e.touches.length === 2) {
     tPinching = true; tPanning = false;
     tPinchStart = pinchDist(e.touches);
