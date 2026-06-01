@@ -406,11 +406,16 @@
                 const hatchId = 'hatch-' + n.id;
                 const baseStyle = n.style || { color: '#f5f2eb', weight: 1.5, opacity: 1, fillOpacity: 0 };
                 const layer = L.geoJSON(data, {
-                  style: function() {
-                    return Object.assign({}, baseStyle, {
-                      fillColor:   n.hatch ? ('url(#' + hatchId + ')') : (baseStyle.fillColor || '#f5f2eb'),
-                      fillOpacity: n.hatch ? 1 : (baseStyle.fillOpacity || 0),
-                    });
+                  style: function(feature) {
+                    const geomType = feature && feature.geometry && feature.geometry.type;
+                    const isPoly = geomType === 'Polygon' || geomType === 'MultiPolygon';
+                    if (isPoly) {
+                      return Object.assign({}, baseStyle, n.polygonStyle || {}, {
+                        fillColor:   n.hatch ? ('url(#' + hatchId + ')') : (baseStyle.fillColor || '#f5f2eb'),
+                        fillOpacity: n.hatch ? 1 : (baseStyle.fillOpacity || 0),
+                      });
+                    }
+                    return Object.assign({}, baseStyle, n.lineStyle || {});
                   }
                 }).addTo(window._leafletMap);
                 if (n.hatch) {
@@ -424,14 +429,36 @@
                       const pat = document.createElementNS(svgNS, 'pattern');
                       pat.setAttribute('id', hatchId); pat.setAttribute('patternUnits', 'userSpaceOnUse');
                       pat.setAttribute('width', sp); pat.setAttribute('height', sp);
-                      pat.setAttribute('patternTransform', 'rotate(' + (h.angle || 45) + ')');
-                      const ln = document.createElementNS(svgNS, 'line');
-                      ln.setAttribute('x1', '0'); ln.setAttribute('y1', '0');
-                      ln.setAttribute('x2', '0'); ln.setAttribute('y2', sp);
-                      ln.setAttribute('stroke', h.color || '#f5f2eb');
-                      ln.setAttribute('stroke-width', h.width || 1.5);
-                      ln.setAttribute('stroke-opacity', h.opacity || 0.8);
-                      pat.appendChild(ln); defs.appendChild(pat);
+                      if (h.type === 'cross') {
+                        const mkL = (x1, y1, x2, y2) => {
+                          const l = document.createElementNS(svgNS, 'line');
+                          l.setAttribute('x1', x1); l.setAttribute('y1', y1);
+                          l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+                          l.setAttribute('stroke', h.color || '#f5f2eb');
+                          l.setAttribute('stroke-width', h.width || 1);
+                          l.setAttribute('stroke-opacity', h.opacity || 0.7);
+                          return l;
+                        };
+                        pat.appendChild(mkL(String(sp/2), '0', String(sp/2), String(sp)));
+                        pat.appendChild(mkL('0', String(sp/2), String(sp), String(sp/2)));
+                      } else if (h.type === 'dot') {
+                        const c = document.createElementNS(svgNS, 'circle');
+                        c.setAttribute('cx', String(sp/2)); c.setAttribute('cy', String(sp/2));
+                        c.setAttribute('r', String(h.radius || sp * 0.18));
+                        c.setAttribute('fill', h.color || '#f5f2eb');
+                        c.setAttribute('fill-opacity', h.opacity || 0.7);
+                        pat.appendChild(c);
+                      } else {
+                        pat.setAttribute('patternTransform', 'rotate(' + (h.angle || 45) + ')');
+                        const ln = document.createElementNS(svgNS, 'line');
+                        ln.setAttribute('x1', '0'); ln.setAttribute('y1', '0');
+                        ln.setAttribute('x2', '0'); ln.setAttribute('y2', sp);
+                        ln.setAttribute('stroke', h.color || '#f5f2eb');
+                        ln.setAttribute('stroke-width', h.width || 1.5);
+                        ln.setAttribute('stroke-opacity', h.opacity || 0.8);
+                        pat.appendChild(ln);
+                      }
+                      defs.appendChild(pat);
                     }
                   }
                 }
