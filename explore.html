@@ -73,7 +73,7 @@
 
   #leaflet-map { position: absolute; inset: 0; }
   .leaflet-container { background: var(--black); }
-  .leaflet-tile-pane { filter: brightness(2.0) contrast(1.05); }
+  .leaflet-tile-pane { filter: brightness(1.5) contrast(1.05); }
   body.map-light .leaflet-tile-pane { filter: brightness(1) contrast(1); }
   body.map-light .leaflet-container { background: #e8e4da; }
   .leaflet-control-attribution { background: rgba(10,10,10,0.6) !important; color: rgba(245,242,235,0.22) !important; font-size: 0.55rem !important; }
@@ -122,9 +122,9 @@
     <div class="map-container" id="map-container">
       <div id="leaflet-map"></div>
       <div class="zoom-controls">
+        <button class="zoom-btn" id="zoom-reset" title="Reset">⌂</button>
         <button class="zoom-btn" id="zoom-in">+</button>
         <button class="zoom-btn" id="zoom-out">−</button>
-        <button class="zoom-btn" id="zoom-reset" title="Reset">⌂</button>
       </div>
       <div id="map-panel" class="map-panel">
         <button class="map-panel-close" id="map-panel-close">✕</button>
@@ -289,8 +289,8 @@
   (function () {
     const BASE = '';
     const DATA = 'data/project_nodes_html_map.json';
-    const CENTER = [39.97, 32.52];
-    const ZOOM = 10;
+    const CENTER = [39.892857, 32.785077];
+    const ZOOM = 9;
 
     window._leafletMap = L.map('leaflet-map', {
       center: CENTER, zoom: ZOOM, zoomControl: false, attributionControl: true,
@@ -498,8 +498,9 @@
 
       allMarkers = markers;
       if (markers.length) {
-        initialBounds = L.featureGroup(markers).getBounds().pad(0.15);
-        window._leafletMap.fitBounds(initialBounds);
+        initialBounds = L.featureGroup(markers).getBounds().pad(0.2);
+        const fitZoom = window._leafletMap.getBoundsZoom(initialBounds);
+        window._leafletMap.setView(CENTER, fitZoom);
       }
     });
 
@@ -507,7 +508,8 @@
     document.getElementById('zoom-out').addEventListener('click',   () => window._leafletMap.zoomOut());
     document.getElementById('zoom-reset').addEventListener('click', () => {
       prevView = null; clearActive();
-      if (initialBounds) window._leafletMap.fitBounds(initialBounds, { animate: true, duration: 1.4 });
+      const z = initialBounds ? window._leafletMap.getBoundsZoom(initialBounds) : ZOOM;
+      window._leafletMap.flyTo(CENTER, z, { duration: 1.4 });
     });
   })();
 
