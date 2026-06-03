@@ -17,8 +17,12 @@
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
 
-  .img-stage { width:100%; height:calc(100vh - 52px); margin-top:52px; background:var(--black); overflow:hidden; }
-  .img-stage img { width:100%; height:100%; object-fit:contain; display:block; }
+  .img-stage { position:relative; width:100%; height:calc(100vh - 52px); margin-top:52px; background:var(--black); overflow:hidden; }
+  .img-stage > img { width:100%; height:100%; object-fit:contain; display:block; filter:brightness(1) contrast(1); }
+  .svg-layer { position:absolute; pointer-events:none; overflow:visible; }
+  .overlay-img { opacity:0; transition:filter 0.3s ease, opacity 0.2s ease; cursor:pointer; }
+  .overlay-img.hover { opacity:1; filter:drop-shadow(0 0 6px rgba(245,220,140,0.55)); }
+  .overlay-img.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,220,140,1)) drop-shadow(0 0 32px rgba(245,200,80,0.7)); }
   .wrap { max-width:960px; margin:0 auto; padding:5rem 2rem 8rem; }
   .sec { margin-bottom:6rem; }
   .sec-head { font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); opacity:0.6; padding-top:2rem; border-top:1px solid var(--border); margin-bottom:2.5rem; display:block; }
@@ -53,6 +57,7 @@
 </nav>
 <div class="img-stage">
   <img src="2026-images/2026-p1/2026-1-728_deneme_final_ornek_gorsel.webp" alt="Çayırhan Ash Lake">
+  <div class="svg-layer" id="svg-layer"></div>
 </div>
 <div class="wrap">
   <div class="body">
@@ -234,5 +239,75 @@
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
+<script>
+  const BASE    = '2026-images/2026-p1/SVG/';
+  const mainImg = document.querySelector('.img-stage > img');
+  const stage   = document.querySelector('.img-stage');
+  const layer   = document.getElementById('svg-layer');
+
+  // inline SVG oluştur — tam layer boyutunda
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svgEl = document.createElementNS(svgNS, 'svg');
+  svgEl.setAttribute('width', '100%');
+  svgEl.setAttribute('height', '100%');
+  svgEl.style.position = 'absolute';
+  svgEl.style.inset = '0';
+  layer.appendChild(svgEl);
+
+  const FILES = [
+    { id:'cayirhan-eski',  file:'2026-1-ÇayırhanEski-ÖneÇıkarılan.svg'  },
+    { id:'baraj',          file:'2026-1-Baraj-ÖneÇıkarılan.png'          },
+    { id:'contamination',  file:'2026-1-Contamination-ÖneÇıkarılan.svg'  },
+    { id:'powerplant',     file:'2026-1-PowerPlant-ÖneÇıkarılan.png'     },
+    { id:'productgraphic', file:'2026-1-ProductGraphic-ÖneÇıkarılan.png' },
+    { id:'waste',          file:'2026-1-Waste-ÖneÇıkarılan.png'          },
+    { id:'riskprofili',    file:'2026-1-RiskProfili-ÖneÇıkarılan.png'    },
+  ];
+
+  FILES.forEach(cfg => {
+    const img = document.createElementNS(svgNS, 'image');
+    img.setAttribute('href', BASE + cfg.file);
+    img.setAttribute('x', '0');
+    img.setAttribute('y', '0');
+    img.setAttribute('width', '100%');
+    img.setAttribute('height', '100%');
+    img.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    img.setAttribute('pointer-events', 'visiblePainted');
+    img.classList.add('overlay-img');
+    img.id = 'overlay-' + cfg.id;
+
+    img.addEventListener('mouseenter', () => {
+      if (!img.classList.contains('active')) img.classList.add('hover');
+    });
+    img.addEventListener('mouseleave', () => img.classList.remove('hover'));
+    img.addEventListener('click', () => {
+      img.classList.toggle('active');
+      img.classList.remove('hover');
+    });
+
+    svgEl.appendChild(img);
+  });
+
+  function fitLayer() {
+    const sw = stage.clientWidth;
+    const sh = stage.clientHeight;
+    const iw = mainImg.naturalWidth  || 3000;
+    const ih = mainImg.naturalHeight || 2250;
+    const imageAR = iw / ih;
+    const stageAR = sw / sh;
+    let w, h, l, t;
+    if (imageAR > stageAR) { w = sw; h = sw / imageAR; l = 0; t = (sh - h) / 2; }
+    else                   { h = sh; w = sh * imageAR; t = 0; l = (sw - w) / 2; }
+    layer.style.left   = l + 'px';
+    layer.style.top    = t + 'px';
+    layer.style.width  = w + 'px';
+    layer.style.height = h + 'px';
+  }
+
+  mainImg.addEventListener('load', fitLayer);
+  if (mainImg.complete) fitLayer();
+  window.addEventListener('resize', fitLayer);
+  new ResizeObserver(fitLayer).observe(stage);
+</script>
 </body>
 </html>
