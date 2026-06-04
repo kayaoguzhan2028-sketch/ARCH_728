@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_1" data-name="katman 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2579 1383">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: rgba(0, 0, 0, 0);
+        stroke-miterlimit: 10;
+        stroke-width: 25px;
+      }
+    </style>
+  </defs>
+  <polyline class="cls-1" points="1060.89 674.3 1006.77 585.96 962.34 530.81 886.26 459.32 802.51 404.17 674.85 348.51 569.66 328.09 429.23 330.13 310.26 363.32 221.06 409.79 132.89 477.53 76.38 537.11 39.28 590.55 2.85 645.36"/>
+</svg>
