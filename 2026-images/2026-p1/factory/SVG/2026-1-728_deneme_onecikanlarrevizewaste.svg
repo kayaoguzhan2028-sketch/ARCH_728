@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_1" data-name="katman 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 2250">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: 25px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="m1931.15,1340.15c110.3-30.64,174.64-44.43,174.64-44.43,0,0,142.47-45.96,159.32-59.74s182.3-87.32,189.96-93.45,65.87-42.89,82.72-49.02,93.45-29.11,110.3-38.3,75.06-47.49,84.26-56.68,76.6-58.21,94.98-62.81,79.66-29.11,93.45-35.23,41.36-12.26,47.49-16.85"/>
+  <path class="cls-1" d="m2724.68,1353.17c.77,171.57,0,252.77,0,252.77"/>
+  <rect class="cls-2" x="2581.45" y="1617.43" width="278.81" height="75.83"/>
+  <rect class="cls-2" x="2569.28" y="859.13" width="405.79" height="15.66"/>
+  <rect class="cls-2" x="2958.04" y="910.7" width="12.77" height="101.11"/>
+  <rect class="cls-2" x="2933.02" y="910.7" width="16.85" height="12.26"/>
+  <rect class="cls-2" x="2933.02" y="969.94" width="16.85" height="9.7"/>
+  <rect class="cls-2" x="2930.98" y="1027.13" width="22.47" height="13.28"/>
+  <rect class="cls-2" x="2933.02" y="1089.94" width="16.85" height="12.77"/>
+  <rect class="cls-2" x="2933.02" y="1148.15" width="17.87" height="17.87"/>
+  <rect class="cls-2" x="2933.02" y="1209.43" width="15.32" height="15.32"/>
+  <rect class="cls-2" x="2933.02" y="1269.68" width="18.89" height="15.83"/>
+</svg>
