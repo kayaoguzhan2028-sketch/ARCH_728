@@ -255,69 +255,56 @@
   layer.appendChild(svgEl);
 
   const FILES = [
-    { id:'cayirhan-eski',  file:'2026-1-ÇayırhanEski-ÖneÇıkarılan.svg'  },
-    { id:'baraj',          file:'2026-1-Baraj-ÖneÇıkarılan.svg'          },
-    { id:'contamination',  file:'2026-1-Contamination-ÖneÇıkarılan.svg'  },
-    { id:'powerplant',     file:'2026-1-PowerPlant-ÖneÇıkarılan.svg'     },
-    { id:'productgraphic', file:'2026-1-ProductGraphic-ÖneÇıkarılan.svg' },
-    { id:'waste',          file:'2026-1-Waste-ÖneÇıkarılan.svg'          },
-    { id:'riskprofili',    file:'2026-1-RiskProfili-ÖneÇıkarılan.svg'    },
+    { id:'cayirhan-eski',  svg:'2026-1-ÇayırhanEski-ÖneÇıkarılan.svg',  webp:'2026-1-ÇayırhanEski-ÖneÇıkarılan.webp'     },
+    { id:'baraj',          svg:'2026-1-Baraj-ÖneÇıkarılan.svg',          webp:'2026-1-Baraj-ÖneÇıkarılan.webp'             },
+    { id:'contamination',  svg:'2026-1-Contamination-ÖneÇıkarılan.svg',  webp:'2026-1-Contamination-ÖneÇıkarılan.webp'     },
+    { id:'powerplant',     svg:'2026-1-PowerPlant-ÖneÇıkarılan.svg',     webp:'2026-1-PowerPlant-ÖneÇıkarılan.webp'        },
+    { id:'productgraphic', svg:'2026-1-ProductGraphic-ÖneÇıkarılan.svg', webp:'2026-1-ProductGraphic-ÖneÇıkarılan-01.webp' },
+    { id:'waste',          svg:'2026-1-Waste-ÖneÇıkarılan.svg',          webp:'2026-1-Waste-ÖneÇıkarılan.webp'             },
+    { id:'riskprofili',    svg:'2026-1-RiskProfili-ÖneÇıkarılan.svg',    webp:'2026-1-RiskProfili-ÖneÇıkarılan.webp'       },
   ];
 
   FILES.forEach(cfg => {
-    if (cfg.file.endsWith('.svg')) {
-      // Fetch and inline SVG so polygon shapes become real DOM elements
-      fetch(BASE + cfg.file)
-        .then(r => r.text())
-        .then(svgText => {
-          const parser = new DOMParser();
-          const parsed = parser.parseFromString(svgText, 'image/svg+xml');
-          const g = document.createElementNS(svgNS, 'g');
-          g.id = 'overlay-' + cfg.id;
-          g.classList.add('overlay-img');
+    fetch(BASE + cfg.svg)
+      .then(r => r.text())
+      .then(svgText => {
+        const parser = new DOMParser();
+        const parsed = parser.parseFromString(svgText, 'image/svg+xml');
+        const g = document.createElementNS(svgNS, 'g');
+        g.id = 'overlay-' + cfg.id;
+        g.classList.add('overlay-img');
 
-          Array.from(parsed.documentElement.childNodes).forEach(node => {
-            if (node.nodeType === 1) g.appendChild(document.importNode(node, true));
-          });
+        // Görsel katman: webp
+        const vis = document.createElementNS(svgNS, 'image');
+        vis.setAttribute('href', BASE + cfg.webp);
+        vis.setAttribute('x', '0');
+        vis.setAttribute('y', '0');
+        vis.setAttribute('width', '3000');
+        vis.setAttribute('height', '2250');
+        vis.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        vis.setAttribute('pointer-events', 'none');
+        g.appendChild(vis);
 
-          // Wire hover/click on every polygon or path inside
-          g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
-            shape.setAttribute('pointer-events', 'all');
-            shape.style.cursor = 'pointer';
-            shape.addEventListener('mouseenter', () => {
-              if (!g.classList.contains('active')) g.classList.add('hover');
-            });
-            shape.addEventListener('mouseleave', () => g.classList.remove('hover'));
-            shape.addEventListener('click', () => {
-              g.classList.toggle('active');
-              g.classList.remove('hover');
-            });
-          });
-
-          svgEl.appendChild(g);
+        // Shape katmanı: SVG'den gelen vektör shapeler (hit detection)
+        Array.from(parsed.documentElement.childNodes).forEach(node => {
+          if (node.nodeType === 1) g.appendChild(document.importNode(node, true));
         });
-    } else {
-      // PNG — no vector shape yet, keep as image element
-      const img = document.createElementNS(svgNS, 'image');
-      img.setAttribute('href', BASE + cfg.file);
-      img.setAttribute('x', '0');
-      img.setAttribute('y', '0');
-      img.setAttribute('width', '3000');
-      img.setAttribute('height', '2250');
-      img.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      img.setAttribute('pointer-events', 'visiblePainted');
-      img.id = 'overlay-' + cfg.id;
-      img.classList.add('overlay-img');
-      img.addEventListener('mouseenter', () => {
-        if (!img.classList.contains('active')) img.classList.add('hover');
+
+        g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
+          shape.setAttribute('pointer-events', 'all');
+          shape.style.cursor = 'pointer';
+          shape.addEventListener('mouseenter', () => {
+            if (!g.classList.contains('active')) g.classList.add('hover');
+          });
+          shape.addEventListener('mouseleave', () => g.classList.remove('hover'));
+          shape.addEventListener('click', () => {
+            g.classList.toggle('active');
+            g.classList.remove('hover');
+          });
+        });
+
+        svgEl.appendChild(g);
       });
-      img.addEventListener('mouseleave', () => img.classList.remove('hover'));
-      img.addEventListener('click', () => {
-        img.classList.toggle('active');
-        img.classList.remove('hover');
-      });
-      svgEl.appendChild(img);
-    }
   });
 
   function fitLayer() {
