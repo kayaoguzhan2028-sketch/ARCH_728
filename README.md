@@ -11,6 +11,8 @@ This is the public digital atlas for *ARCH 728: Reflections on Landscape*, a gra
 
 The studio investigates soil as a metabolically active urban medium — continuously produced, displaced, transformed, and regulated through intertwined human and non-human forces. Centered on Ankara, the research examines the ground not as a passive substrate but as a dynamic force shaping the city's spatial and political transformations.
 
+This site is developed as the course's dedicated web presence, exploring digital representation as a medium for architectural theory. It functions as a static platform built for architectural presentation and spatial communication — serving both as a public record of student research and as an experiment in how design knowledge can be structured, layered, and made navigable on the web.
+
 ---
 
 ## Purpose
@@ -34,7 +36,11 @@ The site functions as a living archive — not a final product, but an ongoing r
 ## Technical
 
 Static site — no server, no database. Built with plain HTML, CSS, and JavaScript.  
-Deployed via GitHub Pages.
+Currently hosted on GitHub Pages as the primary deployment infrastructure during the active studio cycle.
+
+This project is developed as part of an academic course and relies on GitHub for version control, collaboration, and public hosting. Repository contents include student research assets — field photographs, drawings, and media files — uploaded directly in support of course documentation. All assets are original work produced within the scope of the studio.
+
+The long-term plan is to migrate to a dedicated domain and self-hosted infrastructure once the course concludes. GitHub Pages serves as the publishing platform in the interim.
 
 ---
 
