@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/webp" href="2026-images/favicon/06Başkent.webp">
+<link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
 <title>Çayırhan Ash Lake — ARCH 728</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
@@ -18,8 +18,6 @@
   .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
   .info-btn:hover { opacity:1; }
   .info-btn.open { opacity:1; }
-  .factory-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.45; transition:opacity 0.2s; margin-right:1.8rem; }
-  .factory-btn:hover { opacity:1; }
 
   #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
   #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
@@ -49,10 +47,7 @@
     <a href="2026.html" class="nav-back">← 2026</a>
     <button class="info-btn" id="info-toggle">Project Info</button>
   </div>
-  <div style="display:flex;align-items:center;">
-    <a href="project-2026-1-factory.html" class="factory-btn">Factory →</a>
-    <span class="nav-tag">Field Report</span>
-  </div>
+  <span class="nav-tag">Field Report</span>
 </nav>
 
 <div id="info-panel">
@@ -220,15 +215,24 @@
         g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
           shape.setAttribute('pointer-events', 'all');
           shape.style.cursor = 'pointer';
-          shape.addEventListener('mouseenter', () => {
-            if (!g.classList.contains('active')) g.classList.add('hover');
-          });
-          shape.addEventListener('mouseleave', () => g.classList.remove('hover'));
-          shape.addEventListener('click', () => {
-            if (wasDragging) return;
-            g.classList.toggle('active');
-            g.classList.remove('hover');
-          });
+          if (cfg.id === 'fabrika') {
+            shape.addEventListener('mouseenter', () => g.classList.add('active'));
+            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
+            shape.addEventListener('click', () => {
+              if (wasDragging) return;
+              window.location.href = 'project-2026-1-factory.html';
+            });
+          } else {
+            shape.addEventListener('mouseenter', () => {
+              if (!g.classList.contains('active')) g.classList.add('hover');
+            });
+            shape.addEventListener('mouseleave', () => g.classList.remove('hover'));
+            shape.addEventListener('click', () => {
+              if (wasDragging) return;
+              g.classList.toggle('active');
+              g.classList.remove('hover');
+            });
+          }
         });
 
         svgEl.appendChild(g);
