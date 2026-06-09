@@ -292,7 +292,12 @@
         });
 
         g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
-          shape.setAttribute('pointer-events', 'all');
+          if (shape.tagName.toLowerCase() === 'polyline') {
+            shape.setAttribute('pointer-events', 'stroke');
+            shape.style.fill = 'none';
+          } else {
+            shape.setAttribute('pointer-events', 'all');
+          }
           shape.style.cursor = 'pointer';
           shape.addEventListener('mouseenter', () => {
             if (!g.classList.contains('active')) g.classList.add('hover');
