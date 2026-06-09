@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_1" data-name="katman 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 2250">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+        stroke-width: 25px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <line class="cls-1" x1="2010.81" y1="682.45" x2="2327.4" y2="682.45"/>
+  <line class="cls-1" x1="2179.32" y1="719.21" x2="2217.11" y2="719.21"/>
+  <line class="cls-1" x1="2155.32" y1="738.11" x2="2244.68" y2="738.11"/>
+  <line class="cls-1" x1="2380.51" y1="719.21" x2="2431.06" y2="719.21"/>
+  <line class="cls-1" x1="2364.68" y1="741.17" x2="2450.98" y2="741.17"/>
+  <line class="cls-1" x1="2475.49" y1="831.04" x2="2512.26" y2="831.04"/>
+  <line class="cls-1" x1="2416.26" y1="853.51" x2="2570.98" y2="853.51"/>
+  <line class="cls-1" x1="2364.68" y1="934.7" x2="2419.83" y2="934.7"/>
+  <line class="cls-1" x1="2364.68" y1="956.66" x2="2422.89" y2="956.66"/>
+  <line class="cls-1" x1="2108.34" y1="932.66" x2="2242.13" y2="934.7"/>
+  <line class="cls-1" x1="2129.79" y1="956.66" x2="2220.17" y2="956.66"/>
+  <line class="cls-1" x1="2110.89" y1="834.11" x2="2190.04" y2="834.11"/>
+  <line class="cls-1" x1="2129.79" y1="856.06" x2="2174.98" y2="856.06"/>
+  <circle class="cls-2" cx="2303.4" cy="839.72" r="109.79"/>
+</svg>
