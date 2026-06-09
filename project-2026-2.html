@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,98 +14,120 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+  .nav-conditions { display:flex; gap:1.4rem; align-items:center; }
+  .nav-conditions a { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.35; transition:opacity 0.2s; }
+  .nav-conditions a:hover { opacity:1; }
 
   .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
-  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
   .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
   .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
-  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:3rem 0 0.6rem; }
+  .body h2:first-child { margin-top:0; }
+  .body ul { font-size:1.1rem; line-height:1.95; padding-left:1.2rem; margin:0 0 1.6rem; }
+  .body ul li { margin-bottom:0.8rem; }
+  .body ul li:last-child { margin-bottom:0; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
-  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+
   .sub-nav { display:flex; gap:2rem; justify-content:center; margin:4rem 0; }
   .sub-nav a { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.65em 1.6em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
   .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+
+  .info-rule { border:none; border-top:1px solid var(--border); margin:4rem 0 3.5rem; }
+  .project-title { font-size:clamp(1.5rem,3.5vw,2.4rem); font-weight:400; line-height:1.2; letter-spacing:0.03em; color:#c87530; margin-bottom:0.5rem; }
+  .project-subtitle { font-size:1rem; font-style:italic; color:#c87530; opacity:0.8; line-height:1.5; margin-bottom:2.5rem; }
+  .author-line { font-size:0.78rem; letter-spacing:0.12em; opacity:0.45; margin-bottom:2.8rem; }
+
+  #cursor-tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 500;
+    max-width: 380px;
+    padding: 1.2rem 1.5rem;
+    background: rgba(10,10,10,0.94);
+    border: 1px solid rgba(245,242,235,0.12);
+    font-size: 0.88rem;
+    line-height: 1.82;
+    color: var(--white);
+    opacity: 0;
+    transition: opacity 0.18s;
+    transform: translate(18px, 18px);
+  }
+  #cursor-tooltip.visible { opacity: 1; }
+
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
-  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
-  .info-btn:hover { opacity:1; }
-  .info-btn.open { opacity:1; }
-  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
-  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
-  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
-  #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; font-family:var(--font); }
-  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; font-family:var(--font); padding-left:1.2rem; margin:0; }
-  #info-panel ul li { margin-bottom:0.8rem; }
-  #info-panel ul li:last-child { margin-bottom:0; }
-  #info-panel em { font-style:italic; }
 </style>
 </head>
 <body>
+
 <nav>
-  <div style="display:flex;align-items:center;">
-    <a href="2026.html" class="nav-back">← 2026</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
+  <a href="2026.html" class="nav-back">← 2026</a>
+  <div class="nav-conditions">
+    <a href="project-2026-2-condition1.html">Condition 1</a>
+    <a href="project-2026-2-condition2.html">Condition 2</a>
+    <a href="project-2026-2-condition3.html">Condition 3</a>
   </div>
-  <span class="nav-tag">Field Report</span>
 </nav>
 
-<div id="info-panel">
-  <h2>Group Members</h2>
-  <p>Nisa Gezer, Selen İlhan, Serda Buket Erol, Ülkü Karakaş</p>
-  <h2>Main Title</h2>
-  <p>What the Ground Carries?</p>
-  <h2>Sub-Title</h2>
-  <p><em>Stratigraphic Memory and the Politics of Urban Soil Metabolism on Hıdırlık Hill, Ankara</em></p>
-  <h2>Research Questions</h2>
-  <ul>
-    <li>How can we uncover the conditions of erasure on Hıdırlık Tepesi, and what does the ground still carry from what has been removed?</li>
-    <li>Where does the soil of Hıdırlık go when the hill is "greened", and what does the new ground carry that the old ground no longer can?</li>
-    <li>How does urban soil metabolism function across centuries of transformation, and what does its interruption make visible?</li>
-  </ul>
-  <h2>Position Statement</h2>
-  <p>Hıdırlık Hill has been continuously transformed through extraction, settlement, demolition, and reconstruction. Things have been taken from the hill, things have been added to it. Its current form is the result of these successive interventions, each one covering or erasing what came before. This project traces those layers in the (urban) soil. We position ourselves as soil detectives, reading the hill not through its current surface but through the seams where one ground ends and another begins. Our central claim is that the "greening" narrative renders the hill's transformation invisible at precisely the moment when it is most consequential. Biological life is destroyed, decades of inhabitation are sealed beneath concrete, and the hill's original stratigraphy is quietly erased.</p>
-  <p style="margin-top:0.8rem;font-style:italic;">What the ground carries is not merely material, it is political.</p>
-  <h2>Methodology</h2>
-  <p>Our project combines archival research, spatial analysis, and three-dimensional modelling to trace the successive transformations of Hıdırlık Tepesi across several centuries. The archival layer draws on historical maps, cadastral records, aerial photographs, planning documents, geological surveys, and press coverage to reconstruct what occupied the hill at each critical moment of change. These materials are not treated as background context but as primary evidence. Each document is read for what it reveals about the ground itself, what was built on it, what was extracted from it, what was buried beneath it, and who was removed from it. The spatial layer translates this evidence into a single three-dimensional model, in which all temporal states of the hill coexist simultaneously. The model is not a reconstruction of any single historical moment but an instrument for reading the relationships between moments, collisions, erasures, and continuities that would remain invisible in a conventional chronological account.</p>
-</div>
+<div id="cursor-tooltip"></div>
+
 <div class="wrap">
-  <span class="label">ARCH 728 · Spring 2026</span>
-  <h1>Hıdırlık Tepe</h1>
-  <hr class="rule">
   <div class="body">
+
     <div class="sub-nav">
-      <a href="project-2026-2-thesection.html">The Section</a>
-      <a href="project-2026-2-thetimeline.html">The Timeline</a>
-      <a href="project-2026-2-themodel.html">The Model</a>
+      <a href="project-2026-2-thesection.html" data-tooltip="The section cuts through the hill from its present surface down to its oldest ground. Each stratum marks a moment of transformation. A settlement cleared, a slope degraded, a layer sealed beneath concrete. Click on any band to travel directly to the archival materials that document it.">The Section</a>
+      <a href="project-2026-2-thetimeline.html" data-tooltip="The archive spans six centuries of Hıdırlık Hill's transformation. Maps, cadastral records, aerial photographs, press clippings, plans, and postcards are gathered here not as background context but as primary evidence. Each document reads for what it reveals about the ground itself. Browse by century, or follow &quot;the section&quot; to land directly at a specific stratum.">The Timeline</a>
+      <a href="project-2026-2-themodel.html" data-tooltip="The model is the core instrument of this project. It does not reconstruct a single historical moment but holds all temporal states of Hıdırlık Hill simultaneously: collisions, erasures, and continuities made visible in three dimensions. Navigate between different layers to read how each of them was made, unmade, and replaced.">The Model</a>
     </div>
-    <div class="sub-nav">
-      <a href="project-2026-2-condition1.html">Condition 1</a>
-      <a href="project-2026-2-condition2.html">Condition 2</a>
-      <a href="project-2026-2-condition3.html">Condition 3</a>
-    </div>
+
+    <hr class="info-rule">
+
+    <h1 class="project-title">What the Ground Carries?</h1>
+    <p class="project-subtitle">Stratigraphic Memory and the Politics of Urban Soil Metabolism<br>on Hıdırlık Hill, Ankara</p>
+
+    <p class="author-line">Nisa Gezer, Selen İlhan, Serda Buket Erol, Ülkü Karakaş</p>
+
+    <p>Hıdırlık Hill has been continuously transformed through extraction, settlement, demolition, and reconstruction. Things have been taken from the hill, things have been added to it. Its current form is the result of these successive interventions, each one covering or erasing what came before. This project traces those layers in the (urban) soil. We position ourselves as soil detectives, reading the hill not through its current surface but through the seams where one ground ends and another begins. Our central claim is that the "greening" narrative renders the hill's transformation invisible at precisely the moment when it is most consequential. Biological life is destroyed, decades of inhabitation are sealed beneath concrete, and the hill's original stratigraphy is quietly erased.</p>
+    <p><em>What the ground carries is not merely material, it is political.</em></p>
+
+    <p>How can we uncover the conditions of erasure on Hıdırlık Tepesi, and what does the ground still carry from what has been removed?</p>
+    <p>Where does the soil of Hıdırlık go when the hill is "greened", and what does the new ground carry that the old ground no longer can?</p>
+    <p>How does urban soil metabolism function across centuries of transformation, and what does its interruption make visible?</p>
+
+    <p>Our project combines archival research, spatial analysis, and three-dimensional modelling to trace the successive transformations of Hıdırlık Tepesi across several centuries. The archival layer draws on historical maps, cadastral records, aerial photographs, planning documents, geological surveys, and press coverage to reconstruct what occupied the hill at each critical moment of change. These materials are not treated as background context but as primary evidence. Each document is read for what it reveals about the ground itself, what was built on it, what was extracted from it, what was buried beneath it, and who was removed from it? The spatial layer translates this evidence into a single three-dimensional model, in which all temporal states of the hill coexist simultaneously. The model is not a reconstruction of any single historical moment but an instrument for reading the relationships between moments, collisions, erasures, and continuities that would remain invisible in a conventional chronological account.</p>
+
+    <img src="2026-images/2026-p2/mainpage/main-page.gif" alt="" style="width:100%;display:block;margin-top:3rem;">
+
   </div>
   <dl class="meta">
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
+
 <script>
-  const btn = document.getElementById('info-toggle');
-  const panel = document.getElementById('info-panel');
-  btn.addEventListener('click', () => {
-    const open = panel.classList.toggle('open');
-    btn.classList.toggle('open', open);
+  const tooltip = document.getElementById('cursor-tooltip');
+
+  document.addEventListener('mousemove', e => {
+    let x = e.clientX, y = e.clientY;
+    const tw = 380 + 32, th = 160;
+    if (x + tw > window.innerWidth)  x = e.clientX - tw - 4;
+    if (y + th > window.innerHeight) y = e.clientY - th - 4;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top  = y + 'px';
   });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { panel.classList.remove('open'); btn.classList.remove('open'); }
+
+  document.querySelectorAll('[data-tooltip]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      tooltip.textContent = el.dataset.tooltip;
+      tooltip.classList.add('visible');
+    });
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
   });
 </script>
 </body>

@@ -9,7 +9,7 @@
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --nav-h:52px; }
-  html, body { background: var(--black); color: var(--white); font-family: var(--font); height: 100%; overflow: hidden; }
+  html, body { background: var(--black); color: var(--white); font-family: var(--font); min-height: 100vh; }
 
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -19,12 +19,48 @@
   }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+  .nav-links { display:flex; gap:1.6rem; align-items:center; }
+  .nav-link { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.4; transition:opacity 0.2s; }
+  .nav-link:hover { opacity:1; }
 
   .stage {
-    position: fixed;
-    top: var(--nav-h); left: 0; right: 0; bottom: 0;
+    position: relative;
+    margin-top: var(--nav-h);
+    width: 100%;
+    height: calc(100vh - var(--nav-h));
     overflow: hidden;
+  }
+
+  .dikey-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    padding: 2px;
+  }
+  .dikey-col img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dikey-text {
+    padding: 1.8rem 1.4rem 3rem;
+  }
+  .dikey-label {
+    font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+    opacity: 0.28; display: block; margin-bottom: 0.3rem;
+  }
+  .dikey-sub {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.4; display: block; margin-bottom: 1.4rem;
+    padding-bottom: 1rem; border-bottom: 1px solid var(--border);
+  }
+  .dikey-title {
+    font-size: 1.15rem; font-weight: 400; letter-spacing: 0.03em;
+    margin-bottom: 1rem; line-height: 1.3;
+  }
+  .dikey-body {
+    font-size: 0.9rem; line-height: 1.85; opacity: 0.65;
   }
 
   .base-img {
@@ -49,7 +85,6 @@
 
   .hit-layer {
     position: absolute;
-    pointer-events: none;
     overflow: visible;
   }
   .hit-layer svg {
@@ -57,7 +92,7 @@
     width: 100%; height: 100%;
   }
 
-  .hit-group { cursor: pointer; }
+  .hit-group { cursor: pointer; pointer-events: all; }
   .hit-group path, .hit-group polygon, .hit-group rect, .hit-group circle, .hit-group ellipse {
     pointer-events: all;
     fill: transparent;
@@ -68,7 +103,11 @@
 
 <nav>
   <a href="project-2026-2.html" class="nav-back">← Hıdırlık Tepe</a>
-  <span class="nav-tag">The Section</span>
+  <span class="nav-title">The Section</span>
+  <div class="nav-links">
+    <a href="project-2026-2-thetimeline.html" class="nav-link">The Timeline</a>
+    <a href="project-2026-2-themodel.html" class="nav-link">The Model</a>
+  </div>
 </nav>
 
 <div class="stage" id="stage">
@@ -86,6 +125,39 @@
        src="2026-images/2026-p2/thesection/section-kolajkesit-slice4.webp" alt="">
 
   <div class="hit-layer" id="hit-layer"></div>
+</div>
+
+<div class="dikey-section">
+
+  <div class="dikey-col">
+    <img src="2026-images/2026-p2/thesection/dikey-kesit_01.webp" alt="Vertical Section 1" loading="lazy">
+    <div class="dikey-text">
+      <span class="dikey-label">a.</span>
+      <span class="dikey-sub">Vertical Section 1</span>
+      <h2 class="dikey-title">Suspended Ground</h2>
+      <p class="dikey-body">At the summit of Hıdırlık Hill, a monument occupies the footprint of a türbe. The ground that once held the türbe is no longer there. It was cut away, regraded, and replaced with a platform. What appears as a clean architectural intervention is, in section, a displacement. The new structure does not simply stand beside the old one, it stands where the old ground used to be. The shrine survives above, suspended; the soil that carried it does not.</p>
+    </div>
+  </div>
+
+  <div class="dikey-col">
+    <img src="2026-images/2026-p2/thesection/dikey-kesit_02.webp" alt="Vertical Section 2" loading="lazy">
+    <div class="dikey-text">
+      <span class="dikey-label">b.</span>
+      <span class="dikey-sub">Vertical Section 2</span>
+      <p class="dikey-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    </div>
+  </div>
+
+  <div class="dikey-col">
+    <img src="2026-images/2026-p2/thesection/dikey-kesit_03.webp" alt="Vertical Section 3" loading="lazy">
+    <div class="dikey-text">
+      <span class="dikey-label">c.</span>
+      <span class="dikey-sub">Vertical Section 3</span>
+      <h2 class="dikey-title">Infrastructure of Erasure</h2>
+      <p class="dikey-body">Below the new TOKİ blocks, the section reveals what the surface conceals — decades of gecekondu settlement, compressed beneath concrete foundations and threaded through with infrastructure pipes. The geological strata beneath are not untouched but they are cut, compacted, and rerouted. The hill was not simply built upon, it was metabolized. What reads from above as urban renewal reads in section as a sealing of soil, of habitation, of a way of living on the hill that the new ground can no longer carry.</p>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -134,10 +206,10 @@
         g.querySelectorAll('path, polygon, rect, circle, ellipse, polyline').forEach(shape => {
           shape.style.fill = 'transparent';
           shape.setAttribute('pointer-events', 'all');
-
-          shape.addEventListener('mouseenter', () => sliceImg.classList.add('visible'));
-          shape.addEventListener('mouseleave', () => sliceImg.classList.remove('visible'));
         });
+
+        g.addEventListener('mouseenter', () => sliceImg.classList.add('visible'));
+        g.addEventListener('mouseleave', () => sliceImg.classList.remove('visible'));
 
         hitSvg.appendChild(g);
       });
