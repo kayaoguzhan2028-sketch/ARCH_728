@@ -13,7 +13,7 @@
     --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif;
     --legend-w:240px; --nav-h:52px;
   }
-  html, body { background: var(--black); color: var(--white); font-family: var(--font); height: 100%; overflow: hidden; }
+  html, body { background: var(--black); color: var(--white); font-family: var(--font); min-height: 100vh; }
 
   /* NAV */
   nav {
@@ -37,6 +37,23 @@
   }
   .legend::-webkit-scrollbar { width: 3px; }
   .legend::-webkit-scrollbar-thumb { background: rgba(245,242,235,0.08); }
+
+  .below-section {
+    position: relative;
+    z-index: 20;
+    background: var(--black);
+    margin-top: 100vh;
+    padding: 5rem 4rem 6rem;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .below-section p {
+    font-size: 1.05rem;
+    line-height: 1.95;
+    opacity: 0.72;
+    font-family: var(--font);
+  }
 
   .legend-title {
     font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
@@ -140,6 +157,10 @@
   <div class="canvas-inner" id="canvas"></div>
 </div>
 
+<div class="below-section">
+  <p>This model does not represent Hıdırlık Hill as it is, or as it was. It holds all of its states at once. Built from point cloud data, archival maps, aerial photographs, and spatial reconstructions, it renders the hill as a stratigraphic accumulation. Settlements that were erased, settlements that remain, construction that is still underway, rocky formations carved into and built over, and infrastructure threaded through soil that has been cut and recompacted are all visible. Each layer can be isolated and examined on its own, or read against the others, because it is precisely in the collision between layers that the hill's political history becomes legible. Use the legend to toggle individual strata on and off.</p>
+</div>
+
 <script>
   const BASE = '2026-images/2026-p2/themodel/';
 
@@ -209,16 +230,22 @@
   function makeImg(file, startHidden = true) {
     const img = document.createElement('img');
     if (startHidden) {
-      img.dataset.src = BASE + file;  // defer — only loads when toggled on
+      img.dataset.src = BASE + file;
       img.classList.add('hidden');
     } else {
-      img.src = BASE + file;          // render view loads immediately
+      img.src = BASE + file;
     }
     img.alt = file;
     imgMap[file] = img;
     canvas.appendChild(img);
     return img;
   }
+
+  // Pre-create all images sorted by filename number descending (24→1)
+  // so DOM order puts 24 at bottom and 01 at top of the visual stack
+  const allItems = GROUPS.flatMap(g => g.items).concat([STANDALONE]);
+  allItems.sort((a, b) => parseInt(b.file) - parseInt(a.file));
+  allItems.forEach(item => makeImg(item.file, item.file !== STANDALONE.file));
 
   function setLayerVisible(file, visible) {
     const img = imgMap[file];
@@ -259,8 +286,6 @@
     groupEl.appendChild(itemsEl);
 
     group.items.forEach(item => {
-      makeImg(item.file, true);
-
       const btn = document.createElement('button');
       btn.className = 'layer-btn off';
       btn.dataset.file = item.file;
@@ -302,7 +327,6 @@
   });
 
   // Standalone render view row — visible on load
-  makeImg(STANDALONE.file, false);
   let renderVisible = true;
 
   const standaloneRow = document.createElement('div');

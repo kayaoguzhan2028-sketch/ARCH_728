@@ -385,6 +385,14 @@
       loadCentury(btn.dataset.key);
     });
   });
+
+  // Auto-open century from URL hash (e.g. #2020s)
+  const hashKey = location.hash.replace('#', '');
+  if (hashKey && IMAGES[hashKey]) {
+    const targetBtn = document.querySelector(`.century-btn[data-key="${hashKey}"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+    loadCentury(hashKey);
+  }
 </script>
 </body>
 </html>

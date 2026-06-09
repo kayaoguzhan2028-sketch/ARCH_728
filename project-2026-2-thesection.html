@@ -130,7 +130,7 @@
 <div class="dikey-section">
 
   <div class="dikey-col">
-    <img src="2026-images/2026-p2/thesection/dikey-kesit_01.webp" alt="Vertical Section 1" loading="lazy">
+    <a href="project-2026-2-condition2.html" style="display:block;"><img src="2026-images/2026-p2/thesection/dikey-kesit_01.webp" alt="Vertical Section 1" loading="lazy"></a>
     <div class="dikey-text">
       <span class="dikey-label">a.</span>
       <span class="dikey-sub">Vertical Section 1</span>
@@ -140,7 +140,7 @@
   </div>
 
   <div class="dikey-col">
-    <img src="2026-images/2026-p2/thesection/dikey-kesit_02.webp" alt="Vertical Section 2" loading="lazy">
+    <a href="project-2026-2-condition1.html" style="display:block;"><img src="2026-images/2026-p2/thesection/dikey-kesit_02.webp" alt="Vertical Section 2" loading="lazy"></a>
     <div class="dikey-text">
       <span class="dikey-label">b.</span>
       <span class="dikey-sub">Vertical Section 2</span>
@@ -149,7 +149,7 @@
   </div>
 
   <div class="dikey-col">
-    <img src="2026-images/2026-p2/thesection/dikey-kesit_03.webp" alt="Vertical Section 3" loading="lazy">
+    <a href="project-2026-2-condition3.html" style="display:block;"><img src="2026-images/2026-p2/thesection/dikey-kesit_03.webp" alt="Vertical Section 3" loading="lazy"></a>
     <div class="dikey-text">
       <span class="dikey-label">c.</span>
       <span class="dikey-sub">Vertical Section 3</span>
@@ -165,10 +165,10 @@
   const svgNS = 'http://www.w3.org/2000/svg';
 
   const SLICES = [
-    { id: 'slice-1', svg: 'section-kolajkesit-slice1-01.svg' },
-    { id: 'slice-2', svg: 'section-kolajkesit-slice2-01.svg' },
-    { id: 'slice-3', svg: 'section-kolajkesit-slice3-01.svg' },
-    { id: 'slice-4', svg: 'section-kolajkesit-slice4-01.svg' },
+    { id: 'slice-1', svg: 'section-kolajkesit-slice1-01.svg', link: 'project-2026-2-thetimeline.html#2020s' },
+    { id: 'slice-2', svg: 'section-kolajkesit-slice2-01.svg', link: 'project-2026-2-thetimeline.html#2000s' },
+    { id: 'slice-3', svg: 'section-kolajkesit-slice3-01.svg', link: 'project-2026-2-thetimeline.html#1900s' },
+    { id: 'slice-4', svg: 'section-kolajkesit-slice4-01.svg', link: 'project-2026-2-thetimeline.html#1500s' },
   ];
 
   const stage    = document.getElementById('stage');
@@ -210,6 +210,7 @@
 
         g.addEventListener('mouseenter', () => sliceImg.classList.add('visible'));
         g.addEventListener('mouseleave', () => sliceImg.classList.remove('visible'));
+        g.addEventListener('click', () => { window.location.href = cfg.link; });
 
         hitSvg.appendChild(g);
       });
