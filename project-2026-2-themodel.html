@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
+<title>The Model — Hıdırlık Tepe — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black:#0a0a0a; --white:#f5f2eb; --accent:#c9b8a8;
+    --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif;
+    --legend-w:240px; --nav-h:52px;
+  }
+  html, body { background: var(--black); color: var(--white); font-family: var(--font); height: 100%; overflow: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: var(--nav-h);
+    border-bottom: 1px solid var(--border); background: var(--black);
+  }
+  .nav-back { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
+  .nav-back:hover { opacity: 1; }
+  .nav-title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.55; pointer-events: none; }
+
+  /* LEGEND */
+  .legend {
+    position: fixed; top: var(--nav-h); left: 0; bottom: 0; width: var(--legend-w);
+    overflow-y: auto; padding: 1.8rem 0 2rem 2.8rem;
+    z-index: 10;
+  }
+  .legend::-webkit-scrollbar { width: 3px; }
+  .legend::-webkit-scrollbar-thumb { background: rgba(245,242,235,0.08); }
+
+  .legend-title {
+    font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--white); opacity: 0.18; margin-bottom: 1.6rem;
+  }
+
+  /* GROUP */
+  .legend-group { margin-bottom: 0.2rem; }
+
+  .group-header {
+    display: flex; align-items: center; gap: 0.5rem;
+    cursor: pointer; padding: 0.5rem 0 0.25rem;
+    user-select: none;
+  }
+  .group-toggle {
+    font-size: 0.72rem; line-height: 1; width: 10px; flex-shrink: 0;
+    color: var(--white); opacity: 0.3; transition: opacity 0.2s;
+    font-family: monospace; text-align: center;
+  }
+  .group-header:hover .group-toggle { opacity: 0.7; }
+  .group-name {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white); opacity: 0.35;
+  }
+
+  /* ITEMS */
+  .group-items {
+    display: flex; flex-direction: column; gap: 0;
+    padding-left: 0.1rem;
+    overflow: hidden;
+    max-height: 500px;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+    opacity: 1;
+  }
+  .group-items.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
+
+  .layer-btn {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: none; border: none; cursor: pointer;
+    padding: 0.2rem 0 0.2rem 1.2rem; width: 100%; text-align: left;
+    transition: opacity 0.15s;
+  }
+  .layer-btn .swatch {
+    width: 16px; height: 10px; flex-shrink: 0;
+    border: none; transition: opacity 0.2s;
+  }
+  .layer-btn .lbl {
+    font-family: var(--font); font-size: 0.68rem; letter-spacing: 0.08em;
+    color: var(--white); opacity: 0.7; transition: opacity 0.2s; white-space: nowrap;
+  }
+  .layer-btn.off .swatch { opacity: 0.15; }
+  .layer-btn.off .lbl { opacity: 0.2; }
+  .layer-btn:not(.off):hover .lbl { opacity: 1; }
+
+  /* standalone render row */
+  .standalone-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-top: 0.5rem; padding: 0.5rem 0 0.25rem;
+  }
+  .standalone-row .group-toggle { opacity: 0.3; }
+  .standalone-row.off .group-toggle { opacity: 0.15; }
+  .standalone-row .swatch { width: 16px; height: 10px; flex-shrink: 0; margin-left: 1.2rem; }
+  .standalone-row .lbl { font-family: var(--font); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--white); opacity: 0.7; }
+  .standalone-row.off .swatch { opacity: 0.15; }
+  .standalone-row.off .lbl { opacity: 0.2; }
+  .standalone-row { cursor: pointer; user-select: none; }
+
+  /* CANVAS */
+  .canvas {
+    position: fixed;
+    top: var(--nav-h); left: var(--legend-w); right: 0; bottom: 0;
+    overflow: hidden;
+  }
+  .canvas-inner {
+    position: relative; width: 100%; height: 100%;
+  }
+  .canvas-inner img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: contain; display: block;
+    transition: opacity 0.25s;
+  }
+  .canvas-inner img.hidden { opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="project-2026-2.html" class="nav-back">← Hıdırlık Tepe</a>
+  <span class="nav-title">The Model</span>
+</nav>
+
+<div class="legend" id="legend">
+  <div class="legend-title">legend</div>
+</div>
+
+<div class="canvas">
+  <div class="canvas-inner" id="canvas"></div>
+</div>
+
+<script>
+  const BASE = '2026-images/2026-p2/themodel/';
+
+  const GROUPS = [
+    {
+      name: 'slums',
+      items: [
+        { file: '03-model-exisitngslum.webp',   label: 'existing slums',          color: '#0033ff' },
+        { file: '04-model-slumlaststage.webp',  label: 'erased slums | last stage', color: '#ff00bb' },
+        { file: '05-model-slum3rdstage.webp',   label: 'erased slums | 3rd stage',  color: '#cc55cc' },
+        { file: '06-model-slum2ndstage.webp',   label: 'erased slums | 2nd stage',  color: '#dd99dd' },
+        { file: '07-model-slum1ststage.webp',   label: 'erased slums | 1st stage',  color: '#eebbee' },
+      ]
+    },
+    {
+      name: 'recreation project',
+      items: [
+        { file: '02-model-toki-foundatıon.webp', label: 'toki foundations', color: '#ffee00' },
+        { file: '12-model-monument-tower.webp',  label: 'monument: tower',  color: '#ccff33' },
+        { file: '01-model-toki.webp',            label: 'toki blocks',      color: '#aabb55' },
+        { file: '11-model-monument.webp',        label: 'monument: base',   color: '#eeff99' },
+      ]
+    },
+    {
+      name: 'historical',
+      items: [
+        { file: '16-model-tomb.webp', label: 'tomb', color: '#bb44ff' },
+      ]
+    },
+    {
+      name: 'greenary',
+      items: [
+        { file: '15-model-plannedtree.webp',  label: 'planted for the project', color: '#006633' },
+        { file: '13-model-existingtree.webp', label: 'existing trees',          color: '#44aa33' },
+        { file: '14-model-removedtree.webp',  label: 'erased trees',            color: '#99bb44' },
+      ]
+    },
+    {
+      name: 'infrastructure',
+      items: [
+        { file: '08-model-electrictower.webp', label: 'electric tower', color: '#ff8822' },
+        { file: '09-model-lightpole.webp',     label: 'lighting pole',  color: '#ff8822' },
+        { file: '10-model-funiküler.webp',     label: 'funicular',      color: '#ff8822' },
+      ]
+    },
+    {
+      name: 'topography',
+      items: [
+        { file: '21-model-erasedsoil.webp',         label: 'erased soil',               color: '#1e1e1e' },
+        { file: '17-model-rockyformations.webp',     label: 'rocky formations',          color: '#444444' },
+        { file: '20-model-path.webp',                label: 'path',                      color: '#808080' },
+        { file: '19-model-concrete-retaining.webp',  label: 'concrete retaining walls',  color: '#aaaaaa' },
+        { file: '18-model-stoneretaining.webp',      label: 'stone retaining walls',     color: '#c8b8b0' },
+        { file: '22-model-anagorsel-poıntcloud.webp',label: 'point cloud topography',   color: '#0a0a0a', border: '1px solid rgba(255,255,255,0.25)' },
+        { file: '23-model-meshtopo.webp',             label: 'mesh topography',          color: '#111111', border: '1px solid rgba(255,255,255,0.2)' },
+      ]
+    },
+  ];
+
+  const STANDALONE = { file: '24-model-anagörsel-renderered.webp', label: 'render view', color: '#f5f2eb' };
+
+  const legend = document.getElementById('legend');
+  const canvas = document.getElementById('canvas');
+
+  const imgMap = {};
+
+  function makeImg(file, startHidden = true) {
+    const img = document.createElement('img');
+    img.src = BASE + file;
+    img.alt = file;
+    if (startHidden) img.classList.add('hidden');
+    imgMap[file] = img;
+    canvas.appendChild(img);
+    return img;
+  }
+
+  function setLayerVisible(file, visible) {
+    const img = imgMap[file];
+    if (!img) return;
+    img.classList.toggle('hidden', !visible);
+  }
+
+  // Build groups
+  GROUPS.forEach(group => {
+    let expanded = false;
+
+    const groupEl = document.createElement('div');
+    groupEl.className = 'legend-group';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'group-header';
+
+    const toggle = document.createElement('span');
+    toggle.className = 'group-toggle';
+    toggle.textContent = '+';
+
+    const nameEl = document.createElement('span');
+    nameEl.className = 'group-name';
+    nameEl.textContent = group.name;
+
+    header.appendChild(toggle);
+    header.appendChild(nameEl);
+    groupEl.appendChild(header);
+
+    // Items container — starts collapsed
+    const itemsEl = document.createElement('div');
+    itemsEl.className = 'group-items collapsed';
+    groupEl.appendChild(itemsEl);
+
+    group.items.forEach(item => {
+      makeImg(item.file, true);
+
+      const btn = document.createElement('button');
+      btn.className = 'layer-btn';
+      btn.dataset.file = item.file;
+
+      const swatch = document.createElement('span');
+      swatch.className = 'swatch';
+      swatch.style.background = item.color;
+      if (item.border) swatch.style.border = item.border;
+
+      const lbl = document.createElement('span');
+      lbl.className = 'lbl';
+      lbl.textContent = item.label;
+
+      btn.appendChild(swatch);
+      btn.appendChild(lbl);
+      itemsEl.appendChild(btn);
+
+      btn.addEventListener('click', () => {
+        const isOff = btn.classList.contains('off');
+        btn.classList.toggle('off', !isOff);
+        setLayerVisible(item.file, isOff);
+      });
+    });
+
+    // Group toggle
+    header.addEventListener('click', () => {
+      expanded = !expanded;
+      toggle.textContent = expanded ? '−' : '+';
+      itemsEl.classList.toggle('collapsed', !expanded);
+
+      group.items.forEach(item => {
+        const btn = itemsEl.querySelector(`[data-file="${item.file}"]`);
+        const isOff = btn && btn.classList.contains('off');
+        if (!isOff) setLayerVisible(item.file, expanded);
+      });
+    });
+
+    legend.appendChild(groupEl);
+  });
+
+  // Standalone render view row — visible on load
+  makeImg(STANDALONE.file, false);
+  let renderVisible = true;
+
+  const standaloneRow = document.createElement('div');
+  standaloneRow.className = 'standalone-row';
+
+  const stToggle = document.createElement('span');
+  stToggle.className = 'group-toggle';
+  stToggle.textContent = '−';
+
+  const stSwatch = document.createElement('span');
+  stSwatch.className = 'swatch';
+  stSwatch.style.background = STANDALONE.color;
+  stSwatch.style.border = '1px solid rgba(245,242,235,0.25)';
+
+  const stLbl = document.createElement('span');
+  stLbl.className = 'lbl';
+  stLbl.textContent = STANDALONE.label;
+
+  standaloneRow.appendChild(stToggle);
+  standaloneRow.appendChild(stSwatch);
+  standaloneRow.appendChild(stLbl);
+  legend.appendChild(standaloneRow);
+
+  standaloneRow.addEventListener('click', () => {
+    renderVisible = !renderVisible;
+    stToggle.textContent = renderVisible ? '−' : '+';
+    standaloneRow.classList.toggle('off', !renderVisible);
+    setLayerVisible(STANDALONE.file, renderVisible);
+  });
+</script>
+</body>
+</html>
