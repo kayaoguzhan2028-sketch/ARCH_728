@@ -222,6 +222,13 @@
               if (wasDragging) return;
               window.location.href = 'project-2026-1-factory.html';
             });
+          } else if (cfg.id === 'kus') {
+            shape.addEventListener('mouseenter', () => g.classList.add('active'));
+            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
+            shape.addEventListener('click', () => {
+              if (wasDragging) return;
+              window.location.href = 'project-2026-1-bird.html';
+            });
           } else {
             shape.addEventListener('mouseenter', () => {
               if (!g.classList.contains('active')) g.classList.add('hover');

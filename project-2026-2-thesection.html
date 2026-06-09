@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,29 +8,160 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --nav-h:52px; }
+  html, body { background: var(--black); color: var(--white); font-family: var(--font); height: 100%; overflow: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: var(--nav-h);
+    border-bottom: 1px solid var(--border); background: var(--black);
+  }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
-  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
-  h1 { font-size:clamp(2rem,5vw,3.4rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
-  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+
+  .stage {
+    position: fixed;
+    top: var(--nav-h); left: 0; right: 0; bottom: 0;
+    overflow: hidden;
+  }
+
+  .base-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: brightness(0.3);
+    transition: filter 0.3s;
+  }
+
+  .slice-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .slice-img.visible { opacity: 1; }
+
+  .hit-layer {
+    position: absolute;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .hit-layer svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+
+  .hit-group { cursor: pointer; }
+  .hit-group path, .hit-group polygon, .hit-group rect, .hit-group circle, .hit-group ellipse {
+    pointer-events: all;
+    fill: transparent;
+  }
 </style>
 </head>
 <body>
+
 <nav>
   <a href="project-2026-2.html" class="nav-back">← Hıdırlık Tepe</a>
   <span class="nav-tag">The Section</span>
 </nav>
-<div class="wrap">
-  <span class="label">ARCH 728 · Spring 2026</span>
-  <h1>The Section</h1>
-  <hr class="rule">
-  <div class="body"><p style="opacity:0.35;font-size:0.82rem;letter-spacing:0.12em;">Coming soon.</p></div>
+
+<div class="stage" id="stage">
+  <img class="base-img" id="base-img"
+       src="2026-images/2026-p2/thesection/section-kolajkesit-01.webp"
+       alt="The Section">
+
+  <img class="slice-img" id="slice-1"
+       src="2026-images/2026-p2/thesection/section-kolajkesit-slice1.webp" alt="">
+  <img class="slice-img" id="slice-2"
+       src="2026-images/2026-p2/thesection/section-kolajkesit-slice2.webp" alt="">
+  <img class="slice-img" id="slice-3"
+       src="2026-images/2026-p2/thesection/section-kolajkesit-slice3.webp" alt="">
+  <img class="slice-img" id="slice-4"
+       src="2026-images/2026-p2/thesection/section-kolajkesit-slice4.webp" alt="">
+
+  <div class="hit-layer" id="hit-layer"></div>
 </div>
+
+<script>
+  const BASE  = '2026-images/2026-p2/thesection/';
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  const SLICES = [
+    { id: 'slice-1', svg: 'section-kolajkesit-slice1-01.svg' },
+    { id: 'slice-2', svg: 'section-kolajkesit-slice2-01.svg' },
+    { id: 'slice-3', svg: 'section-kolajkesit-slice3-01.svg' },
+    { id: 'slice-4', svg: 'section-kolajkesit-slice4-01.svg' },
+  ];
+
+  const stage    = document.getElementById('stage');
+  const baseImg  = document.getElementById('base-img');
+  const hitLayer = document.getElementById('hit-layer');
+
+  // Single SVG container for all hit groups
+  const hitSvg = document.createElementNS(svgNS, 'svg');
+  hitSvg.setAttribute('viewBox', '0 0 1920 1080');
+  hitSvg.setAttribute('width', '100%');
+  hitSvg.setAttribute('height', '100%');
+  hitSvg.style.position = 'absolute';
+  hitSvg.style.inset = '0';
+  hitLayer.appendChild(hitSvg);
+
+  SLICES.forEach(cfg => {
+    const sliceImg = document.getElementById(cfg.id);
+
+    fetch(BASE + cfg.svg)
+      .then(r => r.text())
+      .then(svgText => {
+        const parser = new DOMParser();
+        const parsed = parser.parseFromString(svgText, 'image/svg+xml');
+
+        const g = document.createElementNS(svgNS, 'g');
+        g.classList.add('hit-group');
+
+        // Import only non-image children (skip embedded base64 image)
+        Array.from(parsed.documentElement.childNodes).forEach(node => {
+          if (node.nodeType === 1 && node.tagName.toLowerCase() !== 'image') {
+            g.appendChild(document.importNode(node, true));
+          }
+        });
+
+        g.querySelectorAll('path, polygon, rect, circle, ellipse, polyline').forEach(shape => {
+          shape.style.fill = 'transparent';
+          shape.setAttribute('pointer-events', 'all');
+
+          shape.addEventListener('mouseenter', () => sliceImg.classList.add('visible'));
+          shape.addEventListener('mouseleave', () => sliceImg.classList.remove('visible'));
+        });
+
+        hitSvg.appendChild(g);
+      });
+  });
+
+  // Fit the hit layer to match object-fit:contain letterboxing
+  function fitLayer() {
+    const sw = stage.clientWidth, sh = stage.clientHeight;
+    const iw = baseImg.naturalWidth  || 1920;
+    const ih = baseImg.naturalHeight || 1080;
+    const imageAR = iw / ih, stageAR = sw / sh;
+    let w, h, l, t;
+    if (imageAR > stageAR) { w = sw; h = sw / imageAR; l = 0; t = (sh - h) / 2; }
+    else                   { h = sh; w = sh * imageAR; t = 0; l = (sw - w) / 2; }
+    hitLayer.style.left   = l + 'px';
+    hitLayer.style.top    = t + 'px';
+    hitLayer.style.width  = w + 'px';
+    hitLayer.style.height = h + 'px';
+  }
+
+  baseImg.addEventListener('load', fitLayer);
+  if (baseImg.complete && baseImg.naturalWidth) fitLayer();
+  window.addEventListener('resize', fitLayer);
+  new ResizeObserver(fitLayer).observe(stage);
+</script>
 </body>
 </html>
