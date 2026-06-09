@@ -217,7 +217,7 @@
 
   // Build groups
   GROUPS.forEach(group => {
-    let expanded = false;
+    let expanded = true;
 
     const groupEl = document.createElement('div');
     groupEl.className = 'legend-group';
@@ -228,7 +228,7 @@
 
     const toggle = document.createElement('span');
     toggle.className = 'group-toggle';
-    toggle.textContent = '+';
+    toggle.textContent = '−';
 
     const nameEl = document.createElement('span');
     nameEl.className = 'group-name';
@@ -238,16 +238,16 @@
     header.appendChild(nameEl);
     groupEl.appendChild(header);
 
-    // Items container — starts collapsed
+    // Items container — starts expanded
     const itemsEl = document.createElement('div');
-    itemsEl.className = 'group-items collapsed';
+    itemsEl.className = 'group-items';
     groupEl.appendChild(itemsEl);
 
     group.items.forEach(item => {
       makeImg(item.file, true);
 
       const btn = document.createElement('button');
-      btn.className = 'layer-btn';
+      btn.className = 'layer-btn off';
       btn.dataset.file = item.file;
 
       const swatch = document.createElement('span');
