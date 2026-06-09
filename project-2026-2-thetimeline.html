@@ -311,12 +311,24 @@
     });
   }
 
+  const preloadCache = {};
+  function preload(file) {
+    if (!preloadCache[file]) {
+      const img = new Image();
+      img.src = BASE + file;
+      preloadCache[file] = img;
+    }
+  }
+
   function goTo(index) {
     current = index;
     const item = items[current];
 
     frameImg.src = BASE + item.file;
     frameImg.alt = nameFromFile(item.file);
+
+    // silently preload next image so navigation feels instant
+    if (items[current + 1]) preload(items[current + 1].file);
 
     imgName.textContent = nameFromFile(item.file);
     imgCaption.textContent = item.caption || '';

@@ -201,9 +201,13 @@
 
   function makeImg(file, startHidden = true) {
     const img = document.createElement('img');
-    img.src = BASE + file;
+    if (startHidden) {
+      img.dataset.src = BASE + file;  // defer — only loads when toggled on
+      img.classList.add('hidden');
+    } else {
+      img.src = BASE + file;          // render view loads immediately
+    }
     img.alt = file;
-    if (startHidden) img.classList.add('hidden');
     imgMap[file] = img;
     canvas.appendChild(img);
     return img;
@@ -212,6 +216,10 @@
   function setLayerVisible(file, visible) {
     const img = imgMap[file];
     if (!img) return;
+    if (visible && img.dataset.src) {
+      img.src = img.dataset.src;      // first toggle-on triggers actual load
+      delete img.dataset.src;
+    }
     img.classList.toggle('hidden', !visible);
   }
 
