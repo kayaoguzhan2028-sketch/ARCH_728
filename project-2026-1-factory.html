@@ -62,7 +62,7 @@
 <div class="wrap">
   <div class="body">
 
-    <div class="sec">
+    <div class="sec" id="sec-cayirhan">
       <span class="sec-head">Çayırhan</span>
       <div class="two-col">
         <div class="sec-text">
@@ -311,6 +311,9 @@
           shape.addEventListener('click', () => {
             g.classList.toggle('active');
             g.classList.remove('hover');
+            if (cfg.id === 'cayirhan') {
+              document.getElementById('sec-cayirhan').scrollIntoView({ behavior: 'smooth' });
+            }
           });
         });
 
