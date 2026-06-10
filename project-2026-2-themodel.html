@@ -133,9 +133,34 @@
   .canvas-inner img {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     object-fit: contain; display: block;
+    pointer-events: none;
     transition: opacity 0.25s;
   }
   .canvas-inner img.hidden { opacity: 0; pointer-events: none; }
+
+  /* HOTSPOTS */
+  .hit-layer {
+    position: absolute;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .hit-layer svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .hotspot-path {
+    fill: rgba(245,242,235,0);
+    stroke: rgba(245,242,235,0);
+    stroke-width: 50px;
+    pointer-events: all;
+    cursor: pointer;
+    transition: fill 0.2s ease, stroke 0.2s ease;
+  }
+  .hotspot-path:hover {
+    fill: rgba(245,242,235,0.18);
+    stroke: rgba(245,242,235,0.6);
+  }
 </style>
 </head>
 <body>
@@ -163,6 +188,7 @@
 
 <script>
   const BASE = '2026-images/2026-p2/themodel/';
+  const svgNS = 'http://www.w3.org/2000/svg';
 
   const GROUPS = [
     {
@@ -246,6 +272,60 @@
   const allItems = GROUPS.flatMap(g => g.items).concat([STANDALONE]);
   allItems.sort((a, b) => parseInt(b.file) - parseInt(a.file));
   allItems.forEach(item => makeImg(item.file, item.file !== STANDALONE.file));
+
+  // --- Hover/click hotspots (transparent overlays) ---
+  const HOTSPOTS = [
+    { svg: 'Dikdörtgen1.svg', link: null },
+    { svg: 'Dikdörtgen2.svg', link: null },
+    { svg: 'Dikdörtgen3.svg', link: null },
+  ];
+
+  const hitLayer = document.createElement('div');
+  hitLayer.className = 'hit-layer';
+  const hitSvg = document.createElementNS(svgNS, 'svg');
+  hitSvg.setAttribute('viewBox', '0 0 8910 6300');
+  hitLayer.appendChild(hitSvg);
+  canvas.appendChild(hitLayer);
+
+  HOTSPOTS.forEach(cfg => {
+    fetch(BASE + cfg.svg)
+      .then(r => r.text())
+      .then(svgText => {
+        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const srcPath = parsed.querySelector('path');
+        if (!srcPath) return;
+
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', srcPath.getAttribute('d'));
+        path.classList.add('hotspot-path');
+
+        path.addEventListener('click', () => {
+          if (cfg.link) window.location.href = cfg.link;
+        });
+
+        hitSvg.appendChild(path);
+      });
+  });
+
+  // Fit the hit layer to match object-fit:contain letterboxing
+  const refImg = imgMap[STANDALONE.file];
+  function fitHitLayer() {
+    const cw = canvas.clientWidth, ch = canvas.clientHeight;
+    const iw = refImg.naturalWidth  || 8910;
+    const ih = refImg.naturalHeight || 6300;
+    const imageAR = iw / ih, boxAR = cw / ch;
+    let w, h, l, t;
+    if (imageAR > boxAR) { w = cw; h = cw / imageAR; l = 0; t = (ch - h) / 2; }
+    else                 { h = ch; w = ch * imageAR; t = 0; l = (cw - w) / 2; }
+    hitLayer.style.left   = l + 'px';
+    hitLayer.style.top    = t + 'px';
+    hitLayer.style.width  = w + 'px';
+    hitLayer.style.height = h + 'px';
+  }
+  refImg.addEventListener('load', fitHitLayer);
+  if (refImg.complete && refImg.naturalWidth) fitHitLayer();
+  window.addEventListener('resize', fitHitLayer);
+  new ResizeObserver(fitHitLayer).observe(canvas);
 
   function setLayerVisible(file, visible) {
     const img = imgMap[file];
