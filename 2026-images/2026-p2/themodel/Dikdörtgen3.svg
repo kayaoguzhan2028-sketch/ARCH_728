@@ -1,19 +1,14 @@
 <svg id="Grup_2" data-name="Grup 2" xmlns="http://www.w3.org/2000/svg" width="8910" height="6300" viewBox="0 0 8910 6300">
   <defs>
     <style>
-      .cls-1, .cls-2 {
+      .cls-1 {
         fill: none;
         stroke: #de6bfb;
         stroke-width: 50px;
         fill-rule: evenodd;
-      }
-
-      .cls-1 {
         opacity: 0.01;
       }
     </style>
   </defs>
   <path id="Dikdörtgen_2" data-name="Dikdörtgen 2" class="cls-1" d="M2951.58,1367.4h543.84v722.2H2951.58V1367.4Z"/>
-  <path id="Dikdörtgen_2_kopya_9" data-name="Dikdörtgen 2 kopya 9" class="cls-1" d="M3762.58,2290.4h543.84v722.2H3762.58V2290.4Z"/>
-  <path id="Dikdörtgen_2_kopya_10" data-name="Dikdörtgen 2 kopya 10" class="cls-2" d="M6514.58,2346.4h543.84v722.2H6514.58V2346.4Z"/>
 </svg>
