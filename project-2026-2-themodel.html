@@ -289,11 +289,17 @@
 
   HOTSPOTS.forEach(cfg => {
     fetch(BASE + cfg.svg)
-      .then(r => r.text())
+      .then(r => {
+        if (!r.ok) throw new Error(`fetch ${cfg.svg} → ${r.status}`);
+        return r.text();
+      })
       .then(svgText => {
         const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
         const srcPath = parsed.querySelector('path');
-        if (!srcPath) return;
+        if (!srcPath) {
+          console.warn('Hotspot: <path> not found in', cfg.svg, parsed);
+          return;
+        }
 
         const path = document.createElementNS(svgNS, 'path');
         path.setAttribute('d', srcPath.getAttribute('d'));
@@ -304,7 +310,9 @@
         });
 
         hitSvg.appendChild(path);
-      });
+        console.log('Hotspot loaded:', cfg.svg, '→', cfg.link);
+      })
+      .catch(err => console.error('Hotspot fetch failed:', cfg.svg, err));
   });
 
   // Fit the hit layer to match object-fit:contain letterboxing
