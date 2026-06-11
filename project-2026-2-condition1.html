@@ -21,6 +21,9 @@
   .pair-group { margin-bottom: 4.5rem; }
   .pair-label { font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; opacity:0.28; margin-bottom:0.7rem; display:block; }
 
+  .condition-row { display:flex; gap:2rem; margin-bottom:4.5rem; flex-wrap:wrap; }
+  .condition-row .pair-group { flex:1; min-width:240px; margin-bottom:0; }
+
   /* stacked images */
   .stack {
     position: relative;
@@ -85,37 +88,41 @@
     </div>
   </div>
 
-  <div class="pair-group">
-    <span class="pair-label">a</span>
-    <div class="stack" id="stack-a">
-      <img src="2026-images/2026-p2/conditions/condition-oncesi-01-a.webp" alt="öncesi a">
-      <img class="img-sonrasi" src="2026-images/2026-p2/conditions/condition-sonrasi-01-a.webp" alt="sonrası a">
-    </div>
-    <div class="slider-wrap">
-      <input type="range" min="0" max="100" value="0" data-stack="stack-a">
-    </div>
-  </div>
+  <div class="condition-row">
 
-  <div class="pair-group">
-    <span class="pair-label">b</span>
-    <div class="stack" id="stack-b">
-      <img src="2026-images/2026-p2/conditions/condition-oncesi-01-b.webp" alt="öncesi b">
-      <img class="img-sonrasi" src="2026-images/2026-p2/conditions/condition-sonrasi-01-b.webp" alt="sonrası b">
+    <div class="pair-group">
+      <span class="pair-label">a</span>
+      <div class="stack" id="stack-a">
+        <img src="2026-images/2026-p2/conditions/condition-oncesi-01-a.webp" alt="öncesi a">
+        <img class="img-sonrasi" src="2026-images/2026-p2/conditions/condition-sonrasi-01-a.webp" alt="sonrası a">
+      </div>
+      <div class="slider-wrap">
+        <input type="range" min="0" max="100" value="0" data-stack="stack-a">
+      </div>
     </div>
-    <div class="slider-wrap">
-      <input type="range" min="0" max="100" value="0" data-stack="stack-b">
-    </div>
-  </div>
 
-  <div class="pair-group">
-    <span class="pair-label">c</span>
-    <div class="stack" id="stack-c">
-      <img src="2026-images/2026-p2/conditions/condition-oncesi-01-c.webp" alt="öncesi c">
-      <img class="img-sonrasi" src="2026-images/2026-p2/conditions/condition-sonrasi-01-c.webp" alt="sonrası c">
+    <div class="pair-group">
+      <span class="pair-label">b</span>
+      <div class="stack" id="stack-b">
+        <img src="2026-images/2026-p2/conditions/condition-oncesi-01-b.webp" alt="öncesi b">
+        <img class="img-sonrasi" src="2026-images/2026-p2/conditions/condition-sonrasi-01-b.webp" alt="sonrası b">
+      </div>
+      <div class="slider-wrap">
+        <input type="range" min="0" max="100" value="0" data-stack="stack-b">
+      </div>
     </div>
-    <div class="slider-wrap">
-      <input type="range" min="0" max="100" value="0" data-stack="stack-c">
+
+    <div class="pair-group">
+      <span class="pair-label">c</span>
+      <div class="stack" id="stack-c">
+        <img src="2026-images/2026-p2/conditions/condition-oncesi-01-c.webp" alt="öncesi c">
+        <img class="img-sonrasi" src="2026-images/2026-p2/conditions/condition-sonrasi-01-c.webp" alt="sonrası c">
+      </div>
+      <div class="slider-wrap">
+        <input type="range" min="0" max="100" value="0" data-stack="stack-c">
+      </div>
     </div>
+
   </div>
 
 </div>
