@@ -159,12 +159,29 @@
     stroke: rgba(245,242,235,0);
     stroke-width: 50px;
     pointer-events: all;
-    cursor: pointer;
+    cursor: default;
     transition: fill 0.2s ease, stroke 0.2s ease;
   }
   .hotspot-path:hover {
     fill: rgba(245,242,235,0.18);
     stroke: rgba(245,242,235,0.6);
+  }
+
+  /* HOVER PREVIEW */
+  .hover-preview {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 30;
+    background: var(--black);
+    border: 1px solid rgba(245,242,235,0.25);
+    transition: opacity 0.2s ease;
+  }
+  .hover-preview.visible { opacity: 1; }
+  .hover-preview img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
   }
 </style>
 </head>
@@ -279,11 +296,11 @@
   allItems.sort((a, b) => parseInt(b.file) - parseInt(a.file));
   allItems.forEach(item => makeImg(item.file, item.file !== STANDALONE.file));
 
-  // --- Hover/click hotspots (transparent overlays) ---
+  // --- Hover hotspots (transparent overlays) ---
   const HOTSPOTS = [
-    { svg: 'Dikdörtgen1.svg', link: 'project-2026-2-condition1.html' },
-    { svg: 'Dikdörtgen2.svg', link: 'project-2026-2-condition2.html' },
-    { svg: 'Dikdörtgen3.svg', link: 'project-2026-2-condition3.html' },
+    { svg: 'Dikdörtgen1.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_03.webp' },
+    { svg: 'Dikdörtgen2.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_01.webp' },
+    { svg: 'Dikdörtgen3.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_02.webp' },
   ];
 
   const hitLayer = document.createElement('div');
@@ -310,13 +327,32 @@
         const path = document.createElementNS(svgNS, 'path');
         path.setAttribute('d', srcPath.getAttribute('d'));
         path.classList.add('hotspot-path');
-
-        path.addEventListener('click', () => {
-          if (cfg.link) window.location.href = cfg.link;
-        });
-
         hitSvg.appendChild(path);
-        console.log('Hotspot loaded:', cfg.svg, '→', cfg.link);
+
+        // Hover preview frame, sized ~2x the hotspot and centered on it
+        const bbox = path.getBBox();
+        const xPct = bbox.x / 8910 * 100;
+        const yPct = bbox.y / 6300 * 100;
+        const wPct = bbox.width  / 8910 * 100;
+        const hPct = bbox.height / 6300 * 100;
+
+        const preview = document.createElement('div');
+        preview.className = 'hover-preview';
+        preview.style.left   = (xPct - wPct / 2) + '%';
+        preview.style.top    = (yPct - hPct / 2) + '%';
+        preview.style.width  = (wPct * 2) + '%';
+        preview.style.height = (hPct * 2) + '%';
+
+        const previewImg = document.createElement('img');
+        previewImg.src = cfg.preview;
+        previewImg.alt = '';
+        preview.appendChild(previewImg);
+        hitLayer.appendChild(preview);
+
+        path.addEventListener('mouseenter', () => preview.classList.add('visible'));
+        path.addEventListener('mouseleave', () => preview.classList.remove('visible'));
+
+        console.log('Hotspot loaded:', cfg.svg, '→', cfg.preview);
       })
       .catch(err => console.error('Hotspot fetch failed:', cfg.svg, err));
   });
