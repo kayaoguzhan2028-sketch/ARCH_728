@@ -169,7 +169,7 @@
 
   /* HOVER PREVIEW */
   .hover-preview {
-    position: absolute;
+    position: fixed;
     pointer-events: none;
     opacity: 0;
     z-index: 30;
@@ -329,27 +329,43 @@
         path.classList.add('hotspot-path');
         hitSvg.appendChild(path);
 
-        // Hover preview frame, sized ~2x the hotspot and centered on it
+        // Hover preview frame, shown at the preview image's native
+        // resolution (no upscaling), centered on the hotspot but
+        // clamped so it always stays fully within the viewport.
         const bbox = path.getBBox();
-        const xPct = bbox.x / 8910 * 100;
-        const yPct = bbox.y / 6300 * 100;
-        const wPct = bbox.width  / 8910 * 100;
-        const hPct = bbox.height / 6300 * 100;
+        const cxFrac = (bbox.x + bbox.width  / 2) / 8910;
+        const cyFrac = (bbox.y + bbox.height / 2) / 6300;
 
         const preview = document.createElement('div');
         preview.className = 'hover-preview';
-        preview.style.left   = (xPct - wPct / 2) + '%';
-        preview.style.top    = (yPct - hPct / 2) + '%';
-        preview.style.width  = (wPct * 2) + '%';
-        preview.style.height = (hPct * 2) + '%';
 
         const previewImg = document.createElement('img');
-        previewImg.src = cfg.preview;
         previewImg.alt = '';
+        previewImg.src = cfg.preview;
         preview.appendChild(previewImg);
-        hitLayer.appendChild(preview);
+        document.body.appendChild(preview);
 
-        path.addEventListener('mouseenter', () => preview.classList.add('visible'));
+        function positionPreview() {
+          const rect = hitLayer.getBoundingClientRect();
+          const cx = rect.left + cxFrac * rect.width;
+          const cy = rect.top  + cyFrac * rect.height;
+          const w = previewImg.naturalWidth;
+          const h = previewImg.naturalHeight;
+          const margin = 8;
+          let left = cx - w / 2;
+          let top  = cy - h / 2;
+          left = Math.min(Math.max(left, margin), window.innerWidth  - w - margin);
+          top  = Math.min(Math.max(top,  margin), window.innerHeight - h - margin);
+          preview.style.left   = left + 'px';
+          preview.style.top    = top  + 'px';
+          preview.style.width  = w + 'px';
+          preview.style.height = h + 'px';
+        }
+
+        path.addEventListener('mouseenter', () => {
+          positionPreview();
+          preview.classList.add('visible');
+        });
         path.addEventListener('mouseleave', () => preview.classList.remove('visible'));
 
         console.log('Hotspot loaded:', cfg.svg, '→', cfg.preview);
