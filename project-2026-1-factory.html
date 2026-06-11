@@ -11,13 +11,13 @@
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
   html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; background:linear-gradient(to bottom, rgba(10,10,10,0.65), rgba(10,10,10,0)); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
 
-  .img-stage { position:relative; width:100%; aspect-ratio:4/3; margin-top:52px; background:var(--black); overflow:hidden; }
+  .img-stage { position:relative; width:100%; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
   .img-stage > img { width:100%; height:100%; object-fit:contain; display:block; filter:brightness(1) contrast(1); }
   .svg-layer { position:absolute; pointer-events:none; overflow:visible; }
   .overlay-img { opacity:0; transition:filter 0.3s ease, opacity 0.2s ease; cursor:pointer; }
