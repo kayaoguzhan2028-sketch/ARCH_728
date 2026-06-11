@@ -349,8 +349,8 @@
           const rect = hitLayer.getBoundingClientRect();
           const cx = rect.left + cxFrac * rect.width;
           const cy = rect.top  + cyFrac * rect.height;
-          const w = previewImg.naturalWidth;
-          const h = previewImg.naturalHeight;
+          const w = previewImg.naturalWidth  * 0.75;
+          const h = previewImg.naturalHeight * 0.75;
           const margin = 8;
           let left = cx - w / 2;
           let top  = cy - h / 2;
