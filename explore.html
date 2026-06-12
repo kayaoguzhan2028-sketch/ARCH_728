@@ -341,7 +341,7 @@
     const mapPanelText  = document.getElementById('map-panel-text');
 
     let activeShape = null, activeMarkerEl = null, initialBounds = null;
-    let prevView = null, mapLocked = false, allMarkers = [], hiddenMarkers = [];
+    let prevView = null, mapLocked = false, allMarkers = [], hiddenMarkers = [], lensParent = null;
 
     function lockMap() {
       mapLocked = true;
@@ -363,11 +363,16 @@
       mapPanel.classList.remove('visible', 'mode-geojson');
       mapPanelText.textContent = '';
       closeLensMenu();
+      lensParent = null;
       unlockMap();
     }
 
     document.getElementById('map-panel-close').addEventListener('click', clearActive);
     mapPanelBack.addEventListener('click', () => {
+      if (lensParent) {
+        openGeojsonNode(lensParent, undefined, null, true);
+        return;
+      }
       const view = prevView; prevView = null; clearActive();
       if (view) window._leafletMap.flyTo(view.center, view.zoom, { duration: 2.4 });
     });
@@ -435,7 +440,7 @@
           item.addEventListener('click', (e) => {
             e.stopPropagation();
             closeLensMenu();
-            openGeojsonNode(child);
+            openGeojsonNode(child, undefined, n);
           });
           menu.appendChild(item);
           requestAnimationFrame(() => requestAnimationFrame(() => item.classList.add('visible')));
@@ -448,9 +453,12 @@
       window.addEventListener('resize', lensResizeHandler);
     }
 
-    function openGeojsonNode(n, marker) {
+    function openGeojsonNode(n, marker, parent, isReturning) {
       clearActive();
-      prevView = { center: window._leafletMap.getCenter(), zoom: window._leafletMap.getZoom() };
+      lensParent = parent || null;
+      if (!parent && !isReturning) {
+        prevView = { center: window._leafletMap.getCenter(), zoom: window._leafletMap.getZoom() };
+      }
       if (marker) {
         const el = marker.getElement();
         if (el) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; activeMarkerEl = el; }
