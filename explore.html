@@ -56,8 +56,12 @@
   .lens-node:hover .lens-node-dot { transform: scale(1.2); }
   .lens-node.visible .lens-node-dot { transform: scale(1); opacity: 1; }
   .lens-node.visible:hover .lens-node-dot { transform: scale(1.2); }
-  .lens-node-label { position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%); background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; white-space: nowrap; font-size: 0.82rem; letter-spacing: 0.05em; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.25s ease; }
+  .lens-node-label { position: absolute; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; white-space: nowrap; font-size: 0.82rem; letter-spacing: 0.05em; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.25s ease; }
   .lens-node.visible .lens-node-label { opacity: 1; }
+  .lens-node.label-right .lens-node-label { left: calc(100% + 10px); top: 50%; transform: translateY(-50%); }
+  .lens-node.label-left  .lens-node-label { right: calc(100% + 10px); top: 50%; transform: translateY(-50%); }
+  .lens-node.label-top    .lens-node-label { left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); }
+  .lens-node.label-bottom .lens-node-label { left: 50%; top: calc(100% + 10px); transform: translateX(-50%); }
 
   #view-year { align-items: center; justify-content: center; overflow: hidden; }
   .year-stack { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; user-select: none; }
@@ -84,6 +88,18 @@
   .btn-library { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.38rem 1.2rem; border: 1px solid rgba(245,242,235,0.25); background: none; color: var(--white); font-family: 'EB Garamond', serif; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: border-color 0.2s, opacity 0.2s; opacity: 0.6; }
   .btn-library:hover { opacity: 1; border-color: rgba(245,242,235,0.6); }
   .btn-library svg { width: 11px; height: 11px; opacity: 0.7; }
+
+  /* Library overlay */
+  .library-overlay { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; background: rgba(10,10,10,0.82); backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+  .library-overlay.visible { opacity: 1; pointer-events: auto; }
+  .library-panel { position: relative; width: min(440px, 90vw); max-height: 80vh; overflow-y: auto; background: var(--black); border: 1px solid var(--border); padding: 2.2rem 2.2rem; }
+  .library-close { position: absolute; top: 0.9rem; right: 1rem; background: none; border: none; color: var(--white); cursor: pointer; opacity: 0.4; font-size: 0.85rem; line-height: 1; padding: 0.2rem; transition: opacity 0.15s; }
+  .library-close:hover { opacity: 1; }
+  .library-title { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 1.4rem; }
+  .library-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+  .library-list a { display: flex; gap: 0.9rem; align-items: baseline; padding: 0.6rem 0.2rem; color: var(--white); text-decoration: none; font-size: 0.95rem; letter-spacing: 0.04em; opacity: 0.65; border-bottom: 1px solid var(--border); transition: opacity 0.18s, padding-left 0.18s; }
+  .library-list a:hover { opacity: 1; padding-left: 0.5rem; }
+  .library-index { font-size: 0.72rem; letter-spacing: 0.15em; opacity: 0.5; min-width: 1.6em; }
 
   #leaflet-map { position: absolute; inset: 0; }
   .leaflet-container { background: var(--black); }
@@ -176,11 +192,19 @@
 
 <footer>
   <span class="footer-meta">© 2026 — ODTÜ</span>
-  <a href="#" class="btn-library">
+  <a href="#" class="btn-library" id="library-btn">
     Open Library
     <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 6h8M7 3l3 3-3 3"/></svg>
   </a>
 </footer>
+
+<div class="library-overlay" id="library-overlay">
+  <div class="library-panel">
+    <button class="library-close" id="library-close">✕</button>
+    <h2 class="library-title">2026</h2>
+    <ul class="library-list" id="library-list"></ul>
+  </div>
+</div>
 
 <script>
   const activeYears = [2026];
@@ -379,9 +403,9 @@
 
     // ── Lens radial menu ──
     const LENS_SPREAD_DEG = 360;
-    const LENS_RADIUS_RATIO = 0.19;
-    const LENS_RADIUS_MIN = 60;
-    const LENS_RADIUS_MAX = 190;
+    const LENS_RADIUS_RATIO = 0.285;
+    const LENS_RADIUS_MIN = 90;
+    const LENS_RADIUS_MAX = 285;
     const LENS_FIT_RATIO = 0.7;
     const LENS_STAGGER_MS = 60;
 
@@ -428,10 +452,14 @@
 
         children.forEach((child, i) => {
           const phi = (LENS_SPREAD_DEG / children.length) * (i + 0.5) * (Math.PI / 180);
-          const x = ax + R * Math.sin(phi);
-          const y = ay - R * Math.cos(phi);
+          const dx = Math.sin(phi), dy = -Math.cos(phi);
+          const x = ax + R * dx;
+          const y = ay + R * dy;
+          const labelDir = Math.abs(dx) >= Math.abs(dy)
+            ? (dx >= 0 ? 'label-right' : 'label-left')
+            : (dy >= 0 ? 'label-bottom' : 'label-top');
           const item = document.createElement('div');
-          item.className = 'lens-node';
+          item.className = 'lens-node ' + labelDir;
           item.style.left = x + 'px';
           item.style.top = y + 'px';
           item.innerHTML = `<div class="lens-node-dot"></div><div class="lens-node-label">${child.label}</div>`;
@@ -648,6 +676,45 @@
       if (target === 'map' && window._leafletMap) window._leafletMap.invalidateSize();
     });
   });
+
+  // ── Library overlay ──
+  const LIBRARY_PROJECTS = [
+    { num: '01', label: 'Çayırhan Ash Lake',           url: 'project-2026-1.html' },
+    { num: '02', label: 'Hıdırlık Tepe',               url: 'project-2026-2.html' },
+    { num: '03', label: 'Grid',                        url: 'project-2026-3.html' },
+    { num: '04', label: 'Bilkent Territory',           url: 'project-2026-4.html' },
+    { num: '05', label: 'Ankara Çankaya (vinç) Hotel', url: 'project-2026-5.html' },
+    { num: '06', label: 'Cebeci Cemetery',             url: 'project-2026-6.html' },
+    { num: '07', label: 'İlker Mahallesi',             url: 'project-2026-7.html' },
+    { num: '08', label: 'ÇUBUK I Dam',                 url: 'project-2026-8.html' },
+    { num: '09', label: "Ankara's Clay",               url: 'project-2026-9.html' },
+  ];
+
+  const libraryOverlay = document.getElementById('library-overlay');
+  const libraryList    = document.getElementById('library-list');
+
+  LIBRARY_PROJECTS.forEach(p => {
+    const li = document.createElement('li');
+    const a  = document.createElement('a');
+    a.href = p.url;
+    const index = document.createElement('span');
+    index.className = 'library-index';
+    index.textContent = p.num;
+    const label = document.createElement('span');
+    label.textContent = p.label;
+    a.appendChild(index);
+    a.appendChild(label);
+    li.appendChild(a);
+    libraryList.appendChild(li);
+  });
+
+  function openLibrary()  { libraryOverlay.classList.add('visible'); }
+  function closeLibrary() { libraryOverlay.classList.remove('visible'); }
+
+  document.getElementById('library-btn').addEventListener('click', (e) => { e.preventDefault(); openLibrary(); });
+  document.getElementById('library-close').addEventListener('click', closeLibrary);
+  libraryOverlay.addEventListener('click', (e) => { if (e.target === libraryOverlay) closeLibrary(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLibrary(); });
 
   // ── Bouncing shapes ──
   const container = document.getElementById('view-content');
