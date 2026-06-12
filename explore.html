@@ -36,6 +36,8 @@
   .node { position: relative; display: inline-block; pointer-events: all; touch-action: manipulation; cursor: pointer; }
   .node-dot { width: var(--node-size); height: var(--node-size); border-radius: 50%; background: #f5f2eb; border: 1.5px solid #0a0a0a; transition: transform 0.2s; position: relative; z-index: 2; }
   .node-dot::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid rgba(245,242,235,0.55); animation: pulse 2.5s ease-out infinite; opacity: 0; }
+  .node-square .node-dot { border-radius: 2px; }
+  .node-square .node-dot::after { border-radius: 2px; }
   @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(2.2); opacity: 0; } }
   .node:hover .node-dot { transform: scale(1.5); }
   .node-label { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; white-space: nowrap; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); }
@@ -383,7 +385,8 @@
           });
 
         } else if (type === 'geojson') {
-          const html = `<div class="node"><div class="node-dot"></div><div class="node-label">${n.label}</div></div>`;
+          const shapeClass = n.icon === 'square' ? ' node-square' : '';
+          const html = `<div class="node${shapeClass}"><div class="node-dot"></div><div class="node-label">${n.label}</div></div>`;
           const marker = L.marker([n.lat, n.lng], { icon: makeIcon(html) }).addTo(window._leafletMap);
           markers.push(marker);
           marker.on('click', () => {
