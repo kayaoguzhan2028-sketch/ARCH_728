@@ -47,6 +47,18 @@
   .cluster-link { background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; color: var(--white); text-decoration: none; backdrop-filter: blur(4px); transition: border-color 0.15s; }
   .cluster-link:hover { border-color: rgba(245,242,235,0.5); }
 
+  /* Lens radial menu */
+  .lens-menu { position: absolute; inset: 0; z-index: 998; pointer-events: auto; }
+  .lens-arc-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .lens-arc { fill: none; stroke: rgba(245,242,235,0.45); stroke-width: 1; stroke-dasharray: 4 5; }
+  .lens-node { position: absolute; transform: translate(-50%, -50%); cursor: pointer; }
+  .lens-node-dot { width: calc(var(--node-size) * 1.6); height: calc(var(--node-size) * 1.6); border-radius: 50%; background: #f5f2eb; border: 1.5px solid #0a0a0a; transform: scale(0); opacity: 0; transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1), opacity 0.32s ease; }
+  .lens-node:hover .lens-node-dot { transform: scale(1.2); }
+  .lens-node.visible .lens-node-dot { transform: scale(1); opacity: 1; }
+  .lens-node.visible:hover .lens-node-dot { transform: scale(1.2); }
+  .lens-node-label { position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%); background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; white-space: nowrap; font-size: 0.82rem; letter-spacing: 0.05em; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.25s ease; }
+  .lens-node.visible .lens-node-label { opacity: 1; }
+
   #view-year { align-items: center; justify-content: center; overflow: hidden; }
   .year-stack { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; user-select: none; }
   .year-item { position: absolute; display: flex; align-items: center; gap: 0.6em; font-family: 'EB Garamond', Georgia, serif; font-weight: 400; color: var(--white); white-space: nowrap; transition: transform 0.43s cubic-bezier(0.4,0,0.2,1), opacity 0.43s cubic-bezier(0.4,0,0.2,1), font-size 0.43s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
@@ -350,6 +362,7 @@
       hiddenMarkers = [];
       mapPanel.classList.remove('visible', 'mode-geojson');
       mapPanelText.textContent = '';
+      closeLensMenu();
       unlockMap();
     }
 
@@ -358,6 +371,176 @@
       const view = prevView; prevView = null; clearActive();
       if (view) window._leafletMap.flyTo(view.center, view.zoom, { duration: 2.4 });
     });
+
+    // ── Lens radial menu ──
+    const LENS_ARC_DEG = 90;
+    const LENS_RADIUS_RATIO = 0.16;
+    const LENS_RADIUS_MIN = 60;
+    const LENS_RADIUS_MAX = 160;
+    const LENS_STAGGER_MS = 60;
+
+    let lensMenuEl = null, lensEscHandler = null, lensResizeHandler = null;
+
+    function closeLensMenu() {
+      if (!lensMenuEl) return;
+      lensMenuEl.remove();
+      lensMenuEl = null;
+      document.removeEventListener('keydown', lensEscHandler);
+      window.removeEventListener('resize', lensResizeHandler);
+      lensEscHandler = null;
+      lensResizeHandler = null;
+    }
+
+    function showLensMenu(n) {
+      closeLensMenu();
+      const children = n.lensChildren || [];
+      if (!children.length) return;
+
+      const menu = document.createElement('div');
+      menu.className = 'lens-menu';
+      document.getElementById('map-container').appendChild(menu);
+      lensMenuEl = menu;
+
+      function layout() {
+        menu.innerHTML = '';
+        const pt = window._leafletMap.latLngToContainerPoint([n.lat, n.lng]);
+        const ax = pt.x, ay = pt.y;
+        const R = Math.max(LENS_RADIUS_MIN, Math.min(LENS_RADIUS_MAX, Math.min(window.innerWidth, window.innerHeight) * LENS_RADIUS_RATIO));
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('class', 'lens-arc-svg');
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('class', 'lens-arc');
+        path.setAttribute('d', `M ${ax} ${ay - R} A ${R} ${R} 0 0 1 ${ax + R} ${ay}`);
+        svg.appendChild(path);
+        menu.appendChild(svg);
+
+        children.forEach((child, i) => {
+          const phi = (LENS_ARC_DEG / children.length) * (i + 0.5) * (Math.PI / 180);
+          const x = ax + R * Math.sin(phi);
+          const y = ay - R * Math.cos(phi);
+          const item = document.createElement('div');
+          item.className = 'lens-node';
+          item.style.left = x + 'px';
+          item.style.top = y + 'px';
+          item.innerHTML = `<div class="lens-node-dot"></div><div class="lens-node-label">${child.label}</div>`;
+          item.querySelector('.lens-node-dot').style.transitionDelay = (i * LENS_STAGGER_MS) + 'ms';
+          item.querySelector('.lens-node-label').style.transitionDelay = (i * LENS_STAGGER_MS) + 'ms';
+          item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeLensMenu();
+            openGeojsonNode(child);
+          });
+          menu.appendChild(item);
+          requestAnimationFrame(() => requestAnimationFrame(() => item.classList.add('visible')));
+        });
+      }
+
+      layout();
+      menu.addEventListener('click', closeLensMenu);
+
+      lensEscHandler = (e) => { if (e.key === 'Escape') closeLensMenu(); };
+      document.addEventListener('keydown', lensEscHandler);
+
+      lensResizeHandler = () => layout();
+      window.addEventListener('resize', lensResizeHandler);
+    }
+
+    function openGeojsonNode(n, marker) {
+      clearActive();
+      prevView = { center: window._leafletMap.getCenter(), zoom: window._leafletMap.getZoom() };
+      if (marker) {
+        const el = marker.getElement();
+        if (el) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; activeMarkerEl = el; }
+      }
+      hiddenMarkers = allMarkers.filter(m => m !== marker);
+      hiddenMarkers.forEach(m => window._leafletMap.removeLayer(m));
+      lockMap();
+      mapPanelLabel.textContent = n.label;
+      mapPanelLink.href = BASE + n.url;
+      mapPanelText.textContent = n.description || '';
+      mapPanel.classList.add('visible', 'mode-geojson');
+      const geojsonUrl = DATA.replace(/\/[^/]+$/, '') + '/' + n.geojsonFile + '?v=' + Date.now();
+      fetch(geojsonUrl)
+        .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(data => {
+          if (!mapPanel.classList.contains('visible')) return;
+          const hatchId = 'hatch-' + n.id;
+          const svgNS = 'http://www.w3.org/2000/svg';
+          const baseStyle = n.style || { color: '#f5f2eb', weight: 1.5, opacity: 1, fillOpacity: 0 };
+          if (n.hatch) {
+            let defsSvg = document.getElementById('_hatch_defs_svg');
+            if (!defsSvg) {
+              defsSvg = document.createElementNS(svgNS, 'svg');
+              defsSvg.setAttribute('id', '_hatch_defs_svg');
+              defsSvg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+              document.body.appendChild(defsSvg);
+            }
+            let defs = defsSvg.querySelector('defs');
+            if (!defs) { defs = document.createElementNS(svgNS, 'defs'); defsSvg.appendChild(defs); }
+            if (!defs.querySelector('#' + hatchId)) {
+              const h = n.hatch; const sp = h.spacing || 6;
+              const pat = document.createElementNS(svgNS, 'pattern');
+              pat.setAttribute('id', hatchId); pat.setAttribute('patternUnits', 'userSpaceOnUse');
+              pat.setAttribute('width', sp); pat.setAttribute('height', sp);
+              if (h.type === 'cross') {
+                const mkL = (x1, y1, x2, y2) => {
+                  const l = document.createElementNS(svgNS, 'line');
+                  l.setAttribute('x1', x1); l.setAttribute('y1', y1);
+                  l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+                  l.setAttribute('stroke', h.color || '#f5f2eb');
+                  l.setAttribute('stroke-width', h.width || 1);
+                  l.setAttribute('stroke-opacity', h.opacity || 0.7);
+                  return l;
+                };
+                pat.appendChild(mkL(String(sp/2), '0', String(sp/2), String(sp)));
+                pat.appendChild(mkL('0', String(sp/2), String(sp), String(sp/2)));
+              } else if (h.type === 'dot') {
+                const c = document.createElementNS(svgNS, 'circle');
+                c.setAttribute('cx', String(sp/2)); c.setAttribute('cy', String(sp/2));
+                c.setAttribute('r', String(h.radius || sp * 0.18));
+                c.setAttribute('fill', h.color || '#f5f2eb');
+                c.setAttribute('fill-opacity', h.opacity || 0.7);
+                pat.appendChild(c);
+              } else {
+                pat.setAttribute('patternTransform', 'rotate(' + (h.angle || 45) + ')');
+                const ln = document.createElementNS(svgNS, 'line');
+                ln.setAttribute('x1', '0'); ln.setAttribute('y1', '0');
+                ln.setAttribute('x2', '0'); ln.setAttribute('y2', sp);
+                ln.setAttribute('stroke', h.color || '#f5f2eb');
+                ln.setAttribute('stroke-width', h.width || 1.5);
+                ln.setAttribute('stroke-opacity', h.opacity || 0.8);
+                pat.appendChild(ln);
+              }
+              defs.appendChild(pat);
+            }
+          }
+          const layer = L.geoJSON(data, {
+            style: function(feature) {
+              const geomType = feature && feature.geometry && feature.geometry.type;
+              const isPoly = geomType === 'Polygon' || geomType === 'MultiPolygon';
+              if (isPoly) {
+                return Object.assign({}, baseStyle, n.polygonStyle || {}, {
+                  fillColor:   n.hatch ? ('url(#' + hatchId + ')') : (baseStyle.fillColor || '#f5f2eb'),
+                  fillOpacity: n.hatch ? 1 : (baseStyle.fillOpacity || 0),
+                });
+              }
+              return Object.assign({}, baseStyle, n.lineStyle || {});
+            }
+          }).addTo(window._leafletMap);
+          activeShape = layer;
+          const bounds = layer.getBounds();
+          if (bounds.isValid()) {
+            const zoom = n.zoom !== undefined ? n.zoom : window._leafletMap.getBoundsZoom(bounds, false, L.point(40, 40));
+            window._leafletMap.flyTo(bounds.getCenter(), zoom, { duration: 1.4 });
+          }
+          if (n.lensChildren && n.lensChildren.length) {
+            setTimeout(() => { if (mapPanel.classList.contains('visible')) showLensMenu(n); }, 1450);
+          }
+        })
+        .catch(err => console.error('[geojson] fetch error:', err));
+    }
 
     fetch(DATA).then(r => r.json()).then(nodes => {
       const markers = [];
@@ -390,93 +573,7 @@
           const html = `<div class="node${shapeClass}"><div class="node-dot"${dotAttr}></div><div class="node-label">${n.label}</div></div>`;
           const marker = L.marker([n.lat, n.lng], { icon: makeIcon(html, iconSize) }).addTo(window._leafletMap);
           markers.push(marker);
-          marker.on('click', () => {
-            clearActive();
-            prevView = { center: window._leafletMap.getCenter(), zoom: window._leafletMap.getZoom() };
-            const el = marker.getElement();
-            if (el) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; activeMarkerEl = el; }
-            hiddenMarkers = allMarkers.filter(m => m !== marker);
-            hiddenMarkers.forEach(m => window._leafletMap.removeLayer(m));
-            lockMap();
-            mapPanelLabel.textContent = n.label;
-            mapPanelLink.href = BASE + n.url;
-            mapPanelText.textContent = n.description || '';
-            mapPanel.classList.add('visible', 'mode-geojson');
-            const geojsonUrl = DATA.replace(/\/[^/]+$/, '') + '/' + n.geojsonFile + '?v=' + Date.now();
-            fetch(geojsonUrl)
-              .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-              .then(data => {
-                if (!mapPanel.classList.contains('visible')) return;
-                const hatchId = 'hatch-' + n.id;
-                const svgNS = 'http://www.w3.org/2000/svg';
-                const baseStyle = n.style || { color: '#f5f2eb', weight: 1.5, opacity: 1, fillOpacity: 0 };
-                if (n.hatch) {
-                  let defsSvg = document.getElementById('_hatch_defs_svg');
-                  if (!defsSvg) {
-                    defsSvg = document.createElementNS(svgNS, 'svg');
-                    defsSvg.setAttribute('id', '_hatch_defs_svg');
-                    defsSvg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
-                    document.body.appendChild(defsSvg);
-                  }
-                  let defs = defsSvg.querySelector('defs');
-                  if (!defs) { defs = document.createElementNS(svgNS, 'defs'); defsSvg.appendChild(defs); }
-                  if (!defs.querySelector('#' + hatchId)) {
-                    const h = n.hatch; const sp = h.spacing || 6;
-                    const pat = document.createElementNS(svgNS, 'pattern');
-                    pat.setAttribute('id', hatchId); pat.setAttribute('patternUnits', 'userSpaceOnUse');
-                    pat.setAttribute('width', sp); pat.setAttribute('height', sp);
-                    if (h.type === 'cross') {
-                      const mkL = (x1, y1, x2, y2) => {
-                        const l = document.createElementNS(svgNS, 'line');
-                        l.setAttribute('x1', x1); l.setAttribute('y1', y1);
-                        l.setAttribute('x2', x2); l.setAttribute('y2', y2);
-                        l.setAttribute('stroke', h.color || '#f5f2eb');
-                        l.setAttribute('stroke-width', h.width || 1);
-                        l.setAttribute('stroke-opacity', h.opacity || 0.7);
-                        return l;
-                      };
-                      pat.appendChild(mkL(String(sp/2), '0', String(sp/2), String(sp)));
-                      pat.appendChild(mkL('0', String(sp/2), String(sp), String(sp/2)));
-                    } else if (h.type === 'dot') {
-                      const c = document.createElementNS(svgNS, 'circle');
-                      c.setAttribute('cx', String(sp/2)); c.setAttribute('cy', String(sp/2));
-                      c.setAttribute('r', String(h.radius || sp * 0.18));
-                      c.setAttribute('fill', h.color || '#f5f2eb');
-                      c.setAttribute('fill-opacity', h.opacity || 0.7);
-                      pat.appendChild(c);
-                    } else {
-                      pat.setAttribute('patternTransform', 'rotate(' + (h.angle || 45) + ')');
-                      const ln = document.createElementNS(svgNS, 'line');
-                      ln.setAttribute('x1', '0'); ln.setAttribute('y1', '0');
-                      ln.setAttribute('x2', '0'); ln.setAttribute('y2', sp);
-                      ln.setAttribute('stroke', h.color || '#f5f2eb');
-                      ln.setAttribute('stroke-width', h.width || 1.5);
-                      ln.setAttribute('stroke-opacity', h.opacity || 0.8);
-                      pat.appendChild(ln);
-                    }
-                    defs.appendChild(pat);
-                  }
-                }
-                const layer = L.geoJSON(data, {
-                  style: function(feature) {
-                    const geomType = feature && feature.geometry && feature.geometry.type;
-                    const isPoly = geomType === 'Polygon' || geomType === 'MultiPolygon';
-                    if (isPoly) {
-                      return Object.assign({}, baseStyle, n.polygonStyle || {}, {
-                        fillColor:   n.hatch ? ('url(#' + hatchId + ')') : (baseStyle.fillColor || '#f5f2eb'),
-                        fillOpacity: n.hatch ? 1 : (baseStyle.fillOpacity || 0),
-                      });
-                    }
-                    return Object.assign({}, baseStyle, n.lineStyle || {});
-                  }
-                }).addTo(window._leafletMap);
-                activeShape = layer;
-                const bounds = layer.getBounds();
-                const zoom = n.zoom !== undefined ? n.zoom : window._leafletMap.getBoundsZoom(bounds, false, L.point(40, 40));
-                window._leafletMap.flyTo(bounds.getCenter(), zoom, { duration: 1.4 });
-              })
-              .catch(err => console.error('[geojson] fetch error:', err));
-          });
+          marker.on('click', () => openGeojsonNode(n, marker));
 
         } else {
           const html = `<div class="node"><div class="node-dot"></div><div class="node-label">${n.label}</div></div>`;
