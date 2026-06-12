@@ -171,8 +171,7 @@
 
 <script>
   const activeYears = [2026];
-  const YEARS = [];
-  for (let y = 2026; y <= 2030; y++) YEARS.push(y);
+  const YEARS = [2026];
 
   const stack   = document.getElementById('year-stack');
   const yearBg  = document.getElementById('year-bg');
@@ -249,7 +248,7 @@
 
   const items = stack.querySelectorAll('.year-item');
 
-  const yearHtmlMap = { 2026: '2026.html', 2027: '2027.html', 2028: '#', 2029: '#', 2030: '#' };
+  const yearHtmlMap = { 2026: '2026.html' };
 
   function renderYears() {
     items.forEach((item, i) => {
