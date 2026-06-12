@@ -15,13 +15,24 @@
   .hero-eyebrow { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; opacity:0.35; margin-bottom:1.2rem; }
   .hero-title { font-size:clamp(4rem,14vw,10rem); font-weight:600; letter-spacing:0.12em; text-transform:uppercase; line-height:1; color:var(--white); margin-bottom:0.6rem; }
   .hero-subtitle { font-size:clamp(0.9rem,2vw,1.15rem); font-style:italic; color:var(--mid); letter-spacing:0.04em; margin-bottom:3rem; }
-  .project-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; width:min(480px,90vw); }
-  .btn-project { display:flex; align-items:center; justify-content:center; height:52px; border:1px solid rgba(245,242,235,0.35); color:var(--white); font-family:var(--font); font-size:0.88rem; letter-spacing:0.2em; text-decoration:none; position:relative; overflow:hidden; transition:border-color 0.3s; }
-  .btn-project::before { content:''; position:absolute; inset:0; background:var(--white); transform:translateY(101%); transition:transform 0.32s cubic-bezier(0.4,0,0.2,1); z-index:0; }
-  .btn-project span { position:relative; z-index:1; transition:color 0.32s; }
-  .btn-project:hover { border-color:var(--white); }
-  .btn-project:hover::before { transform:translateY(0); }
-  .btn-project:hover span { color:var(--black); }
+  .project-circle { position:relative; width:min(440px,88vw); height:min(440px,88vw); margin:0 auto; }
+  .project-circle::before { content:''; position:absolute; inset:30px; border:1px solid rgba(245,242,235,0.12); border-radius:50%; }
+  .circle-node { position:absolute; width:60px; height:60px; margin:-30px 0 0 -30px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(245,242,235,0.35); color:var(--white); font-family:var(--font); font-size:0.85rem; letter-spacing:0.15em; text-decoration:none; background:var(--black); overflow:hidden; transition:border-color 0.3s, transform 0.3s ease; }
+  .circle-node::before { content:''; position:absolute; inset:0; background:var(--white); border-radius:50%; transform:scale(0); transition:transform 0.32s cubic-bezier(0.4,0,0.2,1); z-index:0; }
+  .circle-node span { position:relative; z-index:1; transition:color 0.32s; }
+  .circle-node:hover { border-color:var(--white); transform:scale(1.15); }
+  .circle-node:hover::before { transform:scale(1); }
+  .circle-node:hover span { color:var(--black); }
+  .circle-preview { position:absolute; top:50%; left:50%; width:62%; height:62%; transform:translate(-50%,-50%); border-radius:50%; overflow:hidden; pointer-events:none; opacity:0; transition:opacity 0.35s ease; }
+  .circle-preview.active { opacity:1; }
+  .circle-preview img { width:100%; height:100%; object-fit:cover; display:block; }
+  @media (max-width:480px) {
+    .project-circle { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:min(320px,90vw); height:auto; }
+    .project-circle::before { display:none; }
+    .circle-node { position:static; margin:0; width:100%; height:56px; border-radius:0; }
+    .circle-node:hover { transform:none; }
+    .circle-preview { display:none; }
+  }
   .scroll-hint { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.2; z-index:1; }
   .nav-back { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:rgba(10,10,10,0.8); backdrop-filter:blur(6px); }
   .nav-back a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; transition:opacity 0.2s; }
@@ -54,16 +65,20 @@
   <div class="hero-content">
     <p class="hero-eyebrow">ARCH 728 · Reflections on Landscape · ODTÜ</p>
     <h1 class="hero-title">2026</h1>
-    <p class="hero-subtitle">Urban Soil Metabolism · Spring Semester · 8 Proje</p>
-    <div class="project-grid">
-      <a href="project-2026-1.html" class="btn-project"><span>01</span></a>
-      <a href="project-2026-2.html" class="btn-project"><span>02</span></a>
-      <a href="project-2026-3.html" class="btn-project"><span>03</span></a>
-      <a href="project-2026-4.html" class="btn-project"><span>04</span></a>
-      <a href="project-2026-5.html" class="btn-project"><span>05</span></a>
-      <a href="project-2026-6.html" class="btn-project"><span>06</span></a>
-      <a href="project-2026-7.html" class="btn-project"><span>07</span></a>
-      <a href="project-2026-8.html" class="btn-project"><span>08</span></a>
+    <p class="hero-subtitle">Urban Soil Metabolism · Spring Semester · 9 Proje</p>
+    <div class="project-circle">
+      <div class="circle-preview" id="preview-1"><img src="2026-images/2026-p1/main-page/2026-1-cayirhanmainphoto_03.01.webp" alt=""></div>
+      <div class="circle-preview" id="preview-2"><img src="2026-images/2026-p2/themodel/00-model-hepsi.webp" alt=""></div>
+      <div class="circle-preview" id="preview-7"><img src="2026-images/2026-p7/main image 20.05.webp" alt=""></div>
+      <a href="project-2026-1.html" class="circle-node" style="top:6.82%;left:50%;"><span>01</span></a>
+      <a href="project-2026-2.html" class="circle-node" style="top:16.93%;left:77.75%;"><span>02</span></a>
+      <a href="project-2026-3.html" class="circle-node" style="top:42.5%;left:92.53%;"><span>03</span></a>
+      <a href="project-2026-4.html" class="circle-node" style="top:71.59%;left:87.39%;"><span>04</span></a>
+      <a href="project-2026-5.html" class="circle-node" style="top:90.58%;left:64.77%;"><span>05</span></a>
+      <a href="project-2026-6.html" class="circle-node" style="top:90.58%;left:35.23%;"><span>06</span></a>
+      <a href="project-2026-7.html" class="circle-node" style="top:71.59%;left:12.61%;"><span>07</span></a>
+      <a href="project-2026-8.html" class="circle-node" style="top:42.5%;left:7.47%;"><span>08</span></a>
+      <a href="project-2026-9.html" class="circle-node" style="top:16.93%;left:22.25%;"><span>09</span></a>
     </div>
   </div>
   <p class="scroll-hint">&#8595; scroll</p>
@@ -88,8 +103,18 @@
     <li><a href="project-2026-6.html" style="color:inherit;text-decoration:none;opacity:0.65;">06 — Project 06</a></li>
     <li><a href="project-2026-7.html" style="color:inherit;text-decoration:none;opacity:0.65;">07 — İlker Mahallesi</a></li>
     <li><a href="project-2026-8.html" style="color:inherit;text-decoration:none;opacity:0.65;">08 — Project 08</a></li>
+    <li><a href="project-2026-9.html" style="color:inherit;text-decoration:none;opacity:0.65;">09 — Project 09</a></li>
   </ul></div>
 </div>
 <footer><p>© 2026 METU · ARCH 728 · Spring Semester</p></footer>
+<script>
+  const previews = { 1:'preview-1', 2:'preview-2', 7:'preview-7' };
+  Object.entries(previews).forEach(([num, id]) => {
+    const node = document.querySelector('a[href="project-2026-' + num + '.html"]');
+    const preview = document.getElementById(id);
+    node.addEventListener('mouseenter', () => preview.classList.add('active'));
+    node.addEventListener('mouseleave', () => preview.classList.remove('active'));
+  });
+</script>
 </body>
 </html>

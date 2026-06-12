@@ -296,9 +296,9 @@
           if (node.nodeType === 1) g.appendChild(document.importNode(node, true));
         });
 
-        g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
+        g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline, line').forEach(shape => {
           const tag = shape.tagName.toLowerCase();
-          if (tag === 'polyline' || tag === 'polygon') {
+          if (tag === 'polyline' || tag === 'polygon' || tag === 'line') {
             shape.setAttribute('pointer-events', 'stroke');
             shape.style.fill = 'none';
           } else {
