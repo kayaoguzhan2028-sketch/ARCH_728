@@ -144,7 +144,7 @@
     <li><button data-view="year">By Year</button></li>
     <li><button data-view="content">By Content</button></li>
   </ul>
-  <button id="map-theme-btn">hell</button>
+  <button id="map-theme-btn">bright</button>
 </nav>
 
 <div class="content">
@@ -353,7 +353,7 @@
         { attribution: tileAttrib, subdomains: 'abcd', maxZoom: 19 }
       ).addTo(window._leafletMap);
       document.body.classList.toggle('map-light', isLight);
-      document.getElementById('map-theme-btn').textContent = isLight ? 'dunkel' : 'hell';
+      document.getElementById('map-theme-btn').textContent = isLight ? 'dark' : 'bright';
     });
 
     function makeIcon(html, size = 8) {
