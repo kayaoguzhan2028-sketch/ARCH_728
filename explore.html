@@ -121,6 +121,8 @@
   .map-panel-back { display: none; font-family: 'EB Garamond', serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; background: none; border: 1px solid rgba(245,242,235,0.28); color: var(--white); cursor: pointer; padding: 0.28em 0.7em; opacity: 0.65; transition: opacity 0.18s, border-color 0.18s; }
   .map-panel-back:hover { opacity: 1; border-color: rgba(245,242,235,0.55); }
   .map-panel-text { margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.78rem; line-height: 1.65; opacity: 0.55; white-space: pre-line; }
+  .map-panel-text a { color: var(--white); text-decoration: underline; opacity: 0.8; transition: opacity 0.18s; }
+  .map-panel-text a:hover { opacity: 1; }
   .map-panel.mode-geojson .map-panel-close { display: none; }
   .map-panel.mode-geojson .map-panel-back { display: inline-block; }
 
@@ -403,9 +405,9 @@
 
     // ── Lens radial menu ──
     const LENS_SPREAD_DEG = 360;
-    const LENS_RADIUS_RATIO = 0.285;
-    const LENS_RADIUS_MIN = 90;
-    const LENS_RADIUS_MAX = 285;
+    const LENS_RADIUS_RATIO = 0.33;
+    const LENS_RADIUS_MIN = 105;
+    const LENS_RADIUS_MAX = 330;
     const LENS_FIT_RATIO = 0.7;
     const LENS_STAGGER_MS = 60;
 
@@ -497,6 +499,15 @@
       mapPanelLabel.textContent = n.label;
       mapPanelLink.href = BASE + n.url;
       mapPanelText.textContent = n.description || '';
+      if (n.link) {
+        mapPanelText.appendChild(document.createElement('br'));
+        const linkEl = document.createElement('a');
+        linkEl.href = n.link;
+        linkEl.target = '_blank';
+        linkEl.rel = 'noopener';
+        linkEl.textContent = n.link;
+        mapPanelText.appendChild(linkEl);
+      }
       mapPanel.classList.add('visible', 'mode-geojson');
       const geojsonUrl = DATA.replace(/\/[^/]+$/, '') + '/' + n.geojsonFile + '?v=' + Date.now();
       fetch(geojsonUrl)
@@ -554,6 +565,7 @@
             }
           }
           const layer = L.geoJSON(data, {
+            interactive: false,
             style: function(feature) {
               const geomType = feature && feature.geometry && feature.geometry.type;
               const isPoly = geomType === 'Polygon' || geomType === 'MultiPolygon';
