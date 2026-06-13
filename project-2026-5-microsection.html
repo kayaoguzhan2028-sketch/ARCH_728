@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
+<title>MicroSections — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --orange:#d97a3f; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+
+  .wrap { max-width:1000px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; color:var(--orange); }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
+  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
+  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+
+  .interactive-image { position:relative; width:100%; margin:2.5rem 0; }
+  .interactive-image img { width:100%; display:block; margin:0; opacity:0.9; }
+  .hotspot-overlay { position:absolute; top:0; left:0; width:100%; height:100%; }
+  .hotspot-zone { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
+  .hotspot-zone:hover { opacity:0.25; }
+  .hotspot-zone.active { opacity:0.35; }
+
+  .micro-result { display:none; gap:1.5rem; margin-top:1rem; align-items:flex-start; flex-wrap:wrap; }
+  .micro-result.active { display:flex; }
+  .micro-result img { flex:1 1 260px; max-width:45%; display:block; margin:0; opacity:0.92; }
+  .micro-result .micro-text { flex:1 1 260px; font-size:1.1rem; line-height:1.95; opacity:0.82; }
+
+  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
+  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="2026.html" class="nav-back">← 2026</a>
+  <span class="nav-tag">Field Report</span>
+</nav>
+<div class="wrap">
+  <h1>MicroSections</h1>
+  <hr class="rule">
+  <div class="body">
+
+    <p>This section shows, how materials detached from the structure dissolve over time and interact with the surrounding environment. Concrete, steel reinforcement, and surface coatings decompose at different rates, creating a heterogeneous transformation field at the material scale.</p>
+
+    <div class="interactive-image">
+      <img src="2026-images/2026-p5/03-MicroSections/base1-microsection.webp" alt="Microsection base diagram">
+      <svg class="hotspot-overlay" viewBox="0 0 3781 1993" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="hotspot-zone" cx="398.2" cy="1171.17" r="37.76"/>
+        <circle class="hotspot-zone" cx="709.9" cy="1167.66" r="37.76"/>
+        <circle class="hotspot-zone" cx="1253.24" cy="1438.78" r="37.76"/>
+        <circle class="hotspot-zone" cx="1588.35" cy="1386.7" r="37.76"/>
+      </svg>
+    </div>
+
+    <div class="micro-result" id="micro-result">
+      <img id="micro-result-img" src="" alt="">
+      <p class="micro-text" id="micro-result-text"></p>
+    </div>
+
+  </div>
+  <dl class="meta">
+    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+  </dl>
+</div>
+<script>
+  const microData = [
+    { img: '2026-images/2026-p5/03-MicroSections/micro.section_biological.degradation.webp', text: 'The image shows a cross-section of a concrete pier underground, illustrating the biodegradation (biocorrosion) mechanism caused by microorganisms and chemical processes. Fungal growth and sulfate-reducing bacterial zones (SRB zones) cause microbiologically induced deterioration in the concrete structure through the organic acids they secrete. In summary, the diagram illustrates the biogenic acid attack and erosion process that underground concrete infrastructures are subjected to by living organisms and chemical reactions in the soil.' },
+    { img: '2026-images/2026-p5/03-MicroSections/micro.section_abandoned.contamination.webp', text: 'The diagram shows, in cross-section, the chemical and physical degradation processes that different man-made and natural materials under the soil undergo over time. Environmental pollution factors such as glass dissolution, iron oxidation, bitumen and microplastic release are schematically represented alongside intra-soil reactions such as calcium carbonate formation. In short, the diagram summarizes the destructive effects of anthropogenic waste on soil structure at both microscopic and macroscopic scales.' },
+    { img: '2026-images/2026-p5/03-MicroSections/micro.section_Contaminant.Migration.webp', text: 'The diagram illustrates the alkalization process resulting from the erosion of a concrete structure at its base level, and the spread of leached materials from the concrete into the soil via capillary migration. These material leaks and corrosion, which can occur in the underground foundation and basement walls of the hotel structure in the project, have the potential to directly affect the soil and groundwater chemistry in the topography where the hotel is located. In short, the diagram explains, via cross-section, the inevitable and polluting physicochemical interaction that large-scale reinforced concrete structures, such as hotel buildings, have with the surrounding environment.' },
+    { img: '2026-images/2026-p5/03-MicroSections/micro.section_reinforced.concrete.pile.foundation.webp', text: 'The image illustrates structural degradation processes such as concrete carbonation (carbonation front), concrete spalling, and reinforcement corrosion and migration that can occur in the foundation and pile systems of the hotel project. The pH changes (pH alkalization) at the interface between the concrete and the dense layers of heavy metals (Al, Cr, Pb, Cd) in the soil create a corrosion cycle that threatens the structural life and strength of the hotel building\'s load-bearing elements. In short, this cross-section explains the physical deterioration and material-based aging mechanism of the hotel\'s underground reinforced concrete components due to the chemical profile of the soil.' }
+  ];
+
+  const microResult = document.getElementById('micro-result');
+  const microResultImg = document.getElementById('micro-result-img');
+  const microResultText = document.getElementById('micro-result-text');
+  const hotspotZones = document.querySelectorAll('.hotspot-zone');
+
+  hotspotZones.forEach((zone, i) => {
+    zone.addEventListener('click', () => {
+      microResultImg.src = microData[i].img;
+      microResultText.textContent = microData[i].text;
+      microResult.classList.add('active');
+      hotspotZones.forEach((z, j) => z.classList.toggle('active', j === i));
+    });
+  });
+</script>
+</body>
+</html>
