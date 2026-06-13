@@ -1,0 +1,345 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
+<title>Çayırhan Ash Lake — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; background:linear-gradient(to bottom, rgba(10,10,10,0.65), rgba(10,10,10,0)); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+
+  .img-stage { position:relative; width:100%; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
+  .img-stage > img { width:100%; height:100%; object-fit:contain; display:block; filter:brightness(1) contrast(1); }
+  .svg-layer { position:absolute; pointer-events:none; overflow:visible; }
+  .overlay-img { opacity:0; transition:filter 0.3s ease, opacity 0.2s ease; cursor:pointer; }
+  .overlay-img.hover { opacity:1; filter:drop-shadow(0 0 6px rgba(245,220,140,0.55)); }
+  .overlay-img.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,220,140,1)) drop-shadow(0 0 32px rgba(245,200,80,0.7)); }
+  .wrap { max-width:960px; margin:0 auto; padding:5rem 2rem 8rem; }
+  .sec { margin-bottom:6rem; }
+  .sec-head { font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); opacity:0.6; padding-top:2rem; border-top:1px solid var(--border); margin-bottom:2.5rem; display:block; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
+  .fig img { width:100%; height:auto; display:block; margin:0; }
+  figcaption { font-size:0.56rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--mid); opacity:0.4; margin-top:0.5rem; }
+  .sec-text { font-size:0.95rem; line-height:1.9; opacity:0.7; }
+  .sec-text p { margin-bottom:1rem; }
+  @media (max-width:680px) { .two-col,.three-col { grid-template-columns:1fr; } }
+  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
+  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  .body { font-size:1.1rem; line-height:1.95; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
+  .body img { max-width:100%; margin:2.5rem 0; }
+  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
+  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="2026.html" class="nav-back">← 2026</a>
+  <span class="nav-title">Çayırhan Ash Lake</span>
+  <span class="nav-tag">Field Report</span>
+</nav>
+<div class="img-stage">
+  <img src="2026-images/2026-p1/factory/2026-1-728_factory_final_ornek_gorsel.webp" alt="Çayırhan Ash Lake" fetchpriority="high">
+  <div class="svg-layer" id="svg-layer"></div>
+</div>
+<div class="wrap">
+  <div class="body">
+
+    <div class="sec" id="sec-cayirhan">
+      <span class="sec-head">Çayırhan</span>
+      <div class="two-col">
+        <div class="sec-text">
+          <span class="label">Background of Çayırhan</span>
+          <p>According to the Climate Change Policy and Research Association's report (2021), Çayırhan is a town in the Nallıhan district of Ankara that has transformed over time from a natural and agricultural settlement into a heavy industrial and mining center. Situated on the historical Silk Road, Çayırhan is 120-123 km from Ankara, 22 km from Beypazarı, and 35 km from Nallıhan. Located at an average altitude of 500 meters above sea level, the town is right next to the Sarıyar Dam, which opened in 1959, and the Nallıhan Bird Sanctuary, an internationally important Ramsar site home to a large number of different bird species.</p>
+          <p>Karaca et al. (2009) stated that the region is quite suitable for agriculture in terms of its geographical structure, morphological features, climate, and soil characteristics. Furthermore, a large number of the population earned their living through animal husbandry and farming. Grains such as wheat and barley were grown in arid lands, while vegetable, fruit, and viticulture activities were carried out in irrigated areas.</p>
+          <p>According to Prof. Suna Kili's book, titled Çayırhan, (1978) the discovery of a lignite coal deposit by Musa Murtazaoğlu in 1954 completely changed the fate of Çayırhan. The Çayırhan Thermal Power Plant, established in 1976 to convert this low-quality lignite into electricity, and the massive underground coal mining operations have transformed the region into a heavily industrialized town. Hundreds of employees at the plant have created significant economic activity in the area. In addition to the thermal power plant and mines, chemical plants extracting sodium sulfate and soda from underground also operate on the hills in the region.</p>
+        </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanKentten-KeskinColor.webp" loading="lazy" alt="">
+          <figcaption>Dolor sit</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">How was Çayırhan?</span>
+      <div class="two-col">
+        <div class="sec-text"><p></p></div>
+        <div>
+          <figure class="fig" style="margin-bottom:1.5rem">
+            <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanBalıkçılık-VEKAM.webp" loading="lazy" alt="">
+            <figcaption>Amet consectetur</figcaption>
+          </figure>
+          <figure class="fig">
+            <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanManzara-ÖÖztaş.webp" loading="lazy" alt="">
+            <figcaption>Adipiscing elit</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Railway Project</span>
+      <div class="two-col">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-AnkaraEskiDemiryolu-AnkaraHarita.webp" loading="lazy" alt="">
+          <figcaption>Sed do</figcaption>
+        </figure>
+        <div class="sec-text"><p></p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Sarıyar Dam Construction</span>
+      <div class="three-col">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-SarıyarBarajı-AHANKA230006.webp" loading="lazy" alt="">
+          <figcaption>Eiusmod tempor</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-SarıyarBarajı-AHANKA230021.webp" loading="lazy" alt="">
+          <figcaption>Incididunt ut</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-SarıyarBarajı-AHANKA230023.webp" loading="lazy" alt="">
+          <figcaption>Labore dolore</figcaption>
+        </figure>
+      </div>
+      <div class="sec-text" style="margin-top:2rem"><p></p></div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Foundation of Power Station</span>
+      <div class="two-col">
+        <div class="sec-text"><p></p></div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanKarar-Arşiv.webp" loading="lazy" alt="">
+          <figcaption>Magna aliqua</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">Mining Resources</span>
+      <div class="two-col">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-MadenSahası-AA.webp" loading="lazy" alt="">
+          <figcaption>Ut enim</figcaption>
+        </figure>
+        <div class="sec-text"><p></p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">How Çayırhan Power Station Works</span>
+      <div class="two-col">
+        <div class="sec-text"><p></p></div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanYapı1-BAteş.webp" loading="lazy" alt="">
+          <figcaption>Ad minim</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">How Power Station Changed?</span>
+      <div class="three-col">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanTermik1-ÖÖztaş.webp" loading="lazy" alt="">
+          <figcaption>Veniam quis</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanTermik2-ÖÖztaş.webp" loading="lazy" alt="">
+          <figcaption>Nostrud exercitation</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanTermik3-ÖÖztaş.webp" loading="lazy" alt="">
+          <figcaption>Ullamco laboris</figcaption>
+        </figure>
+      </div>
+      <div class="sec-text" style="margin-top:2rem"><p></p></div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Production Trends</span>
+      <div class="two-col">
+        <div class="sec-text"><p></p></div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-ÇayırhanYapı2-BAteş.webp" loading="lazy" alt="">
+          <figcaption>Nisi ut</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">the Ash Lake</span>
+      <div class="three-col">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-KülGöleti-TikTok.webp" loading="lazy" alt="">
+          <figcaption>Aliquip ex</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-KülGöletiÜstÖlçek-HÇağdaşArşiv.webp" loading="lazy" alt="">
+          <figcaption>Ea commodo</figcaption>
+        </figure>
+        <div class="sec-text"><p></p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Waste Profile</span>
+      <div class="two-col">
+        <div class="sec-text"><p></p></div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-KülKonveyorHattı-Enprotek1.webp" loading="lazy" alt="">
+          <figcaption>Consequat duis</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The System</span>
+      <div class="three-col">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-KülKonveyorHattı-Enprotek2.webp" loading="lazy" alt="">
+          <figcaption>Aute irure</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/factory/2026-1-KülKonveyorHattı-Enprotek3.webp" loading="lazy" alt="">
+          <figcaption>Dolor reprehenderit</figcaption>
+        </figure>
+        <div class="sec-text"><p></p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Consequences</span>
+      <div class="sec-text"><p></p></div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">References</span>
+      <div class="sec-text"><p></p></div>
+    </div>
+
+  </div>
+  <dl class="meta">
+    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+  </dl>
+</div>
+<script>
+  const BASE    = '2026-images/2026-p1/factory/SVG/';
+  const mainImg = document.querySelector('.img-stage > img');
+  const stage   = document.querySelector('.img-stage');
+  const layer   = document.getElementById('svg-layer');
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svgEl = document.createElementNS(svgNS, 'svg');
+  svgEl.setAttribute('viewBox', '0 0 3000 2250');
+  svgEl.setAttribute('width', '100%');
+  svgEl.setAttribute('height', '100%');
+  svgEl.style.position = 'absolute';
+  svgEl.style.inset = '0';
+  layer.appendChild(svgEl);
+
+  const FILES = [
+    { id:'ashlake',    svg:'2026-1-728_deneme_ÖneÇıkanlarASHLAKE.svg',    webp:'2026-1-728_deneme_ÖneÇıkanlarASHLAKE.webp'    },
+    { id:'baraj',      svg:'2026-1-728_deneme_ÖneÇıkanlarBARAJ.svg',       webp:'2026-1-728_deneme_ÖneÇıkanlarBARAJ.webp'       },
+    { id:'circle',     svg:'2026-1-728_deneme_ÖneÇıkanlarCIRCLE.svg',      webp:'2026-1-728_deneme_ÖneÇıkanlarCIRCLE.webp'      },
+    { id:'fabrika',    svg:'2026-1-728_deneme_ÖneÇıkanlarFABRIKA.svg',     webp:'2026-1-728_deneme_ÖneÇıkanlarFABRIKA.webp'     },
+    { id:'production', svg:'2026-1-728_deneme_ÖneÇıkanlarPRODUCTION.svg',  webp:'2026-1-728_deneme_ÖneÇıkanlarPRODUCTION.webp'  },
+    { id:'risk',       svg:'2026-1-728_deneme_ÖneÇıkanlarRISK.svg',        webp:'2026-1-728_deneme_ÖneÇıkanlarRISK.webp'        },
+    { id:'waste',      svg:'2026-1-728_deneme_ÖneÇıkanlarWASTE.svg',       webp:'2026-1-728_deneme_ÖneÇıkanlarWASTE.webp'       },
+    { id:'cayirhan',   svg:'2026-1-728_deneme_ÖneÇıkanlarÇAYIRHAN.svg',    webp:'2026-1-728_deneme_ÖneÇıkanlarÇAYIRHAN.webp'    },
+  ];
+
+  FILES.forEach(cfg => {
+    fetch(BASE + cfg.svg)
+      .then(r => r.text())
+      .then(svgText => {
+        const parser = new DOMParser();
+        const parsed = parser.parseFromString(svgText, 'image/svg+xml');
+        const g = document.createElementNS(svgNS, 'g');
+        g.id = 'overlay-' + cfg.id;
+        g.classList.add('overlay-img');
+
+        // Görsel katman: webp
+        const vis = document.createElementNS(svgNS, 'image');
+        vis.setAttribute('href', BASE + cfg.webp);
+        vis.setAttribute('x', '0');
+        vis.setAttribute('y', '0');
+        vis.setAttribute('width', '3000');
+        vis.setAttribute('height', '2250');
+        vis.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        vis.setAttribute('pointer-events', 'none');
+        g.appendChild(vis);
+
+        // Shape katmanı: SVG'den gelen vektör shapeler (hit detection)
+        Array.from(parsed.documentElement.childNodes).forEach(node => {
+          if (node.nodeType === 1) g.appendChild(document.importNode(node, true));
+        });
+
+        g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline, line').forEach(shape => {
+          const tag = shape.tagName.toLowerCase();
+          if (tag === 'polyline' || tag === 'polygon' || tag === 'line') {
+            shape.setAttribute('pointer-events', 'stroke');
+            shape.style.fill = 'none';
+          } else {
+            shape.setAttribute('pointer-events', 'all');
+          }
+          shape.style.cursor = 'pointer';
+          shape.addEventListener('mouseenter', () => {
+            if (!g.classList.contains('active')) g.classList.add('hover');
+          });
+          shape.addEventListener('mouseleave', () => g.classList.remove('hover'));
+          shape.addEventListener('click', () => {
+            g.classList.toggle('active');
+            g.classList.remove('hover');
+            if (cfg.id === 'cayirhan') {
+              document.getElementById('sec-cayirhan').scrollIntoView({ behavior: 'smooth' });
+            }
+          });
+        });
+
+        svgEl.appendChild(g);
+      });
+  });
+
+  function fitLayer() {
+    const sw = stage.clientWidth, sh = stage.clientHeight;
+    const iw = mainImg.naturalWidth  || 3000;
+    const ih = mainImg.naturalHeight || 2250;
+    const imageAR = iw / ih, stageAR = sw / sh;
+    let w, h, l, t;
+    if (imageAR > stageAR) { w = sw; h = sw / imageAR; l = 0; t = (sh - h) / 2; }
+    else                   { h = sh; w = sh * imageAR; t = 0; l = (sw - w) / 2; }
+    layer.style.left   = l + 'px';
+    layer.style.top    = t + 'px';
+    layer.style.width  = w + 'px';
+    layer.style.height = h + 'px';
+  }
+
+  mainImg.addEventListener('load', fitLayer);
+  if (mainImg.complete) fitLayer();
+  window.addEventListener('resize', fitLayer);
+  new ResizeObserver(fitLayer).observe(stage);
+</script>
+</body>
+</html>
