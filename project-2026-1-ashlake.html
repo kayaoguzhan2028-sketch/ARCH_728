@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,242 +9,46 @@
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html, body { height: 100%; overflow: hidden; background: var(--black); color: var(--white); font-family: var(--font); }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; background:linear-gradient(to bottom, rgba(10,10,10,0.65), rgba(10,10,10,0)); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
-  .info-btn:hover { opacity:1; }
-  .info-btn.open { opacity:1; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
 
-  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
-  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
-  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
-  #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; }
-  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
-  #info-panel ul li { margin-bottom:0.8rem; }
-  #info-panel ul li:last-child { margin-bottom:0; }
-  #info-panel em { font-style:italic; }
-
-  #viewer { position:fixed; top:52px; left:0; right:0; bottom:0; overflow:hidden; cursor:grab; touch-action:none; }
-  #viewer.grabbing { cursor:grabbing; }
-  #canvas { position:absolute; top:0; left:0; transform-origin:0 0; }
-  #main-img { display:block; max-width:none; user-select:none; -webkit-user-drag:none; }
-  #overlay-svg { position:absolute; top:0; left:0; pointer-events:none; overflow:visible; }
-
-  .overlay-img { opacity:0; transition:filter 0.3s ease, opacity 0.2s ease; }
-  .overlay-img.hover { opacity:1; filter:drop-shadow(0 0 6px rgba(245,220,140,0.55)); }
-  .overlay-img.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,220,140,1)) drop-shadow(0 0 32px rgba(245,200,80,0.7)); }
+  .wrap { max-width:1000px; margin:0 auto; padding:6.5rem 2rem 6rem; }
+  .sec { margin-bottom:4rem; }
+  .sec:last-child { margin-bottom:0; }
+  .fig img { width:100%; height:auto; display:block; margin:0; }
 </style>
 </head>
 <body>
-
 <nav>
-  <div style="display:flex;align-items:center;">
-    <a href="2026.html" class="nav-back">← 2026</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
-  </div>
+  <a href="2026.html" class="nav-back">← 2026</a>
+  <span class="nav-title">Çayırhan Ash Lake</span>
   <span class="nav-tag">Field Report</span>
 </nav>
+<div class="wrap">
 
-<div id="info-panel">
-  <h2>Group Members</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-  <h2>Main Title</h2>
-  <p>Lorem ipsum dolor sit amet</p>
-  <h2>Sub-Title</h2>
-  <p><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</em></p>
-  <h2>Research Questions</h2>
-  <ul>
-    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore?</li>
-    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore?</li>
-    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt?</li>
-  </ul>
-  <h2>Position Statement</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <h2>Methodology</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-</div>
-
-<div id="viewer">
-  <div id="canvas">
-    <img id="main-img" src="2026-images/2026-p1/1-mainpage/2026-1-728-kapak_görseli_yatay.webp" draggable="false" alt="">
-    <svg id="overlay-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2579 1383" width="2579" height="1383"></svg>
+  <div class="sec">
+    <figure class="fig">
+      <img src="2026-images/2026-p1/8-ashlake/2026-1-728-AshLake-MainImage.webp" loading="lazy" alt="">
+    </figure>
   </div>
+
+  <div class="sec">
+    <figure class="fig">
+      <img src="2026-images/2026-p1/8-ashlake/2026-1-728-AshLake-MainImage-Photo1.webp" loading="lazy" alt="">
+    </figure>
+  </div>
+
+  <div class="sec">
+    <figure class="fig">
+      <img src="2026-images/2026-p1/8-ashlake/2026-1-728-AshLake-MainImage-Photo2.webp" loading="lazy" alt="">
+    </figure>
+  </div>
+
 </div>
-
-<script>
-  const infoBtn   = document.getElementById('info-toggle');
-  const infoPanel = document.getElementById('info-panel');
-  infoBtn.addEventListener('click', () => {
-    const open = infoPanel.classList.toggle('open');
-    infoBtn.classList.toggle('open', open);
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { infoPanel.classList.remove('open'); infoBtn.classList.remove('open'); }
-  });
-
-  const viewer  = document.getElementById('viewer');
-  const canvas  = document.getElementById('canvas');
-  const img     = document.getElementById('main-img');
-  const svgEl   = document.getElementById('overlay-svg');
-  const svgNS   = 'http://www.w3.org/2000/svg';
-
-  let scale = 1, tx = 0, ty = 0, minScale = 0.1;
-
-  function applyTransform() {
-    canvas.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
-  }
-
-  function fitImage() {
-    const vw = viewer.clientWidth, vh = viewer.clientHeight;
-    const iw = img.naturalWidth,   ih = img.naturalHeight;
-    if (!iw || !ih) return;
-    minScale = Math.min(vw / iw, vh / ih);
-    scale = minScale;
-    tx = (vw - iw * scale) / 2;
-    ty = (vh - ih * scale) / 2;
-    applyTransform();
-  }
-
-  img.addEventListener('load', fitImage);
-  if (img.complete && img.naturalWidth) fitImage();
-  window.addEventListener('resize', fitImage);
-
-  viewer.addEventListener('wheel', e => {
-    e.preventDefault();
-    const rect = viewer.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-    const newScale = Math.max(minScale, Math.min(scale * factor, 12));
-    const ratio = newScale / scale;
-    tx = mx - ratio * (mx - tx);
-    ty = my - ratio * (my - ty);
-    scale = newScale;
-    applyTransform();
-  }, { passive: false });
-
-  let dragging = false, dragX = 0, dragY = 0, wasDragging = false;
-  viewer.addEventListener('mousedown', e => {
-    dragging = true; dragX = e.clientX; dragY = e.clientY; wasDragging = false;
-    viewer.classList.add('grabbing');
-  });
-  window.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    if (Math.abs(e.clientX - dragX) > 4 || Math.abs(e.clientY - dragY) > 4) wasDragging = true;
-    tx += e.clientX - dragX; ty += e.clientY - dragY;
-    dragX = e.clientX; dragY = e.clientY;
-    applyTransform();
-  });
-  window.addEventListener('mouseup', () => { dragging = false; viewer.classList.remove('grabbing'); });
-
-  let prevTouches = null;
-  function currTouches(e) { return Array.from(e.touches).map(t => ({ x: t.clientX, y: t.clientY })); }
-
-  viewer.addEventListener('touchstart', e => {
-    e.preventDefault();
-    prevTouches = currTouches(e);
-  }, { passive: false });
-
-  viewer.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const curr = currTouches(e);
-    if (!prevTouches || prevTouches.length !== curr.length) { prevTouches = curr; return; }
-    const rect = viewer.getBoundingClientRect();
-    if (curr.length >= 2) {
-      const d0 = Math.hypot(prevTouches[1].x - prevTouches[0].x, prevTouches[1].y - prevTouches[0].y);
-      const d1 = Math.hypot(curr[1].x - curr[0].x, curr[1].y - curr[0].y);
-      const mx = (curr[0].x + curr[1].x) / 2 - rect.left;
-      const my = (curr[0].y + curr[1].y) / 2 - rect.top;
-      const factor = d0 > 0 ? d1 / d0 : 1;
-      const newScale = Math.max(minScale, Math.min(scale * factor, 12));
-      const ratio = newScale / scale;
-      tx = mx - ratio * (mx - tx) + ((curr[0].x + curr[1].x) / 2 - (prevTouches[0].x + prevTouches[1].x) / 2);
-      ty = my - ratio * (my - ty) + ((curr[0].y + curr[1].y) / 2 - (prevTouches[0].y + prevTouches[1].y) / 2);
-      scale = newScale;
-    } else if (curr.length === 1) {
-      tx += curr[0].x - prevTouches[0].x;
-      ty += curr[0].y - prevTouches[0].y;
-    }
-    prevTouches = curr;
-    applyTransform();
-  }, { passive: false });
-
-  viewer.addEventListener('touchend', e => { e.preventDefault(); prevTouches = null; }, { passive: false });
-
-  const BASE = '2026-images/2026-p1/2-interactive-page/SVG/';
-
-  const FILES = [
-    { id:'microclimate', svg:'2026-1-cayirhanmainphoto_03.01-onecikanlar-microclimate.svg', webp:'2026-1-cayirhanmainphoto_03.01-onecikanlar-microclimate.webp' },
-    { id:'fabrika',      svg:'2026-1-cayirhanmainphoto_03.01-onecikanlarfabrika.svg',        webp:'2026-1-cayirhanmainphoto_03.01-onecikanlarfabrika.webp'        },
-    { id:'golet',        svg:'2026-1-cayirhanmainphoto_03.01-onecikanlargolet.svg',          webp:'2026-1-cayirhanmainphoto_03.01-onecikanlargolet.webp'          },
-    { id:'kus',          svg:'2026-1-cayirhanmainphoto_03.01-onecikanlarkus.svg',            webp:'2026-1-cayirhanmainphoto_03.01-onecikanlarkus.webp'            },
-    { id:'toprak',       svg:'2026-1-cayirhanmainphoto_03.01-onecikanlartoprak.svg',         webp:'2026-1-cayirhanmainphoto_03.01-onecikanlartoprak.webp'         },
-    { id:'yapi',         svg:'2026-1-cayirhanmainphoto_03.01-onecikanlaryapi.svg',           webp:'2026-1-cayirhanmainphoto_03.01-onecikanlaryapi.webp'           },
-  ];
-
-  FILES.forEach(cfg => {
-    fetch(encodeURI(BASE + cfg.svg))
-      .then(r => r.text())
-      .then(svgText => {
-        const parser = new DOMParser();
-        const parsed = parser.parseFromString(svgText, 'image/svg+xml');
-
-        const g = document.createElementNS(svgNS, 'g');
-        g.id = 'overlay-' + cfg.id;
-        g.classList.add('overlay-img');
-
-        const vis = document.createElementNS(svgNS, 'image');
-        vis.setAttribute('href', encodeURI(BASE + cfg.webp));
-        vis.setAttribute('x', '0');
-        vis.setAttribute('y', '0');
-        vis.setAttribute('width', '2579');
-        vis.setAttribute('height', '1383');
-        vis.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-        vis.setAttribute('pointer-events', 'none');
-        g.appendChild(vis);
-
-        Array.from(parsed.documentElement.childNodes).forEach(node => {
-          if (node.nodeType === 1) g.appendChild(document.importNode(node, true));
-        });
-
-        g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
-          shape.setAttribute('pointer-events', 'all');
-          shape.style.cursor = 'pointer';
-          if (cfg.id === 'fabrika') {
-            shape.addEventListener('mouseenter', () => g.classList.add('active'));
-            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
-            shape.addEventListener('click', () => {
-              if (wasDragging) return;
-              window.location.href = 'project-2026-1-powerplant.html';
-            });
-          } else if (cfg.id === 'kus') {
-            shape.addEventListener('mouseenter', () => g.classList.add('active'));
-            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
-            shape.addEventListener('click', () => {
-              if (wasDragging) return;
-              window.location.href = 'project-2026-1-bird.html';
-            });
-          } else {
-            shape.addEventListener('mouseenter', () => {
-              if (!g.classList.contains('active')) g.classList.add('hover');
-            });
-            shape.addEventListener('mouseleave', () => g.classList.remove('hover'));
-            shape.addEventListener('click', () => {
-              if (wasDragging) return;
-              g.classList.toggle('active');
-              g.classList.remove('hover');
-            });
-          }
-        });
-
-        svgEl.appendChild(g);
-      });
-  });
-</script>
 </body>
 </html>
