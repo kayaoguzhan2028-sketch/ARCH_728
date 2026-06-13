@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -71,7 +71,7 @@
 
 <div id="viewer">
   <div id="canvas">
-    <img id="main-img" src="2026-images/2026-p1/main-page/2026-1-cayirhanmainphoto_03.01.webp" draggable="false" alt="">
+    <img id="main-img" src="2026-images/2026-p1/2-interactive-page/2026-1-çayırhanmainphoto_03.01.webp" draggable="false" alt="">
     <svg id="overlay-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2579 1383" width="2579" height="1383"></svg>
   </div>
 </div>
@@ -176,7 +176,7 @@
 
   viewer.addEventListener('touchend', e => { e.preventDefault(); prevTouches = null; }, { passive: false });
 
-  const BASE = '2026-images/2026-p1/main-page/SVG/';
+  const BASE = '2026-images/2026-p1/2-interactive-page/SVG/';
 
   const FILES = [
     { id:'microclimate', svg:'2026-1-cayirhanmainphoto_03.01-onecikanlar-microclimate.svg', webp:'2026-1-cayirhanmainphoto_03.01-onecikanlar-microclimate.webp' },
@@ -228,6 +228,34 @@
             shape.addEventListener('click', () => {
               if (wasDragging) return;
               window.location.href = 'project-2026-1-bird.html';
+            });
+          } else if (cfg.id === 'microclimate') {
+            shape.addEventListener('mouseenter', () => g.classList.add('active'));
+            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
+            shape.addEventListener('click', () => {
+              if (wasDragging) return;
+              window.location.href = 'project-2026-1-microclimatichange.html';
+            });
+          } else if (cfg.id === 'golet') {
+            shape.addEventListener('mouseenter', () => g.classList.add('active'));
+            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
+            shape.addEventListener('click', () => {
+              if (wasDragging) return;
+              window.location.href = 'project-2026-1-ashlake.html';
+            });
+          } else if (cfg.id === 'toprak') {
+            shape.addEventListener('mouseenter', () => g.classList.add('active'));
+            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
+            shape.addEventListener('click', () => {
+              if (wasDragging) return;
+              window.location.href = 'project-2026-1-soil.html';
+            });
+          } else if (cfg.id === 'yapi') {
+            shape.addEventListener('mouseenter', () => g.classList.add('active'));
+            shape.addEventListener('mouseleave', () => g.classList.remove('active'));
+            shape.addEventListener('click', () => {
+              if (wasDragging) return;
+              window.location.href = 'project-2026-1-infrastructure.html';
             });
           } else {
             shape.addEventListener('mouseenter', () => {
