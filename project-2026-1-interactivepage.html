@@ -38,6 +38,14 @@
   .overlay-img { opacity:0; transition:filter 0.3s ease, opacity 0.2s ease; }
   .overlay-img.hover { opacity:1; filter:drop-shadow(0 0 6px rgba(245,220,140,0.55)); }
   .overlay-img.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,220,140,1)) drop-shadow(0 0 32px rgba(245,200,80,0.7)); }
+
+  #main-img-2 { display:none; max-width:none; user-select:none; -webkit-user-drag:none; }
+
+  .view-toggle { position:fixed; top:68px; left:50%; transform:translateX(-50%); z-index:95; display:flex; border:1px solid var(--accent); }
+  .toggle-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:var(--black); border:none; padding:0.6em 1.8em; cursor:pointer; font-family:var(--font); opacity:0.6; transition:opacity 0.2s ease, background 0.2s ease, color 0.2s ease; }
+  .toggle-btn + .toggle-btn { border-left:1px solid var(--accent); }
+  .toggle-btn:hover { opacity:1; }
+  .toggle-btn.active { opacity:1; background:var(--accent); color:var(--black); }
 </style>
 </head>
 <body>
@@ -69,10 +77,16 @@
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 </div>
 
+<div class="view-toggle">
+  <button class="toggle-btn active" id="toggle-current" type="button">Current</button>
+  <button class="toggle-btn" id="toggle-future" type="button">Future</button>
+</div>
+
 <div id="viewer">
   <div id="canvas">
     <img id="main-img" src="2026-images/2026-p1/2-interactive-page/2026-1-çayırhanmainphoto_03.01.webp" draggable="false" alt="">
     <svg id="overlay-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2579 1383" width="2579" height="1383"></svg>
+    <img id="main-img-2" src="2026-images/2026-p1/2-interactive-page/2026-1-728-INTERACTIVEPAGE_2NDIMAGE.webp" draggable="false" alt="">
   </div>
 </div>
 
@@ -90,9 +104,11 @@
   const viewer  = document.getElementById('viewer');
   const canvas  = document.getElementById('canvas');
   const img     = document.getElementById('main-img');
+  const img2    = document.getElementById('main-img-2');
   const svgEl   = document.getElementById('overlay-svg');
   const svgNS   = 'http://www.w3.org/2000/svg';
 
+  let activeImg = img;
   let scale = 1, tx = 0, ty = 0, minScale = 0.1;
 
   function applyTransform() {
@@ -101,7 +117,7 @@
 
   function fitImage() {
     const vw = viewer.clientWidth, vh = viewer.clientHeight;
-    const iw = img.naturalWidth,   ih = img.naturalHeight;
+    const iw = activeImg.naturalWidth, ih = activeImg.naturalHeight;
     if (!iw || !ih) return;
     minScale = Math.min(vw / iw, vh / ih);
     scale = minScale;
@@ -112,7 +128,33 @@
 
   img.addEventListener('load', fitImage);
   if (img.complete && img.naturalWidth) fitImage();
+  img2.addEventListener('load', () => { if (activeImg === img2) fitImage(); });
   window.addEventListener('resize', fitImage);
+
+  const toggleCurrent = document.getElementById('toggle-current');
+  const toggleFuture  = document.getElementById('toggle-future');
+
+  toggleCurrent.addEventListener('click', () => {
+    if (toggleCurrent.classList.contains('active')) return;
+    toggleCurrent.classList.add('active');
+    toggleFuture.classList.remove('active');
+    img2.style.display = 'none';
+    img.style.display = 'block';
+    svgEl.style.display = '';
+    activeImg = img;
+    fitImage();
+  });
+
+  toggleFuture.addEventListener('click', () => {
+    if (toggleFuture.classList.contains('active')) return;
+    toggleFuture.classList.add('active');
+    toggleCurrent.classList.remove('active');
+    img.style.display = 'none';
+    svgEl.style.display = 'none';
+    img2.style.display = 'block';
+    activeImg = img2;
+    if (img2.complete && img2.naturalWidth) fitImage();
+  });
 
   viewer.addEventListener('wheel', e => {
     e.preventDefault();
