@@ -35,6 +35,17 @@
   .overlay-zone { fill:var(--accent); opacity:0.2; pointer-events:all; cursor:pointer; transition:opacity 0.3s ease, filter 0.3s ease; }
   .overlay-zone.hover { opacity:0.4; filter:drop-shadow(0 0 26px rgba(245,200,80,0.85)); }
 
+  .trace-split { flex-direction:row; align-items:center; justify-content:center; gap:3.5rem; text-align:left; }
+  .trace-left { flex:0 1 440px; display:flex; flex-direction:column; gap:1.1rem; }
+  .trace-left img { width:100%; height:auto; display:block; }
+
+  .img-wrap3 { position:relative; flex:0 0 auto; width:min(42vw, calc(88vh * 2157 / 3507)); aspect-ratio:2157/3507; max-height:88vh; }
+  .img-wrap3 img { width:100%; height:100%; object-fit:contain; display:block; }
+  .img-wrap3 svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+  .img-wrap3 svg path, .img-wrap3 svg polygon { fill:var(--accent); opacity:0; pointer-events:all; cursor:pointer; transition:opacity 0.25s ease, filter 0.25s ease; }
+  .img-wrap3 svg path:hover, .img-wrap3 svg polygon:hover,
+  .img-wrap3 svg path.active, .img-wrap3 svg polygon.active { opacity:0.2; filter:drop-shadow(0 0 20px rgba(245,200,80,0.75)); }
+
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .panel-overlay.open { opacity:1; pointer-events:auto; }
   .panel-overlay img { max-width:90vw; max-height:90vh; display:block; }
@@ -69,6 +80,20 @@
     <div class="img-wrap2">
       <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/2026-1-728-InfrastructureSectionMap.webp" loading="lazy" alt="">
       <svg id="overlay-svg2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14796 9705"></svg>
+    </div>
+  </section>
+
+  <section class="section trace-split">
+    <div class="trace-left">
+      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
+      <p class="body-text">This layout generates a sequential soil map through the path of the Overland Conveyor. The map shows how the soil changes radically due to the conveyor itself, from the darkness of the mining area to the artificial turquoise color of the ash lake.</p>
+      <div class="reference-block">
+        <p>(Satellite view are used to create image)</p>
+      </div>
+    </div>
+    <div class="img-wrap3">
+      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
+      <svg id="overlay-svg3" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
   </section>
 
@@ -124,6 +149,23 @@
         svgEl2.appendChild(rect);
       });
   });
+
+  const svgEl3 = document.getElementById('overlay-svg3');
+  fetch(encodeURI('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_HighlighStructure.svg'))
+    .then(r => r.text())
+    .then(svgText => {
+      const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+      const source = parsed.documentElement;
+
+      const vb = source.getAttribute('viewBox');
+      if (vb) svgEl3.setAttribute('viewBox', vb);
+
+      source.querySelectorAll('path, polygon').forEach(shape => {
+        const clone = document.importNode(shape, true);
+        clone.addEventListener('click', () => clone.classList.toggle('active'));
+        svgEl3.appendChild(clone);
+      });
+    });
 </script>
 </body>
 </html>

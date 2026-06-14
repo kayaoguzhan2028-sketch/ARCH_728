@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,73 +9,55 @@
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html, body { min-height: 100%; background: var(--black); color: var(--white); font-family: var(--font); }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; background:linear-gradient(to bottom, rgba(10,10,10,0.65), rgba(10,10,10,0)); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
-  .info-btn:hover { opacity:1; }
-  .info-btn.open { opacity:1; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
 
-  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
-  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
-  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
-  #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; }
-  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
-  #info-panel ul li { margin-bottom:0.8rem; }
-  #info-panel ul li:last-child { margin-bottom:0; }
-  #info-panel em { font-style:italic; }
+  .wrap { padding-top:52px; }
+  .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.2rem; padding:1.5rem 2rem; text-align:center; }
 
-  .wrap { max-width:1000px; margin:0 auto; padding:7.5rem 2.5rem 4rem; }
-  #main-img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; }
+  .fig { flex:1; min-height:0; overflow:hidden; }
+  .fig img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+
+  .body-text { max-width:780px; font-size:0.95rem; line-height:1.8; opacity:0.8; flex:0 0 auto; }
+
+  .section-split { flex-direction:row; align-items:center; justify-content:center; gap:3rem; text-align:left; }
+  .soil-text { flex:0 1 25%; max-height:100%; overflow-y:auto; }
+  .soil-text p { margin-bottom:1.2rem; font-size:0.95rem; line-height:1.75; opacity:0.8; }
+  .soil-text h2 { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.5; font-weight:400; margin:1.6rem 0 0.6rem; }
+  .soil-text .reference { font-size:0.74rem; line-height:1.7; opacity:0.45; margin-bottom:0.5rem; }
+  .soil-text .reference:last-child { margin-bottom:0; }
 </style>
 </head>
 <body>
-
 <nav>
-  <div style="display:flex;align-items:center;">
-    <a href="2026.html" class="nav-back">← 2026</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
-  </div>
+  <a href="2026.html" class="nav-back">← 2026</a>
+  <span class="nav-title">Çayırhan Ash Lake</span>
   <span class="nav-tag">Field Report</span>
 </nav>
-
-<div id="info-panel">
-  <h2>Group Members</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-  <h2>Main Title</h2>
-  <p>Lorem ipsum dolor sit amet</p>
-  <h2>Sub-Title</h2>
-  <p><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</em></p>
-  <h2>Research Questions</h2>
-  <ul>
-    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore?</li>
-    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore?</li>
-    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt?</li>
-  </ul>
-  <h2>Position Statement</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <h2>Methodology</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-</div>
-
 <div class="wrap">
-  <img id="main-img" src="2026-images/2026-p1/6-soil/2026-1-728-Soil.webp" draggable="false" alt="">
-</div>
 
-<script>
-  const infoBtn   = document.getElementById('info-toggle');
-  const infoPanel = document.getElementById('info-panel');
-  infoBtn.addEventListener('click', () => {
-    const open = infoPanel.classList.toggle('open');
-    infoBtn.classList.toggle('open', open);
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { infoPanel.classList.remove('open'); infoBtn.classList.remove('open'); }
-  });
-</script>
+  <section class="section section-split">
+    <div class="soil-text">
+      <p>The diagram explains the vertical leaching mechanism and mobilite hierarchy of fly ash, heavy metals, and isotopic components originating from coal fired thermal power plant waste areas within the soil profile. While creating this diagram, instead of geologic age of the soil, the capacity of substances to dissolve in water and adhere to soil were taken as essential. There are 4 main different layers according to depth. The graphic language follows a morphological gradient evolving from rigid and crystalline structures at the surface to dissolved amorphous and liquid phases deeper down.</p>
+      <h2>References</h2>
+      <p class="reference">Agrawal, P., Mittal, A., Prakash, R., Kumar, M., Singh, T. B., & Tripathi, S. K. (2010). Assessment of contamination of soil due to heavy metals around coal fired thermal power plants at Singrauli region of India. Bulletin of Environmental Contamination and Toxicology, 85(2), 219-223.</p>
+      <p class="reference">Mandal, A., & Sengupta, D. (2006). An assessment of soil contamination due to heavy metals around a coal-fired thermal power plant in India. Environmental Geology, 51(3), 409-420.</p>
+      <p class="reference">Murtic, S., Jurkovic, J., Basic, E., & Hekic, E. (2019). Assessment of wild plants for phytoremediation of heavy metals in soils surrounding the thermal power station.</p>
+      <p class="reference">Özkul, C. (2016). Heavy metal contamination in soils around the Tunçbilek thermal power plant (Kütahya, Turkey). Environmental monitoring and assessment, 188(5), 284.</p>
+      <p class="reference">Papp, Z., Dezső, Z., & Daroczy, S. (2002). Significant radioactive contamination of soil around a coal-fired thermal power plant. Journal of Environmental Radioactivity, 59(2), 191-205.</p>
+      <p class="reference">Paul, K. T., Satpathy, S. K., Manna, I., Chakraborty, K. K., & Nando, G. B. (2007). Preparation and characterization of nano structured materials from fly ash: a waste from thermal power stations, by high energy ball milling. Nanoscale Research Letters, 2(8), 397.</p>
+      <p class="reference">Pędziwiatr, A., Potysz, A., Kaczmarczyk, I., Sulej, J., Kwasowski, W., & Uzarowicz, Ł. (2025). Combined approach using soil and fly ash analysis to understand the environmental consequences of coal combustion in thermal power stations in the city. Water, Air, & Soil Pollution, 236(3), 146.</p>
+    </div>
+    <figure class="fig">
+      <img src="2026-images/2026-p1/6-soil/2026-1-728-Soil.webp" loading="lazy" alt="">
+    </figure>
+  </section>
+
+</div>
 </body>
 </html>
