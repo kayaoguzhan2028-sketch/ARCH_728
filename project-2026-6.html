@@ -15,12 +15,14 @@
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
 
-  .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .wrap { max-width:1200px; margin:0 auto; padding:8rem 2rem 6rem; }
   .main-img { width:100%; display:block; margin-bottom:3rem; }
   .sub-nav { display:flex; gap:1.4rem; justify-content:center; flex-wrap:wrap; margin-bottom:3.5rem; }
   .sub-nav a { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.65em 1.6em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
   .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .section + .section { margin-top:1rem; padding-top:3rem; border-top:1px solid var(--border); }
   .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
@@ -36,24 +38,36 @@
 <body>
 <nav>
   <a href="2026.html" class="nav-back">← 2026</a>
+  <span class="nav-title">Imrahor Valley</span>
   <span class="nav-tag">Field Report</span>
 </nav>
 <div class="wrap">
-  <img class="main-img" src="2026-images/2026-p6/0-Main Page/2026-6-Main Page.webp" alt="Project 2026-6">
+  <section class="section">
+    <img class="main-img" src="2026-images/2026-p6/0-Main Page/2026-6-Main Page.webp" alt="Project 2026-6">
 
-  <div class="sub-nav">
-    <a href="project-2026-6-thesoil.html">The Soil</a>
-    <a href="project-2026-6-thefactories.html">The Factories</a>
-    <a href="project-2026-6-thetimeline.html">The Timeline</a>
-    <a href="project-2026-6-thestoryline.html">The Storyline</a>
-  </div>
+    <div class="sub-nav">
+      <a href="project-2026-6-thesoil.html">The Soil</a>
+      <a href="project-2026-6-thefactories.html">The Factories</a>
+      <a href="project-2026-6-thetimeline.html">The Timeline</a>
+      <a href="project-2026-6-thestoryline.html">The Storyline</a>
+    </div>
+  </section>
 
-  <div class="body">
-    <p>İmrahor Valley is widely recognized with its ecological value and current political interventions. However, this project approaches the valley through a relatively overlooked aspect of it, the history of brick production. With the clay-and-silt alluvial deposits along the stream, İmrahor functioned as one of the main sites for brick production in the last century, physically contributing to the construction of Ankara. From the 1930s onwards, soil was seen as a resource, excavated from the valley, transformed into brick and tile, and incorporated into the expanding fabric of the city. Following the decline of brick production in the 1990s, the factories gradually disappeared, leaving behind excavation pits, industrial debris, and a landscape that continues to absorb the consequences of decades of extraction. By tracing this overlooked history, the project investigates how soil loses its stable identity, and shifts between resource and residue.</p>
-  </div>
+  <section class="section">
+    <div class="body">
+      <p>Imrahor Valley is widely recognized with its ecological value and current political interventions. However, this project approaches the valley through a relatively overlooked aspect of it: the history of brick production. With the clay-and-silt alluvial deposits along the stream, İmrahor functioned as one of the main sites for brick production in the last century, physically contributing to the construction of Ankara. From the 1930s onwards, soil was seen as a resource, excavated from the valley, transformed into brick and tile, and incorporated into the expanding fabric of the city. Following the decline of brick production in the 1990s, the factories gradually disappeared, leaving behind excavation pits, industrial debris, and a landscape that continues to absorb the consequences of decades of extraction. By tracing this overlooked history, the project investigates how soil loses its stable identity, and shifts between resource and residue with brick production.</p>
+
+      <h2>Research Questions</h2>
+      <p>How does the process of becoming reveal soil's shifting identity? What transformations does soil undergo in İmrahor Valley as it shifts from resource to residue through the history of brick production? What material traces of brick production remain now in the landscape after the industry's decline?</p>
+
+      <h2>Methodology</h2>
+      <p>This project uses archival research, literature review, oral history, and site-based observation to trace the history of brick production in İmrahor Valley. Maps, aerial photographs, journal and newspaper archives, planning documents, academic studies, and social media archives are examined alongside an interview with a former factory owner. For the current situation, field observations and photographs are used to document the soil, remaining factories, extraction pits, ponds, and residues.</p>
+    </div>
+  </section>
 
   <dl class="meta">
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+    <div class="meta-item"><dt>Authors</dt><dd>Elif Ceyhan, Hatice Köksal, İnci Ergün, İpek Deniz Alpdoğan Kaya</dd></div>
   </dl>
 </div>
 </body>

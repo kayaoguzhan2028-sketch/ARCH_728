@@ -17,11 +17,29 @@
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
 
-  .wrap { max-width:1200px; margin:0 auto; padding:6.5rem 2rem 6rem; }
-  .sec { margin-bottom:4rem; }
-  .sec:last-child { margin-bottom:0; }
-  .fig img { width:100%; height:auto; display:block; margin:0; }
-  figcaption { font-size:0.56rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--mid); opacity:0.4; margin-top:0.5rem; }
+  .wrap { padding-top:52px; }
+  .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.2rem; padding:1.5rem 2rem; text-align:center; }
+
+  .fig { flex:1; min-height:0; width:100%; max-width:1000px; overflow:hidden; }
+  .fig img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+
+  .body-text { max-width:780px; font-size:0.95rem; line-height:1.8; opacity:0.8; flex:0 0 auto; }
+
+  .reference-block { max-width:780px; font-size:0.68rem; line-height:1.6; opacity:0.4; flex:0 0 auto; }
+  .reference-block p { margin-bottom:0.3rem; }
+  .reference-block p:last-child { margin-bottom:0; }
+
+  .img-wrap2 { position:relative; width:min(94%, calc(80vh * 14796 / 9705)); aspect-ratio:14796/9705; }
+  .img-wrap2 img { width:100%; height:100%; object-fit:contain; display:block; }
+  .img-wrap2 svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+  .overlay-zone { fill:var(--accent); opacity:0.2; pointer-events:all; cursor:pointer; transition:opacity 0.3s ease, filter 0.3s ease; }
+  .overlay-zone.hover { opacity:0.4; filter:drop-shadow(0 0 26px rgba(245,200,80,0.85)); }
+
+  .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .panel-overlay.open { opacity:1; pointer-events:auto; }
+  .panel-overlay img { max-width:90vw; max-height:90vh; display:block; }
+  .panel-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
+  .panel-close:hover { opacity:1; background:var(--accent); color:var(--black); }
 </style>
 </head>
 <body>
@@ -32,24 +50,80 @@
 </nav>
 <div class="wrap">
 
-  <div class="sec">
+  <section class="section">
     <figure class="fig">
-      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
+      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/2026-1-728-INFRASTURE-SECTION2.webp" loading="lazy" alt="">
     </figure>
-  </div>
 
-  <div class="sec">
-    <figure class="fig">
-      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
-    </figure>
-  </div>
+    <p class="body-text">This image shows the ash transport infrastructure which is established on land by the 7.5 km long Overland Conveyor that locates from Çayırhan mine to the ash lake. While the structure linearly occupies the landscape, it turns the nodes where it anchors to the ground into transfer points that leak toxic substances and heavy metals into soil and diverses soil layers synthetically. The cross sections from the map illustrates the enormous scale of the conveyor on a spatial level through rendering artificial layering under ground. At the end, both the sections and map display the leakage of the structure of the ash and slag conveyor to the soil.</p>
 
-  <div class="sec">
-    <figure class="fig">
+    <div class="reference-block">
+      <p>(Satellite view are used to create image)</p>
+      <p>Ahmet Soyak Belgehane. (2020, May 3). Çayırhan'da Mavi bir gölümüz varmış (03.11.2019)</p>
+      <p>Enprotek. (2022, March 24). EÜAŞ Çayırhan Termik Santrali kül konveyör hatları rehabilitasyonu. https://enprotek.com.tr/euas-cayirhan-termik-santrali-kul-konveyor-hatlari-rehabilitasyonu/</p>
+      <p>Karaca, A., Türkmen, C., Arcak, S., Haktanır, K., Topçuoğlu, B., & Yıldız, H. (2009). Çayırhan termik santralı emisyonlarının yöre topraklarının bazı ağır metal ve kükürt kapsamlarına etkilerinin belirlenmesi. Ankara Üniversitesi Çevrebilimleri Dergisi, 1(1).</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="img-wrap2">
       <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/2026-1-728-InfrastructureSectionMap.webp" loading="lazy" alt="">
-    </figure>
-  </div>
+      <svg id="overlay-svg2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14796 9705"></svg>
+    </div>
+  </section>
 
 </div>
+
+<div class="panel-overlay" id="panel-overlay">
+  <button class="panel-close" id="panel-close" aria-label="Close">×</button>
+  <img id="panel-img" src="" alt="">
+</div>
+
+<script>
+  const svgEl2   = document.getElementById('overlay-svg2');
+  const svgNS    = 'http://www.w3.org/2000/svg';
+  const BASE_SVG = '2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/SVG/';
+  const BASE_IMG = '2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/';
+
+  const panelOverlay = document.getElementById('panel-overlay');
+  const panelImg     = document.getElementById('panel-img');
+
+  function openPanel(webp) {
+    panelImg.src = encodeURI(BASE_IMG + webp);
+    panelOverlay.classList.add('open');
+  }
+  document.getElementById('panel-close').addEventListener('click', () => panelOverlay.classList.remove('open'));
+  panelOverlay.addEventListener('click', e => { if (e.target === panelOverlay) panelOverlay.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') panelOverlay.classList.remove('open'); });
+
+  const FILES = [
+    { svg:'2026-1-728-InfrastructureSectionMap-Section1.svg', webp:'2026-1-728-INFRASTURE-SECTION1.webp' },
+    { svg:'2026-1-728-InfrastructureSectionMap-Section2.svg', webp:'2026-1-728-INFRASTURE-SECTION2.webp' },
+    { svg:'2026-1-728-InfrastructureSectionMap-Section3.svg', webp:'2026-1-728-INFRASTURE-SECTION3.webp' },
+    { svg:'2026-1-728-InfrastructureSectionMap-Section4.svg', webp:'2026-1-728-INFRASTURE-SECTION4.webp' },
+    { svg:'2026-1-728-InfrastructureSectionMap-Section5.svg', webp:'2026-1-728-INFRASTURE-SECTION5.webp' },
+  ];
+
+  FILES.forEach(cfg => {
+    fetch(encodeURI(BASE_SVG + cfg.svg))
+      .then(r => r.text())
+      .then(svgText => {
+        const parsed  = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const imageEl = parsed.querySelector('image');
+
+        const rect = document.createElementNS(svgNS, 'rect');
+        rect.setAttribute('width', imageEl.getAttribute('width'));
+        rect.setAttribute('height', imageEl.getAttribute('height'));
+        rect.setAttribute('transform', imageEl.getAttribute('transform'));
+        rect.classList.add('overlay-zone');
+
+        rect.addEventListener('mouseenter', () => rect.classList.add('hover'));
+        rect.addEventListener('mouseleave', () => rect.classList.remove('hover'));
+        rect.addEventListener('click', () => openPanel(cfg.webp));
+
+        svgEl2.appendChild(rect);
+      });
+  });
+</script>
 </body>
 </html>
