@@ -28,11 +28,25 @@
   .sec-head { font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); opacity:0.6; padding-top:2rem; border-top:1px solid var(--border); margin-bottom:2.5rem; display:block; }
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
   .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
+  .grid-2x2 { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .grid-2x2 .span-2 { grid-column:1 / -1; }
+  .grid-2x2 .span-2-row { grid-row:span 2; }
+  .grid-2x2 .fig img { aspect-ratio:4/3; object-fit:cover; }
+  .grid-2x2 .span-2 img { aspect-ratio:16/9; }
+  .grid-2x2 .span-2-row img { height:100%; aspect-ratio:auto; }
   .fig img { width:100%; height:auto; display:block; margin:0; }
   figcaption { font-size:0.56rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--mid); opacity:0.4; margin-top:0.5rem; }
   .sec-text { font-size:0.95rem; line-height:1.9; opacity:0.7; }
   .sec-text p { margin-bottom:1rem; }
-  @media (max-width:680px) { .two-col,.three-col { grid-template-columns:1fr; } }
+  .sec-text a { color:var(--accent); text-decoration:underline; word-break:break-all; }
+  .sec-text ol { padding-left:1.4rem; }
+  .sec-text ol li { margin-bottom:1rem; }
+  .sec-text ol li:last-child { margin-bottom:0; }
+  @media (max-width:680px) {
+    .two-col,.three-col,.grid-2x2 { grid-template-columns:1fr; }
+    .grid-2x2 .span-2-row { grid-row:auto; }
+    .grid-2x2 .span-2-row img { height:auto; aspect-ratio:4/3; }
+  }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
@@ -62,6 +76,13 @@
 <div class="wrap">
   <div class="body">
 
+    <div class="sec">
+      <span class="sec-head">Interactive Collage</span>
+      <div class="sec-text">
+        <p>This collage functions as an interactive narrative interface designed to expose the hidden layers of Çayırhan’s industrial impact. Beyond a static illustration, the chronological milestones, graphs, and environmental vectors serve as digital nodes. Touching these nodes deploys informational panels containing archival data, research facts, and their environmental consequences. This interactive structure transforms the collage into a dynamic archive, confronting the viewer with the raw data of landscape devastation.</p>
+      </div>
+    </div>
+
     <div class="sec" id="sec-cayirhan">
       <span class="sec-head">Çayırhan</span>
       <div class="two-col">
@@ -80,18 +101,136 @@
 
     <div class="sec">
       <span class="sec-head">How was Çayırhan?</span>
-      <div class="two-col">
-        <div class="sec-text"><p></p></div>
-        <div>
-          <figure class="fig" style="margin-bottom:1.5rem">
-            <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanBalıkçılık-VEKAM.webp" loading="lazy" alt="">
-            <figcaption>Amet consectetur</figcaption>
-          </figure>
-          <figure class="fig">
-            <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanManzara-ÖÖztaş.webp" loading="lazy" alt="">
-            <figcaption>Adipiscing elit</figcaption>
-          </figure>
+      <div class="grid-2x2">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanKentten-KeskinColor.webp" loading="lazy" alt="">
+        </figure>
+        <div class="sec-text">
+          <span class="label">Local Context of Çayırhan</span>
+          <p>Çayırhan is a town located in the Nallıhan district of Ankara, which has transformed over time from a natural and agricultural settlement into a center for heavy industry and mining. It is situated right next to the Sarıyar Dam and the Nallıhan Bird Sanctuary, an internationally recognized Ramsar site<sup>1</sup> and home to numerous different bird species. Although the region has long relied on livestock farming and agriculture for its livelihood, the emergence of the mining sector has shifted its focus.<sup>2</sup></p>
         </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanKentten-BBAksu.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanBalıkçılık-VEKAM.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Sarıyar Dam</span>
+      <div class="grid-2x2">
+        <div class="sec-text">
+          <p>The idea of constructing a large hydroelectric power plant on the Sakarya River was first proposed by the Electricity Works Survey Administration (EİEİ),<sup>3</sup> but concrete steps were taken by the government in the early 1950s. Construction of the dam accelerated in the Çayırhan region along the Ankara–Nallıhan road during the first half of the decade. By November 1954, the project had reached its final stages, and expropriation processes in the region were intensified.<sup>2</sup> Construction was completed in 1956, and the dam was officially inaugurated as one of Türkiye’s first large hydroelectric power plants (HPPs).<sup>4</sup></p>
+        </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-SarıyarBarajı-AHANKA230006.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-SarıyarBarajı-AHANKA230021.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-SarıyarBarajı-AHANKA230023.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">Çayırhan Power Plant</span>
+      <div class="grid-2x2">
+        <div class="sec-text">
+          <p>The mining adventure, which began with the processing of lignite coal, whose presence in the region was discovered by chance, started to affect the local people with the establishment of small businesses. During the 1960s, the mining sector was gradually nationalized, reflecting an increasing role of the state in economic production and resource management. In 1967, it was purchased by the Turkish Coal Enterprises, and the TKİ Central Anatolian Lignite Çayırhan Enterprise was established. The Çayırhan Thermal Power Plant was also established under state custody in 1976 in line with these decisions.<sup>2</sup> The power plant site was chosen to be close to the coal source as well as to Sarıyar Dam Lake, which would provide cooling water.<sup>1</sup> The power plant and related mining areas attracted a wave of both qualified and unqualified migration from all over Türkiye, from Zonguldak to Van, transforming an Anatolian village into a mining town with labor unions.</p>
+        </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-MadenSahası-AA.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig span-2">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanTermik3-ÖÖztaş.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">About the Ash Lake</span>
+      <div class="grid-2x2">
+        <div class="sec-text">
+          <p>The ash lake is one of the visible products of energy consumption materialised in the rural landscape. Tons of fly ash and slag produced by burning coal accumulate in these artificial basins, creating a new artificial soil layer, technosol, that does not naturally exist.</p>
+          <p>To prevent airborne damage from the large amounts of ash released from coal-fired power plants, this waste is usually dumped into pits or storage areas near the plant and submerged. Over time, rainwater and this wetting process combine to form large lakes. Soluble ions and minerals in the ash give the water clear turquoise, blue, and green hues. These vibrant colors attract visual attention and become focal points for living things in the surrounding area. However, the water in these lakes does not allow any life to thrive.<sup>5</sup> In analyses conducted on different ash lakes by institutions such as TÜBİTAK and the Climate Change Policy and Research Association<sup>1</sup>, high levels of heavy metals harmful to human and environmental health have been detected in various ash lake waters. Therefore, entering or drinking their water is dangerous. A similar example of an ash lake can be found in Çayırhan.</p>
+        </div>
+        <figure class="fig span-2-row">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-KülGöleti-TikTok.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanTermik2-ÖÖztaş.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+
+      <div class="three-col" style="margin-top:1.5rem">
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-KülKonveyorHattı-Enprotek2.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-KülKonveyorHattı-Enprotek1.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-KülKonveyorHattı-Enprotek3.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">The Production Trend</span>
+      <div class="grid-2x2">
+        <div class="sec-text">
+          <p>This graph should be described as a speculative dataset prepared within the scope of the information obtained, rather than a transfer of actual data.<sup>8,9,10</sup> In this context, when the historical production trend of the Çayırhan Thermal Power Plant is examined, it is seen that the plant reached an average annual gross production capacity of 4 TWh during the period when it was under private sector management.<sup>11</sup> In addition, it is possible to infer that the cancellation of the additional lignite mining fields planned to feed the power plant and the Çayırhan B project may have played a role in the decline of the production trend after 2020.<sup>1</sup></p>
+        </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/SVG/2026-1-728_deneme_ÖneÇıkanlarPRODUCTION.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig span-2">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-KülGöletiÜstÖlçek-HÇağdaşArşiv.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">Invisible Contamination Cycle</span>
+      <div class="two-col">
+        <div class="sec-text">
+          <p>This cycle should be described as a cumulative dataset prepared within the scope of the information obtained.<sup>1,12</sup> The Invisible Contamination Cycle takes its first step with the release of heavy metals from industrial waste or power plants into the environment. These heavy metals, accumulating in the soil, can be transported thousands of kilometers away by atmospheric transport, even to polar regions untouched by industry. These toxic particles, which float in the air, return to the soil with rain, cause seepage through the soil, and are invisible to the naked eye, have become an integral part of the water cycle. Thus, they enter into an inseparable relationship with the surrounding ecosystem.</p>
+        </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/SVG/2026-1-728_deneme_ÖneÇıkanlarCIRCLE.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">Cumulative Waste Production</span>
+      <div class="grid-2x2">
+        <div class="sec-text">
+          <p>According to the Nallıhan Bird Sanctuary Report of the Climate Change Policy and Research Association (2021), the facility in Çayırhan was carrying out open dumping in the ash lake until June 2021.<sup>1</sup></p>
+          <p>The graph created should be described as a speculative dataset prepared within the scope of the information obtained, rather than a presentation of actual data.<sup>8,12,13,14</sup> The curve, which started from zero with the beginning of industrial production in 1980, shows the weight of industrial waste settling on the landscape, exceeding the threshold of tens of millions of tons today.</p>
+        </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/SVG/2026-1-728_deneme_ÖneÇıkanlarWASTE.webp" loading="lazy" alt="">
+        </figure>
+        <figure class="fig span-2">
+          <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanYapı2-BAteş.webp" loading="lazy" alt="">
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec-head">Environmental Risk Profile</span>
+      <div class="two-col">
+        <div class="sec-text">
+          <p>The cumulative impact of the Çayırhan Thermal Power Plant and surrounding industrial activities on the environment, in light of available information, presents a chronic threat that simultaneously and irreversibly transforms all layers of the ecosystem; air, soil, water, and geological structure.<sup>1,14,15</sup> The conflict between nature and the man-made artificial environment has engendered a tragic landscape transformation, a technosol formation, in this region, where technocratic planning objectives completely disregard ecological limits. In light of resources and empirical data, a multidimensional threat graph generated by this environmental risk profile can be constructed, as shown in the figure.</p>
+        </div>
+        <figure class="fig">
+          <img src="2026-images/2026-p1/4-power-plant/SVG/2026-1-728_deneme_ÖneÇıkanlarRISK.webp" loading="lazy" alt="">
+        </figure>
       </div>
     </div>
 
