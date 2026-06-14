@@ -122,24 +122,32 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') panelOverlay.classList.remove('open'); });
 
   const FILES = [
-    { svg:'2026-1-728-InfrastructureSectionMap-Section1.svg', webp:'2026-1-728-INFRASTURE-SECTION1.webp' },
-    { svg:'2026-1-728-InfrastructureSectionMap-Section2.svg', webp:'2026-1-728-INFRASTURE-SECTION2.webp' },
-    { svg:'2026-1-728-InfrastructureSectionMap-Section3.svg', webp:'2026-1-728-INFRASTURE-SECTION3.webp' },
-    { svg:'2026-1-728-InfrastructureSectionMap-Section4.svg', webp:'2026-1-728-INFRASTURE-SECTION4.webp' },
-    { svg:'2026-1-728-InfrastructureSectionMap-Section5.svg', webp:'2026-1-728-INFRASTURE-SECTION5.webp' },
+    { svg:'2026-1-728-InfrastructureSection1.svg', webp:'2026-1-728-INFRASTURE-SECTION1.webp' },
+    { svg:'2026-1-728-InfrastructureSection2.svg', webp:'2026-1-728-INFRASTURE-SECTION2.webp' },
+    { svg:'2026-1-728-InfrastructureSection3.svg', webp:'2026-1-728-INFRASTURE-SECTION3.webp' },
+    { svg:'2026-1-728-InfrastructureSection4.svg', webp:'2026-1-728-INFRASTURE-SECTION4.webp' },
+    { svg:'2026-1-728-InfrastructureSection5.svg', webp:'2026-1-728-INFRASTURE-SECTION5.webp' },
   ];
 
   FILES.forEach(cfg => {
     fetch(encodeURI(BASE_SVG + cfg.svg))
       .then(r => r.text())
       .then(svgText => {
-        const parsed  = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-        const imageEl = parsed.querySelector('image');
+        const parsed   = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const styleTxt = parsed.querySelector('style').textContent;
+        const imageEl  = parsed.querySelector('image');
+
+        const m = imageEl.getAttribute('transform').match(/matrix\(([^)]+)\)/)[1].trim().split(/\s+/).map(Number);
+        const offsetX = m[4], offsetY = m[5];
+
+        const hiddenClass = (styleTxt.match(/\.(\w+)\s*\{[^}]*display:\s*none/) || [])[1];
+        const activeRect  = [...parsed.querySelectorAll('rect')].find(r => r.getAttribute('class') !== hiddenClass);
 
         const rect = document.createElementNS(svgNS, 'rect');
-        rect.setAttribute('width', imageEl.getAttribute('width'));
-        rect.setAttribute('height', imageEl.getAttribute('height'));
-        rect.setAttribute('transform', imageEl.getAttribute('transform'));
+        rect.setAttribute('x', parseFloat(activeRect.getAttribute('x')) - offsetX);
+        rect.setAttribute('y', parseFloat(activeRect.getAttribute('y')) - offsetY);
+        rect.setAttribute('width', activeRect.getAttribute('width'));
+        rect.setAttribute('height', activeRect.getAttribute('height'));
         rect.classList.add('overlay-zone');
 
         rect.addEventListener('mouseenter', () => rect.classList.add('hover'));
