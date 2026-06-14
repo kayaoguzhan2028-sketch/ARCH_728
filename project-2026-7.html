@@ -15,11 +15,12 @@
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .map-stage { position:fixed; top:52px; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:var(--black); }
-  .map-inner { position:relative; display:inline-block; line-height:0; font-size:0; cursor:grab; user-select:none; }
-  .map-inner.grabbing { cursor:grabbing; }
-  .map-inner > img { display:block; max-width:100vw; max-height:calc(100vh - 52px); width:auto; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
-  #nisa-layer { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:80; display:flex; align-items:center; justify-content:center; background:var(--black); pointer-events:none; }
-  #nisa-layer img { max-width:100%; max-height:100%; object-fit:contain; display:block; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  .map-inner { position:relative; display:inline-block; line-height:0; font-size:0; user-select:none; }
+  #map-main { display:block; max-width:100vw; max-height:calc(100vh - 52px); width:auto; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  .map-layer { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; user-select:none; -webkit-user-drag:none; transition:opacity 0.4s ease; }
+  .map-layer.active { opacity:1; }
+  .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; border:none; }
+  #nisa-layer { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:80; background:var(--black); pointer-events:none; }
   .node { position:absolute; transform:translate(-50%,-50%); width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; z-index:10; opacity:0; transition:opacity 0.5s ease; }
   .node-dot { width:6px; height:6px; border-radius:50%; background:#c0392b; opacity:0.5; position:relative; flex-shrink:0; transition:opacity 0.35s ease,transform 0.35s ease; }
   .node-dot::after { content:''; position:absolute; top:50%; left:50%; width:20px; height:20px; border-radius:50%; border:1px solid var(--white); transform:translate(-50%,-50%) scale(0.4); opacity:0; transition:opacity 0.35s ease,transform 0.35s ease; }
@@ -66,14 +67,26 @@
   <p>Field photography documenting soil in transit — excavation trucks, active dump operations, material accumulation — forms the visual core of the study, supplemented by historical aerial imagery and satellite overlays that trace the Mamak dump site's transformation from early formation to its current artificial topography. Ecological records of vegetation loss, hydrological shifts, and landslide events register what the soil's movement has cost the ground it left behind. Geology and urban engineering theses held in the YÖK National Thesis Center — particularly master's theses on excavation site selection and soil composition in the Ankara basin — provide the technical substrate for reading the site's spatial logic as simultaneously geological and political. Nail's <em>The Figure of the Migrant</em> and <em>Kinopolitics</em> function not as objects of analysis but as theoretical lenses, orienting the study toward movement, expulsion, and subject-formation rather than static spatial categories.</p>
 </div>
 
-<div id="nisa-layer">
-  <img src="2026-images/2026-p7/Nisa Map.webp" alt="Overview">
-</div>
+<div id="nisa-layer"></div>
 
 <div class="map-stage">
   <div class="map-inner">
 
-    <img id="map-main" src="2026-images/2026-p7/main image 20.05.webp" alt="Project 2026-7">
+    <img id="map-main" src="2026-images/2026-p7/Opening Page/Axon all/01_trailmap_son.webp" alt="Project 2026-7">
+
+    <img class="map-layer" data-layer="02" src="2026-images/2026-p7/Opening Page/Axon all/02_barbarianmap.webp" alt="">
+    <img class="map-layer" data-layer="03" src="2026-images/2026-p7/Opening Page/Axon all/03_proletarianmap.webp" alt="">
+    <img class="map-layer" data-layer="04" src="2026-images/2026-p7/Opening Page/Axon all/04_genericbuildingsetmap.webp" alt="">
+    <img class="map-layer" data-layer="05" src="2026-images/2026-p7/Opening Page/Axon all/05_displacementmap.webp" alt="">
+    <img class="map-layer" data-layer="06" src="2026-images/2026-p7/Opening Page/Axon all/06_vagabondearthmap.webp" alt="">
+    <img class="map-layer" data-layer="07" src="2026-images/2026-p7/Opening Page/Axon all/07_nomadicearthmap.webp" alt="">
+
+    <object class="map-hotspot" data-layer="02" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/02_barbarianmap.svg"></object>
+    <object class="map-hotspot" data-layer="03" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/03_proletarianmap.svg"></object>
+    <object class="map-hotspot" data-layer="04" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/04_genericbuilding.svg"></object>
+    <object class="map-hotspot" data-layer="05" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/05_displacementmap.svg"></object>
+    <object class="map-hotspot" data-layer="06" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/06_vagabondearthmap.svg"></object>
+    <object class="map-hotspot" data-layer="07" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/07_nomadicearthmap.svg"></object>
 
     <a class="node" id="node-debris" href="project-2026-7-debris.html" style="left:38%;top:80%;" title="Debris">
       <div class="node-dot"></div>
@@ -85,20 +98,13 @@
       <span class="node-label">Civilized Soil</span>
     </a>
 
-    <a class="node" id="node-soil" href="project-2026-7-soil-layers.html" style="left:65%;top:50%;" title="Soil Layers">
-      <div class="node-dot"></div>
-      <span class="node-label">Soil Layers</span>
-    </a>
-
   </div>
 </div>
 
 <script>
-const mapInner  = document.querySelector('.map-inner');
 const mapStage  = document.querySelector('.map-stage');
 const nisaLayer = document.getElementById('nisa-layer');
 const nodes     = document.querySelectorAll('.node');
-let mScale = 1, mTx = 0, mTy = 0, mDrag = false, mLx, mLy, mMoved = false;
 let fadeT = 0;
 const FADE_STEP = 0.07;
 
@@ -108,48 +114,24 @@ function setFade(t) {
   nodes.forEach(n => { n.style.opacity = fadeT >= 1 ? '1' : '0'; });
 }
 
-function applyMap() {
-  mapInner.style.transform = `translate(${mTx}px,${mTy}px) scale(${mScale})`;
-}
-
 mapStage.addEventListener('wheel', e => {
   e.preventDefault();
-  const zoomIn = e.deltaY < 0;
-  if (fadeT < 1 || (!zoomIn && mScale <= 1)) {
-    setFade(fadeT + (zoomIn ? FADE_STEP : -FADE_STEP));
-    return;
-  }
-  mScale = Math.max(0.8, Math.min(8, mScale * (zoomIn ? 1.1 : 0.91)));
-  if (mScale <= 1) { mScale = 1; mTx = 0; mTy = 0; }
-  applyMap();
+  setFade(fadeT + (e.deltaY < 0 ? FADE_STEP : -FADE_STEP));
 }, { passive: false });
 
-mapInner.addEventListener('mousedown', e => { mDrag = true; mMoved = false; mLx = e.clientX; mLy = e.clientY; mapInner.classList.add('grabbing'); });
-document.addEventListener('mousemove', e => { if (!mDrag) return; mTx += e.clientX - mLx; mTy += e.clientY - mLy; mLx = e.clientX; mLy = e.clientY; mMoved = true; applyMap(); });
-document.addEventListener('mouseup', () => { mDrag = false; mapInner.classList.remove('grabbing'); });
-mapStage.addEventListener('dblclick', () => { mScale = 1; mTx = 0; mTy = 0; applyMap(); });
-
-// ── Touch / pinch ──────────────────────────────────────────────────────────────
-let tPinching = false, tPanning = false;
-let tPinchStart = 0, tFadeStart = 0, tScaleStart = 0;
-let tDragLx = 0, tDragLy = 0;
+// ── Touch / pinch (fade only — no pan/zoom) ──────────────────────────────────────
+let tPinching = false, tPinchStart = 0, tFadeStart = 0;
 
 function pinchDist(touches) {
   return Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
 }
 
 mapStage.addEventListener('touchstart', e => {
-  if (e.target.closest('.node')) return; // node'a tıklandıysa map handler'a girme
+  if (e.target.closest('.node')) return;
   if (e.touches.length === 2) {
-    tPinching = true; tPanning = false;
+    tPinching = true;
     tPinchStart = pinchDist(e.touches);
     tFadeStart  = fadeT;
-    tScaleStart = mScale;
-    e.preventDefault();
-  } else if (e.touches.length === 1 && fadeT >= 1 && mScale > 1) {
-    tPanning = true;
-    tDragLx = e.touches[0].clientX;
-    tDragLy = e.touches[0].clientY;
     e.preventDefault();
   }
 }, { passive: false });
@@ -157,29 +139,13 @@ mapStage.addEventListener('touchstart', e => {
 mapStage.addEventListener('touchmove', e => {
   if (tPinching && e.touches.length === 2) {
     const ratio = pinchDist(e.touches) / tPinchStart;
-    if (tFadeStart < 1) {
-      // fade fazı — yavaş: parmak mesafesi 2x olunca fade tamamlanır
-      setFade(tFadeStart + (ratio - 1));
-    } else {
-      const s = Math.max(0.8, Math.min(8, tScaleStart * ratio));
-      mScale = s <= 1 ? 1 : s;
-      if (mScale === 1) { mTx = 0; mTy = 0; }
-      applyMap();
-    }
-    e.preventDefault();
-  } else if (tPanning && e.touches.length === 1) {
-    mTx += e.touches[0].clientX - tDragLx;
-    mTy += e.touches[0].clientY - tDragLy;
-    tDragLx = e.touches[0].clientX;
-    tDragLy = e.touches[0].clientY;
-    applyMap();
+    setFade(tFadeStart + (ratio - 1));
     e.preventDefault();
   }
 }, { passive: false });
 
 mapStage.addEventListener('touchend', e => {
   if (e.touches.length < 2) tPinching = false;
-  if (e.touches.length === 0) tPanning = false;
 });
 
 const infoToggle = document.getElementById('info-toggle');
@@ -190,6 +156,21 @@ infoToggle.addEventListener('click', () => {
 });
 
 setFade(0);
+
+// ── Soil-layer hover reveal ───────────────────────────────────────────────────
+['02','03','04','05','06','07'].forEach(id => {
+  const obj   = document.querySelector(`.map-hotspot[data-layer="${id}"]`);
+  const layer = document.querySelector(`.map-layer[data-layer="${id}"]`);
+  obj.addEventListener('load', () => {
+    const doc = obj.contentDocument;
+    if (!doc) return;
+    const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = '*{fill:transparent !important;stroke:none !important;} path,polygon{pointer-events:all;cursor:pointer;}';
+    doc.documentElement.insertBefore(style, doc.documentElement.firstChild);
+    doc.addEventListener('mouseover', e => { if (e.target.matches('path,polygon')) layer.classList.add('active'); });
+    doc.addEventListener('mouseout',  e => { if (e.target.matches('path,polygon')) layer.classList.remove('active'); });
+  });
+});
 </script>
 </body>
 </html>
