@@ -35,12 +35,11 @@
   .hotspot-zone:hover { opacity:0.25; }
   .hotspot-zone.active { opacity:0.35; }
 
-  .timeline-result { display:none; gap:1.5rem; margin-top:1.5rem; align-items:flex-start; flex-wrap:wrap; }
+  .timeline-result { display:none; flex-direction:column; gap:1.5rem; margin-top:3.5rem; padding-top:3rem; border-top:1px solid var(--border); scroll-margin-top:5rem; }
   .timeline-result.active { display:flex; }
-  .timeline-result img { flex:1 1 260px; max-width:45%; display:block; margin:0; opacity:0.92; }
-  .timeline-result .timeline-text { flex:1 1 260px; }
-  .timeline-result .timeline-text h3 { font-size:0.72rem; font-weight:400; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin:0 0 1rem; }
-  .timeline-result .timeline-text p { font-size:1.1rem; line-height:1.95; opacity:0.82; margin:0; }
+  .timeline-result h3 { font-size:0.72rem; font-weight:400; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin:0; }
+  .timeline-result img { max-width:100%; max-height:60vh; width:auto; display:block; margin:0 auto; opacity:0.92; }
+  .timeline-result p { font-size:1.1rem; line-height:1.95; opacity:0.82; margin:0; }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
@@ -67,11 +66,9 @@
     </div>
 
     <div class="timeline-result" id="timeline-result">
+      <h3 id="timeline-result-title"></h3>
       <img id="timeline-result-img" src="" alt="">
-      <div class="timeline-text">
-        <h3 id="timeline-result-title"></h3>
-        <p id="timeline-result-text"></p>
-      </div>
+      <p id="timeline-result-text"></p>
     </div>
 
   </div>
@@ -95,11 +92,15 @@
 
   hotspotZones.forEach((zone, i) => {
     zone.addEventListener('click', () => {
-      timelineResultImg.src = timelineData[i].img;
       timelineResultTitle.textContent = timelineData[i].title;
       timelineResultText.textContent = timelineData[i].text;
       timelineResult.classList.add('active');
       hotspotZones.forEach((z, j) => z.classList.toggle('active', j === i));
+
+      const scrollToResult = () => timelineResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      timelineResultImg.onload = scrollToResult;
+      timelineResultImg.src = timelineData[i].img;
+      if (timelineResultImg.complete) scrollToResult();
     });
   });
 </script>

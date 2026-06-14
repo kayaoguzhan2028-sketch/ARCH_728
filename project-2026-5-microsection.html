@@ -35,10 +35,10 @@
   .hotspot-zone:hover { opacity:0.25; }
   .hotspot-zone.active { opacity:0.35; }
 
-  .micro-result { display:none; gap:1.5rem; margin-top:1rem; align-items:flex-start; flex-wrap:wrap; }
+  .micro-result { display:none; flex-direction:column; gap:1.5rem; margin-top:3.5rem; padding-top:3rem; border-top:1px solid var(--border); scroll-margin-top:5rem; }
   .micro-result.active { display:flex; }
-  .micro-result img { flex:1 1 260px; max-width:45%; display:block; margin:0; opacity:0.92; }
-  .micro-result .micro-text { flex:1 1 260px; font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .micro-result img { max-width:100%; max-height:60vh; width:auto; display:block; margin:0 auto; opacity:0.92; }
+  .micro-result .micro-text { font-size:1.1rem; line-height:1.95; opacity:0.82; }
 
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
@@ -93,10 +93,14 @@
 
   hotspotZones.forEach((zone, i) => {
     zone.addEventListener('click', () => {
-      microResultImg.src = microData[i].img;
       microResultText.textContent = microData[i].text;
       microResult.classList.add('active');
       hotspotZones.forEach((z, j) => z.classList.toggle('active', j === i));
+
+      const scrollToResult = () => microResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      microResultImg.onload = scrollToResult;
+      microResultImg.src = microData[i].img;
+      if (microResultImg.complete) scrollToResult();
     });
   });
 </script>
