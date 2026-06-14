@@ -14,7 +14,9 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .page-nav { display:flex; gap:0.8rem; }
+  .page-nav-link { font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.2); padding:0.4em 1em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
+  .page-nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
 
   .wrap { max-width:1000px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
@@ -49,7 +51,10 @@
 <body>
 <nav>
   <a href="2026.html" class="nav-back">← 2026</a>
-  <span class="nav-tag">Field Report</span>
+  <div class="page-nav">
+    <a href="project-2026-5-timeline.html" class="page-nav-link">← The Section</a>
+    <a href="project-2026-5-waterways.html" class="page-nav-link">Waterways →</a>
+  </div>
 </nav>
 <div class="wrap">
   <h1>MicroSections</h1>
