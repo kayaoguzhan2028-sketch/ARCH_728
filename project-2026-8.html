@@ -42,8 +42,8 @@
   .interactive-image { position:relative; width:100%; margin:2.5rem 0; }
   .interactive-image img { width:100%; display:block; margin:0; opacity:0.9; }
   .hotspot-overlay { position:absolute; top:0; left:0; width:100%; height:100%; }
-  .hotspot-area { fill:transparent; stroke:transparent; stroke-width:25px; pointer-events:fill; cursor:pointer; transition:stroke 0.25s ease; }
-  .hotspot-area:hover { stroke:var(--accent); }
+  .hotspot-area { fill:var(--accent); opacity:0; stroke:transparent; stroke-width:25px; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
+  .hotspot-area:hover { opacity:0.25; }
   .media-row { display:flex; gap:2rem; align-items:center; margin:3rem 0; }
   .media-row > img { flex:0 0 45%; width:45%; display:block; margin:0; opacity:0.9; }
   .media-row .media-text { flex:1; min-width:0; }
@@ -64,7 +64,7 @@
   .slider-dots { position:absolute; bottom:1rem; left:0; right:0; z-index:2; display:flex; justify-content:center; gap:0.5rem; }
   .slider-dot { width:6px; height:6px; border-radius:50%; padding:0; background:transparent; border:1px solid rgba(245,242,235,0.5); cursor:pointer; transition:background 0.2s,border-color 0.2s; }
   .slider-dot.active { background:var(--white); border-color:var(--white); }
-  .slider-inline { flex:0 0 45%; width:45%; max-width:1000px; height:280px; max-height:none; margin:0; }
+  .slider-inline { flex:0 0 45%; width:45%; max-width:1000px; height:400px; max-height:none; margin:0; }
   @media (max-width:600px) {
     .media-row { flex-direction:column; }
     .media-row > img, .media-row .slider-inline { flex:0 0 auto; width:100%; }
@@ -84,6 +84,8 @@
   .section-zoom-2x .interactive-image { width:200%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%) translateY(-6rem); }
   .section.section-zoom-3x { overflow:visible; }
   .section-zoom-3x .interactive-image { width:300%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
+  .section.section-row-wide { overflow:visible; }
+  .section-row-wide .media-row { position:relative; width:200%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
   .section.section-text { height:auto; overflow:visible; padding:5rem 0; }
   .section-text ul { padding-left:1.2rem; margin:0 0 1.6rem; }
   .section-text ul li { margin-bottom:1rem; }
@@ -113,11 +115,16 @@
   .image-modal-close:hover { opacity:1; background:rgba(245,242,235,0.14); }
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; padding:2rem; }
   .panel-overlay.open { opacity:1; pointer-events:auto; }
-  .panel-content-wrap { display:flex; flex-direction:column; align-items:center; gap:1.4rem; max-width:90vw; max-height:90vh; overflow-y:auto; }
+  .panel-content-wrap { display:flex; flex-direction:row; align-items:center; gap:2rem; max-width:90vw; max-height:90vh; overflow-y:auto; }
   .panel-overlay img { max-width:90vw; max-height:80vh; display:block; }
-  .panel-content-wrap:has(.panel-caption:not(:empty)) img { max-height:60vh; }
-  .panel-caption { max-width:680px; font-size:1.05rem; line-height:1.85; opacity:0.85; }
+  .panel-content-wrap:has(.panel-caption:not(:empty)) img { max-width:50vw; max-height:80vh; flex-shrink:0; }
+  .panel-caption { max-width:480px; font-size:1.05rem; line-height:1.85; opacity:0.85; }
   .panel-caption:empty { display:none; }
+  @media (max-width:768px) {
+    .panel-content-wrap { flex-direction:column; }
+    .panel-content-wrap:has(.panel-caption:not(:empty)) img { max-width:90vw; max-height:50vh; }
+    .panel-caption { max-width:90vw; }
+  }
   .panel-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
   .panel-close:hover { opacity:1; background:var(--accent); color:var(--black); }
   .text-panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; padding:2rem; }
@@ -291,7 +298,7 @@
       <p>However, as the timeline progresses toward environmental degradation and functional loss, the imagery reveals the slow, relentless transition into Entropy. This phase fundamentally rejects any narrative of human exceptionalism in environmental design. The expanding footprint of sedimentation within the reservoir and the visible pushback of the ecosystem at the edges highlight the site's inherent resilience. On a macroscopic scale, the constructed environment is continually being digested; the rigid cells of the urban and infrastructural grid are broken down, proving that human mastery is ultimately composted back into the earth to synthesize the next cycle of life.</p>
     </div>
 
-    <div class="section">
+    <div class="section section-row-wide">
     <div class="media-row">
       <div class="slider slider-inline">
         <img id="slider2-img" src="2026-images/2026-p8/Görsel7.webp" alt="">
@@ -351,7 +358,6 @@
     <div class="section">
       <h2>Conclusion</h2>
       <img src="2026-images/2026-p8/conclusion.webp" alt="">
-      <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
     </div>
 
   </div>
@@ -545,7 +551,7 @@
         const path = document.importNode(parsed.querySelector('path'), true);
         path.setAttribute('class', 'hotspot-solo');
         path.addEventListener('click', () => openPanel(BASE_IMG5, cfg.webp, cfg.caption));
-        overlaySvg5.appendChild(path);
+        overlaySvg5.insertBefore(path, overlaySvg5.querySelector('.hotspot-line'));
       });
   });
 
