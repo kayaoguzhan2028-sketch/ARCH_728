@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="313" height="1069" viewBox="0 0 313 1069">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        opacity: 0.01;
+      }
+
+      .cls-2, .cls-3 {
+        fill: none;
+        stroke: #000;
+        stroke-width: 1px;
+      }
+
+      .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .tl-text {
+        font-family: 'EB Garamond', Georgia, serif;
+        color: #f5f2eb;
+        font-size: 6px;
+        line-height: 1.35;
+      }
+
+      .tl-text .tl-title {
+        font-weight: 600;
+        margin: 0 0 0.5em;
+      }
+
+      .tl-text p {
+        margin: 0 0 0.4em;
+      }
+
+      .tl-text p:last-child {
+        margin-bottom: 0;
+      }
+
+      .tl-text sup {
+        font-size: 0.65em;
+      }
+
+      .tl-left { text-align: left; }
+      .tl-right { text-align: right; }
+
+      .tl-year {
+        font-family: 'EB Garamond', Georgia, serif;
+        font-size: 9px;
+        font-weight: 600;
+        fill: #f5f2eb;
+        letter-spacing: 0.05em;
+      }
+    </style>
+  </defs>
+  <g id="_2025" data-name="2025" class="cls-1">
+    <path id="Soldan_2025" class="cls-2" d="M120,815.179H73.014V797.218H120v17.961Z"/>
+    <path id="Sağa_Dayalı_2025" class="cls-2" d="M19.878,820.558H152V952.68H19.878V820.558Z"/>
+  </g>
+  <g id="_2000" data-name="2000" class="cls-1">
+    <path id="Sağdan_2000" class="cls-2" d="M233,661.491H186.014V643.53H233v17.961Z"/>
+    <rect id="Sola_Dayalı_2000" class="cls-3" x="155" y="665.094" width="132.125" height="132.125"/>
+  </g>
+  <g id="_1979" data-name="1979" class="cls-1">
+    <path id="Soldan_1979" class="cls-2" d="M121,534.989H74.014V517.028H121v17.961Z"/>
+    <rect id="Sağa_Dayalı_1979" class="cls-3" x="19.875" y="539.969" width="132.125" height="132.125"/>
+  </g>
+  <g id="_1976" data-name="1976" class="cls-1">
+    <path id="Sağdan_1976" class="cls-2" d="M233,402.969H186.014V385.008H233v17.961Z"/>
+    <rect id="Sola_Dayalı_1976" class="cls-3" x="155" y="407.844" width="132.125" height="132.125"/>
+  </g>
+  <g id="_1967" data-name="1967" class="cls-1">
+    <path id="Soldan_1967" class="cls-2" d="M120,307.3H73.014V289.312H120V307.3Z"/>
+    <path id="Sağa_Dayalı_1967" class="cls-2" d="M19.878,311.368H152V443.49H19.878V311.368Z"/>
+  </g>
+  <g id="_1956" data-name="1956" class="cls-1">
+    <path id="Sağdan_1956" class="cls-2" d="M233,165.06H186.014V147.071H233V165.06Z"/>
+    <path id="Sola_Dayalı_1956" class="cls-2" d="M155,169.89H287.125V302.012H155V169.89Z"/>
+  </g>
+  <g id="_1953" data-name="1953" class="cls-1">
+    <path id="Sağa_Dayalı_1953" class="cls-2" d="M19.878,108.828H152V240.95H19.878V108.828Z"/>
+    <path id="Soldan_1953" class="cls-2" d="M120,105H73.014V87.009H120V105Z"/>
+  </g>
+
+  <g id="timeline-text">
+    <text class="tl-year" x="73.014" y="96.0" dominant-baseline="central" text-anchor="start">1953</text>
+    <text class="tl-year" x="233" y="156.07" dominant-baseline="central" text-anchor="end">1956</text>
+    <text class="tl-year" x="73.014" y="298.31" dominant-baseline="central" text-anchor="start">1967</text>
+    <text class="tl-year" x="233" y="393.99" dominant-baseline="central" text-anchor="end">1976</text>
+    <text class="tl-year" x="74.014" y="526.01" dominant-baseline="central" text-anchor="start">1979</text>
+    <text class="tl-year" x="233" y="652.51" dominant-baseline="central" text-anchor="end">2000</text>
+    <text class="tl-year" x="73.014" y="806.2" dominant-baseline="central" text-anchor="start">2025</text>
+
+    <foreignObject x="19.878" y="108.828" width="132.122" height="132.122">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tl-text tl-right">
+        <p class="tl-title">1953 – Discovery of Lignite Reserves</p>
+        <p>The story of Çayırhan’s mining industry began in 1953–1954 when contractor Mustafa Murtazaoğlu, while constructing a bridge on the Ankara–Nallıhan road, accidentally discovered lignite deposits. He subsequently obtained exploration and operating licenses and initiated small-scale mining activities in the area.<sup>1</sup></p>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="155" y="169.89" width="132.125" height="132.122">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tl-text tl-left">
+        <p class="tl-title">1956 – The Impact of Sarıyar Dam</p>
+        <p>The opening of the Sarıyar Dam in 1956 submerged a significant portion of the village’s agricultural land and settlement area. At the same time, the growing mining industry introduced as a new economic opportunity and transformed local livelihoods.<sup>1</sup></p>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="19.878" y="311.368" width="132.122" height="132.122">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tl-text tl-right">
+        <p class="tl-title">1967 – State-Led Mining Operations</p>
+        <p>In 1967, the mining enterprise was acquired by the Turkish Coal Enterprises (TKİ). The establishment of the Central Anatolian Lignite Çayırhan Operation marked the beginning of more organised, large-scale, and efficient mining activities.<sup>1</sup></p>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="155" y="407.844" width="132.125" height="132.125">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tl-text tl-left">
+        <p class="tl-title">1976 – Municipal Status and Power Plant Development</p>
+        <p>Çayırhan was granted municipal status in 1976. On November 14 of the same year, construction began on the Çayırhan Thermal Power Plant. Completed in 1978, the facility has since undergone several expansions and remains one of the region’s key industrial assets.<sup>2</sup></p>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="19.875" y="539.969" width="132.125" height="132.125">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tl-text tl-right">
+        <p class="tl-title">1979 – Emergence of an Industrial Center</p>
+        <p>With the thermal power plant becoming fully operational, Çayırhan experienced rapid growth. What had once been a small settlement evolved into an important mining and energy production center.<sup>2</sup></p>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="155" y="665.094" width="132.125" height="132.125">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tl-text tl-left">
+        <p class="tl-title">2000 – Privatization Process</p>
+        <p>After decades of state operation, the Çayırhan Thermal Power Plant became the first thermal power plant in Türkiye to be transferred to the private sector.<sup>3</sup> In 2000, operational rights were transferred to Park Termik, a company owned by Turgay Ciner. Upon the expiration of the 20-year Operating Rights Transfer Agreement on June 30, 2020, the facility returned to state control.<sup>4</sup></p>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="19.878" y="820.558" width="132.122" height="132.122">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tl-text tl-right">
+        <p class="tl-title">2025 – New Operating Agreement</p>
+        <p>In 2025, Akçadağ İnşaat Enerji Madencilik A.Ş. won the tender to operate the Çayırhan Thermal Power Plant and Mining Site. The company will hold operating rights until 2059.<sup>5</sup></p>
+      </div>
+    </foreignObject>
+  </g>
+</svg>
