@@ -11,36 +11,24 @@
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
   html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; background:linear-gradient(to bottom, rgba(10,10,10,0.65), rgba(10,10,10,0)); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
 
-  .img-wrap { max-width:1000px; margin:0 auto; padding:7.5rem 2.5rem 0; }
-  .full-img { width:100%; height:auto; display:block; }
+  .wrap { padding-top:52px; }
+  .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:1.5rem 2rem; text-align:center; }
 
-  .wrap { max-width:960px; margin:0 auto; padding:5rem 2rem 8rem; }
-  .sec { margin-bottom:6rem; }
-  .sec-head { font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); opacity:0.6; padding-top:2rem; border-top:1px solid var(--border); margin-bottom:2.5rem; display:block; }
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
-  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
-  .fig img { width:100%; height:auto; display:block; margin:0; }
-  figcaption { font-size:0.56rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--mid); opacity:0.4; margin-top:0.5rem; }
-  .sec-text { font-size:0.95rem; line-height:1.9; opacity:0.7; }
-  .sec-text p { margin-bottom:1rem; }
-  .sec-text.references { font-size:0.78rem; line-height:1.7; opacity:0.45; }
-  @media (max-width:680px) { .two-col,.three-col { grid-template-columns:1fr; } }
-  .body { font-size:1.1rem; line-height:1.95; }
-  .body p { margin-bottom:1.6rem; }
-  .body p:last-child { margin-bottom:0; }
-  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
-  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
-  .body img { max-width:100%; margin:2.5rem 0; }
-  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
-  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
-  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
-  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+  .fig { flex:1; min-height:0; width:100%; max-width:1100px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .fig img { width:100%; height:100%; object-fit:contain; display:block; }
+
+  .body-text { max-width:780px; font-size:0.92rem; line-height:1.7; opacity:0.8; flex:0 0 auto; }
+
+  .reference-block { max-width:780px; font-size:0.66rem; line-height:1.55; opacity:0.4; flex:0 0 auto; }
+  .reference-block h2 { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; font-weight:400; margin-bottom:0.35rem; }
+  .reference-block p { margin-bottom:0.2rem; }
+  .reference-block p:last-child { margin-bottom:0; }
 </style>
 </head>
 <body>
@@ -49,35 +37,23 @@
   <span class="nav-title">Bird</span>
   <span class="nav-tag">Field Report</span>
 </nav>
-
-<div class="img-wrap">
-  <img class="full-img" src="2026-images/2026-p1/5-bird/kusgocharitasi.webp" alt="Kuş Göç Haritası" fetchpriority="high">
-</div>
-
 <div class="wrap">
-  <div class="body">
 
-    <div class="sec">
-      <span class="sec-head">Section</span>
-      <div class="sec-text">
-        <p>Centered on the Nallıhan Bird Sanctuary and the Sarıyar Dam reservoir, this mapping analyzes how industrial landscapes intersect with non-human geographies. The local microclimatic shifts and atmospheric conditions induced by the Çayırhan Thermal Power Plant do not just contaminate the immediate site; they act as an active airborne barrier, forcing an intervention into the region’s traditional flyways. By overlaying spatial infrastructure data with habitat surveys, this section charts the transition from a historic avian refuge to a highly fragmented, deviated flight network. The resulting map visualizes how ecological migration paths are physically rewritten by subsurface and atmospheric industrial presence.</p>
-      </div>
+  <section class="section">
+    <figure class="fig">
+      <img src="2026-images/2026-p1/5-bird/kusgocharitasi.webp" loading="lazy" alt="Kuş Göç Haritası">
+    </figure>
+
+    <p class="body-text">Centered on the Nallıhan Bird Sanctuary and the Sarıyar Dam reservoir, this mapping analyzes how industrial landscapes intersect with non-human geographies. The local microclimatic shifts and atmospheric conditions induced by the Çayırhan Thermal Power Plant do not just contaminate the immediate site; they act as an active airborne barrier, forcing an intervention into the region's traditional flyways. By overlaying spatial infrastructure data with habitat surveys, this section charts the transition from a historic avian refuge to a highly fragmented, deviated flight network. The resulting map visualizes how ecological migration paths are physically rewritten by subsurface and atmospheric industrial presence.</p>
+
+    <div class="reference-block">
+      <h2>References</h2>
+      <p>Ayaş, Z. Nest Site Characteristics and Nest Densities of Ardeids (Night Heron: Nycticorax nycticorax, Grey Heron: Ardea cinerea, and Little Egret: Egretta garzetta) in Nallıhan Bird Sanctuary. TÜBİTAK Turkish Journal of Zoology.</p>
+      <p>Perktaş, U., & Ayaş, Z. (2005). The Bird Species of Nallıhan Bird Sanctuary (Ankara, Turkey). Journal of the Black Sea/Mediterranean Environment, 11(2).</p>
+      <p>Sutherland, W. J. (1998). Evidence for Flexibility and Regional Deviation in Avian Migration Routes. Journal of Avian Biology. / Richardson, W. J. (1998). Bird migration and power plants: Atmospheric and spatial disruptions. Environmental Management.</p>
     </div>
+  </section>
 
-    <div class="sec">
-      <span class="sec-head">References</span>
-      <div class="sec-text references">
-        <p>Ayaş, Z. Nest Site Characteristics and Nest Densities of Ardeids (Night Heron: Nycticorax nycticorax, Grey Heron: Ardea cinerea, and Little Egret: Egretta garzetta) in Nallıhan Bird Sanctuary. TÜBİTAK Turkish Journal of Zoology.</p>
-        <p>Perktaş, U., & Ayaş, Z. (2005). The Bird Species of Nallıhan Bird Sanctuary (Ankara, Turkey). Journal of the Black Sea/Mediterranean Environment, 11(2).</p>
-        <p>Sutherland, W. J. (1998). Evidence for Flexibility and Regional Deviation in Avian Migration Routes. Journal of Avian Biology. / Richardson, W. J. (1998). Bird migration and power plants: Atmospheric and spatial disruptions. Environmental Management.</p>
-      </div>
-    </div>
-
-  </div>
-  <dl class="meta">
-    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
-  </dl>
 </div>
-
 </body>
 </html>
