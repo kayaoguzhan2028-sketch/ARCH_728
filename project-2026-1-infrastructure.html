@@ -29,17 +29,17 @@
   .reference-block p { margin-bottom:0.3rem; }
   .reference-block p:last-child { margin-bottom:0; }
 
-  .img-wrap2 { position:relative; width:min(94%, calc(80vh * 14796 / 9705)); aspect-ratio:14796/9705; }
+  .img-wrap2 { position:relative; width:min(94%, calc(60vh * 14796 / 9705)); aspect-ratio:14796/9705; }
   .img-wrap2 img { width:100%; height:100%; object-fit:contain; display:block; }
   .img-wrap2 svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
   .overlay-zone { fill:var(--accent); opacity:0.2; pointer-events:all; cursor:pointer; transition:opacity 0.3s ease, filter 0.3s ease; }
   .overlay-zone.hover { opacity:0.4; filter:drop-shadow(0 0 26px rgba(245,200,80,0.85)); }
 
-  .trace-split { flex-direction:row; align-items:center; justify-content:center; gap:3.5rem; text-align:left; }
+  .trace-split { flex-direction:row; align-items:flex-end; justify-content:center; gap:3.5rem; text-align:left; }
   .trace-left { flex:0 1 440px; display:flex; flex-direction:column; gap:1.1rem; }
   .trace-left img { width:100%; height:auto; display:block; }
 
-  .img-wrap3 { position:relative; flex:0 0 auto; width:min(42vw, calc(88vh * 2157 / 3507)); aspect-ratio:2157/3507; max-height:88vh; }
+  .img-wrap3 { position:relative; flex:0 0 auto; width:min(18vw, calc(88vh * 2157 / 3507)); aspect-ratio:2157/3507; max-height:88vh; }
   .img-wrap3 img { width:100%; height:100%; object-fit:contain; display:block; }
   .img-wrap3 svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
   .img-wrap3 svg path, .img-wrap3 svg polygon { fill:var(--accent); opacity:0; pointer-events:all; cursor:pointer; transition:opacity 0.25s ease, filter 0.25s ease; }
@@ -85,11 +85,11 @@
 
   <section class="section trace-split">
     <div class="trace-left">
-      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
       <p class="body-text">This layout generates a sequential soil map through the path of the Overland Conveyor. The map shows how the soil changes radically due to the conveyor itself, from the darkness of the mining area to the artificial turquoise color of the ash lake.</p>
       <div class="reference-block">
         <p>(Satellite view are used to create image)</p>
       </div>
+      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
     </div>
     <div class="img-wrap3">
       <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
