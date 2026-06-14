@@ -30,10 +30,20 @@
   .nav-link:hover { opacity: 1; }
 
   /* LEGEND */
-  .legend {
+  .legend-panel {
     position: fixed; top: var(--nav-h); left: 0; bottom: 0; width: var(--legend-w);
-    overflow-y: auto; padding: 1.8rem 0 2rem 2.8rem;
+    display: flex; flex-direction: column;
     z-index: 10;
+  }
+  .legend-heading {
+    flex-shrink: 0;
+    padding: 1.8rem 2rem 0.6rem 2.8rem;
+    font-size: 0.95rem; font-style: italic; line-height: 1.4;
+    color: var(--accent); opacity: 0.85;
+  }
+  .legend {
+    flex: 1; min-height: 0;
+    overflow-y: auto; padding: 0 0 2rem 2.8rem;
   }
   .legend::-webkit-scrollbar { width: 3px; }
   .legend::-webkit-scrollbar-thumb { background: rgba(245,242,235,0.08); }
@@ -159,7 +169,7 @@
     stroke: rgba(245,242,235,0);
     stroke-width: 50px;
     pointer-events: all;
-    cursor: default;
+    cursor: pointer;
     transition: fill 0.2s ease, stroke 0.2s ease;
   }
   .hotspot-path:hover {
@@ -196,8 +206,11 @@
   </div>
 </nav>
 
-<div class="legend" id="legend">
-  <div class="legend-title">legend</div>
+<div class="legend-panel">
+  <div class="legend-heading">Make your own Hıdırlık Hill!</div>
+  <div class="legend" id="legend">
+    <div class="legend-title">legend</div>
+  </div>
 </div>
 
 <div class="canvas">
@@ -227,16 +240,16 @@
     {
       name: 'recreation project',
       items: [
-        { file: '02-model-toki-foundatıon.webp', label: 'toki foundations', color: '#ffee00' },
-        { file: '12-model-monument-tower.webp',  label: 'monument: tower',  color: '#ccff33' },
-        { file: '01-model-toki.webp',            label: 'toki blocks',      color: '#aabb55' },
-        { file: '11-model-monument.webp',        label: 'monument: base',   color: '#eeff99' },
+        { file: '02-model-toki-foundatıon.webp', label: 'toki foundations (in progress)', color: '#ffee00' },
+        { file: '12-model-monument-tower.webp',  label: 'monument tower (in progress)',   color: '#ccff33' },
+        { file: '01-model-toki.webp',            label: 'toki blocks (future project)',   color: '#aabb55' },
+        { file: '11-model-monument.webp',        label: 'monument base (future project)', color: '#eeff99' },
       ]
     },
     {
       name: 'historical',
       items: [
-        { file: '16-model-tomb.webp', label: 'tomb', color: '#bb44ff' },
+        { file: '16-model-tomb.webp', label: 'tomb (demolished)', color: '#bb44ff' },
       ]
     },
     {
@@ -252,7 +265,7 @@
       items: [
         { file: '08-model-electrictower.webp', label: 'electric tower', color: '#ff8822' },
         { file: '09-model-lightpole.webp',     label: 'lighting pole',  color: '#ff8822' },
-        { file: '10-model-funiküler.webp',     label: 'funicular',      color: '#ff8822' },
+        { file: '10-model-funiküler.webp',     label: 'funicular (future project)', color: '#ff8822' },
       ]
     },
     {
@@ -298,9 +311,9 @@
 
   // --- Hover hotspots (transparent overlays) ---
   const HOTSPOTS = [
-    { svg: 'Dikdörtgen1.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_03.webp' },
-    { svg: 'Dikdörtgen2.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_01.webp' },
-    { svg: 'Dikdörtgen3.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_02.webp' },
+    { svg: 'Dikdörtgen1.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_02.webp', link: 'project-2026-2-thesection.html#dikey-2' },
+    { svg: 'Dikdörtgen2.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_01.webp', link: 'project-2026-2-thesection.html#dikey-1' },
+    { svg: 'Dikdörtgen3.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_03.webp', link: 'project-2026-2-thesection.html#dikey-3' },
   ];
 
   const hitLayer = document.createElement('div');
@@ -367,6 +380,7 @@
           preview.classList.add('visible');
         });
         path.addEventListener('mouseleave', () => preview.classList.remove('visible'));
+        path.addEventListener('click', () => { window.location.href = cfg.link; });
 
         console.log('Hotspot loaded:', cfg.svg, '→', cfg.preview);
       })

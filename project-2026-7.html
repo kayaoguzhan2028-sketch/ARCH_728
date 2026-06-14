@@ -20,8 +20,7 @@
   .map-layer { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; user-select:none; -webkit-user-drag:none; transition:opacity 0.4s ease; }
   .map-layer.active { opacity:1; }
   .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; border:none; }
-  #nisa-layer { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:80; background:var(--black); pointer-events:none; }
-  .node { position:absolute; transform:translate(-50%,-50%); width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; z-index:10; opacity:0; transition:opacity 0.5s ease; }
+  .node { position:absolute; transform:translate(-50%,-50%); width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; z-index:10; opacity:1; }
   .node-dot { width:6px; height:6px; border-radius:50%; background:#c0392b; opacity:0.5; position:relative; flex-shrink:0; transition:opacity 0.35s ease,transform 0.35s ease; }
   .node-dot::after { content:''; position:absolute; top:50%; left:50%; width:20px; height:20px; border-radius:50%; border:1px solid var(--white); transform:translate(-50%,-50%) scale(0.4); opacity:0; transition:opacity 0.35s ease,transform 0.35s ease; }
   .node-label { position:absolute; bottom:calc(100% + 14px); left:50%; transform:translateX(-50%) translateY(8px); white-space:nowrap; font-family:var(--font); font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--white); opacity:0; pointer-events:none; transition:opacity 0.35s ease,transform 0.35s ease; }
@@ -67,8 +66,6 @@
   <p>Field photography documenting soil in transit — excavation trucks, active dump operations, material accumulation — forms the visual core of the study, supplemented by historical aerial imagery and satellite overlays that trace the Mamak dump site's transformation from early formation to its current artificial topography. Ecological records of vegetation loss, hydrological shifts, and landslide events register what the soil's movement has cost the ground it left behind. Geology and urban engineering theses held in the YÖK National Thesis Center — particularly master's theses on excavation site selection and soil composition in the Ankara basin — provide the technical substrate for reading the site's spatial logic as simultaneously geological and political. Nail's <em>The Figure of the Migrant</em> and <em>Kinopolitics</em> function not as objects of analysis but as theoretical lenses, orienting the study toward movement, expulsion, and subject-formation rather than static spatial categories.</p>
 </div>
 
-<div id="nisa-layer"></div>
-
 <div class="map-stage">
   <div class="map-inner">
 
@@ -102,60 +99,12 @@
 </div>
 
 <script>
-const mapStage  = document.querySelector('.map-stage');
-const nisaLayer = document.getElementById('nisa-layer');
-const nodes     = document.querySelectorAll('.node');
-let fadeT = 0;
-const FADE_STEP = 0.07;
-
-function setFade(t) {
-  fadeT = Math.max(0, Math.min(1, t));
-  nisaLayer.style.opacity = (1 - fadeT).toFixed(3);
-  nodes.forEach(n => { n.style.opacity = fadeT >= 1 ? '1' : '0'; });
-}
-
-mapStage.addEventListener('wheel', e => {
-  e.preventDefault();
-  setFade(fadeT + (e.deltaY < 0 ? FADE_STEP : -FADE_STEP));
-}, { passive: false });
-
-// ── Touch / pinch (fade only — no pan/zoom) ──────────────────────────────────────
-let tPinching = false, tPinchStart = 0, tFadeStart = 0;
-
-function pinchDist(touches) {
-  return Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
-}
-
-mapStage.addEventListener('touchstart', e => {
-  if (e.target.closest('.node')) return;
-  if (e.touches.length === 2) {
-    tPinching = true;
-    tPinchStart = pinchDist(e.touches);
-    tFadeStart  = fadeT;
-    e.preventDefault();
-  }
-}, { passive: false });
-
-mapStage.addEventListener('touchmove', e => {
-  if (tPinching && e.touches.length === 2) {
-    const ratio = pinchDist(e.touches) / tPinchStart;
-    setFade(tFadeStart + (ratio - 1));
-    e.preventDefault();
-  }
-}, { passive: false });
-
-mapStage.addEventListener('touchend', e => {
-  if (e.touches.length < 2) tPinching = false;
-});
-
 const infoToggle = document.getElementById('info-toggle');
 const infoPanel  = document.getElementById('info-panel');
 infoToggle.addEventListener('click', () => {
   const open = infoPanel.classList.toggle('open');
   infoToggle.classList.toggle('open', open);
 });
-
-setFade(0);
 
 // ── Soil-layer hover reveal ───────────────────────────────────────────────────
 ['02','03','04','05','06','07'].forEach(id => {
