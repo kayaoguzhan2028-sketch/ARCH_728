@@ -64,16 +64,10 @@
   .lens-node.label-bottom .lens-node-label { left: 50%; top: calc(100% + 10px); transform: translateX(-50%); }
 
   #view-year { align-items: center; justify-content: center; overflow: hidden; }
-  .year-stack { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; user-select: none; }
-  .year-item { position: absolute; display: flex; align-items: center; gap: 0.6em; font-family: 'EB Garamond', Georgia, serif; font-weight: 400; color: var(--white); white-space: nowrap; transition: transform 0.43s cubic-bezier(0.4,0,0.2,1), opacity 0.43s cubic-bezier(0.4,0,0.2,1), font-size 0.43s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+  #year-video { max-width: 70%; max-height: 70vh; }
 
-  #dive-in-btn { position: absolute; left: calc(50% + 8rem); top: 50%; transform: translateY(-50%); z-index: 10; font-family: 'EB Garamond', serif; font-size: 0.82rem; font-style: italic; letter-spacing: 0.14em; color: var(--white); text-decoration: none; border: 1px solid rgba(245,242,235,0.35); padding: 0.28em 0.75em; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
-  #dive-in-btn.visible { opacity: 0.55; pointer-events: auto; }
+  #dive-in-btn { position: absolute; right: 25%; top: 50%; transform: translateY(-50%); z-index: 10; font-family: 'EB Garamond', serif; font-size: 0.82rem; font-style: italic; letter-spacing: 0.14em; color: var(--white); text-decoration: none; border: 1px solid rgba(245,242,235,0.35); padding: 0.28em 0.75em; opacity: 0.55; transition: opacity 0.35s; }
   #dive-in-btn:hover { opacity: 1; }
-
-  #year-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 0; }
-  #year-bg svg { width: 62vmin; height: 62vmin; transition: opacity 0.45s ease; }
-  .year-stack { position: relative; z-index: 1; }
 
   #view-content { position: absolute; inset: 0; overflow: hidden; cursor: default; }
   .shape { position: absolute; cursor: pointer; transition: transform 0.35s ease, opacity 0.4s ease, filter 0.4s ease; will-change: transform; }
@@ -172,14 +166,13 @@
 
   <!-- BY YEAR -->
   <div class="view" id="view-year">
-    <div id="year-bg"></div>
-    <div class="year-stack" id="year-stack"></div>
-    <a href="#" id="dive-in-btn">dive in</a>
+    <video id="year-video" src="must-images/by-year/2026-STG.mp4" autoplay loop muted playsinline></video>
+    <a href="2026.html" id="dive-in-btn" class="visible">dive in</a>
   </div>
 
   <!-- BY CONTENT -->
   <div class="view" id="view-content">
-    <img class="shape" id="shape-0" src="must-images/by-content/factory.webp" data-label="Factory" data-href="project-2026-1-powerplant.html" style="width:120px;height:auto;" draggable="false" alt="Factory">
+    <img class="shape" id="shape-0" src="must-images/by-content/factory.webp" data-label="Powerplant" data-href="project-2026-1-powerplant.html" style="width:120px;height:auto;" draggable="false" alt="Powerplant">
     <img class="shape" id="shape-1" src="2026-images/2026-p2/themodel/23-model-meshtopo.webp" data-label="The Model" data-href="project-2026-2-themodel.html" style="width:90px;height:auto;" draggable="false" alt="The Model">
     <svg class="shape" id="shape-2" width="110" height="110" viewBox="0 0 110 110" data-label="Grup 03"><polygon points="55,5 103,40 84,96 26,96 7,40" fill="#8fa3c8"/></svg>
     <svg class="shape" id="shape-3" width="120" height="104" viewBox="0 0 120 104" data-label="Grup 04"><polygon points="60,2 113,30 113,74 60,102 7,74 7,30" fill="#c8c09a"/></svg>
@@ -209,121 +202,6 @@
 </div>
 
 <script>
-  const activeYears = [2026];
-  const YEARS = [2026];
-
-  const stack   = document.getElementById('year-stack');
-  const yearBg  = document.getElementById('year-bg');
-  const diveBtn = document.getElementById('dive-in-btn');
-  let currentIdx = YEARS.indexOf(2026);
-
-  function polyPoints(n, cx, cy, r, offset) {
-    offset = offset || 0;
-    const pts = [];
-    for (let i = 0; i < n; i++) {
-      const a = (2 * Math.PI * i / n) - Math.PI / 2 + offset;
-      pts.push((cx + r * Math.cos(a)).toFixed(2) + ',' + (cy + r * Math.sin(a)).toFixed(2));
-    }
-    return pts.join(' ');
-  }
-
-  function starPoints(n, cx, cy, rOut, rIn, offset) {
-    offset = offset || 0;
-    const pts = [];
-    for (let i = 0; i < n * 2; i++) {
-      const r = i % 2 === 0 ? rOut : rIn;
-      const a = (Math.PI * i / n) - Math.PI / 2 + offset;
-      pts.push((cx + r * Math.cos(a)).toFixed(2) + ',' + (cy + r * Math.sin(a)).toFixed(2));
-    }
-    return pts.join(' ');
-  }
-
-  const PASTEL = [
-    'rgba(195,170,160,0.28)', 'rgba(155,175,165,0.28)', 'rgba(160,175,200,0.28)',
-    'rgba(200,190,155,0.28)', 'rgba(175,165,195,0.28)', 'rgba(165,185,175,0.28)',
-    'rgba(200,175,155,0.28)', 'rgba(155,180,185,0.28)', 'rgba(185,170,155,0.28)',
-    'rgba(170,185,160,0.28)', 'rgba(190,165,175,0.28)', 'rgba(175,185,200,0.28)',
-  ];
-
-  const SHAPES = [
-    (c) => `<polygon points="${polyPoints(3,100,100,88)}" fill="${c}"/>`,
-    (c) => `<rect x="16" y="16" width="168" height="168" fill="${c}"/>`,
-    (c) => `<polygon points="${polyPoints(5,100,100,88)}" fill="${c}"/>`,
-    (c) => `<polygon points="${polyPoints(6,100,100,88)}" fill="${c}"/>`,
-    (c) => `<polygon points="${polyPoints(7,100,100,88)}" fill="${c}"/>`,
-    (c) => `<polygon points="${polyPoints(8,100,100,88)}" fill="${c}"/>`,
-    (c) => `<polygon points="${starPoints(5,100,100,88,38)}" fill="${c}"/>`,
-    (c) => `<polygon points="${starPoints(6,100,100,88,42)}" fill="${c}"/>`,
-    (c) => `<polygon points="100,8 192,100 100,192 8,100" fill="${c}"/>`,
-    (c) => `<path d="M68,8 H132 V68 H192 V132 H132 V192 H68 V132 H8 V68 H68 Z" fill="${c}"/>`,
-    (c) => `<circle cx="100" cy="100" r="88" fill="${c}"/>`,
-    (c) => `<polygon points="${polyPoints(9,100,100,88)}" fill="${c}"/>`,
-  ];
-
-  function updateBg(year) {
-    const idx = (year - 2026) % SHAPES.length;
-    const color = PASTEL[idx];
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('viewBox', '0 0 200 200');
-    svg.style.opacity = '0';
-    svg.innerHTML = SHAPES[idx](color);
-    yearBg.innerHTML = '';
-    yearBg.appendChild(svg);
-    requestAnimationFrame(() => { svg.style.opacity = '1'; });
-  }
-
-  updateBg(YEARS[currentIdx]);
-
-  YEARS.forEach((yr, i) => {
-    const item = document.createElement('div');
-    item.className = 'year-item';
-    item.dataset.index = i;
-    const label = document.createElement('span');
-    label.textContent = yr;
-    item.appendChild(label);
-    if (activeYears.includes(yr)) item.classList.add('is-active');
-    stack.appendChild(item);
-  });
-
-  const items = stack.querySelectorAll('.year-item');
-
-  const yearHtmlMap = { 2026: '2026.html' };
-
-  function renderYears() {
-    items.forEach((item, i) => {
-      const delta = i - currentIdx;
-      if (Math.abs(delta) > 2) { item.style.opacity = '0'; item.style.pointerEvents = 'none'; return; }
-      item.style.pointerEvents = delta === 0 ? 'auto' : 'none';
-      const scale = Math.pow(0.6, Math.abs(delta));
-      const fontSize = delta === 0 ? 'clamp(3rem, 8vw, 7rem)' : `calc(clamp(3rem, 8vw, 7rem) * ${scale.toFixed(3)})`;
-      const opacities = [1, 0.4, 0.2];
-      const opacity = opacities[Math.abs(delta)];
-      const spacing = 110;
-      const translateY = delta * spacing * Math.pow(0.72, Math.abs(delta) - 1);
-      const rotateX = delta * -6;
-      item.style.fontSize  = fontSize;
-      item.style.opacity   = opacity;
-      item.style.transform = `translateY(${translateY}px) rotateX(${rotateX}deg) translateZ(${delta === 0 ? 0 : -60}px)`;
-      item.style.zIndex    = 10 - Math.abs(delta);
-    });
-    diveBtn.href = yearHtmlMap[YEARS[currentIdx]] || '#';
-    diveBtn.classList.add('visible');
-  }
-
-  renderYears();
-
-  let scrollLocked = false;
-  document.getElementById('view-year').addEventListener('wheel', (e) => {
-    e.preventDefault();
-    if (scrollLocked) return;
-    scrollLocked = true;
-    setTimeout(() => scrollLocked = false, 330);
-    if (e.deltaY > 0 && currentIdx < YEARS.length - 1) currentIdx++;
-    else if (e.deltaY < 0 && currentIdx > 0) currentIdx--;
-    renderYears();
-    updateBg(YEARS[currentIdx]);
-  }, { passive: false });
-
   // ── Leaflet Map ──
   (function () {
     const BASE = '';
