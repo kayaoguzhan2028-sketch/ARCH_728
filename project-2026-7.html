@@ -134,6 +134,8 @@ soilLayers.forEach(L => {
 const HOVER_INFO = {
   '07': { icon: '2026-images/2026-p7/Icons/ikon-nomad_metabolic-flow.webp', label: 'Nomadic Soil' },
   '06': { icon: '2026-images/2026-p7/Icons/ikon-vagabond1.webp', label: 'Vagabond Earth' },
+  '04': { label: 'Generic Building Set' },
+  '05': { label: 'Displacement' },
   '03': { icon: '2026-images/2026-p7/Icons/ikon-proleterian.webp', label: 'Proletairat Earth' },
   '02': { icon: '2026-images/2026-p7/Icons/ikon-barbarian.webp', label: 'Barbarian Earth' }
 };
@@ -160,7 +162,12 @@ mapInner.addEventListener('mousemove', e => {
 
   const info = hit && HOVER_INFO[hit.id];
   if (info) {
-    hoverIconImg.src = info.icon;
+    if (info.icon) {
+      hoverIconImg.src = info.icon;
+      hoverIconImg.style.display = '';
+    } else {
+      hoverIconImg.style.display = 'none';
+    }
     hoverIconLabel.textContent = info.label;
     hoverIcon.style.left = e.clientX + 'px';
     hoverIcon.style.top = e.clientY + 'px';
