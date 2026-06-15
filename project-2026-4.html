@@ -41,6 +41,13 @@
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+  .grid3x3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:0 0 2.5rem; }
+  .grid3x3 .grid-cell { display:flex; align-items:center; justify-content:center; aspect-ratio:1; overflow:hidden; }
+  .grid3x3 .grid-cell img { width:100%; height:100%; object-fit:cover; margin:0; opacity:0.88; }
+  @media (max-width:640px) {
+    .grid3x3 { grid-template-columns:1fr; }
+    .grid3x3 .grid-cell { aspect-ratio:auto; }
+  }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
@@ -58,19 +65,19 @@
 
 <div id="info-panel">
   <ul class="info-nav">
-    <li><a href="2026.html">_index</a></li>
+    <li>_index</li>
     <li><a href="project-2026-4.html">_0.entry</a></li>
     <li><a href="project-2026-4-proposal&amp;methodology.html">_1.proposal &amp; methodology</a></li>
     <li><a href="project-2026-4-aerial-assessment.html">_2.aerial assessment</a></li>
     <li>
       <button class="accordion-toggle" data-target="acc-sections">_3.sections</button>
       <ul class="accordion-content" id="acc-sections">
-        <li><a href="project-2026-4-sections.html">_3.1.hospital section 2007-2023</a></li>
-        <li><a href="project-2026-4-sections.html">_3.2.6002.street section 1 2007-2023</a></li>
-        <li><a href="project-2026-4-sections.html">_3.3.beytepe pond section 2007-2023</a></li>
-        <li><a href="project-2026-4-sections.html">_3.4.arboretum section 2007-2023</a></li>
-        <li><a href="project-2026-4-sections.html">_3.5.6002.street section 2</a></li>
-        <li><a href="project-2026-4-sections.html">_3.6.6002.street section 3</a></li>
+        <li><a href="project-2026-4-sections1.html">_3.1.hospital section 2007-2023</a></li>
+        <li><a href="project-2026-4-sections2.html">_3.2.6002.street section 1 2007-2023</a></li>
+        <li><a href="project-2026-4-sections3.html">_3.3.beytepe pond section 2007-2023</a></li>
+        <li><a href="project-2026-4-sections4.html">_3.4.arboretum section 2007-2023</a></li>
+        <li><a href="project-2026-4-sections5.html">_3.5.6002.street section 2</a></li>
+        <li><a href="project-2026-4-sections6.html">_3.6.6002.street section 3</a></li>
       </ul>
     </li>
     <li>
@@ -84,7 +91,19 @@
 </div>
 
 <div class="wrap">
-  <div class="body"></div>
+  <div class="body">
+    <section class="grid3x3">
+      <div class="grid-cell"></div>
+      <div class="grid-cell"></div>
+      <div class="grid-cell"></div>
+      <div class="grid-cell"></div>
+      <div class="grid-cell"><img src="2026-images/2026-p4/webp/_0.entry/0.Superposed Izohips 3D view with section lines-01.webp" alt="Superposed Izohips 3D view with section lines"></div>
+      <div class="grid-cell"></div>
+      <div class="grid-cell"></div>
+      <div class="grid-cell"></div>
+      <div class="grid-cell"></div>
+    </section>
+  </div>
   <dl class="meta">
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>

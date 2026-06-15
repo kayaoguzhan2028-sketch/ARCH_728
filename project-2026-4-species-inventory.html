@@ -15,6 +15,19 @@
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
+  .info-btn:hover { opacity:1; }
+  .info-btn.open { opacity:1; }
+
+  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:380px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
+  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  .info-nav { list-style:none; font-size:0.92rem; line-height:1.9; }
+  .info-nav a { color:var(--white); text-decoration:none; opacity:0.75; transition:opacity 0.2s; }
+  .info-nav a:hover { opacity:1; text-decoration:underline; }
+  .accordion-toggle { display:block; width:100%; text-align:left; background:none; border:none; color:var(--white); font-family:var(--font); font-size:0.92rem; line-height:1.9; opacity:0.75; cursor:pointer; padding:0; transition:opacity 0.2s; }
+  .accordion-toggle:hover { opacity:1; }
+  .accordion-content { list-style:none; padding-left:1.2rem; max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+  .accordion-content.open { max-height:20rem; }
 
   .wrap { max-width:1400px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
@@ -40,9 +53,39 @@
 </head>
 <body>
 <nav>
-  <a href="2026.html" class="nav-back">← 2026</a>
+  <div style="display:flex;align-items:center;">
+    <a href="2026.html" class="nav-back">← 2026</a>
+    <button class="info-btn" id="info-toggle">Project Info</button>
+  </div>
   <span class="nav-tag">Field Report</span>
 </nav>
+
+<div id="info-panel">
+  <ul class="info-nav">
+    <li>_index</li>
+    <li><a href="project-2026-4.html">_0.entry</a></li>
+    <li><a href="project-2026-4-proposal&amp;methodology.html">_1.proposal &amp; methodology</a></li>
+    <li><a href="project-2026-4-aerial-assessment.html">_2.aerial assessment</a></li>
+    <li>
+      <button class="accordion-toggle" data-target="acc-sections">_3.sections</button>
+      <ul class="accordion-content" id="acc-sections">
+        <li><a href="project-2026-4-sections1.html">_3.1.hospital section 2007-2023</a></li>
+        <li><a href="project-2026-4-sections2.html">_3.2.6002.street section 1 2007-2023</a></li>
+        <li><a href="project-2026-4-sections3.html">_3.3.beytepe pond section 2007-2023</a></li>
+        <li><a href="project-2026-4-sections4.html">_3.4.arboretum section 2007-2023</a></li>
+        <li><a href="project-2026-4-sections5.html">_3.5.6002.street section 2</a></li>
+        <li><a href="project-2026-4-sections6.html">_3.6.6002.street section 3</a></li>
+      </ul>
+    </li>
+    <li>
+      <button class="accordion-toggle" data-target="acc-complementary">_4.complementary information</button>
+      <ul class="accordion-content" id="acc-complementary">
+        <li><a href="project-2026-4-species-inventory.html">_4.1.species inventory</a></li>
+        <li><a href="project-2026-4-habitat-strata.html">_4.2.habitat strata</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
 <div class="wrap">
   <div class="body">
     <h2 style="margin:0 0 1rem;">Species Inventory</h2>
@@ -58,5 +101,19 @@
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
+<script>
+  const infoBtn = document.getElementById('info-toggle');
+  const infoPanel = document.getElementById('info-panel');
+  infoBtn.addEventListener('click', () => {
+    const open = infoPanel.classList.toggle('open');
+    infoBtn.classList.toggle('open', open);
+  });
+
+  document.querySelectorAll('.accordion-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.target).classList.toggle('open');
+    });
+  });
+</script>
 </body>
 </html>

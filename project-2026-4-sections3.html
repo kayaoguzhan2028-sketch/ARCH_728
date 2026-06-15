@@ -28,31 +28,33 @@
   .accordion-toggle:hover { opacity:1; }
   .accordion-content { list-style:none; padding-left:1.2rem; max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
   .accordion-content.open { max-height:20rem; }
+  .nav-title { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; opacity:0.6; }
 
-  .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .wrap { max-width:1400px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
   .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:1; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
-  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
-  .proposal-grid { display:flex; gap:1rem; margin:2.5rem 0; align-items:flex-end; }
-  .proposal-grid .col-left { flex:0 0 40%; }
-  .proposal-grid .col-left img { width:100%; display:block; margin:0; opacity:0.88; }
-  .proposal-grid .col-right { flex:1; display:flex; flex-direction:column; gap:1rem; }
-  .proposal-grid .col-right img { width:100%; display:block; margin:0; opacity:0.88; }
-  @media (max-width:640px) {
-    .proposal-grid { flex-direction:column; align-items:stretch; }
-    .proposal-grid .col-left { flex:none; }
-  }
+  .body img { max-width:100%; margin:2.5rem 0; opacity:1; }
+  .sections-grid { display:grid; grid-template-columns:1fr; max-width:900px; gap:1rem; margin:0 auto 2.5rem; align-items:start; }
+  .section-col { display:flex; flex-direction:column; gap:1rem; }
+  .section-col img { width:100%; display:block; margin:0; opacity:1; }
+  .section-col p { font-size:0.85rem; line-height:1.7; opacity:1; margin:0; }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
+  .lightbox-trigger { cursor:pointer; }
+  .lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.9); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
+  .lightbox.active { display:flex; }
+  .lightbox img { max-width:100%; max-height:100%; object-fit:contain; }
+  .lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:#f5f2eb; font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); }
+  .lightbox-close:hover { opacity:0.7; }
 </style>
 </head>
 <body>
@@ -61,6 +63,7 @@
     <a href="2026.html" class="nav-back">← 2026</a>
     <button class="info-btn" id="info-toggle">Project Info</button>
   </div>
+  <span class="nav-title">Sections</span>
   <span class="nav-tag">Field Report</span>
 </nav>
 
@@ -92,20 +95,29 @@
 </div>
 <div class="wrap">
   <div class="body">
-    <h2 style="margin:0 0 1rem;">Proposal &amp; Methodology</h2>
-    <section class="proposal-grid" style="margin-top:0;">
-      <div class="col-left">
-        <img src="2026-images/2026-p4/webp/_1.proposal & methodology/1.proposal & methodology- yan.webp" alt="Proposal &amp; methodology — side">
-      </div>
-      <div class="col-right">
-        <img src="2026-images/2026-p4/webp/_1.proposal & methodology/1.proposal & methodology- alt.webp" alt="Proposal &amp; methodology">
-        <img src="2026-images/2026-p4/webp/_1.proposal & methodology/1.proposal & methodology- alt 2.webp" alt="Proposal &amp; methodology — alt">
+    <section class="sections-grid">
+      <div class="section-col">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/section3_beytepepond_section_2007-2023.webp" alt="Beytepe pond section 2007-2023" class="lightbox-trigger">
+        <p>Beytepe pond is located near the left corner of the selected site. It is relatively higher to the rest. There is definitive information that this is artificial due to the need of irrigation at first. Then, it was used for nourishment of endangered fish species and research on zooplankton populations was made. These events have served for the creation of the pond's microclimate. Although its relationship with the botanical garden still remains, due to technical difficulties the pathway towards the pond has been closed (flood risk of the pedestrian way).</p>
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-1.webp" alt="Beytepe pond section photo 1">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-2.webp" alt="Beytepe pond section photo 2">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-3.webp" alt="Beytepe pond section photo 3">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-4.webp" alt="Beytepe pond section photo 4">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-5.webp" alt="Beytepe pond section photo 5">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-6.webp" alt="Beytepe pond section photo 6">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-7.webp" alt="Beytepe pond section photo 7">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-8.webp" alt="Beytepe pond section photo 8">
+        <img src="2026-images/2026-p4/webp/_3.sections/3.3.beytepe pond section 2007-2023/webp - Photo Section 3-9.webp" alt="Beytepe pond section photo 9">
       </div>
     </section>
   </div>
   <dl class="meta">
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
+</div>
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">×</button>
+  <img id="lightboxImg" src="" alt="">
 </div>
 <script>
   const infoBtn = document.getElementById('info-toggle');
@@ -119,6 +131,20 @@
     btn.addEventListener('click', () => {
       document.getElementById(btn.dataset.target).classList.toggle('open');
     });
+  });
+  document.querySelectorAll('.lightbox-trigger').forEach(function(img){
+    img.addEventListener('click', function(){
+      var lbImg = document.getElementById('lightboxImg');
+      lbImg.src = this.src;
+      lbImg.alt = this.alt;
+      document.getElementById('lightbox').classList.add('active');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', function(){
+    document.getElementById('lightbox').classList.remove('active');
+  });
+  document.getElementById('lightbox').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('active');
   });
 </script>
 </body>
