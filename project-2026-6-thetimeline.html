@@ -35,7 +35,7 @@
   .hotspot-overlay.hover-layer circle:hover,
   .hotspot-overlay.hover-layer polygon:hover,
   .hotspot-overlay.hover-layer rect:hover { opacity:0.3; }
-  .hotspot-overlay.hover-layer line { stroke:var(--accent); stroke-opacity:0; pointer-events:stroke; cursor:default; transition:stroke-opacity 0.25s ease; }
+  .hotspot-overlay.hover-layer line { stroke:var(--accent); stroke-width:100; stroke-opacity:0; pointer-events:stroke; cursor:default; transition:stroke-opacity 0.25s ease; }
   .hotspot-overlay.hover-layer line:hover { stroke-opacity:0.3; }
 
   .decade-hotspot { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
@@ -368,11 +368,24 @@
     return null;
   }
 
+  const decadeLabels = {
+    '30lar': '1930s',
+    '60lar': '1960s–1970s',
+    '90lar': '1990s–2000s',
+    '2020ler': 'Today',
+  };
+
   interactiveImage.addEventListener('mousemove', (e) => {
     const found = decadeAt(e.clientX, e.clientY);
     if (found !== activeDecadeImg) {
       if (activeDecadeImg) activeDecadeImg.classList.remove('active-hover');
-      if (found) found.classList.add('active-hover');
+      if (found) {
+        found.classList.add('active-hover');
+        legendLabel.innerHTML = `<h3>${decadeLabels[found.dataset.decade]}</h3><p>Click to view details.</p>`;
+        legendLabel.classList.add('active');
+      } else {
+        legendLabel.classList.remove('active');
+      }
       activeDecadeImg = found;
       interactiveImage.style.cursor = found ? 'pointer' : '';
     }
@@ -381,6 +394,7 @@
   interactiveImage.addEventListener('mouseleave', () => {
     if (activeDecadeImg) activeDecadeImg.classList.remove('active-hover');
     activeDecadeImg = null;
+    legendLabel.classList.remove('active');
     interactiveImage.style.cursor = '';
   });
 
