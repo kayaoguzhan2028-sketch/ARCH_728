@@ -310,7 +310,7 @@
       .then((res) => res.text())
       .then((svg) => {
         overlay.innerHTML = svg;
-        const shapes = overlay.querySelectorAll('path, circle, polygon, rect');
+        const shapes = overlay.querySelectorAll('path, circle, polygon');
 
         if (overlay.classList.contains('hover-layer')) {
           shapes.forEach((shape) => {
