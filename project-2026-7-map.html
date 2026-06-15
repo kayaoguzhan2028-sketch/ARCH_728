@@ -24,10 +24,10 @@
   .map-canvas img, .map-canvas .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; }
   #map-base, .map-layer { pointer-events:none; -webkit-user-drag:none; }
   .map-layer { opacity:0; transition:opacity 0.3s ease; }
-  .map-hotspot { pointer-events:auto; }
+  .map-hotspot { pointer-events:none; }
   .map-hotspot svg { width:100%; height:100%; display:block; }
   .map-hotspot path, .map-hotspot polygon { fill:transparent; pointer-events:all; cursor:pointer; }
-  .map-viewport.pan-ready .map-hotspot { pointer-events:none; }
+  .map-viewport.pan-ready .map-hotspot path, .map-viewport.pan-ready .map-hotspot polygon { pointer-events:none; }
 </style>
 </head>
 <body>
