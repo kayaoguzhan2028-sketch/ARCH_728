@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,41 +9,137 @@
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; height:100%; overflow:hidden; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
 
-  .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
-  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
-  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
-  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
-  .body p { margin-bottom:1.6rem; }
-  .body p:last-child { margin-bottom:0; }
-  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
-  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
-  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
-  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
-  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
-  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
-  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+  .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:1fr 1fr; grid-template-areas:"preview visual" "info visual"; }
+  .cell { display:flex; align-items:center; justify-content:center; padding:2rem; overflow:hidden; }
+  .cell-preview { grid-area:preview; }
+  .cell-info { grid-area:info; }
+  .cell-visual { grid-area:visual; }
+
+  .interactive-image { position:relative; width:min(95%, calc(85vh * 2598 / 2953)); aspect-ratio:2598/2953; }
+  .interactive-image img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
+  .factory-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .factory-highlight.active { opacity:1; }
+
+  .hotspot-overlay { position:absolute; inset:0; }
+  .hotspot-overlay svg { width:100%; height:100%; display:block; }
+  .hotspot-overlay path, .hotspot-overlay circle { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
+  .hotspot-overlay path:hover, .hotspot-overlay circle:hover { opacity:0.3; }
+
+  .preview-panel { width:100%; max-width:320px; opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; }
+  .preview-panel.active { opacity:1; transform:translateY(0); }
+  .preview-panel img { width:100%; display:block; border:1px solid var(--border); }
+
+  .info-panel { max-width:340px; font-size:0.92rem; line-height:1.85; opacity:0.78; }
+  .info-panel .references { margin-top:1.2rem; font-size:0.72rem; line-height:1.6; opacity:0.55; }
+  .info-panel .references p { margin-bottom:0.5rem; }
+  .info-panel .references p:last-child { margin-bottom:0; }
+
+  @media (max-width:720px) {
+    html,body { overflow:auto; }
+    .stage { position:static; grid-template-columns:1fr; grid-template-rows:auto; grid-template-areas:"visual" "preview" "info"; padding:6rem 1rem 3rem; gap:1.5rem; }
+    .info-panel { font-size:0.85rem; }
+  }
 </style>
 </head>
 <body>
 <nav>
   <a href="2026.html" class="nav-back">← 2026</a>
+  <span class="nav-title">Imrahor Valley</span>
   <span class="nav-tag">Field Report</span>
 </nav>
-<div class="wrap">
-  <span class="label">ARCH 728 · Spring 2026</span>
-  <h1>Project 2026-6</h1>
-  <div class="body"></div>
-  <dl class="meta">
-    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
-  </dl>
+
+<div class="stage">
+  <div class="cell cell-preview">
+    <div class="preview-panel" id="preview-panel">
+      <img id="preview-img" src="" alt="">
+    </div>
+  </div>
+
+  <div class="cell cell-visual">
+  <div class="interactive-image">
+    <img src="2026-images/2026-p6/2-The Factories/2026-6-Factory Main Visual.webp" alt="The Factories — Main Visual">
+    <img class="factory-highlight" data-factory="1" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 1.webp" alt="">
+    <img class="factory-highlight" data-factory="2" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 2.webp" alt="">
+    <img class="factory-highlight" data-factory="3" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 3.webp" alt="">
+    <img class="factory-highlight" data-factory="4" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 4.webp" alt="">
+    <img class="factory-highlight" data-factory="5" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 5.webp" alt="">
+    <img class="factory-highlight" data-factory="6" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 6.webp" alt="">
+    <img class="factory-highlight" data-factory="7" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 7.webp" alt="">
+    <img class="factory-highlight" data-factory="8" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 8.webp" alt="">
+    <img class="factory-highlight" data-factory="9" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 9.webp" alt="">
+    <img class="factory-highlight" data-factory="10" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 10.webp" alt="">
+    <img class="factory-highlight" data-factory="11" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 11.webp" alt="">
+    <div class="hotspot-overlay">
+      <svg viewBox="0 0 2598 2953" xmlns="http://www.w3.org/2000/svg">
+        <path data-factory="1" d="M1512,383c-1,.06,21-69,21-69l48-4,53-7,31,5,58-10h25l86,28,15,6,8,10,33,2,10,8,5,9-1,5-3,7s-9.28,8.477-14,8-19,0-19,0l-98,8-29,8-33-6-51-4-112-3S1513,382.94,1512,383Z"/>
+        <circle data-factory="2" cx="2032" cy="358" r="15"/>
+        <circle data-factory="3" cx="1408" cy="437" r="15"/>
+        <path data-factory="4" d="M1144,516l21-44,87-1-1-102,14-5,11,5,5,102,264,5,6,13v5l16,36-3,18-414-11Z"/>
+        <path data-factory="5" d="M1277,603c8.48-.208,524,12,524,12l2-47,150-4-1,103-233-2-27-7-259-3-32-11-53,3-72-1-2-45"/>
+        <path data-factory="6" d="M1394,927l426-42,217,19,8,80H1818l-424-14V927Z"/>
+        <path data-factory="7" d="M1284,1243V1104l151-26,149,17,137,57-16,11,3,55-108,38-154-12-142,8Z"/>
+        <path data-factory="8" d="M565,1413l7-100,235-56,61,15,45-32,105,20s191.73,80.04,191,82,0,36,0,36h-43l-9,8-109-1v7l-28,14-54,12-162,16Z"/>
+        <path data-factory="9" d="M1441,1451l829,48-4-82-28-12-221,4-576,4v38Z"/>
+        <path data-factory="10" d="M701,2228l2-57,797-4,6,80Z"/>
+        <path data-factory="11" d="M1717,2537l566,22-1-63-11-13-341-4-5-17-121-5-22,12-18-278-19-1,4,284-31-1Z"/>
+      </svg>
+    </div>
+  </div>
+  </div>
+
+  <div class="cell cell-info">
+    <div class="info-panel">
+      <p>From the 1930s onwards, İmrahor's clay-rich soils supported a thriving brick industry. While early production in the 1930s relied on traditional methods, brick production expanded significantly between 1965 and 1976 with the establishment of 17 factories¹. By the early 1970s, the valley contained approximately 25 brick kilns² and had become one of Ankara's major brick-producing areas, supplying materials for the city's rapid growth. Although most factories closed by the early 2000s and the last remaining factory ceased operation in early 2020s, the traces of production remain visible in the landscape through abandoned structures, pits, and bricks embedded in the soil. In the visual, we see the factories that we can locate today.</p>
+      <div class="references">
+        <p>¹ Interview with Former Factory Co-owner, 2026.</p>
+        <p>² Sınacı Özfındık, F. (2019). Changing Characteristics of a Significant Part of the Urban Fringe in Ankara: İmrahor Valley. <em>Ankara Araştırmaları Dergisi</em>, 7(2), 343-353. https://doi.org/10.5505/jas.2019.21548.</p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+  const basePath = '2026-images/2026-p6/2-The Factories/';
+  const hoverImages = {
+    1: '2026-6-Factory 1in üzerine gelince.webp',
+    2: '2026-6-Factory 2nin üzerine gelince.webp',
+    3: '2026-6-Factory 3ün üzerine gelince.webp',
+    4: '2026-6-Factory 4ün üzerine gelince.webp',
+    5: '2026-6-Factory 5in üzerine gelince.webp',
+    6: '2026-6-Factory 6nın üzerine gelince.webp',
+    7: '2026-6-Factory 7nin üzerine gelince.webp',
+    8: '2026-6-Factory 8in üzerine gelince.webp',
+    9: '2026-6-Factory 9un üzerine gelince.webp',
+    10: '2026-6-Factory 10un üzerine gelince.webp',
+    11: '2026-6-Factory 11in üzerine gelince.webp',
+  };
+
+  const previewPanel = document.getElementById('preview-panel');
+  const previewImg = document.getElementById('preview-img');
+
+  document.querySelectorAll('.hotspot-overlay [data-factory]').forEach((shape) => {
+    const id = shape.dataset.factory;
+    const highlight = document.querySelector(`.factory-highlight[data-factory="${id}"]`);
+
+    shape.addEventListener('mouseenter', () => {
+      highlight.classList.add('active');
+      previewImg.src = basePath + hoverImages[id];
+      previewPanel.classList.add('active');
+    });
+
+    shape.addEventListener('mouseleave', () => {
+      highlight.classList.remove('active');
+      previewPanel.classList.remove('active');
+    });
+  });
+</script>
 </body>
 </html>
