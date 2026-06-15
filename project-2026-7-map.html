@@ -20,11 +20,13 @@
   .map-viewport.pan-ready { cursor:grab; }
   .map-viewport.panning { cursor:grabbing; }
 
-  .map-canvas { position:absolute; top:0; left:0; width:4961px; height:3508px; will-change:transform; }
-  .map-canvas img, .map-canvas object { position:absolute; top:0; left:0; width:100%; height:100%; display:block; }
+  .map-canvas { position:absolute; top:0; left:0; width:3938.05px; height:2784.65px; will-change:transform; }
+  .map-canvas img, .map-canvas .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; }
   #map-base, .map-layer { pointer-events:none; -webkit-user-drag:none; }
   .map-layer { opacity:0; transition:opacity 0.3s ease; }
   .map-hotspot { pointer-events:auto; }
+  .map-hotspot svg { width:100%; height:100%; display:block; }
+  .map-hotspot path, .map-hotspot polygon { fill:transparent; pointer-events:all; cursor:pointer; }
   .map-viewport.pan-ready .map-hotspot { pointer-events:none; }
 </style>
 </head>
@@ -44,10 +46,10 @@
     <img class="map-layer" data-layer="vagabond" src="2026-images/2026-p7/Map/map-vagabond.webp" alt="">
     <img class="map-layer" data-layer="proletairat" src="2026-images/2026-p7/Map/map-proletairat.webp" alt="">
 
-    <object class="map-hotspot" data-layer="nomad" type="image/svg+xml" data="2026-images/2026-p7/Map/nomad.svg"></object>
-    <object class="map-hotspot" data-layer="barbarian" type="image/svg+xml" data="2026-images/2026-p7/Map/barbarian.svg"></object>
-    <object class="map-hotspot" data-layer="vagabond" type="image/svg+xml" data="2026-images/2026-p7/Map/vagabond.svg"></object>
-    <object class="map-hotspot" data-layer="proletairat" type="image/svg+xml" data="2026-images/2026-p7/Map/proletairat.svg"></object>
+    <div class="map-hotspot" data-layer="nomad" data-svg="2026-images/2026-p7/Map/nomad.svg"></div>
+    <div class="map-hotspot" data-layer="barbarian" data-svg="2026-images/2026-p7/Map/barbarian.svg"></div>
+    <div class="map-hotspot" data-layer="vagabond" data-svg="2026-images/2026-p7/Map/vagabond.svg"></div>
+    <div class="map-hotspot" data-layer="proletairat" data-svg="2026-images/2026-p7/Map/proletairat.svg"></div>
 
   </div>
 </div>
@@ -57,7 +59,7 @@
   const canvas = document.getElementById('map-canvas');
 
   // circle-maxview.svg: center + radius (derived from its bezier-circle path)
-  const CIRCLE = { cx: 2188.82, cy: 1792.39, r: 1476.38 };
+  const CIRCLE = { cx: 1969.02, cy: 1392.33, r: 1002.03 };
 
   // vx,vy = canvas-space point currently shown at the viewport center
   let vx = CIRCLE.cx;
@@ -71,7 +73,17 @@
       const scale = CIRCLE.r / dist;
       vx = CIRCLE.cx + dx * scale;
       vy = CIRCLE.cy + dy * scale;
+      return true;
     }
+    return false;
+  }
+
+  function bounceBack() {
+    canvas.style.transition = 'transform 0.35s cubic-bezier(0.33,1,0.68,1)';
+    vx += (CIRCLE.cx - vx) * 0.06;
+    vy += (CIRCLE.cy - vy) * 0.06;
+    applyTransform();
+    setTimeout(() => { canvas.style.transition = ''; }, 350);
   }
 
   function applyTransform() {
@@ -86,6 +98,7 @@
   // ── Pan: only while Space or the middle mouse button is held ─────────────
   let panKey = false;
   let dragging = false;
+  let atBoundary = false;
   let lastX = 0, lastY = 0;
 
   window.addEventListener('keydown', (e) => {
@@ -116,19 +129,23 @@
     vy -= (e.clientY - lastY);
     lastX = e.clientX;
     lastY = e.clientY;
-    clampCenter();
+    atBoundary = clampCenter();
     applyTransform();
   });
   window.addEventListener('mouseup', () => {
     dragging = false;
     viewport.classList.remove('panning');
+    if (atBoundary) {
+      bounceBack();
+      atBoundary = false;
+    }
   });
 
   // ── Hotspots: hover = half-open, click = stay open (toggle) ──────────────
   const LAYERS = ['nomad', 'barbarian', 'vagabond', 'proletairat'];
 
   LAYERS.forEach((name) => {
-    const obj = document.querySelector(`.map-hotspot[data-layer="${name}"]`);
+    const overlay = document.querySelector(`.map-hotspot[data-layer="${name}"]`);
     const layer = document.querySelector(`.map-layer[data-layer="${name}"]`);
     let hovering = false;
     let locked = false;
@@ -137,23 +154,16 @@
       layer.style.opacity = locked ? '1' : (hovering ? '0.5' : '0');
     };
 
-    obj.addEventListener('load', () => {
-      const doc = obj.contentDocument;
-      if (!doc) return;
-      const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
-      style.textContent = '*{fill:transparent !important;} path,polygon{pointer-events:all;cursor:pointer;}';
-      doc.documentElement.insertBefore(style, doc.documentElement.firstChild);
-
-      doc.addEventListener('mouseover', (e) => {
-        if (e.target.matches('path,polygon')) { hovering = true; update(); }
+    fetch(overlay.dataset.svg)
+      .then((res) => res.text())
+      .then((svg) => {
+        overlay.innerHTML = svg;
+        overlay.querySelectorAll('path, polygon').forEach((shape) => {
+          shape.addEventListener('mouseenter', () => { hovering = true; update(); });
+          shape.addEventListener('mouseleave', () => { hovering = false; update(); });
+          shape.addEventListener('click', () => { locked = !locked; update(); });
+        });
       });
-      doc.addEventListener('mouseout', (e) => {
-        if (e.target.matches('path,polygon')) { hovering = false; update(); }
-      });
-      doc.addEventListener('click', (e) => {
-        if (e.target.matches('path,polygon')) { locked = !locked; update(); }
-      });
-    });
   });
 </script>
 </body>
