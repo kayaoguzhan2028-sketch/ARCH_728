@@ -9,26 +9,23 @@
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); height:100%; overflow:hidden; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
 
-  .wrap { max-width:1160px; margin:0 auto; padding:8rem 2.5rem 6rem; }
-  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
-  .masthead { font-size:clamp(2.4rem,6vw,4.8rem); font-weight:400; line-height:1.1; letter-spacing:0.03em; margin-bottom:3.5rem; max-width:860px; }
-  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  .map-viewport { position:fixed; top:52px; left:0; right:0; bottom:0; overflow:hidden; background:var(--black); cursor:default; user-select:none; }
+  .map-viewport.pan-ready { cursor:grab; }
+  .map-viewport.panning { cursor:grabbing; }
 
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
-  .body p { margin-bottom:1.6rem; }
-  .body p:last-child { margin-bottom:0; }
-
-  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
-  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
-  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
-  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+  .map-canvas { position:absolute; top:0; left:0; width:4961px; height:3508px; will-change:transform; }
+  .map-canvas img, .map-canvas object { position:absolute; top:0; left:0; width:100%; height:100%; display:block; }
+  #map-base, .map-layer { pointer-events:none; -webkit-user-drag:none; }
+  .map-layer { opacity:0; transition:opacity 0.3s ease; }
+  .map-hotspot { pointer-events:auto; }
+  .map-viewport.pan-ready .map-hotspot { pointer-events:none; }
 </style>
 </head>
 <body>
@@ -37,16 +34,127 @@
   <span class="nav-tag">Field Report</span>
 </nav>
 
-<div class="wrap">
-  <span class="label">ARCH 728 · Spring 2026</span>
-  <h1 class="masthead">Map</h1>
-  <hr class="rule">
+<div class="map-viewport" id="map-viewport">
+  <div class="map-canvas" id="map-canvas">
 
-  <div class="body"></div>
+    <img id="map-base" src="2026-images/2026-p7/Map/map-base.webp" alt="Map">
 
-  <dl class="meta">
-    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
-  </dl>
+    <img class="map-layer" data-layer="nomad" src="2026-images/2026-p7/Map/map-nomad.webp" alt="">
+    <img class="map-layer" data-layer="barbarian" src="2026-images/2026-p7/Map/map-barbarian.webp" alt="">
+    <img class="map-layer" data-layer="vagabond" src="2026-images/2026-p7/Map/map-vagabond.webp" alt="">
+    <img class="map-layer" data-layer="proletairat" src="2026-images/2026-p7/Map/map-proletairat.webp" alt="">
+
+    <object class="map-hotspot" data-layer="nomad" type="image/svg+xml" data="2026-images/2026-p7/Map/nomad.svg"></object>
+    <object class="map-hotspot" data-layer="barbarian" type="image/svg+xml" data="2026-images/2026-p7/Map/barbarian.svg"></object>
+    <object class="map-hotspot" data-layer="vagabond" type="image/svg+xml" data="2026-images/2026-p7/Map/vagabond.svg"></object>
+    <object class="map-hotspot" data-layer="proletairat" type="image/svg+xml" data="2026-images/2026-p7/Map/proletairat.svg"></object>
+
+  </div>
 </div>
+
+<script>
+  const viewport = document.getElementById('map-viewport');
+  const canvas = document.getElementById('map-canvas');
+
+  // circle-maxview.svg: center + radius (derived from its bezier-circle path)
+  const CIRCLE = { cx: 2188.82, cy: 1792.39, r: 1476.38 };
+
+  // vx,vy = canvas-space point currently shown at the viewport center
+  let vx = CIRCLE.cx;
+  let vy = CIRCLE.cy;
+
+  function clampCenter() {
+    const dx = vx - CIRCLE.cx;
+    const dy = vy - CIRCLE.cy;
+    const dist = Math.hypot(dx, dy);
+    if (dist > CIRCLE.r) {
+      const scale = CIRCLE.r / dist;
+      vx = CIRCLE.cx + dx * scale;
+      vy = CIRCLE.cy + dy * scale;
+    }
+  }
+
+  function applyTransform() {
+    const tx = viewport.clientWidth / 2 - vx;
+    const ty = viewport.clientHeight / 2 - vy;
+    canvas.style.transform = `translate(${tx}px, ${ty}px)`;
+  }
+
+  applyTransform();
+  window.addEventListener('resize', applyTransform);
+
+  // ── Pan: only while Space or the middle mouse button is held ─────────────
+  let panKey = false;
+  let dragging = false;
+  let lastX = 0, lastY = 0;
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && !panKey) {
+      panKey = true;
+      viewport.classList.add('pan-ready');
+    }
+  });
+  window.addEventListener('keyup', (e) => {
+    if (e.code === 'Space') {
+      panKey = false;
+      viewport.classList.remove('pan-ready');
+    }
+  });
+
+  viewport.addEventListener('mousedown', (e) => {
+    if (panKey || e.button === 1) {
+      dragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      viewport.classList.add('panning');
+      e.preventDefault();
+    }
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    vx -= (e.clientX - lastX);
+    vy -= (e.clientY - lastY);
+    lastX = e.clientX;
+    lastY = e.clientY;
+    clampCenter();
+    applyTransform();
+  });
+  window.addEventListener('mouseup', () => {
+    dragging = false;
+    viewport.classList.remove('panning');
+  });
+
+  // ── Hotspots: hover = half-open, click = stay open (toggle) ──────────────
+  const LAYERS = ['nomad', 'barbarian', 'vagabond', 'proletairat'];
+
+  LAYERS.forEach((name) => {
+    const obj = document.querySelector(`.map-hotspot[data-layer="${name}"]`);
+    const layer = document.querySelector(`.map-layer[data-layer="${name}"]`);
+    let hovering = false;
+    let locked = false;
+
+    const update = () => {
+      layer.style.opacity = locked ? '1' : (hovering ? '0.5' : '0');
+    };
+
+    obj.addEventListener('load', () => {
+      const doc = obj.contentDocument;
+      if (!doc) return;
+      const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
+      style.textContent = '*{fill:transparent !important;} path,polygon{pointer-events:all;cursor:pointer;}';
+      doc.documentElement.insertBefore(style, doc.documentElement.firstChild);
+
+      doc.addEventListener('mouseover', (e) => {
+        if (e.target.matches('path,polygon')) { hovering = true; update(); }
+      });
+      doc.addEventListener('mouseout', (e) => {
+        if (e.target.matches('path,polygon')) { hovering = false; update(); }
+      });
+      doc.addEventListener('click', (e) => {
+        if (e.target.matches('path,polygon')) { locked = !locked; update(); }
+      });
+    });
+  });
+</script>
 </body>
 </html>

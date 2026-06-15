@@ -9,26 +9,19 @@
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); height:100%; overflow:hidden; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
 
-  .wrap { max-width:1160px; margin:0 auto; padding:8rem 2.5rem 6rem; }
-  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
-  .masthead { font-size:clamp(2.4rem,6vw,4.8rem); font-weight:400; line-height:1.1; letter-spacing:0.03em; margin-bottom:3.5rem; max-width:860px; }
-  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
-
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
-  .body p { margin-bottom:1.6rem; }
-  .body p:last-child { margin-bottom:0; }
-
-  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
-  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
-  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
-  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+  .map-stage { position:fixed; top:52px; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:var(--black); }
+  .map-inner { position:relative; display:inline-block; line-height:0; font-size:0; user-select:none; }
+  #timeline-main { display:block; max-width:100vw; max-height:calc(100vh - 52px); width:auto; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  .map-layer { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; user-select:none; -webkit-user-drag:none; transition:opacity 0.4s ease; }
+  .map-layer.active { opacity:1; }
+  .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; border:none; }
 </style>
 </head>
 <body>
@@ -37,16 +30,42 @@
   <span class="nav-tag">Field Report</span>
 </nav>
 
-<div class="wrap">
-  <span class="label">ARCH 728 · Spring 2026</span>
-  <h1 class="masthead">Timeline</h1>
-  <hr class="rule">
+<div class="map-stage">
+  <div class="map-inner">
 
-  <div class="body"></div>
+    <img id="timeline-main" src="2026-images/2026-p7/Timeline/timeline - tam.webp" alt="Timeline">
 
-  <dl class="meta">
-    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
-  </dl>
+    <img class="map-layer" data-layer="1" src="2026-images/2026-p7/Timeline/1-renkli.webp" alt="">
+    <img class="map-layer" data-layer="2" src="2026-images/2026-p7/Timeline/22renkli.webp" alt="">
+    <img class="map-layer" data-layer="3" src="2026-images/2026-p7/Timeline/3-renkli.webp" alt="">
+    <img class="map-layer" data-layer="4" src="2026-images/2026-p7/Timeline/4-renkli.webp" alt="">
+    <img class="map-layer" data-layer="5" src="2026-images/2026-p7/Timeline/5-renkli.webp" alt="">
+    <img class="map-layer" data-layer="6" src="2026-images/2026-p7/Timeline/6-renkli.webp" alt="">
+
+    <object class="map-hotspot" data-layer="1" type="image/svg+xml" data="2026-images/2026-p7/Timeline/1-renkli.svg"></object>
+    <object class="map-hotspot" data-layer="2" type="image/svg+xml" data="2026-images/2026-p7/Timeline/22renkli.svg"></object>
+    <object class="map-hotspot" data-layer="3" type="image/svg+xml" data="2026-images/2026-p7/Timeline/3-renkli.svg"></object>
+    <object class="map-hotspot" data-layer="4" type="image/svg+xml" data="2026-images/2026-p7/Timeline/4-renkli.svg"></object>
+    <object class="map-hotspot" data-layer="5" type="image/svg+xml" data="2026-images/2026-p7/Timeline/5-renkli.svg"></object>
+    <object class="map-hotspot" data-layer="6" type="image/svg+xml" data="2026-images/2026-p7/Timeline/6-renkli.svg"></object>
+
+  </div>
 </div>
+
+<script>
+['1','2','3','4','5','6'].forEach(id => {
+  const obj   = document.querySelector(`.map-hotspot[data-layer="${id}"]`);
+  const layer = document.querySelector(`.map-layer[data-layer="${id}"]`);
+  obj.addEventListener('load', () => {
+    const doc = obj.contentDocument;
+    if (!doc) return;
+    const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = '*{fill:transparent !important;stroke:none !important;} path,polygon{pointer-events:all;cursor:pointer;}';
+    doc.documentElement.insertBefore(style, doc.documentElement.firstChild);
+    doc.addEventListener('mouseover', e => { if (e.target.matches('path,polygon')) layer.classList.add('active'); });
+    doc.addEventListener('mouseout',  e => { if (e.target.matches('path,polygon')) layer.classList.remove('active'); });
+  });
+});
+</script>
 </body>
 </html>
