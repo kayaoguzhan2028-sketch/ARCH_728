@@ -73,6 +73,13 @@
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
+
+  .video-lightbox-trigger { cursor:pointer; }
+  .video-lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.92); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
+  .video-lightbox.active { display:flex; }
+  .video-lightbox video { max-width:100%; max-height:100%; object-fit:contain; }
+  .video-lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:#f5f2eb; font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); z-index:1001; }
+  .video-lightbox-close:hover { opacity:0.7; }
 </style>
 </head>
 <body>
@@ -151,22 +158,26 @@
       </div>
       <div class="grid-cell"></div>
       <div class="grid-cell multi-video connector-front shift-up-left">
-        <video autoplay loop muted playsinline id="vid-s3"><source src="2026-images/2026-p4/gif/section 3.mp4" type="video/mp4"></video>
-        <video autoplay loop muted playsinline id="vid-s2"><source src="2026-images/2026-p4/gif/section_2.mp4" type="video/mp4"></video>
-        <video autoplay loop muted playsinline id="vid-s1"><source src="2026-images/2026-p4/gif/section_1.mp4" type="video/mp4"></video>
+        <video autoplay loop muted playsinline id="vid-s3" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section 3.mp4" type="video/mp4"></video>
+        <video autoplay loop muted playsinline id="vid-s2" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_2.mp4" type="video/mp4"></video>
+        <video autoplay loop muted playsinline id="vid-s1" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_1.mp4" type="video/mp4"></video>
       </div>
       <div class="grid-cell multi-video connector-front shift-down">
-        <video autoplay loop muted playsinline id="vid-s4"><source src="2026-images/2026-p4/gif/section_4.mp4" type="video/mp4"></video>
-        <video autoplay loop muted playsinline id="vid-s5"><source src="2026-images/2026-p4/gif/section_5.mp4" type="video/mp4"></video>
+        <video autoplay loop muted playsinline id="vid-s4" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_4.mp4" type="video/mp4"></video>
+        <video autoplay loop muted playsinline id="vid-s5" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_5.mp4" type="video/mp4"></video>
       </div>
       <div class="grid-cell connector-front">
-        <video autoplay loop muted playsinline id="vid-s6"><source src="2026-images/2026-p4/gif/section_6.mp4" type="video/mp4"></video>
+        <video autoplay loop muted playsinline id="vid-s6" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_6.mp4" type="video/mp4"></video>
       </div>
     </section>
   </div>
   <dl class="meta">
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
+</div>
+<div class="video-lightbox" id="video-lightbox">
+  <button class="video-lightbox-close" id="video-lightbox-close">×</button>
+  <video id="video-lightbox-player" autoplay loop muted playsinline controls></video>
 </div>
 <script>
   const infoBtn = document.getElementById('info-toggle');
@@ -248,6 +259,32 @@
   window.addEventListener('resize', updateConnector);
   document.querySelectorAll('.grid3x3 video').forEach((v) => {
     v.addEventListener('loadedmetadata', updateConnector);
+  });
+
+  const videoLightbox = document.getElementById('video-lightbox');
+  const videoLightboxPlayer = document.getElementById('video-lightbox-player');
+
+  function closeVideoLightbox() {
+    videoLightbox.classList.remove('active');
+    videoLightboxPlayer.pause();
+  }
+
+  document.querySelectorAll('.video-lightbox-trigger').forEach((v) => {
+    v.addEventListener('click', () => {
+      videoLightboxPlayer.querySelectorAll('source').forEach((s) => s.remove());
+      const source = document.createElement('source');
+      source.src = v.querySelector('source').src;
+      source.type = 'video/mp4';
+      videoLightboxPlayer.appendChild(source);
+      videoLightboxPlayer.load();
+      videoLightboxPlayer.play();
+      videoLightbox.classList.add('active');
+    });
+  });
+
+  document.getElementById('video-lightbox-close').addEventListener('click', closeVideoLightbox);
+  videoLightbox.addEventListener('click', (e) => {
+    if (e.target === videoLightbox) closeVideoLightbox();
   });
 </script>
 </body>
