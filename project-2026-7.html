@@ -44,6 +44,10 @@
   #info-panel h2:first-child { margin-top:0; }
   #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; font-family:var(--font); }
   #info-panel em { font-style:italic; }
+  #hover-icon { position:fixed; top:0; left:0; z-index:200; display:flex; flex-direction:column; align-items:center; pointer-events:none; opacity:0; transform:translate(24px,24px); transition:opacity 0.2s ease; }
+  #hover-icon.active { opacity:1; }
+  #hover-icon img { width:90px; height:90px; object-fit:contain; }
+  #hover-icon span { margin-top:0.5rem; font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); background:rgba(10,10,10,0.65); padding:0.25em 0.7em; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -94,6 +98,11 @@
   </div>
 </div>
 
+<div id="hover-icon">
+  <img id="hover-icon-img" src="" alt="">
+  <span id="hover-icon-label"></span>
+</div>
+
 <script>
 const infoToggle = document.getElementById('info-toggle');
 const infoPanel  = document.getElementById('info-panel');
@@ -121,6 +130,16 @@ soilLayers.forEach(L => {
   });
 });
 
+// ── Hover icon for nomadic / vagabond earth layers ────────────────────────────
+const HOVER_INFO = {
+  '07': { icon: '2026-images/2026-p7/Icons/ikon-nomad_metabolic-flow.webp', label: 'Nomadic Soil' },
+  '06': { icon: '2026-images/2026-p7/Icons/ikon-vagabond1.webp', label: 'Vagabond Earth' },
+  '03': { icon: '2026-images/2026-p7/Icons/ikon-proleterian.webp', label: 'Proletairat Earth' }
+};
+const hoverIcon = document.getElementById('hover-icon');
+const hoverIconImg = document.getElementById('hover-icon-img');
+const hoverIconLabel = document.getElementById('hover-icon-label');
+
 const mapInner = document.querySelector('.map-inner');
 let activeSoilHit = null;
 mapInner.addEventListener('mousemove', e => {
@@ -137,11 +156,23 @@ mapInner.addEventListener('mousemove', e => {
   activeSoilHit = hit;
   soilLayers.forEach(L => L.layer.classList.toggle('active', L === hit));
   mapInner.style.cursor = hit ? 'pointer' : 'default';
+
+  const info = hit && HOVER_INFO[hit.id];
+  if (info) {
+    hoverIconImg.src = info.icon;
+    hoverIconLabel.textContent = info.label;
+    hoverIcon.style.left = e.clientX + 'px';
+    hoverIcon.style.top = e.clientY + 'px';
+    hoverIcon.classList.add('active');
+  } else {
+    hoverIcon.classList.remove('active');
+  }
 });
 mapInner.addEventListener('mouseleave', () => {
   activeSoilHit = null;
   soilLayers.forEach(L => L.layer.classList.remove('active'));
   mapInner.style.cursor = 'default';
+  hoverIcon.classList.remove('active');
 });
 mapInner.addEventListener('click', () => {
   if (activeSoilHit && activeSoilHit.id === '02') {
