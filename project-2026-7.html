@@ -22,7 +22,7 @@
   #map-main { display:block; max-width:100vw; max-height:calc(100vh - 52px); width:auto; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
   .map-layer { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; user-select:none; -webkit-user-drag:none; transition:opacity 0.4s ease; }
   .map-layer.active { opacity:1; }
-  .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; border:none; }
+  .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; border:none; pointer-events:none; }
   .node { position:absolute; transform:translate(-50%,-50%); width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; z-index:10; opacity:1; }
   .node-dot { width:6px; height:6px; border-radius:50%; background:#c0392b; opacity:0.5; position:relative; flex-shrink:0; transition:opacity 0.35s ease,transform 0.35s ease; }
   .node-dot::after { content:''; position:absolute; top:50%; left:50%; width:20px; height:20px; border-radius:50%; border:1px solid var(--white); transform:translate(-50%,-50%) scale(0.4); opacity:0; transition:opacity 0.35s ease,transform 0.35s ease; }
@@ -113,18 +113,42 @@ infoToggle.addEventListener('click', () => {
 });
 
 // ── Soil-layer hover reveal ───────────────────────────────────────────────────
-['02','03','04','05','06','07'].forEach(id => {
-  const obj   = document.querySelector(`.map-hotspot[data-layer="${id}"]`);
-  const layer = document.querySelector(`.map-layer[data-layer="${id}"]`);
-  obj.addEventListener('load', () => {
-    const doc = obj.contentDocument;
+const soilLayers = ['07','02','03','04','05','06'].map(id => ({
+  id,
+  obj: document.querySelector(`.map-hotspot[data-layer="${id}"]`),
+  layer: document.querySelector(`.map-layer[data-layer="${id}"]`),
+  doc: null
+}));
+
+soilLayers.forEach(L => {
+  L.obj.addEventListener('load', () => {
+    const doc = L.obj.contentDocument;
     if (!doc) return;
     const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
-    style.textContent = '*{fill:transparent !important;stroke:none !important;} path,polygon{pointer-events:all;cursor:pointer;}';
+    style.textContent = '*{fill:transparent !important;stroke:none !important;} path,polygon{pointer-events:all;}';
     doc.documentElement.insertBefore(style, doc.documentElement.firstChild);
-    doc.addEventListener('mouseover', e => { if (e.target.matches('path,polygon')) layer.classList.add('active'); });
-    doc.addEventListener('mouseout',  e => { if (e.target.matches('path,polygon')) layer.classList.remove('active'); });
+    L.doc = doc;
   });
+});
+
+const mapInner = document.querySelector('.map-inner');
+mapInner.addEventListener('mousemove', e => {
+  const rect = mapInner.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  let hit = null;
+  for (let i = soilLayers.length - 1; i >= 0; i--) {
+    const L = soilLayers[i];
+    if (!L.doc) continue;
+    const el = L.doc.elementFromPoint(x, y);
+    if (el && el.matches('path,polygon')) { hit = L; break; }
+  }
+  soilLayers.forEach(L => L.layer.classList.toggle('active', L === hit));
+  mapInner.style.cursor = hit ? 'pointer' : 'default';
+});
+mapInner.addEventListener('mouseleave', () => {
+  soilLayers.forEach(L => L.layer.classList.remove('active'));
+  mapInner.style.cursor = 'default';
 });
 </script>
 </body>
