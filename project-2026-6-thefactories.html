@@ -16,6 +16,9 @@
   .nav-back:hover { opacity:1; }
   .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-links { display:flex; align-items:center; gap:1.8rem; }
+  .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
+  .nav-links a:hover { opacity:1; }
 
   .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:1fr 1fr; grid-template-areas:"preview visual" "info visual"; }
   .cell { display:flex; align-items:center; justify-content:center; padding:2rem; overflow:hidden; }
@@ -53,7 +56,10 @@
 <nav>
   <a href="2026.html" class="nav-back">← 2026</a>
   <span class="nav-title">Imrahor Valley</span>
-  <span class="nav-tag">Field Report</span>
+  <div class="nav-links">
+    <a href="project-2026-6-thesoil.html">← The Soil</a>
+    <a href="project-2026-6-thetimeline.html">The Timeline →</a>
+  </div>
 </nav>
 
 <div class="stage">

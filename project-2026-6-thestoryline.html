@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,36 +14,168 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-links { display:flex; align-items:center; gap:1.8rem; }
+  .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
+  .nav-links a:hover { opacity:1; }
 
-  .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
-  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
-  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
-  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
+  .story-stage { position:relative; width:100%; max-width:1600px; margin:0 auto; padding:6rem 1.5rem 2rem; }
+  .interactive-image { position:relative; width:100%; aspect-ratio:6251/1251; }
+  .interactive-image img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
+  .story-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .story-highlight.active { opacity:1; }
+
+  .hotspot-overlay { position:absolute; inset:0; }
+  .hotspot-overlay svg { width:100%; height:100%; display:block; }
+  .hotspot-overlay path, .hotspot-overlay circle, .hotspot-overlay rect, .hotspot-overlay polygon, .hotspot-overlay ellipse { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
+  .hotspot-overlay path:hover, .hotspot-overlay circle:hover, .hotspot-overlay rect:hover, .hotspot-overlay polygon:hover, .hotspot-overlay ellipse:hover { opacity:0.3; }
+
+  .modal-overlay { position:fixed; inset:0; z-index:200; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .modal-overlay.open { opacity:1; pointer-events:auto; }
+  .modal-content { display:flex; flex-direction:column; align-items:center; gap:1.2rem; max-width:92vw; max-height:92vh; overflow-y:auto; padding:1rem; }
+  .modal-content img { max-width:92vw; max-height:74vh; object-fit:contain; display:block; }
+  .modal-content p { max-width:620px; font-size:0.95rem; line-height:1.85; opacity:0.82; text-align:center; }
+  .modal-close { position:absolute; top:1.2rem; right:1.5rem; background:none; border:none; color:var(--white); font-size:2rem; line-height:1; font-family:var(--font); cursor:pointer; opacity:0.7; transition:opacity 0.2s; }
+  .modal-close:hover { opacity:1; }
+
+  .wrap { max-width:620px; margin:0 auto; padding:2rem 2rem 6rem; }
   .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
-  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
-  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
-  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
-  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
-  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
-  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
-  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+
+  .story-block { padding:4rem 0; }
+  .interview h2 { font-size:1.3rem; font-weight:400; letter-spacing:0.04em; line-height:1.6; margin-bottom:2.5rem; }
+  .interview-body p { font-size:1rem; line-height:1.9; margin-bottom:1.4rem; opacity:0.85; }
+  .interview-body p:last-child { margin-bottom:0; }
+  .interview-body .speaker { color:var(--accent); font-style:italic; margin-right:0.3em; }
 </style>
 </head>
 <body>
 <nav>
   <a href="2026.html" class="nav-back">← 2026</a>
-  <span class="nav-tag">Field Report</span>
+  <span class="nav-title">The Storyline</span>
+  <div class="nav-links">
+    <a href="project-2026-6-thetimeline.html">← The Timeline</a>
+    <a href="project-2026-5.html">Main Page →</a>
+  </div>
 </nav>
-<div class="wrap">
-  <span class="label">ARCH 728 · Spring 2026</span>
-  <h1>Project 2026-6</h1>
-  <div class="body"></div>
-  <dl class="meta">
-    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
-  </dl>
+
+<div class="story-stage">
+  <div class="interactive-image">
+    <img src="2026-images/2026-p6/4-The Storyline/2026-6-the storyline-p1-webp.webp" alt="The Storyline">
+    <img class="story-highlight" data-spot="1" src="2026-images/2026-p6/4-The Storyline/2026-6-the storyline-p1-artı1-webp.webp" alt="">
+    <img class="story-highlight" data-spot="2" src="2026-images/2026-p6/4-The Storyline/2026-6-the storyline-p1-artı2-webp.webp" alt="">
+    <img class="story-highlight" data-spot="3" src="2026-images/2026-p6/4-The Storyline/2026-6-the storyline-p1-artı3-webp.webp" alt="">
+    <img class="story-highlight" data-spot="4" src="2026-images/2026-p6/4-The Storyline/2026-6-the storyline-p1-artı4-webp.webp" alt="">
+    <img class="story-highlight" data-spot="5" src="2026-images/2026-p6/4-The Storyline/2026-6-the storyline-p1-artı5-webp.webp" alt="">
+    <img class="story-highlight" data-spot="6" src="2026-images/2026-p6/4-The Storyline/2026-6-the storyline-p1-artı6-webp.webp" alt="">
+
+    <div class="hotspot-overlay" data-spot="1" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı1-svg.svg"></div>
+    <div class="hotspot-overlay" data-spot="2" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı2-svg.svg"></div>
+    <div class="hotspot-overlay" data-spot="3" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı3-svg.svg"></div>
+    <div class="hotspot-overlay" data-spot="4" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı4-svg.svg"></div>
+    <div class="hotspot-overlay" data-spot="5" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı5-svg.svg"></div>
+    <div class="hotspot-overlay" data-spot="6" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı6-svg.svg"></div>
+  </div>
 </div>
+
+<section class="wrap story-block">
+  <div class="body">
+    <p>The storyline segment offers an interactive journey into the valley. Through visual collages and oral history, it pieces together the narratives of what once occurred and what actively continues today, aiming to see the story of the soil. While some of the brick factory buildings were abandoned and others were reused, the soil they shared changed drastically due to the shifting volume of water within it. Ultimately, the story reveals how the brick factories permanently rewrote the landscape, transforming the soil from a living ecological resource into a stagnant, artificial residue.</p>
+    <p>(Below, you can also find our full interview with the former factory owner.)</p>
+  </div>
+</section>
+
+<section class="wrap story-block interview">
+  <h2>Interview with the Former Co-owner of Three of the Seventeen Brick Factories Established in İmrahor Valley after 1965</h2>
+  <div class="interview-body">
+    <p><span class="speaker">Interviewer:</span>Hello. Could you tell us about the brick factories in this area?</p>
+    <p><span class="speaker">Co-owner:</span>Between 1965 and 1976, seventeen brick factories were established in Mühye. The factory near the ponds was established in 1965. The one near the viaduct was built by us in 1966. Between 1996 and 1999, the factories lost their operating licenses, so we could no longer extract soil from our clay sources. As a result, the factories gradually shut down.</p>
+    <p><span class="speaker">Interviewer:</span>We heard that there was a factory operating until two or three years ago in the lower part of the valley. Could you tell us about it?</p>
+    <p><span class="speaker">Co-owner:</span>That was Ceylan Brick Factory. It was active until about three or four years ago. They had invested heavily in the facility. Since it produced more bricks than the other factories, it remained in operation much longer. Apart from that, most of the factories had already closed by around 2000.</p>
+    <p><span class="speaker">Interviewer:</span>Do you know anything about the factories established in the 1930s?</p>
+    <p><span class="speaker">Co-owner:</span>I think there were brick workshops here, in Gölbaşı, in Kepekli, and also in Ahlatlıbel. But the one in Ahlatlıbel dates back to the 1950s and was fully automated.</p>
+    <p><span class="speaker">Interviewer:</span>Where did the factories obtain their raw material? Was it extracted from the valley?</p>
+    <p><span class="speaker">Co-owner:</span>Yes, the soil was taken from the valley itself. Over time, the extraction areas filled with water and the clay deposits ran out. The raw material ran out. The soil that accumulated in the valley was suitable for brick production. Bringing soil from elsewhere would have been difficult and costly.</p>
+    <p><span class="speaker">Interviewer:</span>We have read that the bricks produced here were used throughout Ankara. Is that true?</p>
+    <p><span class="speaker">Co-owner:</span>They were used in almost every construction project in Ankara. Until cinder blocks (briket) began arriving from Nevşehir, these bricks were used in every district of the city. But as I said the excavations created ponds. When we were operating, we pumped out the water, excavated the soil, aerated it, and then used it for brick production. You cannot make good bricks from wet, muddy soil.</p>
+    <p><span class="speaker">Interviewer:</span>Could you also describe the firing process?</p>
+    <p><span class="speaker">Co-owner:</span>We were partners in four of the seventeen factories. The bricks were first left to dry on racks. Afterwards, workers manually stacked them inside the kilns. We crushed coal into powder and used it as fuel. Ventilation systems carried the heat through the kiln, allowing the bricks to fire evenly.</p>
+    <p><span class="speaker">Interviewer:</span>I see. I also wonder if the livestock farms were in the area already present at that time?</p>
+    <p><span class="speaker">Co-owner:</span>When it was a village, almost every family owned a few cows or sheep but it was not a serious activity. People produced milk for themselves and sold any surplus. Gardening was also common. When the factories opened, local villagers, along with workers arriving from places such as Samsun, Çorum, Konya, and Yozgat, became brick workers.</p>
+    <p><span class="speaker">Interviewer:</span>So would it be fair to say that the factories became the main source of income in the area?</p>
+    <p><span class="speaker">Co-owner:</span>Before the factories of 1965, people produced handmade bricks, known as harman bricks. That was the situation in the 1950, handmade production was common. Later, production shifted to hollow block bricks.</p>
+    <p><span class="speaker">Interviewer:</span>We know that large amounts of excavation debris have been dumped in the valley. I assume you witnessed that as well.</p>
+    <p><span class="speaker">Co-owner:</span>Whenever we extracted soil, pits were formed. There were ponds in those areas, but they were later filled. The valley became Ankara's main dumping ground for excavation waste. Everyone would bring their waste here. Now the valley has been opened for development. The factories are gone.</p>
+    <p><span class="speaker">Interviewer:</span>Do you have any photographs from those years?</p>
+    <p><span class="speaker">Co-owner:</span>No, we never took photographs. It never even crossed our minds. Cameras were not very common back then.</p>
+    <p><span class="speaker">Interviewer:</span>Is there any plan for these abandoned factories?</p>
+    <p><span class="speaker">Co-owner:</span>Not specifically for the factories. At the moment, a canal is being constructed from the start to Nata Vega. Commercial areas and recreational spaces are planned. They are currently carrying out geotechnical surveys.</p>
+    <p><span class="speaker">Interviewer:</span>As someone who has lived here for a long time, what do you think about that project?</p>
+    <p><span class="speaker">Co-owner:</span>We have high expectations. We gave up the factory business. We received development titles in 2016, but not a single nail has been driven into the ground in nearly ten years. That's the situation.</p>
+    <p><span class="speaker">Interviewer:</span>I see. One final question, there are no active brick factories left in the area today, correct?</p>
+    <p><span class="speaker">Co-owner:</span>None at all.</p>
+    <p><span class="speaker">Interviewer:</span>Not even in the uppermost parts of the valley?</p>
+    <p><span class="speaker">Co-owner:</span>None. They're all gone. Nowadays people produce Ytong blocks and cinder blocks instead.</p>
+    <p><span class="speaker">Interviewer:</span>Seeing so many brick fragments mixed with the soil, we assumed brick production had continued until recently.</p>
+    <p><span class="speaker">Co-owner:</span>No, no. The last one was Ceylan Brick Factory, and now it has become a ruin as well. We stopped operating in 1996. That's how it is.</p>
+    <p><span class="speaker">Interviewer:</span>Okay, I think that's all. Thank you very much.</p>
+  </div>
+</section>
+
+<div class="modal-overlay" id="story-modal">
+  <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+  <div class="modal-content">
+    <img id="modal-img" src="" alt="">
+    <p id="modal-caption"></p>
+  </div>
+</div>
+
+<script>
+  const STORYLINE_BASE = '2026-images/2026-p6/4-The Storyline/';
+  const storyModal = document.getElementById('story-modal');
+  const modalImg = document.getElementById('modal-img');
+  const modalCaption = document.getElementById('modal-caption');
+
+  const storyCaptions = {
+    2: "Whenever we extracted soil, pits were formed. There were ponds in those areas, but they were later filled. The valley became Ankara's main dumping ground for excavation waste. Everyone would bring their waste here. Now the valley has been opened for development. The factories are gone.",
+    3: "The last one was Ceylan Brick Factory (stopped operating at 2020s), and now it has become a ruin as well. We stopped operating in 1996. That's how it is.",
+    4: "When it was a village, almost every family owned a few cows or sheep but it was not a serious activity. People produced milk for themselves and sold any surplus. Gardening was also common.",
+    5: "That was Ceylan Brick Factory. It was active until about three or four years ago. They had invested heavily in the facility. Since it produced more bricks than the other factories, it remained in operation much longer. Apart from that, most of the factories had already closed by around 2000…",
+    6: "We have high expectations. We gave up the factory business. We received development titles in 2016, but not a single nail has been driven into the ground in nearly ten years. That's the situation.",
+    7: "At the moment, a canal is being constructed from the start to Nata Vega. Commercial areas and recreational spaces are planned. They are currently carrying out geotechnical surveys.",
+  };
+
+  document.getElementById('modal-close').addEventListener('click', () => {
+    storyModal.classList.remove('open');
+  });
+  storyModal.addEventListener('click', (e) => {
+    if (e.target === storyModal) storyModal.classList.remove('open');
+  });
+
+  document.querySelectorAll('.hotspot-overlay').forEach((overlay) => {
+    const spot = overlay.dataset.spot;
+    const highlight = document.querySelector(`.story-highlight[data-spot="${spot}"]`);
+    const page = Number(spot) + 1;
+
+    fetch(overlay.dataset.svg)
+      .then((res) => res.text())
+      .then((svgText) => {
+        overlay.innerHTML = svgText;
+
+        const shapes = overlay.querySelectorAll('path, circle, rect, polygon, ellipse');
+        shapes.forEach((shape) => {
+          shape.addEventListener('mouseenter', () => highlight.classList.add('active'));
+          shape.addEventListener('mouseleave', () => highlight.classList.remove('active'));
+          shape.addEventListener('click', () => {
+            modalImg.src = `${STORYLINE_BASE}2026-6-the storyline-p${page}-webp.webp`;
+            modalCaption.textContent = storyCaptions[page] || '';
+            storyModal.classList.add('open');
+          });
+        });
+      });
+  });
+</script>
 </body>
 </html>
