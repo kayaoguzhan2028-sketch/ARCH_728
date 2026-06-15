@@ -26,7 +26,7 @@
   .story-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .story-highlight.active { opacity:1; }
 
-  .hotspot-overlay { position:absolute; inset:0; }
+  .hotspot-overlay { position:absolute; inset:0; pointer-events:none; }
   .hotspot-overlay svg { width:100%; height:100%; display:block; }
   .hotspot-overlay path, .hotspot-overlay circle, .hotspot-overlay rect, .hotspot-overlay polygon, .hotspot-overlay ellipse { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-overlay path:hover, .hotspot-overlay circle:hover, .hotspot-overlay rect:hover, .hotspot-overlay polygon:hover, .hotspot-overlay ellipse:hover { opacity:0.3; }
