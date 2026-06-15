@@ -164,8 +164,19 @@
       .then((svgText) => {
         overlay.innerHTML = svgText;
 
+        const styleEl = overlay.querySelector('style');
+        const hiddenClasses = new Set();
+        if (styleEl) {
+          (styleEl.textContent.match(/\.[\w-]+\s*\{[^}]*\}/g) || []).forEach((rule) => {
+            if (/display\s*:\s*none/.test(rule)) hiddenClasses.add(rule.match(/\.([\w-]+)/)[1]);
+          });
+          styleEl.remove();
+        }
+
         const shapes = overlay.querySelectorAll('path, circle, rect, polygon, ellipse');
         shapes.forEach((shape) => {
+          if (hiddenClasses.has(shape.getAttribute('class'))) { shape.remove(); return; }
+          shape.removeAttribute('class');
           shape.addEventListener('mouseenter', () => highlight.classList.add('active'));
           shape.addEventListener('mouseleave', () => highlight.classList.remove('active'));
           shape.addEventListener('click', () => {

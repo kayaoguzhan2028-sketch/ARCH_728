@@ -306,10 +306,20 @@
       .then((res) => res.text())
       .then((svg) => {
         overlay.innerHTML = svg;
-        const shapes = overlay.querySelectorAll('path, circle, polygon, line');
 
+        const styleEl = overlay.querySelector('style');
+        const hiddenClasses = new Set();
+        if (styleEl) {
+          (styleEl.textContent.match(/\.[\w-]+\s*\{[^}]*\}/g) || []).forEach((rule) => {
+            if (/display\s*:\s*none/.test(rule)) hiddenClasses.add(rule.match(/\.([\w-]+)/)[1]);
+          });
+          styleEl.remove();
+        }
+
+        const shapes = overlay.querySelectorAll('path, circle, polygon, line');
         shapes.forEach((shape) => {
-          if (shape.tagName !== 'line') shape.removeAttribute('class');
+          if (hiddenClasses.has(shape.getAttribute('class'))) { shape.remove(); return; }
+          shape.removeAttribute('class');
           shape.addEventListener('mouseenter', () => {
             legendLabel.innerHTML = `<h3>${overlay.dataset.label}</h3><p>${overlay.dataset.desc}</p>`;
             legendLabel.classList.add('active');
