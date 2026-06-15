@@ -38,6 +38,7 @@
   .trace-split { flex-direction:row; align-items:flex-end; justify-content:center; gap:3.5rem; text-align:left; }
   .trace-left { flex:0 1 440px; display:flex; flex-direction:column; gap:1.1rem; }
   .trace-left img { width:100%; height:auto; display:block; }
+  #trace-img { transition:transform 0.4s ease; transform-origin:center; }
 
   .img-wrap3 { position:relative; flex:0 0 auto; width:min(21vw, calc(88vh * 2157 / 3507)); aspect-ratio:2157/3507; max-height:88vh; }
   .img-wrap3 img { width:100%; height:100%; object-fit:contain; display:block; }
@@ -89,7 +90,7 @@
       <div class="reference-block">
         <p>(Satellite view are used to create image)</p>
       </div>
-      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
+      <img id="trace-img" src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
     </div>
     <div class="img-wrap3">
       <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
@@ -158,7 +159,12 @@
       });
   });
 
-  const svgEl3 = document.getElementById('overlay-svg3');
+  const svgEl3   = document.getElementById('overlay-svg3');
+  const traceImg = document.getElementById('trace-img');
+  const TRACE_STEP = 0.06;
+  const TRACE_MAX_STEPS = 6;
+  let traceStep = 0;
+
   fetch(encodeURI('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_HighlighStructure.svg'))
     .then(r => r.text())
     .then(svgText => {
@@ -170,7 +176,13 @@
 
       source.querySelectorAll('path, polygon').forEach(shape => {
         const clone = document.importNode(shape, true);
-        clone.addEventListener('click', () => clone.classList.toggle('active'));
+        clone.addEventListener('click', () => {
+          clone.classList.toggle('active');
+          if (traceStep < TRACE_MAX_STEPS) {
+            traceStep++;
+            traceImg.style.transform = `scale(${1 + traceStep * TRACE_STEP})`;
+          }
+        });
         svgEl3.appendChild(clone);
       });
     });
