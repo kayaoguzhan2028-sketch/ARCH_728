@@ -38,8 +38,8 @@
   .hotspot-overlay.hover-layer line { stroke:var(--accent); stroke-opacity:0; pointer-events:stroke; cursor:default; transition:stroke-opacity 0.25s ease; }
   .hotspot-overlay.hover-layer line:hover { stroke-opacity:0.3; }
 
-  .decade-hotspot { opacity:0; cursor:pointer; transition:opacity 0.25s ease; }
-  .decade-hotspot:hover { opacity:0.5; }
+  .decade-hotspot { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .decade-hotspot.active-hover { opacity:0.5; }
 
   .legend-label { position:fixed; top:70px; left:2rem; max-width:320px; padding:0.8em 1.2em; border:1px solid var(--border); background:rgba(10,10,10,0.8); opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; pointer-events:none; z-index:60; }
   .legend-label.active { opacity:1; transform:translateY(0); }
@@ -331,10 +331,62 @@
       });
   });
 
-  document.querySelectorAll('.decade-hotspot').forEach((img) => {
-    img.addEventListener('click', () => {
-      openDecadeModal(img.dataset.decade);
-    });
+  const decadeHotspots = Array.from(document.querySelectorAll('.decade-hotspot'));
+  const interactiveImage = document.querySelector('.interactive-image');
+  const hitCanvas = document.createElement('canvas');
+  const hitCtx = hitCanvas.getContext('2d', { willReadFrequently: true });
+  let activeDecadeImg = null;
+
+  decadeHotspots.forEach((img) => {
+    const readPixels = () => {
+      hitCanvas.width = img.naturalWidth;
+      hitCanvas.height = img.naturalHeight;
+      hitCtx.clearRect(0, 0, hitCanvas.width, hitCanvas.height);
+      hitCtx.drawImage(img, 0, 0);
+      img._hitData = hitCtx.getImageData(0, 0, hitCanvas.width, hitCanvas.height).data;
+      img._hitW = hitCanvas.width;
+      img._hitH = hitCanvas.height;
+    };
+    if (img.complete && img.naturalWidth) readPixels();
+    else img.addEventListener('load', readPixels);
+  });
+
+  function decadeAt(clientX, clientY) {
+    const rect = interactiveImage.getBoundingClientRect();
+    const xRatio = (clientX - rect.left) / rect.width;
+    const yRatio = (clientY - rect.top) / rect.height;
+    if (xRatio < 0 || yRatio < 0 || xRatio > 1 || yRatio > 1) return null;
+    for (let i = decadeHotspots.length - 1; i >= 0; i--) {
+      const img = decadeHotspots[i];
+      if (!img._hitData) continue;
+      const px = Math.floor(xRatio * img._hitW);
+      const py = Math.floor(yRatio * img._hitH);
+      if (px < 0 || py < 0 || px >= img._hitW || py >= img._hitH) continue;
+      const alpha = img._hitData[(py * img._hitW + px) * 4 + 3];
+      if (alpha > 10) return img;
+    }
+    return null;
+  }
+
+  interactiveImage.addEventListener('mousemove', (e) => {
+    const found = decadeAt(e.clientX, e.clientY);
+    if (found !== activeDecadeImg) {
+      if (activeDecadeImg) activeDecadeImg.classList.remove('active-hover');
+      if (found) found.classList.add('active-hover');
+      activeDecadeImg = found;
+      interactiveImage.style.cursor = found ? 'pointer' : '';
+    }
+  });
+
+  interactiveImage.addEventListener('mouseleave', () => {
+    if (activeDecadeImg) activeDecadeImg.classList.remove('active-hover');
+    activeDecadeImg = null;
+    interactiveImage.style.cursor = '';
+  });
+
+  interactiveImage.addEventListener('click', (e) => {
+    const found = decadeAt(e.clientX, e.clientY);
+    if (found) openDecadeModal(found.dataset.decade);
   });
 </script>
 </body>
