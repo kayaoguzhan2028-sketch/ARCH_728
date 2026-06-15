@@ -35,15 +35,11 @@
   .hotspot-overlay.hover-layer circle:hover,
   .hotspot-overlay.hover-layer polygon:hover,
   .hotspot-overlay.hover-layer rect:hover { opacity:0.3; }
+  .hotspot-overlay.hover-layer line { stroke:var(--accent); stroke-opacity:0; pointer-events:stroke; cursor:default; transition:stroke-opacity 0.25s ease; }
+  .hotspot-overlay.hover-layer line:hover { stroke-opacity:0.3; }
 
-  .hotspot-overlay.click-layer path,
-  .hotspot-overlay.click-layer circle,
-  .hotspot-overlay.click-layer polygon,
-  .hotspot-overlay.click-layer rect { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
-  .hotspot-overlay.click-layer path:hover,
-  .hotspot-overlay.click-layer circle:hover,
-  .hotspot-overlay.click-layer polygon:hover,
-  .hotspot-overlay.click-layer rect:hover { opacity:0.3; }
+  .decade-hotspot { opacity:0; cursor:pointer; transition:opacity 0.25s ease; }
+  .decade-hotspot:hover { opacity:0.5; }
 
   .legend-label { position:fixed; top:70px; left:2rem; max-width:320px; padding:0.8em 1.2em; border:1px solid var(--border); background:rgba(10,10,10,0.8); opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; pointer-events:none; z-index:60; }
   .legend-label.active { opacity:1; transform:translateY(0); }
@@ -92,18 +88,18 @@
   <div class="interactive-image">
     <img src="2026-images/2026-p6/3-The Timeline/2026-6-the timeline-1.webp" alt="The Timeline — Main Visual">
 
-    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-lejant_(in)visibility-svg.svg" data-label="(In)Visibility" data-desc="Change in soil's visibility."></div>
-    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-lejant_alteration-svg.svg" data-label="Alteration" data-desc="Changing the structure of the soil by removing the top soil."></div>
-    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-lejant_decomposition-svg.svg" data-label="Decomposition" data-desc="Brick to soil process."></div>
-    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-lejant_dumping-svg.svg" data-label="Dumping" data-desc="Waste and excavation dumping to the pits."></div>
-    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-lejant_existing water volume-svg.svg" data-label="Existing Water Volume" data-desc="Change in water through excavation pits."></div>
-    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-lejant_extraction-svg.svg" data-label="Extraction" data-desc="Excavation works in the valley of the factories."></div>
-    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-lejant_recomposition-svg.svg" data-label="Recomposition" data-desc="Soil to brick process."></div>
+    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/in-visibility.svg" data-label="(In)Visibility" data-desc="Change in soil's visibility."></div>
+    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/alteration.svg" data-label="Alteration" data-desc="Changing the structure of the soil by removing the top soil."></div>
+    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/decomposition.svg" data-label="Decomposition" data-desc="Brick to soil process."></div>
+    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/dumping.svg" data-label="Dumping" data-desc="Waste and excavation dumping to the pits."></div>
+    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/existing-water-volume.svg" data-label="Existing Water Volume" data-desc="Change in water through excavation pits."></div>
+    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/extraction.svg" data-label="Extraction" data-desc="Excavation works in the valley of the factories."></div>
+    <div class="hotspot-overlay hover-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/recomposition.svg" data-label="Recomposition" data-desc="Soil to brick process."></div>
 
-    <div class="hotspot-overlay click-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-30lar-svg.svg" data-decade="30lar"></div>
-    <div class="hotspot-overlay click-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-60lar-svg.svg" data-decade="60lar"></div>
-    <div class="hotspot-overlay click-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-90lar-svg.svg" data-decade="90lar"></div>
-    <div class="hotspot-overlay click-layer" data-svg="2026-images/2026-p6/3-The Timeline/THE TIMELINE SVG/2026-6-the timeline-2020ler-svg.svg" data-decade="2020ler"></div>
+    <img class="decade-hotspot" src="2026-images/2026-p6/3-The Timeline/2026-6-the timeline-30lar-webp.webp" alt="" data-decade="30lar">
+    <img class="decade-hotspot" src="2026-images/2026-p6/3-The Timeline/2026-6-the timeline-60lar-webp.webp" alt="" data-decade="60lar">
+    <img class="decade-hotspot" src="2026-images/2026-p6/3-The Timeline/2026-6-the timeline-90lar-webp.webp" alt="" data-decade="90lar">
+    <img class="decade-hotspot" src="2026-images/2026-p6/3-The Timeline/2026-6-the timeline-2020ler-webp.webp" alt="" data-decade="2020ler">
   </div>
 </div>
 
@@ -310,30 +306,25 @@
       .then((res) => res.text())
       .then((svg) => {
         overlay.innerHTML = svg;
-        const shapes = overlay.querySelectorAll('path, circle, polygon');
+        const shapes = overlay.querySelectorAll('path, circle, polygon, line');
 
-        if (overlay.classList.contains('hover-layer')) {
-          shapes.forEach((shape) => {
-            shape.removeAttribute('class');
-            shape.addEventListener('mouseenter', () => {
-              legendLabel.innerHTML = `<h3>${overlay.dataset.label}</h3><p>${overlay.dataset.desc}</p>`;
-              legendLabel.classList.add('active');
-            });
-            shape.addEventListener('mouseleave', () => {
-              legendLabel.classList.remove('active');
-            });
+        shapes.forEach((shape) => {
+          if (shape.tagName !== 'line') shape.removeAttribute('class');
+          shape.addEventListener('mouseenter', () => {
+            legendLabel.innerHTML = `<h3>${overlay.dataset.label}</h3><p>${overlay.dataset.desc}</p>`;
+            legendLabel.classList.add('active');
           });
-        }
-
-        if (overlay.classList.contains('click-layer')) {
-          shapes.forEach((shape) => {
-            shape.removeAttribute('class');
-            shape.addEventListener('click', () => {
-              openDecadeModal(overlay.dataset.decade);
-            });
+          shape.addEventListener('mouseleave', () => {
+            legendLabel.classList.remove('active');
           });
-        }
+        });
       });
+  });
+
+  document.querySelectorAll('.decade-hotspot').forEach((img) => {
+    img.addEventListener('click', () => {
+      openDecadeModal(img.dataset.decade);
+    });
   });
 </script>
 </body>
