@@ -91,16 +91,6 @@
     <object class="map-hotspot" data-layer="05" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/05_displacementmap.svg"></object>
     <object class="map-hotspot" data-layer="06" type="image/svg+xml" data="2026-images/2026-p7/Opening Page/Axon all/06_vagabondearthmap.svg"></object>
 
-    <a class="node" id="node-debris" href="project-2026-7-debris.html" style="left:38%;top:80%;" title="Debris">
-      <div class="node-dot"></div>
-      <span class="node-label">Debris</span>
-    </a>
-
-    <a class="node" id="node-civilized" href="project-2026-7-civilized-soil.html" style="left:50%;top:50%;" title="Civilized Soil">
-      <div class="node-dot"></div>
-      <span class="node-label">Civilized Soil</span>
-    </a>
-
   </div>
 </div>
 
@@ -132,6 +122,7 @@ soilLayers.forEach(L => {
 });
 
 const mapInner = document.querySelector('.map-inner');
+let activeSoilHit = null;
 mapInner.addEventListener('mousemove', e => {
   const rect = mapInner.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -143,12 +134,19 @@ mapInner.addEventListener('mousemove', e => {
     const el = L.doc.elementFromPoint(x, y);
     if (el && el.matches('path,polygon')) { hit = L; break; }
   }
+  activeSoilHit = hit;
   soilLayers.forEach(L => L.layer.classList.toggle('active', L === hit));
   mapInner.style.cursor = hit ? 'pointer' : 'default';
 });
 mapInner.addEventListener('mouseleave', () => {
+  activeSoilHit = null;
   soilLayers.forEach(L => L.layer.classList.remove('active'));
   mapInner.style.cursor = 'default';
+});
+mapInner.addEventListener('click', () => {
+  if (activeSoilHit && activeSoilHit.id === '02') {
+    window.location.href = 'project-2026-7-debris.html';
+  }
 });
 </script>
 </body>

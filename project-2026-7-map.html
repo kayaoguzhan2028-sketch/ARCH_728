@@ -15,6 +15,9 @@
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-links { display:flex; align-items:center; gap:0.8rem; }
+  .nav-link { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.45; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; color:var(--white); text-decoration:none; transition:opacity 0.2s,border-color 0.2s; }
+  .nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.5); }
 
   .map-viewport { position:fixed; top:52px; left:0; right:0; bottom:0; overflow:hidden; background:var(--black); cursor:default; user-select:none; }
   .map-viewport.pan-ready { cursor:grab; }
@@ -33,7 +36,10 @@
 <body>
 <nav>
   <a href="project-2026-7.html" class="nav-back">← 2026</a>
-  <span class="nav-tag">Field Report</span>
+  <div class="nav-links">
+    <a href="project-2026-7.html" class="nav-link">Main</a>
+    <a href="project-2026-7-timeline.html" class="nav-link">The Timeline</a>
+  </div>
 </nav>
 
 <div class="map-viewport" id="map-viewport">
@@ -161,7 +167,13 @@
         overlay.querySelectorAll('path, polygon').forEach((shape) => {
           shape.addEventListener('mouseenter', () => { hovering = true; update(); });
           shape.addEventListener('mouseleave', () => { hovering = false; update(); });
-          shape.addEventListener('click', () => { locked = !locked; update(); });
+          shape.addEventListener('click', () => {
+            if (name === 'barbarian') {
+              window.location.href = 'project-2026-7-debris.html';
+              return;
+            }
+            locked = !locked; update();
+          });
         });
       });
   });
