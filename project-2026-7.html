@@ -134,7 +134,8 @@ soilLayers.forEach(L => {
 const HOVER_INFO = {
   '07': { icon: '2026-images/2026-p7/Icons/ikon-nomad_metabolic-flow.webp', label: 'Nomadic Soil' },
   '06': { icon: '2026-images/2026-p7/Icons/ikon-vagabond1.webp', label: 'Vagabond Earth' },
-  '03': { icon: '2026-images/2026-p7/Icons/ikon-proleterian.webp', label: 'Proletairat Earth' }
+  '03': { icon: '2026-images/2026-p7/Icons/ikon-proleterian.webp', label: 'Proletairat Earth' },
+  '02': { icon: '2026-images/2026-p7/Icons/ikon-barbarian.webp', label: 'Barbarian Earth' }
 };
 const hoverIcon = document.getElementById('hover-icon');
 const hoverIconImg = document.getElementById('hover-icon-img');
@@ -174,9 +175,15 @@ mapInner.addEventListener('mouseleave', () => {
   mapInner.style.cursor = 'default';
   hoverIcon.classList.remove('active');
 });
+let genericBuildingClicks = 0;
 mapInner.addEventListener('click', () => {
   if (activeSoilHit && activeSoilHit.id === '02') {
     window.location.href = 'project-2026-7-debris.html';
+  } else if (activeSoilHit && activeSoilHit.id === '04') {
+    genericBuildingClicks++;
+    if (genericBuildingClicks >= 5) {
+      window.location.href = 'project-2026-7-civilized-soil.html';
+    }
   }
 });
 </script>
