@@ -109,14 +109,16 @@
   .image-modal { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.85); display:flex; align-items:center; justify-content:center; padding:3rem 1.5rem; opacity:0; visibility:hidden; transition:opacity 0.25s ease,visibility 0.25s ease; }
   .image-modal.active { opacity:1; visibility:visible; }
   .image-modal-frame { position:relative; width:100%; max-width:620px; max-height:90vh; overflow-y:auto; background:var(--black); border:1px solid var(--border); padding:3rem 2rem 2rem; }
-  .image-modal-frame img { width:100%; display:block; margin:0 0 1.5rem; opacity:0.92; }
+  .image-modal-frame img { width:100%; display:block; margin:0 0 1.5rem; opacity:0.92; transition:opacity 0.15s ease; }
+  .image-modal-frame img.loading { opacity:0; }
   .image-modal-frame p { font-size:1.1rem; line-height:1.95; opacity:0.82; margin:0; }
   .image-modal-close { position:absolute; top:0.8rem; right:0.8rem; width:36px; height:36px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.7; transition:opacity 0.2s,background 0.2s; }
   .image-modal-close:hover { opacity:1; background:rgba(245,242,235,0.14); }
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; padding:2rem; }
   .panel-overlay.open { opacity:1; pointer-events:auto; }
   .panel-content-wrap { display:flex; flex-direction:row; align-items:center; gap:2rem; max-width:90vw; max-height:90vh; overflow-y:auto; }
-  .panel-overlay img { max-width:90vw; max-height:80vh; display:block; }
+  .panel-overlay img { max-width:90vw; max-height:80vh; display:block; opacity:1; transition:opacity 0.15s ease; }
+  .panel-overlay img.loading { opacity:0; }
   .panel-content-wrap:has(.panel-caption:not(:empty)) img { max-width:50vw; max-height:80vh; flex-shrink:0; }
   .panel-caption { max-width:480px; font-size:1.05rem; line-height:1.85; opacity:0.85; }
   .panel-caption:empty { display:none; }
@@ -437,6 +439,22 @@
     infoToggle.classList.toggle('open', open);
   });
 
+  // Swap an <img>'s src without ever showing the previous image: hide it,
+  // preload the new file in the background, then reveal it once ready.
+  function swapImageSrc(imgEl, src) {
+    const resolved = new URL(src, window.location.href).href;
+    if (imgEl.src === resolved && !imgEl.classList.contains('loading')) return;
+    imgEl.classList.add('loading');
+    const loader = new Image();
+    const reveal = () => {
+      imgEl.src = src;
+      imgEl.classList.remove('loading');
+    };
+    loader.onload = reveal;
+    loader.onerror = reveal;
+    loader.src = src;
+  }
+
   const hotspotModalData = [
     { img: '2026-images/2026-p8/Görsel10.webp', text: '' },
     { img: '2026-images/2026-p8/Görsel12.webp', text: '' },
@@ -448,7 +466,7 @@
   const imageModalText = document.getElementById('image-modal-text');
 
   function openImageModal(index) {
-    imageModalImg.src = hotspotModalData[index].img;
+    swapImageSrc(imageModalImg, hotspotModalData[index].img);
     const text = hotspotModalData[index].text;
     imageModalText.textContent = text;
     imageModalText.style.display = text ? '' : 'none';
@@ -481,7 +499,7 @@
   const panelCaption = document.getElementById('panel-caption');
 
   function openPanel(base, webp, caption) {
-    panelImg.src = encodeURI(base + webp);
+    swapImageSrc(panelImg, encodeURI(base + webp));
     panelCaption.textContent = caption || '';
     panelOverlay.classList.add('open');
   }
@@ -554,6 +572,13 @@
         overlaySvg5.insertBefore(path, overlaySvg5.querySelector('.hotspot-line'));
       });
   });
+
+  // Preload every panel/modal image so it's already cached before a hotspot is clicked.
+  [
+    ...hotspotModalData.map(d => d.img),
+    ...FILES8.map(cfg => encodeURI(BASE_IMG1 + cfg.webp)),
+    ...FILES5.map(cfg => encodeURI(BASE_IMG5 + cfg.webp))
+  ].forEach(src => { new Image().src = src; });
 
   const TEXTS5 = {
     biodiversity: { title:'Biodiversity', text:`Rather than a mere metric of species count, this represents the dense, interdependent network of non-human actors within the soil's bio-infrastructure. It is the living baseline of the Arkhe, measuring the ecocentric health of the site before, during, and after tectonic interventions.` },
