@@ -23,7 +23,7 @@
   .map-viewport.pan-ready { cursor:grab; }
   .map-viewport.panning { cursor:grabbing; }
 
-  .map-canvas { position:absolute; top:0; left:0; width:3150.44px; height:2227.72px; will-change:transform; }
+  .map-canvas { position:absolute; top:0; left:0; width:3150.44px; height:2227.72px; transform-origin:0 0; will-change:transform; }
   .map-canvas img, .map-canvas .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; }
   #map-base, .map-layer { pointer-events:none; -webkit-user-drag:none; }
   .map-layer { opacity:0; transition:opacity 0.3s ease; }
@@ -76,6 +76,11 @@
   let vx = CIRCLE.cx;
   let vy = CIRCLE.cy;
 
+  // zoom: 1 = normal, down to 0.8 = zoomed out (map + circle shrink together)
+  const MIN_SCALE = 0.8;
+  const MAX_SCALE = 1;
+  let scale = 1;
+
   function clampCenter() {
     const dx = vx - CIRCLE.cx;
     const dy = vy - CIRCLE.cy;
@@ -98,13 +103,29 @@
   }
 
   function applyTransform() {
-    const tx = viewport.clientWidth / 2 - vx;
-    const ty = viewport.clientHeight / 2 - vy;
-    canvas.style.transform = `translate(${tx}px, ${ty}px)`;
+    const tx = viewport.clientWidth / 2 - vx * scale;
+    const ty = viewport.clientHeight / 2 - vy * scale;
+    canvas.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
   }
 
   applyTransform();
   window.addEventListener('resize', applyTransform);
+
+  // ── Zoom: mouse wheel, anchored to cursor position ────────────────────────
+  viewport.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const rect = viewport.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const oldScale = scale;
+    const factor = e.deltaY < 0 ? 1.08 : 0.93;
+    scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale * factor));
+    if (scale === oldScale) return;
+    vx += (mx - viewport.clientWidth / 2) * (1 / oldScale - 1 / scale);
+    vy += (my - viewport.clientHeight / 2) * (1 / oldScale - 1 / scale);
+    clampCenter();
+    applyTransform();
+  }, { passive: false });
 
   // ── Pan: only while Space or the middle mouse button is held ─────────────
   let panKey = false;
