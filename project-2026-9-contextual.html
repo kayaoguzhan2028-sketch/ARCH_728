@@ -14,7 +14,9 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-right { display:flex; align-items:center; gap:1.4rem; }
+  .nav-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.25); padding:0.45em 1.2em; opacity:0.55; transition:opacity 0.2s,border-color 0.2s; }
+  .nav-btn:hover { opacity:1; border-color:rgba(245,242,235,0.5); }
 
   .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
@@ -36,11 +38,17 @@
 </head>
 <body>
 <nav>
-  <a href="project-2026-9.html" class="nav-back">← 2026</a>
-  <span class="nav-tag">Field Report</span>
+  <a href="2026.html" class="nav-back">← 2026</a>
+  <span style="position:absolute;left:50%;transform:translateX(-50%);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;">The Ground Speaks</span>
+  <div class="nav-right">
+    <a href="project-2026-9-excavation-pits.html" class="nav-btn">Excavation Pits</a>
+    <a href="project-2026-9.html" class="nav-btn">The Ground</a>
+  </div>
 </nav>
 <div class="wrap">
   <div class="body">
+
+    <h1 style="text-align:center; font-size:clamp(1.6rem,4vw,2.8rem); font-weight:400; letter-spacing:0.08em; margin-bottom:2.5rem;">The Ground Speaks</h1>
 
     <video autoplay loop muted playsinline style="width:100%;display:block;margin:0;">
       <source src="2026-images/2026-p9/Group-9-Map.mp4" type="video/mp4">
