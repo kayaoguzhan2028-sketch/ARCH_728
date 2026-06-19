@@ -20,19 +20,17 @@ const SketchLayer = L.Layer.extend({
     this._canvas = L.DomUtil.create('canvas', 'sketch-canvas');
     Object.assign(this._canvas.style, {
       position:       'absolute',
-      top:            '0',
-      left:           '0',
       pointerEvents:  'none',
       zIndex:         '400',
     });
     map.getPanes().overlayPane.appendChild(this._canvas);
-    map.on('moveend zoomend resize viewreset', this._redraw, this);
-    this._redraw();
+    map.on('moveend zoomend resize viewreset', this._reset, this);
+    this._reset();
     return this;
   },
 
   onRemove: function(map) {
-    map.off('moveend zoomend resize viewreset', this._redraw, this);
+    map.off('moveend zoomend resize viewreset', this._reset, this);
     this._canvas.remove();
     return this;
   },
@@ -42,18 +40,26 @@ const SketchLayer = L.Layer.extend({
     if (this._map) this._redraw();
   },
 
-  _redraw: function() {
+  _reset: function() {
+    this._topLeft = this._map.containerPointToLayerPoint([0, 0]);
+    L.DomUtil.setPosition(this._canvas, this._topLeft);
+
     const size = this._map.getSize();
     this._canvas.width  = size.x;
     this._canvas.height = size.y;
+
+    this._redraw();
+  },
+
+  _redraw: function() {
     const rc = rough.canvas(this._canvas);
     const features = (this._data && this._data.features) || [];
     features.forEach(f => this._drawFeature(rc, f));
   },
 
   _project: function(coord) {
-    const p = this._map.latLngToContainerPoint(L.latLng(coord[1], coord[0]));
-    return [p.x, p.y];
+    const p = this._map.latLngToLayerPoint(L.latLng(coord[1], coord[0]));
+    return [p.x - this._topLeft.x, p.y - this._topLeft.y];
   },
 
   _roughOpts: function() {
