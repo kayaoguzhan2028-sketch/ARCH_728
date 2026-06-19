@@ -8,8 +8,8 @@ const LayerManager = (function() {
   const CONFIGS = {
     buildings: {
       label:       'Binalar',
-      color:       '#8b6f47',
-      fillColor:   '#c4a882',
+      color:       '#f5f2eb',
+      fillColor:   '#d4cebc',
       fill:        true,
       fillStyle:   'hachure',
       strokeWidth: 1.2,
@@ -18,26 +18,36 @@ const LayerManager = (function() {
     },
     roads: {
       label:       'Yollar',
-      color:       '#4a4a4a',
+      color:       '#f5f2eb',
       fill:        false,
-      strokeWidth: 1.8,
+      strokeWidth: 1.6,
       roughness:   0.3,
       bowing:      0,
     },
     greenspace: {
       label:       'Yeşil Alan',
-      color:       '#4a7c59',
-      fillColor:   '#7db88a',
+      color:       '#8fd9a8',
+      fillColor:   '#5fae80',
       fill:        true,
       fillStyle:   'cross-hatch',
       strokeWidth: 1.0,
       roughness:   0.3,
       bowing:      0,
     },
+    water: {
+      label:       'Su',
+      color:       '#6ec8e0',
+      fillColor:   '#3f8fab',
+      fill:        true,
+      fillStyle:   'cross-hatch',
+      strokeWidth: 1.2,
+      roughness:   0.3,
+      bowing:      0,
+    },
     demolition_zones: {
       label:       'Yıkım Alanları',
-      color:       '#c0392b',
-      fillColor:   '#e74c3c',
+      color:       '#ff6b5b',
+      fillColor:   '#c0392b',
       fill:        true,
       fillStyle:   'zigzag',
       strokeWidth: 1.5,
@@ -46,7 +56,7 @@ const LayerManager = (function() {
     },
     hafriyat_guzergah: {
       label:       'Hafriyat Güzergahı',
-      color:       '#e05c2a',
+      color:       '#ffb347',
       fill:        false,
       strokeWidth: 2.0,
       roughness:   0.3,
@@ -63,6 +73,7 @@ const LayerManager = (function() {
     buildings:         true,
     roads:             true,
     greenspace:        true,
+    water:             true,
     demolition_zones:  true,
     hafriyat_guzergah: true,
   };
@@ -71,7 +82,7 @@ const LayerManager = (function() {
 
   async function _fetchGeoJSON(path) {
     try {
-      const r = await fetch(path);
+      const r = await fetch(path, { cache: 'no-store' });
       if (!r.ok) return { type: 'FeatureCollection', features: [] };
       return await r.json();
     } catch (e) {
@@ -86,7 +97,7 @@ const LayerManager = (function() {
   // Statik katmanları yükle (greenspace, demolition, hafriyat)
   async function loadStaticLayers(dataPathFn) {
     if (dataPathFn) _dataPath = dataPathFn;
-    const staticKeys = ['greenspace', 'demolition_zones', 'hafriyat_guzergah'];
+    const staticKeys = ['greenspace', 'water', 'demolition_zones', 'hafriyat_guzergah'];
     for (const key of staticKeys) {
       const geojson = await _fetchGeoJSON(_dataPath(`${key}.geojson`));
       const layer   = sketchLayer(geojson, CONFIGS[key]);

@@ -22,7 +22,9 @@
   .nav-link { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.45; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; color:var(--white); text-decoration:none; transition:opacity 0.2s,border-color 0.2s; }
   .nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.5); }
 
-  #map { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:0; }
+  #map { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:0; background:var(--black); }
+  #map.dimmed .leaflet-tile-pane { filter: brightness(0.32) contrast(0.85) saturate(0.5); transition: filter 0.4s; }
+  #map .leaflet-tile-pane { transition: filter 0.4s; }
 
   #slider-panel {
     position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
@@ -97,6 +99,9 @@
   );
   const BBOX_CENTER = BBOX_BOUNDS.getCenter();
 
+  const mapEl = document.getElementById('map');
+  mapEl.classList.add('dimmed');
+
   const map = L.map('map', { center: BBOX_CENTER, zoom: 15 });
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -113,7 +118,7 @@
   LayerManager.loadYear(2010, _origDataPath);
 
   const layerPanel = document.getElementById('layer-panel');
-  ['buildings','roads','greenspace','demolition_zones','hafriyat_guzergah'].forEach(key => {
+  ['buildings','roads','greenspace','water','demolition_zones','hafriyat_guzergah'].forEach(key => {
     const cfg = LayerManager.getConfig(key);
     const btn = document.createElement('button');
     btn.className = 'layer-btn active';
@@ -133,6 +138,7 @@
   slider.addEventListener('input', () => {
     const y = parseInt(slider.value);
     yearLabel.textContent = y === 2026 ? '2026 (canlı)' : y;
+    mapEl.classList.toggle('dimmed', y < 2026);
     if (y >= 2026) {
       LayerManager.clearYearLayers();
     } else {
