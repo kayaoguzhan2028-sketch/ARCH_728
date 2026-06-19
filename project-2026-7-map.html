@@ -63,6 +63,8 @@
 
   .leaflet-control-attribution { font-size:0.55rem !important; background:rgba(10,10,10,0.6) !important; color:rgba(245,242,235,0.4) !important; }
   .leaflet-control-attribution a { color:rgba(245,242,235,0.55) !important; }
+
+  .map-label { font-family:var(--font); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--white); opacity:0.75; text-shadow:0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7); white-space:nowrap; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -94,8 +96,8 @@
 
 <script>
   const BBOX_BOUNDS = L.latLngBounds(
-    L.latLng(39.82883308517775, 32.80202479436177),
-    L.latLng(39.88858349516757, 32.88841427628221)
+    L.latLng(39.83203706815445, 32.81412634350289),
+    L.latLng(39.88221556253535, 32.88000085456429)
   );
   const BBOX_CENTER = BBOX_BOUNDS.getCenter();
 
@@ -104,9 +106,9 @@
 
   const map = L.map('map', { center: BBOX_CENTER, zoom: 15 });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıda bulunanlar',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıda bulunanlar © <a href="https://carto.com/attributions">CARTO</a>',
   }).addTo(map);
 
   // data path'ini harita/data/ olarak override et
@@ -117,6 +119,22 @@
   LayerManager.loadStaticLayers(_origDataPath);
   LayerManager.loadYear(2010, _origDataPath);
 
+  // Yer adları katmanı (mahalle/semt isimleri) — statik, tek seferlik veri
+  const labelsLayer = L.layerGroup();
+  fetch(_origDataPath('labels.geojson'), { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : { features: [] })
+    .catch(() => ({ features: [] }))
+    .then(geojson => {
+      (geojson.features || []).forEach(f => {
+        const [lng, lat] = f.geometry.coordinates;
+        L.marker([lat, lng], {
+          icon: L.divIcon({ className: 'map-label', html: f.properties.name, iconSize: null }),
+          interactive: false,
+        }).addTo(labelsLayer);
+      });
+    });
+  labelsLayer.addTo(map);
+
   const layerPanel = document.getElementById('layer-panel');
   ['buildings','roads','greenspace','water','demolition_zones','hafriyat_guzergah'].forEach(key => {
     const cfg = LayerManager.getConfig(key);
@@ -126,6 +144,17 @@
     btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
     layerPanel.appendChild(btn);
   });
+
+  let labelsVisible = true;
+  const labelsBtn = document.createElement('button');
+  labelsBtn.className = 'layer-btn active';
+  labelsBtn.innerHTML = '<span class="layer-dot" style="background:#f5f2eb"></span>Yer Adları';
+  labelsBtn.addEventListener('click', () => {
+    labelsVisible = !labelsVisible;
+    labelsBtn.classList.toggle('active', labelsVisible);
+    if (labelsVisible) labelsLayer.addTo(map); else map.removeLayer(labelsLayer);
+  });
+  layerPanel.appendChild(labelsBtn);
 
   map.on('moveend', function() {
     if (!BBOX_BOUNDS.contains(map.getCenter())) {

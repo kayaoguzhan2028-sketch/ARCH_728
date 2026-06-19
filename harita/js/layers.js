@@ -107,20 +107,27 @@ const LayerManager = (function() {
     HafriyatAnimation.load(geojson);
   }
 
+  // Slider hızlı kaydırılınca aynı anda birden çok loadYear() çağrısı havada kalabilir;
+  // sadece en son başlatılan çağrının sonucu haritaya uygulanır, eskileri sessizce iptal edilir.
+  let _loadToken = 0;
+
   // Yıla göre tüm katmanları yükle (bina, yol, yeşil alan, su, inşaat/yıkım)
   async function loadYear(year, dataPathFn) {
     if (dataPathFn) _dataPath = dataPathFn;
-    // Önceki yıl katmanlarını kaldır
+    const token = ++_loadToken;
+
+    const datas = await Promise.all(
+      YEAR_KEYS.map(key => _fetchGeoJSON(_dataPath(`${key}_${year}.geojson`)))
+    );
+
+    if (token !== _loadToken) return; // bu sırada daha yeni bir çağrı başlamış, sonucu yoksay
+
     YEAR_KEYS.forEach(key => {
       if (_yearLayers[key]) {
         _map.removeLayer(_yearLayers[key]);
         _yearLayers[key] = null;
       }
     });
-
-    const datas = await Promise.all(
-      YEAR_KEYS.map(key => _fetchGeoJSON(_dataPath(`${key}_${year}.geojson`)))
-    );
 
     YEAR_KEYS.forEach((key, i) => {
       _yearLayers[key] = sketchLayer(datas[i], CONFIGS[key]);
@@ -130,6 +137,7 @@ const LayerManager = (function() {
 
   // Canlı OSM görünümüne dön: sketch katmanlarını kaldır, sadece taban harita kalsın
   function clearYearLayers() {
+    _loadToken++; // bekleyen loadYear çağrılarını geçersiz kıl
     YEAR_KEYS.forEach(key => {
       if (_yearLayers[key]) {
         _map.removeLayer(_yearLayers[key]);

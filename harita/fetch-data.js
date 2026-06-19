@@ -2,7 +2,7 @@ const https = require('https');
 const fs    = require('fs');
 const path  = require('path');
 
-const BBOX        = '39.82883308517775,32.80202479436177,39.88858349516757,32.88841427628221'; // south,west,north,east
+const BBOX        = '39.83203706815445,32.81412634350289,39.88221556253535,32.88000085456429'; // south,west,north,east
 const OUTPUT_DIR  = path.join(__dirname, 'data');
 const ENDPOINT    = 'overpass-api.de';
 const COORD_DECIMALS = 5; // ~1m hassasiyet, dosya boyutunu küçültmek için OSM'in 7 ondalığından düşürülmüş
