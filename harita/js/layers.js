@@ -122,6 +122,16 @@ const LayerManager = (function() {
     if (_visible.roads)     _yearLayers.roads.addTo(_map);
   }
 
+  // Canlı OSM görünümüne dön: sketch katmanlarını kaldır, sadece taban harita kalsın
+  function clearYearLayers() {
+    ['buildings', 'roads'].forEach(key => {
+      if (_yearLayers[key]) {
+        _map.removeLayer(_yearLayers[key]);
+        _yearLayers[key] = null;
+      }
+    });
+  }
+
   // Katman görünürlüğünü toggle et
   function toggle(key) {
     _visible[key] = !_visible[key];
@@ -152,6 +162,6 @@ const LayerManager = (function() {
   function getConfig(key) { return CONFIGS[key]; }
   function isVisible(key) { return _visible[key]; }
 
-  return { init, loadStaticLayers, loadYear, toggle, getConfig, isVisible, CONFIGS };
+  return { init, loadStaticLayers, loadYear, clearYearLayers, toggle, getConfig, isVisible, CONFIGS };
 
 })();

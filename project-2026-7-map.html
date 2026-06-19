@@ -77,10 +77,10 @@
 
 <div id="slider-panel">
   <span id="year-label">2010</span>
-  <input id="year-slider" type="range" min="2010" max="2024" step="1" value="2010">
+  <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010">
   <div class="slider-ticks">
     <span>2010</span><span>2012</span><span>2014</span><span>2016</span>
-    <span>2018</span><span>2020</span><span>2022</span><span>2024</span>
+    <span>2018</span><span>2020</span><span>2022</span><span>2024</span><span>2026</span>
   </div>
 </div>
 
@@ -132,8 +132,12 @@
   const yearLabel = document.getElementById('year-label');
   slider.addEventListener('input', () => {
     const y = parseInt(slider.value);
-    yearLabel.textContent = y;
-    LayerManager.loadYear(y, _origDataPath);
+    yearLabel.textContent = y === 2026 ? '2026 (canlı)' : y;
+    if (y >= 2026) {
+      LayerManager.clearYearLayers();
+    } else {
+      LayerManager.loadYear(y, _origDataPath);
+    }
   });
 </script>
 
