@@ -64,10 +64,12 @@ const LayerManager = (function() {
     },
   };
 
-  // Aktif sketch layer nesneleri
+  // Aktif sketch layer nesneleri (sadece hafriyat_guzergah statik kalıyor)
   const _layers  = {};
   // Yıl bazlı geçici katmanlar
-  const _yearLayers = { buildings: null, roads: null };
+  const YEAR_KEYS = ['buildings', 'roads', 'greenspace', 'water', 'demolition_zones'];
+  const _yearLayers = {};
+  YEAR_KEYS.forEach(k => _yearLayers[k] = null);
   // Görünürlük durumu
   const _visible = {
     buildings:         true,
@@ -94,48 +96,41 @@ const LayerManager = (function() {
     _map = map;
   }
 
-  // Statik katmanları yükle (greenspace, demolition, hafriyat)
+  // Statik katmanları yükle (sadece hafriyat_guzergah — yıl bazlı OSM verisi yok)
   async function loadStaticLayers(dataPathFn) {
     if (dataPathFn) _dataPath = dataPathFn;
-    const staticKeys = ['greenspace', 'water', 'demolition_zones', 'hafriyat_guzergah'];
-    for (const key of staticKeys) {
-      const geojson = await _fetchGeoJSON(_dataPath(`${key}.geojson`));
-      const layer   = sketchLayer(geojson, CONFIGS[key]);
-      if (_visible[key]) layer.addTo(_map);
-      _layers[key] = layer;
-    }
+    const geojson = await _fetchGeoJSON(_dataPath('hafriyat_guzergah.geojson'));
+    const layer   = sketchLayer(geojson, CONFIGS.hafriyat_guzergah);
+    if (_visible.hafriyat_guzergah) layer.addTo(_map);
+    _layers.hafriyat_guzergah = layer;
 
-    // Hafriyat animasyonu başlat
-    const hData = await _fetchGeoJSON(_dataPath('hafriyat_guzergah.geojson'));
-    HafriyatAnimation.load(hData);
+    HafriyatAnimation.load(geojson);
   }
 
-  // Yıla göre bina ve yol katmanlarını yükle
+  // Yıla göre tüm katmanları yükle (bina, yol, yeşil alan, su, inşaat/yıkım)
   async function loadYear(year, dataPathFn) {
     if (dataPathFn) _dataPath = dataPathFn;
     // Önceki yıl katmanlarını kaldır
-    ['buildings', 'roads'].forEach(key => {
+    YEAR_KEYS.forEach(key => {
       if (_yearLayers[key]) {
         _map.removeLayer(_yearLayers[key]);
         _yearLayers[key] = null;
       }
     });
 
-    const [bData, rData] = await Promise.all([
-      _fetchGeoJSON(_dataPath(`buildings_${year}.geojson`)),
-      _fetchGeoJSON(_dataPath(`roads_${year}.geojson`)),
-    ]);
+    const datas = await Promise.all(
+      YEAR_KEYS.map(key => _fetchGeoJSON(_dataPath(`${key}_${year}.geojson`)))
+    );
 
-    _yearLayers.buildings = sketchLayer(bData, CONFIGS.buildings);
-    _yearLayers.roads     = sketchLayer(rData, CONFIGS.roads);
-
-    if (_visible.buildings) _yearLayers.buildings.addTo(_map);
-    if (_visible.roads)     _yearLayers.roads.addTo(_map);
+    YEAR_KEYS.forEach((key, i) => {
+      _yearLayers[key] = sketchLayer(datas[i], CONFIGS[key]);
+      if (_visible[key]) _yearLayers[key].addTo(_map);
+    });
   }
 
   // Canlı OSM görünümüne dön: sketch katmanlarını kaldır, sadece taban harita kalsın
   function clearYearLayers() {
-    ['buildings', 'roads'].forEach(key => {
+    YEAR_KEYS.forEach(key => {
       if (_yearLayers[key]) {
         _map.removeLayer(_yearLayers[key]);
         _yearLayers[key] = null;
@@ -148,7 +143,7 @@ const LayerManager = (function() {
     _visible[key] = !_visible[key];
 
     // Yıl bazlı katmanlar
-    if (key === 'buildings' || key === 'roads') {
+    if (YEAR_KEYS.includes(key)) {
       const l = _yearLayers[key];
       if (l) {
         _visible[key] ? l.addTo(_map) : _map.removeLayer(l);
@@ -156,13 +151,11 @@ const LayerManager = (function() {
       return _visible[key];
     }
 
-    // Statik katmanlar
+    // Statik katmanlar (hafriyat_guzergah)
     const l = _layers[key];
     if (l) {
       _visible[key] ? l.addTo(_map) : _map.removeLayer(l);
     }
-
-    // Hafriyat animasyonu
     if (key === 'hafriyat_guzergah') {
       _visible[key] ? HafriyatAnimation.start() : HafriyatAnimation.stop();
     }
