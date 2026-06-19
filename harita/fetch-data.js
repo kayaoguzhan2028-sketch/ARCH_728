@@ -2,7 +2,7 @@ const https = require('https');
 const fs    = require('fs');
 const path  = require('path');
 
-const BBOX       = '39.8437706876752,32.82362216984188,39.87364589267011,32.8668169108021'; // south,west,north,east
+const BBOX       = '39.82883308517775,32.80202479436177,39.88858349516757,32.88841427628221'; // south,west,north,east
 const OUTPUT_DIR = path.join(__dirname, 'data');
 // overpass-turbo.eu/api/interpreter yerine resmi endpoint kullanıyoruz (daha stabil)
 const ENDPOINT   = 'overpass-api.de';
