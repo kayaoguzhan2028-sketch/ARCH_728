@@ -1,42 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
 <title>Map — ARCH 728</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
-  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html,body { background:var(--black); color:var(--white); font-family:var(--font); height:100%; overflow:hidden; }
 
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html, body { width: 100%; height: 100%; background: var(--black); color: var(--white); font-family: var(--font); }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-links { display:flex; align-items:center; gap:0.8rem; }
   .nav-link { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.45; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; color:var(--white); text-decoration:none; transition:opacity 0.2s,border-color 0.2s; }
   .nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.5); }
 
-  .map-viewport { position:fixed; top:52px; left:0; right:0; bottom:0; overflow:hidden; background:var(--black); cursor:default; user-select:none; }
-  .map-viewport.pan-ready { cursor:grab; }
-  .map-viewport.panning { cursor:grabbing; }
+  #map { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:0; }
 
-  .map-canvas { position:absolute; top:0; left:0; width:3150.44px; height:2227.72px; transform-origin:0 0; will-change:transform; }
-  .map-canvas img, .map-canvas .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; }
-  #map-base, .map-layer { pointer-events:none; -webkit-user-drag:none; }
-  .map-layer { opacity:0; transition:opacity 0.3s ease; }
-  .map-hotspot { pointer-events:none; }
-  .map-hotspot svg { width:100%; height:100%; display:block; }
-  .map-hotspot path, .map-hotspot polygon { fill:transparent; pointer-events:all; cursor:pointer; }
-  .map-viewport.pan-ready .map-hotspot path, .map-viewport.pan-ready .map-hotspot polygon { pointer-events:none; }
+  #slider-panel {
+    position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
+    z-index:900; background:rgba(10,10,10,0.78); border:1px solid var(--border);
+    padding:0.9rem 1.6rem 0.8rem;
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    min-width:320px;
+  }
+  #year-label { font-size:1.4rem; letter-spacing:0.08em; color:var(--white); opacity:0.9; }
+  #year-slider {
+    width:100%; cursor:pointer; appearance:none; height:2px;
+    background:rgba(245,242,235,0.2); outline:none;
+  }
+  #year-slider::-webkit-slider-thumb {
+    appearance:none; width:14px; height:14px;
+    border-radius:50%; background:var(--white); cursor:pointer;
+  }
+  .slider-ticks {
+    display:flex; justify-content:space-between; width:100%;
+    font-size:0.52rem; letter-spacing:0.1em; color:var(--white); opacity:0.3; user-select:none;
+  }
 
-  #hover-label { position:fixed; top:0; left:0; z-index:200; pointer-events:none; opacity:0; transform:translate(18px,18px); transition:opacity 0.15s ease; font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); background:rgba(10,10,10,0.7); padding:0.35em 0.8em; white-space:nowrap; }
-  #hover-label.active { opacity:1; }
+  #layer-panel {
+    position:fixed; top:62px; right:1rem; z-index:900;
+    background:rgba(10,10,10,0.78); border:1px solid var(--border);
+    padding:0.8rem 1rem; display:flex; flex-direction:column; gap:0.5rem; min-width:170px;
+  }
+  .layer-btn {
+    display:flex; align-items:center; gap:0.6rem;
+    font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--white); background:none; border:none; cursor:pointer;
+    opacity:0.6; transition:opacity 0.2s; padding:0; text-align:left; font-family:var(--font);
+  }
+  .layer-btn.active { opacity:1; }
+  .layer-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+
+  .leaflet-control-attribution { font-size:0.55rem !important; background:rgba(10,10,10,0.6) !important; color:rgba(245,242,235,0.4) !important; }
+  .leaflet-control-attribution a { color:rgba(245,242,235,0.55) !important; }
 </style>
 </head>
 <body>
+
 <nav>
   <a href="project-2026-7.html" class="nav-back">← 2026</a>
   <div class="nav-links">
@@ -45,183 +73,69 @@
   </div>
 </nav>
 
-<div class="map-viewport" id="map-viewport">
-  <div class="map-canvas" id="map-canvas">
+<div id="map"></div>
 
-    <img id="map-base" src="2026-images/2026-p7/Map/map-base.webp" alt="Map">
-
-    <img class="map-layer" data-layer="nomad" src="2026-images/2026-p7/Map/map-nomad.webp" alt="">
-    <img class="map-layer" data-layer="barbarian" src="2026-images/2026-p7/Map/map-barbarian.webp" alt="">
-    <img class="map-layer" data-layer="vagabond" src="2026-images/2026-p7/Map/map-vagabond.webp" alt="">
-    <img class="map-layer" data-layer="proletairat" src="2026-images/2026-p7/Map/map-proletairat.webp" alt="">
-
-    <div class="map-hotspot" data-layer="nomad" data-svg="2026-images/2026-p7/Map/nomad.svg"></div>
-    <div class="map-hotspot" data-layer="barbarian" data-svg="2026-images/2026-p7/Map/barbarian.svg"></div>
-    <div class="map-hotspot" data-layer="vagabond" data-svg="2026-images/2026-p7/Map/vagabond.svg"></div>
-    <div class="map-hotspot" data-layer="proletairat" data-svg="2026-images/2026-p7/Map/proletairat.svg"></div>
-
+<div id="slider-panel">
+  <span id="year-label">2010</span>
+  <input id="year-slider" type="range" min="2010" max="2024" step="1" value="2010">
+  <div class="slider-ticks">
+    <span>2010</span><span>2012</span><span>2014</span><span>2016</span>
+    <span>2018</span><span>2020</span><span>2022</span><span>2024</span>
   </div>
 </div>
 
-<div id="hover-label"></div>
+<div id="layer-panel"></div>
+
+<script src="harita/js/sketch.js"></script>
+<script src="harita/js/animation.js"></script>
+<script src="harita/js/layers.js"></script>
 
 <script>
-  const viewport = document.getElementById('map-viewport');
-  const canvas = document.getElementById('map-canvas');
+  const BBOX_BOUNDS = L.latLngBounds(
+    L.latLng(39.8437706876752, 32.82362216984188),
+    L.latLng(39.87364589267011, 32.8668169108021)
+  );
+  const BBOX_CENTER = BBOX_BOUNDS.getCenter();
 
-  // circle-maxview.svg: center + radius (derived from its bezier-circle path)
-  const CIRCLE = { cx: 1575.22, cy: 1113.86, r: 801.62 };
+  const map = L.map('map', { center: BBOX_CENTER, zoom: 15 });
 
-  // vx,vy = canvas-space point currently shown at the viewport center
-  let vx = CIRCLE.cx;
-  let vy = CIRCLE.cy;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıda bulunanlar',
+  }).addTo(map);
 
-  // zoom: 1 = normal, down to 0.4 = zoomed out (map + circle shrink together)
-  const MIN_SCALE = 0.4;
-  const MAX_SCALE = 1;
-  let scale = 1;
+  // data path'ini harita/data/ olarak override et
+  const _origDataPath = p => `harita/data/${p}`;
 
-  function clampCenter() {
-    const dx = vx - CIRCLE.cx;
-    const dy = vy - CIRCLE.cy;
-    const dist = Math.hypot(dx, dy);
-    if (dist > CIRCLE.r) {
-      const scale = CIRCLE.r / dist;
-      vx = CIRCLE.cx + dx * scale;
-      vy = CIRCLE.cy + dy * scale;
-      return true;
-    }
-    return false;
-  }
+  LayerManager.init(map);
+  HafriyatAnimation.init(map);
+  LayerManager.loadStaticLayers(_origDataPath);
+  LayerManager.loadYear(2010, _origDataPath);
 
-  function bounceBack() {
-    canvas.style.transition = 'transform 0.35s cubic-bezier(0.33,1,0.68,1)';
-    vx += (CIRCLE.cx - vx) * 0.06;
-    vy += (CIRCLE.cy - vy) * 0.06;
-    applyTransform();
-    setTimeout(() => { canvas.style.transition = ''; }, 350);
-  }
-
-  function applyTransform() {
-    const tx = viewport.clientWidth / 2 - vx * scale;
-    const ty = viewport.clientHeight / 2 - vy * scale;
-    canvas.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-  }
-
-  applyTransform();
-  window.addEventListener('resize', applyTransform);
-
-  // ── Zoom: mouse wheel, anchored to cursor position ────────────────────────
-  viewport.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const rect = viewport.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const oldScale = scale;
-    const factor = e.deltaY < 0 ? 1.08 : 0.93;
-    scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale * factor));
-    if (scale === oldScale) return;
-    vx += (mx - viewport.clientWidth / 2) * (1 / oldScale - 1 / scale);
-    vy += (my - viewport.clientHeight / 2) * (1 / oldScale - 1 / scale);
-    clampCenter();
-    applyTransform();
-  }, { passive: false });
-
-  // ── Pan: only while Space or the middle mouse button is held ─────────────
-  let panKey = false;
-  let dragging = false;
-  let atBoundary = false;
-  let lastX = 0, lastY = 0;
-
-  window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && !panKey) {
-      panKey = true;
-      viewport.classList.add('pan-ready');
-    }
+  const layerPanel = document.getElementById('layer-panel');
+  ['buildings','roads','greenspace','demolition_zones','hafriyat_guzergah'].forEach(key => {
+    const cfg = LayerManager.getConfig(key);
+    const btn = document.createElement('button');
+    btn.className = 'layer-btn active';
+    btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
+    btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
+    layerPanel.appendChild(btn);
   });
-  window.addEventListener('keyup', (e) => {
-    if (e.code === 'Space') {
-      panKey = false;
-      viewport.classList.remove('pan-ready');
+
+  map.on('moveend', function() {
+    if (!BBOX_BOUNDS.contains(map.getCenter())) {
+      map.flyTo(BBOX_CENTER, 15, { duration: 0.8 });
     }
   });
 
-  viewport.addEventListener('mousedown', (e) => {
-    if (panKey || e.button === 1) {
-      dragging = true;
-      lastX = e.clientX;
-      lastY = e.clientY;
-      viewport.classList.add('panning');
-      e.preventDefault();
-    }
-  });
-  window.addEventListener('mousemove', (e) => {
-    if (!dragging) return;
-    vx -= (e.clientX - lastX);
-    vy -= (e.clientY - lastY);
-    lastX = e.clientX;
-    lastY = e.clientY;
-    atBoundary = clampCenter();
-    applyTransform();
-  });
-  window.addEventListener('mouseup', () => {
-    dragging = false;
-    viewport.classList.remove('panning');
-    if (atBoundary) {
-      bounceBack();
-      atBoundary = false;
-    }
-  });
-
-  // ── Hotspots: hover = half-open, click = stay open (toggle) ──────────────
-  const LAYERS = ['nomad', 'barbarian', 'vagabond', 'proletairat'];
-  const LAYER_LABELS = {
-    nomad: 'Nomadic Soil',
-    barbarian: 'Barbarian Earth',
-    vagabond: 'Vagabond Earth',
-    proletairat: 'Proletairat Earth'
-  };
-
-  const hoverLabel = document.getElementById('hover-label');
-  viewport.addEventListener('mousemove', (e) => {
-    hoverLabel.style.left = e.clientX + 'px';
-    hoverLabel.style.top = e.clientY + 'px';
-  });
-
-  LAYERS.forEach((name) => {
-    const overlay = document.querySelector(`.map-hotspot[data-layer="${name}"]`);
-    const layer = document.querySelector(`.map-layer[data-layer="${name}"]`);
-    let hovering = false;
-    let locked = false;
-
-    const update = () => {
-      layer.style.opacity = locked ? '1' : (hovering ? '0.5' : '0');
-    };
-
-    fetch(overlay.dataset.svg)
-      .then((res) => res.text())
-      .then((svg) => {
-        overlay.innerHTML = svg;
-        overlay.querySelectorAll('path, polygon').forEach((shape) => {
-          shape.addEventListener('mouseenter', () => {
-            hovering = true; update();
-            hoverLabel.textContent = LAYER_LABELS[name];
-            hoverLabel.classList.add('active');
-          });
-          shape.addEventListener('mouseleave', () => {
-            hovering = false; update();
-            hoverLabel.classList.remove('active');
-          });
-          shape.addEventListener('click', () => {
-            if (name === 'barbarian') {
-              window.location.href = 'project-2026-7-debris.html';
-              return;
-            }
-            locked = !locked; update();
-          });
-        });
-      });
+  const slider    = document.getElementById('year-slider');
+  const yearLabel = document.getElementById('year-label');
+  slider.addEventListener('input', () => {
+    const y = parseInt(slider.value);
+    yearLabel.textContent = y;
+    LayerManager.loadYear(y, _origDataPath);
   });
 </script>
+
 </body>
 </html>
