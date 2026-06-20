@@ -2,7 +2,10 @@ const https = require('https');
 const fs    = require('fs');
 const path  = require('path');
 
-const BBOX       = '39.83203706815445,32.81412634350289,39.88221556253535,32.88000085456429'; // south,west,north,east
+const CENTER_LAT = 39.8572724;
+const CENTER_LON = 32.8407268;
+const RADIUS_M   = 2000;
+const AROUND     = `around:${RADIUS_M},${CENTER_LAT},${CENTER_LON}`;
 const OUTPUT_DIR = path.join(__dirname, 'data');
 const ENDPOINT   = 'overpass-api.de';
 
@@ -55,7 +58,7 @@ function toGeoJSON(elements) {
 
 async function main() {
   const query = `[out:json][timeout:60];
-nwr["place"~"^(neighbourhood|suburb|quarter|locality|village)$"](${BBOX});
+nwr["place"~"^(neighbourhood|suburb|quarter|locality|village)$"](${AROUND});
 out center;`;
 
   process.stdout.write('[labels] çekiliyor... ');

@@ -15,16 +15,22 @@
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .key-icon { width:50px; height:50px; display:block; margin-right:-2.5rem; }
-  .key-icon img { width:100%; height:100%; object-fit:contain; display:block; opacity:0.85; transition:opacity 0.2s; }
+  .key-icon img { width:100%; height:100%; object-fit:contain; display:block; opacity:0.85; transition:opacity 0.2s; transform:scaleX(-1); }
   .key-icon:hover img { opacity:1; }
 
-  .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .wrap { max-width:620px; margin:0 auto; padding:calc(52px + 3rem) 2rem 6rem; }
+  .sub-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem 1.6rem; margin:1.5rem 0 2rem; }
+  .sub-nav a { font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.6em 1.3em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
+  .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .sub-nav a.active { opacity:1; border-color:rgba(245,242,235,0.45); }
+  nav .sub-nav { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); margin:0; gap:0.4rem 0.8rem; flex-wrap:nowrap; }
+  nav .sub-nav a { padding:0.42em 0.85em; font-size:0.6rem; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3rem; line-height:1.6; }
   .intro-images { display:flex; gap:1.5rem; margin-bottom:3.5rem; }
   .intro-images img { flex:1; width:50%; display:block; margin:0; opacity:0.9; }
   .info-meta { display:flex; flex-wrap:wrap; gap:2.5rem; margin-bottom:3.5rem; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
@@ -43,6 +49,15 @@
 <body>
 <nav>
   <a href="2026.html" class="nav-back">← 2026</a>
+  <div class="sub-nav">
+    <a href="project-2026-3-projectinfo.html" class="active">Info</a>
+    <a href="project-2026-3.html">Entrance</a>
+    <a href="project-2026-3-errors.html">Errors</a>
+    <a href="project-2026-3-soilscenesifters.html">Sifters</a>
+    <a href="project-2026-3-siftingwhatdetectingerrors.html">Sifting What?</a>
+    <a href="project-2026-3-aftersift.html">After Sift</a>
+    <a href="project-2026-3-sceneexplanations.html">Scene Explanations</a>
+  </div>
   <a href="project-2026-3.html" class="key-icon">
     <img src="2026-images/2026-p3/0-project brief page/sifting the soil key image-1.0.webp" alt="Sifting the Soil Key">
   </a>

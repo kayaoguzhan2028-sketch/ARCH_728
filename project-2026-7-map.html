@@ -95,16 +95,13 @@
 <script src="harita/js/layers.js"></script>
 
 <script>
-  const BBOX_BOUNDS = L.latLngBounds(
-    L.latLng(39.83203706815445, 32.81412634350289),
-    L.latLng(39.88221556253535, 32.88000085456429)
-  );
-  const BBOX_CENTER = BBOX_BOUNDS.getCenter();
+  const CIRCLE_CENTER = L.latLng(39.8572724, 32.8407268);
+  const CIRCLE_RADIUS = 2000; // metre
 
   const mapEl = document.getElementById('map');
   mapEl.classList.add('dimmed');
 
-  const map = L.map('map', { center: BBOX_CENTER, zoom: 15 });
+  const map = L.map('map', { center: CIRCLE_CENTER, zoom: 15 });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -157,8 +154,8 @@
   layerPanel.appendChild(labelsBtn);
 
   map.on('moveend', function() {
-    if (!BBOX_BOUNDS.contains(map.getCenter())) {
-      map.flyTo(BBOX_CENTER, 15, { duration: 0.8 });
+    if (map.getCenter().distanceTo(CIRCLE_CENTER) > CIRCLE_RADIUS) {
+      map.flyTo(CIRCLE_CENTER, 15, { duration: 0.8 });
     }
   });
 
