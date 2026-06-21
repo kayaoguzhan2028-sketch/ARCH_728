@@ -53,7 +53,7 @@
   .triangle-up a:hover svg { opacity:0.6; }
   .triangle-up a[data-tooltip]::after { content:attr(data-tooltip); position:absolute; bottom:140%; left:50%; transform:translateX(-50%); background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; }
   .triangle-up a[data-tooltip]:hover::after { opacity:1; }
-  .grid3x3 { position:relative; display:grid; grid-template-columns:7fr 11fr 7fr; grid-template-rows:3fr 2fr 3fr; height:calc(100vh - 52px); gap:0; margin:0; }
+  .grid3x3 { position:relative; display:grid; grid-template-columns:7fr 11fr 7fr; grid-template-rows:35% 27.5% 37.5%; height:calc(100vh - 52px); gap:0; margin:0; }
   .grid3x3 .grid-cell { display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .grid3x3 .grid-cell.info-cell { --gif-w:100%; align-items:flex-start; justify-content:flex-start; flex-direction:column; padding:0.3rem; }
   .grid3x3 .grid-cell.info-cell .cell-title { width:100%; text-align:right; font-size:0.88rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; margin-bottom:0; }
@@ -67,13 +67,17 @@
   .grid3x3 .grid-cell img, .grid3x3 .grid-cell video { width:100%; height:100%; object-fit:cover; margin:0; opacity:1; filter:brightness(1) contrast(1); }
   .grid3x3 .grid-cell.full-img { grid-row:span 2; position:relative; }
   .grid3x3 .grid-cell.full-img img { width:96%; height:100%; object-fit:contain; }
-  .hotspot-overlay { position:absolute; top:0; bottom:0; left:2%; right:2%; }
+  .hotspot-overlay { position:absolute; top:0; bottom:0; left:2%; right:2%; overflow:visible; z-index:5; }
   .hotspot-overlay a { cursor:pointer; }
   .hotspot-overlay .hotspot { fill:#fff; opacity:0.01; stroke:#000; stroke-width:1px; fill-rule:evenodd; transition:opacity 0.2s; }
   .hotspot-overlay a:hover .hotspot { opacity:0.16; }
   #hotspot-tooltip { position:fixed; background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:1500; transform:translate(-50%,-140%); }
   #hotspot-tooltip.show { opacity:1; }
-  .hero-text { font-family:var(--font); color:var(--white); font-size:13px; line-height:1.35; text-align:justify; text-align-last:right; pointer-events:none; }
+  .hotspot-overlay foreignObject { overflow:visible; }
+  .hero-text-wrap { display:flex; flex-direction:column; align-items:flex-end; width:100%; height:100%; overflow:visible; }
+  .hero-text-wrap.anchor-top { justify-content:flex-start; }
+  .hero-text-wrap.anchor-bottom { justify-content:flex-end; }
+  .hero-text { font-family:var(--font); color:var(--white); font-size:16pt; line-height:1.35; text-align:justify; text-align-last:right; pointer-events:none; white-space:nowrap; }
   .hero-text p { margin:0 0 4px; }
   .hero-text p:last-child { margin-bottom:0; }
   .grid3x3 .grid-cell.video-cell { flex-direction:column; }
@@ -184,7 +188,7 @@
         <img id="vid-s2" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_2.gif" alt="Section 2">
       </div>
       <div class="grid-cell full-img">
-        <img src="2026-images/2026-p4/webp/0.entry/ANA SAYFA  image.webp" alt="Ana Sayfa">
+        <img id="ana-sayfa-img" src="2026-images/2026-p4/webp/0.entry/ANA SAYFA  image.webp" alt="Ana Sayfa">
         <svg class="hotspot-overlay" viewBox="0 0 784 551" preserveAspectRatio="xMidYMid meet">
           <a href="project-2026-4-sections1.html" data-highlight="vid-s1" data-section="1" aria-label="Section 3.1"><path class="hotspot" d="M101,292l2,14,151-40-3-9Z"/></a>
           <a href="project-2026-4-sections2.html" data-highlight="vid-s2" data-section="2" aria-label="Section 3.2"><path class="hotspot" d="M312,237v7l3,4,92-24-4-9Z"/></a>
@@ -192,32 +196,42 @@
           <a href="project-2026-4-sections4.html" data-highlight="vid-s4" data-section="4" aria-label="Section 3.4"><path class="hotspot" d="M452,416l-71,70v11l11,7,70-75v-7Z"/></a>
           <a href="project-2026-4-sections5.html" data-highlight="vid-s5" data-section="5" aria-label="Section 3.5"><path class="hotspot" d="M494,283l-58,49v10l10,5,56-56v-3Z"/></a>
           <a href="project-2026-4-sections6.html" data-highlight="vid-s6" data-section="6" aria-label="Section 3.6"><path class="hotspot" d="M409,275v7L530,394l9-6,1-10L420,272Z"/></a>
-          <foreignObject x="13" y="328" width="100" height="39">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text">
-              <p>It is excavated.</p>
-              <p>Steril.</p>
+          <foreignObject x="-83" y="328" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-top">
+              <div class="hero-text">
+                <p>It is excavated.</p>
+                <p>Steril.</p>
+              </div>
             </div>
           </foreignObject>
-          <foreignObject x="66" y="93" width="100" height="39">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text">
-              <p>It is redistributed.</p>
+          <foreignObject x="-49" y="61" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-bottom">
+              <div class="hero-text">
+                <p>It is redistributed.</p>
+              </div>
             </div>
           </foreignObject>
-          <foreignObject x="578" y="0" width="165" height="39">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text">
-              <p>Refurbished.</p>
-              <p>It interacts with water.</p>
+          <foreignObject x="543" y="-51" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-bottom">
+              <div class="hero-text">
+                <p>Refurbished.</p>
+                <p>It interacts with water.</p>
+              </div>
             </div>
           </foreignObject>
-          <foreignObject x="209" y="493" width="114" height="50">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text">
-              <p>Incomplete.</p>
-              <p>It enables new forms of vegetation.</p>
+          <foreignObject x="123" y="493" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-top">
+              <div class="hero-text">
+                <p>Incomplete.</p>
+                <p>It enables new forms of vegetation.</p>
+              </div>
             </div>
           </foreignObject>
-          <foreignObject x="561" y="397" width="120" height="50">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text">
-              <p>It is transported.</p>
+          <foreignObject x="514" y="373" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-bottom">
+              <div class="hero-text">
+                <p>It is transported.</p>
+              </div>
             </div>
           </foreignObject>
         </svg>
@@ -338,6 +352,38 @@
   videoLightbox.addEventListener('click', (e) => {
     if (e.target === videoLightbox) closeVideoLightbox();
   });
+
+  function syncHotspotOverlay() {
+    const anaImg = document.getElementById('ana-sayfa-img');
+    const overlay = document.querySelector('.hotspot-overlay');
+    if (!anaImg || !overlay || !anaImg.naturalWidth) return;
+    const cell = anaImg.closest('.grid-cell.full-img');
+    const cellRect = cell.getBoundingClientRect();
+    const imgRect = anaImg.getBoundingClientRect();
+    const naturalRatio = anaImg.naturalWidth / anaImg.naturalHeight;
+    const boxRatio = imgRect.width / imgRect.height;
+    let contentW, contentH;
+    if (naturalRatio > boxRatio) {
+      contentW = imgRect.width;
+      contentH = imgRect.width / naturalRatio;
+    } else {
+      contentH = imgRect.height;
+      contentW = imgRect.height * naturalRatio;
+    }
+    const offsetX = imgRect.left - cellRect.left + (imgRect.width - contentW) / 2;
+    const offsetY = imgRect.top - cellRect.top + (imgRect.height - contentH) / 2;
+    overlay.style.left = offsetX + 'px';
+    overlay.style.top = offsetY + 'px';
+    overlay.style.right = 'auto';
+    overlay.style.bottom = 'auto';
+    overlay.style.width = contentW + 'px';
+    overlay.style.height = contentH + 'px';
+  }
+
+  const anaSayfaImg = document.getElementById('ana-sayfa-img');
+  if (anaSayfaImg.complete) syncHotspotOverlay();
+  anaSayfaImg.addEventListener('load', syncHotspotOverlay);
+  window.addEventListener('resize', syncHotspotOverlay);
 </script>
 </body>
 </html>
