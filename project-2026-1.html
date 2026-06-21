@@ -24,7 +24,7 @@
   #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
   #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
   #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; }
+  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; text-align:justify; }
   #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
   #info-panel ul li { margin-bottom:0.8rem; }
   #info-panel ul li:last-child { margin-bottom:0; }
@@ -32,16 +32,24 @@
 
   .wrap { max-width:1000px; margin:0 auto; padding:7.5rem 2.5rem 4rem; }
   #main-img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; }
-  .body-text { font-size:1.1rem; line-height:1.95; opacity:0.75; margin-top:2.5rem; text-align:center; }
+  .body-title { font-size:1.3rem; text-align:center; margin-top:2.5rem; line-height:1.5; }
+  .body-text { font-size:1.1rem; line-height:1.95; opacity:0.75; margin-top:1rem; text-align:justify; width:90%; margin-left:auto; margin-right:auto; }
   .cta-btn { display:block; width:max-content; margin:2rem auto 0; padding:0.85em 2em; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); border:1px solid var(--accent); text-decoration:none; transition:background 0.2s ease, color 0.2s ease; }
   .cta-btn:hover { background:var(--accent); color:var(--black); }
 
   .gif-block { margin-top:4rem; }
   .gif-block img { display:block; width:100%; height:auto; }
-  .gif-row { display:flex; gap:1.5rem; }
-  .gif-row img { flex:1; min-width:0; }
-  .gif-caption { font-size:0.95rem; line-height:1.85; opacity:0.7; margin-top:1.2rem; }
+  .gif-row { display:grid; grid-template-columns:70% 30%; gap:1.5rem; align-items:center; }
+  .gif-caption { font-size:0.95rem; line-height:1.85; opacity:0.7; margin:0; }
   .gif-reference { font-size:0.75rem; line-height:1.7; opacity:0.45; margin-top:0.6rem; }
+
+  .accordion-btn { display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1.5rem; padding:0.85em 1.2em; background:none; border:1px solid var(--border); color:var(--white); font-family:var(--font); font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; cursor:pointer; opacity:0.7; transition:opacity 0.2s; }
+  .accordion-btn:hover { opacity:1; }
+  .accordion-icon { font-size:1rem; transition:transform 0.25s ease; }
+  .accordion-btn.open .accordion-icon { transform:rotate(45deg); }
+  .accordion-content { display:none; margin-top:1.5rem; }
+  .accordion-content.open { display:block; }
+  .accordion-content video { width:100%; display:block; }
 </style>
 </head>
 <body>
@@ -52,16 +60,15 @@
     <button class="info-btn" id="info-toggle">Project Info</button>
   </div>
   <span class="nav-title">Çayırhan Ash Lake</span>
-  <span class="nav-tag">Field Report</span>
 </nav>
 
 <div id="info-panel">
   <h2>Group Members</h2>
   <p>Bilge Nur Ateş, Elif Bilge Küçükkülahlı, İrem Çiçen</p>
   <h2>Main Title</h2>
-  <p>Çayırhan Ash Lake</p>
+  <p>Leakage</p>
   <h2>Sub-Title</h2>
-  <p><em>Leakage</em></p>
+  <p><em>Çayırhan Ash Lake</em></p>
   <h2>Research Questions</h2>
   <ul>
     <li>How do the toxic slag and fly ash accumulated in the Çayırhan Ash Lake seep into the invisible depths of the landscape and transform its physical reality?</li>
@@ -77,16 +84,25 @@
 <div class="wrap">
   <section class="section">
     <img id="main-img" src="2026-images/2026-p1/1-mainpage/2026-1-728-kapak_görseli_yatay.webp" draggable="false" alt="">
+    <p class="body-title">Leakage<br>Çayırhan Ash Lake</p>
     <p class="body-text">Rather than a static scar left on the landscape by industrial production, the Çayırhan Ash Lake operates as a fluid and active toxic assemblage leaking into both the subterranean layers and the sky. This project positions "leakage" not merely as a technical failure, but as a rhizomatic agent that dissolves boundaries, infects water bodies, and alters living ecologies. By spatializing these invisible contamination cycles, the work aims to expose the toxic stratification beneath the industrial landscape and reveal the deviated migration routes above it.</p>
     <a href="project-2026-1-interactivepage.html" class="cta-btn">Interactive Key Map</a>
+    <button class="accordion-btn" id="modelgif-toggle">
+      <span>Model GIF</span>
+      <span class="accordion-icon">+</span>
+    </button>
+    <div class="accordion-content" id="modelgif-content">
+      <video autoplay loop muted playsinline>
+        <source src="2026-images/2026-p1/1-mainpage/modelgif3.mp4" type="video/mp4">
+      </video>
+    </div>
   </section>
 
   <section class="section gif-block">
     <div class="gif-row">
-      <img src="2026-images/2026-p1/gif/2026-1-728-MainPage.gif" alt="">
-      <img src="2026-images/2026-p1/gif/2026-1-728-MainPage.gif" alt="">
+      <img src="2026-images/2026-p1/1-mainpage/2026-1-728-GIFLER_COMPOSED.gif" alt="">
+      <p class="gif-caption">The gifs illustrate the rising level of the ash lake through time. It can be observed that the ancient city is encroached upon by the increasing toxic waste.</p>
     </div>
-    <p class="gif-caption">The gifs illustrate the rising level of the ash lake through time. It can be observed that the ancient city is encroached upon by the increasing toxic waste.</p>
     <p class="gif-reference">Reference: (Satellite views are used to create image) Ahmet Soyak Belgehane. (2020, August 1). Juliopolis Antik Kenti batı yakası kaçak kazı kurbanı olmuş (2020) https://youtu.be/YLU86PKOQwY?si=l8jHG5av_7taauz4</p>
   </section>
 </div>
@@ -100,6 +116,13 @@
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { infoPanel.classList.remove('open'); infoBtn.classList.remove('open'); }
+  });
+
+  const modelgifToggle  = document.getElementById('modelgif-toggle');
+  const modelgifContent = document.getElementById('modelgif-content');
+  modelgifToggle.addEventListener('click', () => {
+    modelgifToggle.classList.toggle('open');
+    modelgifContent.classList.toggle('open');
   });
 </script>
 </body>

@@ -25,11 +25,11 @@
   #main-img { width:100%; height:100%; object-fit:contain; display:block; user-select:none; -webkit-user-drag:none; }
   #overlay-svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 
-  .body-text { max-width:780px; font-size:1rem; line-height:1.8; opacity:0.8; }
+  .body-text { max-width:702px; font-size:1rem; line-height:1.8; opacity:0.8; text-align:justify; }
 
   .btn-row { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
   .btn-row a { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); border:1px solid var(--accent); padding:0.7em 1.6em; text-decoration:none; opacity:0.65; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
-  .btn-row a:hover { opacity:1; background:var(--accent); color:var(--black); }
+  .btn-row a:hover, .btn-row a.linked-hover { opacity:1; background:var(--accent); color:var(--black); }
 
   .section-split { flex-direction:row; align-items:center; justify-content:center; gap:4rem; text-align:left; }
   .clip-text { flex:1; max-width:560px; }
@@ -75,12 +75,12 @@
     <p class="body-text">This interactive panorama maps the visible and invisible manifestations of industrial violence across the Çayırhan landscape. By charting critical vectors such as rhizomatic seepage, boundary permeability, and deviated avian paths, the image exposes how a localized infrastructure expands into a regional toxic assemblage. Each layer annotated upon this landscape represents a distinct threshold of contamination, inviting further spatial decryption. Explore the highlighted operations to unravel the deep-seated ecological and material conditions of the ash lake.</p>
 
     <div class="btn-row">
-      <a href="project-2026-1-infrastructure.html">Infrastructure</a>
-      <a href="project-2026-1-soil.html">The Soil</a>
-      <a href="project-2026-1-powerplant.html">Power Plant</a>
-      <a href="project-2026-1-microclimatichange.html">Climate Change</a>
-      <a href="project-2026-1-bird.html">Bird Migration</a>
-      <a href="project-2026-1-ashlake.html">Ash Lake</a>
+      <a href="project-2026-1-powerplant.html" data-key="fabrika">Power Plant</a>
+      <a href="project-2026-1-infrastructure.html" data-key="yapi">Infrastructure</a>
+      <a href="project-2026-1-soil.html" data-key="toprak">The Soil</a>
+      <a href="project-2026-1-ashlake.html" data-key="golet">Ash Lake</a>
+      <a href="project-2026-1-microclimatichange.html" data-key="microclimate">Climate Change</a>
+      <a href="project-2026-1-bird.html" data-key="kus">Bird Migration</a>
     </div>
   </section>
 
@@ -160,9 +160,15 @@
           if (node.nodeType === 1) g.appendChild(document.importNode(node, true));
         });
 
+        const linkedBtn = document.querySelector('.btn-row a[data-key="' + cfg.id + '"]');
+
         g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
           shape.setAttribute('pointer-events', 'all');
           shape.style.cursor = 'pointer';
+          if (linkedBtn) {
+            shape.addEventListener('mouseenter', () => linkedBtn.classList.add('linked-hover'));
+            shape.addEventListener('mouseleave', () => linkedBtn.classList.remove('linked-hover'));
+          }
           if (cfg.id === 'fabrika') {
             shape.addEventListener('mouseenter', () => g.classList.add('active'));
             shape.addEventListener('mouseleave', () => g.classList.remove('active'));
@@ -213,6 +219,18 @@
 
         svgEl.appendChild(g);
       });
+  });
+
+  document.querySelectorAll('.btn-row a[data-key]').forEach(btn => {
+    const key = btn.dataset.key;
+    btn.addEventListener('mouseenter', () => {
+      const g = document.getElementById('overlay-' + key);
+      if (g) g.classList.add('active');
+    });
+    btn.addEventListener('mouseleave', () => {
+      const g = document.getElementById('overlay-' + key);
+      if (g) g.classList.remove('active');
+    });
   });
 </script>
 </body>
