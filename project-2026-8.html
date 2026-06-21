@@ -526,14 +526,6 @@
     if (e.target === imageModal) closeImageModal();
   });
 
-  const overlaySvg1 = document.getElementById('overlay-svg1');
-  const BASE_SVG1   = '2026-images/2026-p8/svg/EtkileşimliGörsel1/';
-  const BASE_IMG1   = '2026-images/2026-p8/EtkileşimliGörsel1İçGörseller/';
-
-  const overlaySvg5 = document.getElementById('overlay-svg5');
-  const BASE_SVG5   = '2026-images/2026-p8/svg/EtkileşimliGörsel5/taralı alan/';
-  const BASE_IMG5   = '2026-images/2026-p8/EtkileşimliGörsel5İçGörseller/';
-
   const panelOverlay = document.getElementById('panel-overlay');
   const panelImg     = document.getElementById('panel-img');
   const panelCaption = document.getElementById('panel-caption');
@@ -563,36 +555,6 @@
   }
   document.getElementById('text-panel-close').addEventListener('click', closeTextPanel);
   textPanelOverlay.addEventListener('click', (e) => { if (e.target === textPanelOverlay) closeTextPanel(); });
-
-  const FILES8 = [
-    { svg:'Geological Studies.svg', webp:'geologicalstudies.webp' },
-    { svg:'rehabilitation.svg', webp:'rehabilitation.webp' },
-    { svg:'loss of capacity.svg', webp:'lossofcapacity.webp' },
-    { svg:'symbol of modern life.svg', webp:'symbolofmodernlife.webp' },
-    { svg:'engineering Design.svg', webp:'engineeringdesign.webp' },
-    { svg:'social gathering.svg', webp:'socialgathering.webp' },
-    { svg:'functional loss.svg', webp:'functionalloss.webp' },
-    { svg:'technical renewal.svg', webp:'technicalrenewal.webp' },
-    { svg:'operation systems.svg', webp:'operationsystems.webp' },
-    { svg:'ımproved water quality.svg', webp:'improvedwaterquality.webp' },
-    { svg:'aging infrasturcture.svg', webp:'aginginfrastructure.webp' },
-    { svg:'New Topography.svg', webp:'newtopography.webp' },
-    { svg:'natural flow.svg', webp:'naturalflow.webp' },
-    { svg:'Abandonment.svg', webp:'abondenment.webp' },
-    { svg:'Conservation.svg', webp:'conservation.webp' }
-  ];
-
-  FILES8.forEach(cfg => {
-    fetch(encodeURI(BASE_SVG1 + cfg.svg))
-      .then(r => r.text())
-      .then(svgText => {
-        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-        const path = document.importNode(parsed.querySelector('path'), true);
-        path.setAttribute('class', 'hotspot-area');
-        path.addEventListener('click', () => openPanel(BASE_IMG1, cfg.webp));
-        overlaySvg1.appendChild(path);
-      });
-  });
 
   const hoverPopup = document.getElementById('hover-popup');
   const hoverPopupImg = document.getElementById('hover-popup-img');
@@ -799,51 +761,8 @@
       });
   });
 
-  const FILES5 = [
-    { svg:'taralı alan 1.svg', webp:'ETKİLEŞİMLİ GÖRSEL 5 İÇ GÖRSEL1.webp', caption:`This highlighted intersection marks the critical threshold where the structural hegemony of the Tekton begins to fracture, initiating the onset of Entropy. In this transitionary zone, the landscape's Resilience forces a physical rupture that allows Biodiversity to reclaim the site. As the engineered watertightness and concrete surfaces degrade, biological permeability returns. Here, Resilience performs the geological labor of breaking the spatial fix, while Biodiversity leverages these fractures to infiltrate the ruins, jumpstart pedogenesis, and begin composting the industrial remnants into a new, historically altered Arkhe.` },
-    { svg:'taralı alan 2.svg', webp:'ETKİLEŞİMLİ GÖRSEL 5 İÇ GÖRSEL2.webp', caption:`This highlighted intersection illustrates the hidden, continuous labor of the soil operating directly beneath the structural hegemony of the Tekton phase. The architectural spatial fix of the dam forces a massive, unnatural accumulation of matter, which the earth immediately begins to metabolize. The dam fundamentally alters the site's hydrology, turning the reservoir into a massive, static trap. Silt, organic runoff, and upstream debris are halted by the concrete wall. This is a forced, accelerated sedimentation dictated entirely by human engineering. Even trapped beneath the water and constrained by absolute architectural geometry, the site's bio-infrastructure does not cease to function. This is soil creation in its most suppressed state. Microorganisms and life in the reservoir actively digest this trapped sediment. While the dam projects an image of absolute permanence and mastery above the water, forced sedimentation provides relentless raw matter, and submerged pedogenesis.` },
-    { svg:'taralı alan 3.svg', webp:'ETKİLEŞİMLİ GÖRSEL 5 İÇ GÖRSEL3.webp', caption:`This highlighted intersection traces the dramatic unmasking of the site's environmental history. Spanning from the height of the Tekton phase through the absolute completion of Entropy, this zone illustrates eventual synthesis between the accumulation of human architecture and the visibility of the earth's metabolic labor. At the height of the dam's operational hegemony, Stratification is actively occurring as an architectural and social imposition as well as part of pedogenesis. The spatial fix is entirely successful at hiding the bio-infrastructure; the relentless, subterranean labor of the soil and the forced accumulation of sediment are completely masked by the tektonic structure. As the Tekton reaches its material limits and Entropy sets in, the architectural facade fractures. In this moment, Visibility starts rising up. The internal, hidden layers of the dam, the trapped soil, and the hidden pedogenesis, are violently exposed to the observer. The landscape's suppressed metabolism breaks the surface. By the end of the entropic cycle, the dam has been assimilated by the earth. The massive structural walls have been broken down and absorbed, effectively becoming just another layer within the site's ongoing Stratification. What was once a symbol of human mastery is now fully visible as a sedimentary layer of crushed concrete and thriving bio-infrastructure, ready to serve as the foundation for the next Arkhe.` },
-    { svg:'taralı alan 4.svg', webp:'ETKİLEŞİMLİ GÖRSEL 5 İÇ GÖRSEL4.webp', caption:`This highlighted section captures the fundamental metabolic rift that occurs as the landscape transitions out of the Arkhe. Rather than a symbiotic relationship, these two curves illustrate the inverse consequences of the architectural spatial fix. As the ground is sealed, the space is fractured. In the unbothered Arkhe, the natural colluvium layer is fully porous, allowing for maximum biological and hydrological exchange. However, as the timeline moves forward, this permeability experiences a forced, gradual decline. The imposition of the Tekton specifically the deep excavation and the pouring of watertight, reinforced concrete seals the earth. The open bio-infrastructure is choked, and the natural flows are restricted. Conversely, differentiation steadily rises. In its original state, the valley functioned as a relatively contiguous, unbroken ecological system. But as human intervention takes hold, it actively produces geographical inequalities. The landscape is segmented into specific, engineered zones: the submerged reservoir, the dry downstream riverbed, the sealed concrete spillways, and the promenades. As we move toward Entropy, this differentiation continues to create varying, localized micro-ecologies across the site. Together, these diverging curves map the exact cost of modernization. The dam destroys the landscape's ability to breathe as a unified whole and replaces it with a highly fragmented, artificially categorized, and unevenly developed terrain.` }
-  ];
-
-  FILES5.forEach(cfg => {
-    fetch(encodeURI(BASE_SVG5 + cfg.svg))
-      .then(r => r.text())
-      .then(svgText => {
-        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-        const path = document.importNode(parsed.querySelector('path'), true);
-        path.setAttribute('class', 'hotspot-solo');
-        path.addEventListener('click', () => openPanel(BASE_IMG5, cfg.webp, cfg.caption));
-        overlaySvg5.insertBefore(path, overlaySvg5.querySelector('.hotspot-line'));
-      });
-  });
-
   // Preload every panel/modal image so it's already cached before a hotspot is clicked.
-  [
-    ...hotspotModalData.map(d => d.img),
-    ...FILES8.map(cfg => encodeURI(BASE_IMG1 + cfg.webp)),
-    ...FILES5.map(cfg => encodeURI(BASE_IMG5 + cfg.webp))
-  ].forEach(src => { new Image().src = src; });
-
-  const TEXTS5 = {
-    biodiversity: { title:'Biodiversity', text:`Rather than a mere metric of species count, this represents the dense, interdependent network of non-human actors within the soil's bio-infrastructure. It is the living baseline of the Arkhe, measuring the ecocentric health of the site before, during, and after tectonic interventions.` },
-    visibility: { title:'Visibility', text:`This parameter tracks the recognition of the soil's active metabolic labor. Visibility is at its absolute lowest during the Tekton phase; the hyper-engineered infrastructure paves over the ground, rendering the vital, regenerative labor of the soil and non-human actors entirely invisible. As the site shifts toward Entropy, this metabolic labor breaks the surface and becomes visible once again.` },
-    criticalzone: { title:'Critical Zone', text:`The active, liminal envelope of the Earth from the vegetation canopy down to the deep bedrock. Fundamentally, it is the biosphere; the myriad forms of life on, in, and within the soil actively comprise the critical zone itself. Simply put: where there is life intimately tied to the soil, there is the critical zone. It represents the primary spatial arena where the friction between environmental homeostasis and tectonic engineering takes place.` },
-    permeability: { title:'Permeability', text:`The physical and systemic capacity of the landscape to allow the flow of water and matter, but more crucially, the permeability of life itself. It measures the ability of organic actors, roots, and microorganisms to move, exchange, and metabolize within the soil. The Tekton phase severely restricts this biological permeability, forcing a metabolic rift that the soil's living network eventually seeks to break through during Entropy.` },
-    habitability: { title:'Habitability', text:`An ecocentric, rather than strictly human-centric, condition. It defines the capacity of the ground to sustain its complex, interspecies relations against the socio-spatial pressures that seek to fragment, segment, or enclose the environment. It tracks how effectively the bio-infrastructure can maintain a livable, supportive network for non-human actors when subjected to the unequal burdens and extraction of intensive modernization.` },
-    pedogenesis: { title:'Pedogenesis', text:`The active, continuous history of soil formation, proving that soil is a continuously produced material reality rather than a static backdrop. This includes urban pedogenesis a process of soil transformation that actively takes place even under the heavy constraints of the Tekton phase. This heavily engineered, modified urban soil then becomes the literal and metabolic basis for the regenerative construction of new earth in the subsequent Entropy phase.` },
-    symbiosis: { title:'Symbiosis', text:`The mutual, asynchronous coexistence of multiple environmental and spatial cycles. Rather than a static state of harmony, this curve focuses on the adaptive capacity of the site, the ongoing ability of human and non-human actors to improve their ways of living symbiotically, continually adjusting and finding new ecological balances even as the broader environment, hydrology, and soil composition undergo relentless changes.` },
-    regeneration: { title:'Regeneration', text:`The generative, metabolic labor of Entropy. This is the process by which the soil actively composts the physical ruins and obsolete structures of the engineered landscape. By digesting the remnants of human mastery, turning concrete, steel, and accumulated waste into a foundational substrate, regeneration performs the crucial labor required to establish a new, historically altered Arkhe.` },
-    resilience: { title:'Resilience', text:`The landscape's inherent capacity to absorb the violent shocks of deep excavation, material extraction, and structural imposition. However, it is not merely passive endurance; resilience is nature's active capacity to keep fighting back against the Tekton. It is the relentless push of biological and geological forces that ultimately breaks the human construct, forcing the site to construct a new ecological equilibrium.` },
-    sedimentation: { title:'Sedimentation', text:`This operates on two distinct, intersecting levels. Conceptually, within our methodology, it is the accumulation of historical time and social settings. Materially, it is the literal accumulation of matter, silt, runoff, organic debris, and industrial remnants, building up at the bottom of the dam's water reservoir. This physical buildup eventually chokes the tectonic infrastructure while directly contributing fresh, dynamic material to the site's ongoing soil metabolism.` },
-    stratification: { title:'Stratification', text:`The vertical dimension of the site's transformation, focusing on the material layering of social and spatial phenomena over time. It acts as the accumulation of "bricks" in our environmental metabolic historiography. As the Arkhe, Tekton, and Entropy phases chain together, their helical progression forms the metaphorical cylinder of the site, where this dense stratification continuously accumulates and physically records the site's history.` },
-    differentiation: { title:'Differentiation', text:`The spatial and material variations that emerge across the landscape as the intensities of the other parameters intersect and diverge. It highlights how human intervention actively produces highly specific geographic inequalities. It proves that the site is never a homogenous block, but a deeply fragmented bio-infrastructure shaped by distinct socio-spatial modifications.` }
-  };
-
-  Object.keys(TEXTS5).forEach(key => {
-    const line = document.getElementById('line-' + key);
-    if (line) line.addEventListener('click', () => openTextPanel(TEXTS5[key].title, TEXTS5[key].text));
-  });
+  hotspotModalData.map(d => d.img).forEach(src => { new Image().src = src; });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
