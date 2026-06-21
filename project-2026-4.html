@@ -46,7 +46,10 @@
   .body img { max-width:100%; margin:2.5rem 0; opacity:1; filter:brightness(1) contrast(1); }
   .triangle-up { display:flex; justify-content:center; margin:1rem 0; }
   .triangle-up a { display:block; line-height:0; position:relative; }
-  .triangle-up svg { width:15px; height:15px; display:block; transition:opacity 0.2s; }
+  .triangle-up svg { width:15px; height:15px; display:block; transition:opacity 0.2s; animation:trianglePulse 2.6s ease-in-out infinite; transform-origin:center; }
+  .triangle-up svg polygon { animation:triangleColorRing 12s linear infinite; }
+  @keyframes trianglePulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
+  @keyframes triangleColorRing { 0% { fill:#8e44ad; } 33% { fill:#ff8c1a; } 66% { fill:#ffffff; } 100% { fill:#8e44ad; } }
   .triangle-up a:hover svg { opacity:0.6; }
   .triangle-up a[data-tooltip]::after { content:attr(data-tooltip); position:absolute; bottom:140%; left:50%; transform:translateX(-50%); background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; }
   .triangle-up a[data-tooltip]:hover::after { opacity:1; }
