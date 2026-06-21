@@ -14,7 +14,6 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
   .info-btn:hover { opacity:1; }
   .info-btn.open { opacity:1; }
@@ -30,7 +29,7 @@
   .accordion-content.open { max-height:20rem; }
   .nav-title { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; opacity:0.6; }
 
-  .wrap { max-width:1400px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .wrap { max-width:800px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
@@ -49,6 +48,14 @@
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
+  .photo-carousel { position:relative; max-width:600px; margin:0 auto 2.5rem; }
+  .photo-carousel-viewport { overflow:hidden; }
+  .photo-carousel-track { display:flex; gap:0.6rem; }
+  .photo-carousel-track img { flex:0 0 auto; height:auto; object-fit:cover; display:block; margin:0; opacity:0.95; cursor:pointer; }
+  .carousel-arrow { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%; background:rgba(10,10,10,0.6); border:1px solid rgba(245,242,235,0.4); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.85; transition:opacity 0.2s,background 0.2s; font-size:1.2rem; font-family:var(--font); z-index:10; }
+  .carousel-arrow:hover { opacity:1; background:rgba(10,10,10,0.8); }
+  .carousel-arrow.prev { left:0.5rem; }
+  .carousel-arrow.next { right:0.5rem; }
   .lightbox-trigger { cursor:pointer; }
   .lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.9); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
   .lightbox.active { display:flex; }
@@ -64,7 +71,6 @@
     <button class="info-btn" id="info-toggle">Project Info</button>
   </div>
   <span class="nav-title">Sections</span>
-  <span class="nav-tag">Field Report</span>
 </nav>
 
 <div id="info-panel">
@@ -97,13 +103,17 @@
   <div class="body">
     <section class="sections-grid">
       <div class="section-col">
-        <img src="2026-images/2026-p4/webp/3.sections/3.5.6002.street section 2/section5_6002_section-2_2007-2023.webp" alt="6002 Street section 2, 2007-2023" class="lightbox-trigger">
+        <img src="2026-images/2026-p4/webp/3.sections/3.5.6002.street section 2/section5_6002_section-2_2007-2023_color_inverted.webp" alt="6002 Street section 2, 2007-2023" class="lightbox-trigger">
         <p>This section is directly connected to the 6th one, because they examine the same area from different perspectives. This subjected road is the source of inspiration of this study as it demonstrates such qualities as vegetation, level-based complexity, retaining walls and adjacency to water infrastructure, which are given specific attention. How the pile foundation relates with the underneath soil formation and the soil spread around the road's infrastructure is worth examining. The road here consists of several levels and entangled routes from Beysukent to Bilkent. Diversity of the routes is significant because the levels create hollows for vegetation. The soil in concern is the subject of excavation of the hospital site, yet there are traces of the reeds and more.</p>
-        <img src="2026-images/2026-p4/webp/3.sections/3.5.6002.street section 2/webp - Photo Section 5-1.webp" alt="6002 Street section 2 photo 1">
-        <img src="2026-images/2026-p4/webp/3.sections/3.5.6002.street section 2/webp - Photo Section 5-2.webp" alt="6002 Street section 2 photo 2">
-        <img src="2026-images/2026-p4/webp/3.sections/3.5.6002.street section 2/webp - Photo Section 5-3.webp" alt="6002 Street section 2 photo 3">
       </div>
     </section>
+    <div class="photo-carousel">
+      <div class="photo-carousel-viewport">
+        <div class="photo-carousel-track" id="photoTrack"></div>
+      </div>
+      <button class="carousel-arrow prev" id="carPrev" aria-label="Previous">‹</button>
+      <button class="carousel-arrow next" id="carNext" aria-label="Next">›</button>
+    </div>
   </div>
   <dl class="meta">
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
@@ -126,7 +136,7 @@
       document.getElementById(btn.dataset.target).classList.toggle('open');
     });
   });
-  document.querySelectorAll('.lightbox-trigger').forEach(function(img){
+  document.querySelectorAll('.section-col .lightbox-trigger').forEach(function(img){
     img.addEventListener('click', function(){
       var lbImg = document.getElementById('lightboxImg');
       lbImg.src = this.src;
@@ -140,6 +150,75 @@
   document.getElementById('lightbox').addEventListener('click', function(e){
     if (e.target === this) this.classList.remove('active');
   });
+
+  (function () {
+    var photoList = [];
+    for (var i = 1; i <= 3; i++) {
+      photoList.push('2026-images/2026-p4/webp/3.sections/3.5.6002.street section 2/webp - Photo Section 5-' + i + '.webp');
+    }
+    var visibleCount = 3;
+    var gap = 9.6;
+    var startIndex = 0;
+    var track = document.getElementById('photoTrack');
+    var viewport = track.parentElement;
+
+    function slotWidth() {
+      return (viewport.clientWidth - gap * (visibleCount - 1)) / visibleCount;
+    }
+
+    function renderTrack() {
+      track.innerHTML = '';
+      var w = slotWidth();
+      for (var i = 0; i < visibleCount + 1; i++) {
+        var idx = (startIndex + i) % photoList.length;
+        var img = document.createElement('img');
+        img.src = photoList[idx];
+        img.alt = '6002 Street section 2 photo ' + (idx + 1);
+        img.className = 'lightbox-trigger';
+        img.style.width = w + 'px';
+        track.appendChild(img);
+      }
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0)';
+    }
+
+    function goNext() {
+      var w = slotWidth() + gap;
+      track.style.transition = 'transform 0.4s ease';
+      track.style.transform = 'translateX(-' + w + 'px)';
+      track.addEventListener('transitionend', function handler() {
+        track.removeEventListener('transitionend', handler);
+        startIndex = (startIndex + 1) % photoList.length;
+        renderTrack();
+      });
+    }
+
+    function goPrev() {
+      startIndex = (startIndex - 1 + photoList.length) % photoList.length;
+      renderTrack();
+      var w = slotWidth() + gap;
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(-' + w + 'px)';
+      requestAnimationFrame(function () {
+        track.style.transition = 'transform 0.4s ease';
+        track.style.transform = 'translateX(0)';
+      });
+    }
+
+    renderTrack();
+    document.getElementById('carNext').addEventListener('click', goNext);
+    document.getElementById('carPrev').addEventListener('click', goPrev);
+    window.addEventListener('resize', renderTrack);
+
+    viewport.addEventListener('click', function (e) {
+      if (e.target.classList.contains('lightbox-trigger')) {
+        var lbImg = document.getElementById('lightboxImg');
+        lbImg.src = e.target.src;
+        lbImg.alt = e.target.alt;
+        document.getElementById('lightbox').classList.add('active');
+      }
+    });
+  })();
 </script>
 </body>
 </html>
