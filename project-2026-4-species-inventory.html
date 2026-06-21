@@ -14,7 +14,7 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-title { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; opacity:0.6; }
   .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
   .info-btn:hover { opacity:1; }
   .info-btn.open { opacity:1; }
@@ -29,7 +29,7 @@
   .accordion-content { list-style:none; padding-left:1.2rem; max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
   .accordion-content.open { max-height:20rem; }
 
-  .wrap { max-width:1400px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .wrap { max-width:1400px; margin:0 auto; padding:5.75rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
@@ -40,15 +40,20 @@
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:1; }
-  .species-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:0 0 2.5rem; align-items:start; }
-  .species-grid img { width:100%; display:block; margin:0; opacity:1; }
-  @media (max-width:900px) {
-    .species-grid { grid-template-columns:1fr; }
-  }
+  .species-grid { margin:0 0 2.5rem; }
+  .species-grid img { width:72%; display:block; margin:0 auto; opacity:1; }
+  .species-video { width:30%; display:block; margin:0 auto; opacity:1; }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
+  .lightbox-trigger { cursor:pointer; }
+  .lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.9); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
+  .lightbox.active { display:flex; }
+  .lightbox img, .lightbox video { max-width:100%; max-height:100%; object-fit:contain; display:none; }
+  .lightbox img.active, .lightbox video.active { display:block; }
+  .lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:#f5f2eb; font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); z-index:1001; }
+  .lightbox-close:hover { opacity:0.7; }
 </style>
 </head>
 <body>
@@ -57,7 +62,7 @@
     <a href="2026.html" class="nav-back">← 2026</a>
     <button class="info-btn" id="info-toggle">Project Info</button>
   </div>
-  <span class="nav-tag">Field Report</span>
+  <span class="nav-title">_4.1.species inventory</span>
 </nav>
 
 <div id="info-panel">
@@ -88,13 +93,11 @@
 </div>
 <div class="wrap">
   <div class="body">
-    <h2 style="margin:0 0 1rem;">Species Inventory</h2>
     <section class="species-grid">
-      <img src="2026-images/2026-p4/webp/4.1.species inventory/4.1.1.species inventory photographs.png" alt="Species inventory photographs">
-      <img src="2026-images/2026-p4/webp/4.1.species inventory/01_species.webp" alt="01 Species">
+      <img class="lightbox-trigger" src="2026-images/2026-p4/webp/4.1.species inventory/4.1.1.species inventory photographs.webp" alt="Species inventory photographs">
     </section>
     <section>
-      <video autoplay loop muted playsinline style="width:100%; display:block; margin:0; opacity:1;">
+      <video class="species-video lightbox-trigger" autoplay loop muted playsinline>
         <source src="2026-images/2026-p4/gif/species-water-photographs.mp4" type="video/mp4">
       </video>
     </section>
@@ -102,6 +105,11 @@
   <dl class="meta">
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
+</div>
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">×</button>
+  <img id="lightboxImg" src="" alt="">
+  <video id="lightboxVideo" autoplay loop muted playsinline controls></video>
 </div>
 <script>
   const infoBtn = document.getElementById('info-toggle');
@@ -115,6 +123,45 @@
     btn.addEventListener('click', () => {
       document.getElementById(btn.dataset.target).classList.toggle('open');
     });
+  });
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxVideo = document.getElementById('lightboxVideo');
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    lightboxImg.classList.remove('active');
+    lightboxVideo.pause();
+    lightboxVideo.classList.remove('active');
+  }
+
+  document.querySelectorAll('.lightbox-trigger').forEach((el) => {
+    el.addEventListener('click', () => {
+      if (el.tagName === 'IMG') {
+        lightboxVideo.pause();
+        lightboxVideo.classList.remove('active');
+        lightboxImg.src = el.src;
+        lightboxImg.alt = el.alt;
+        lightboxImg.classList.add('active');
+      } else {
+        lightboxImg.classList.remove('active');
+        lightboxVideo.querySelectorAll('source').forEach((s) => s.remove());
+        const source = document.createElement('source');
+        source.src = el.querySelector('source').src;
+        source.type = 'video/mp4';
+        lightboxVideo.appendChild(source);
+        lightboxVideo.load();
+        lightboxVideo.play();
+        lightboxVideo.classList.add('active');
+      }
+      lightbox.classList.add('active');
+    });
+  });
+
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
   });
 </script>
 </body>
