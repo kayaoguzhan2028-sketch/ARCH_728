@@ -49,6 +49,14 @@
   .hover-popup img { width:100%; display:block; border:1px solid var(--border); background:var(--black); }
   .line-tooltip { position:fixed; z-index:500; pointer-events:none; opacity:0; transition:opacity 0.15s ease; max-width:280px; font-size:0.85rem; line-height:1.5; background:rgba(10,10,10,0.92); border:1px solid var(--border); padding:0.6rem 0.8rem; color:var(--white); }
   .line-tooltip.visible { opacity:1; }
+  .rich-modal { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.85); display:flex; align-items:center; justify-content:center; padding:3rem 1.5rem; opacity:0; visibility:hidden; transition:opacity 0.25s ease,visibility 0.25s ease; }
+  .rich-modal.active { opacity:1; visibility:visible; }
+  .rich-modal-frame { position:relative; width:100%; max-width:620px; max-height:90vh; overflow-y:auto; background:var(--black); border:1px solid var(--border); padding:3rem 2rem 2rem; }
+  .rich-modal-frame h2 { font-size:1.4rem; font-weight:400; letter-spacing:0.04em; margin-bottom:1.2rem; }
+  .rich-modal-frame img, .rich-modal-frame video { width:100%; display:block; opacity:0.92; }
+  .rich-modal-frame p { font-size:1.05rem; line-height:1.9; opacity:0.82; text-align:justify; }
+  .rich-modal-close { position:absolute; top:0.8rem; right:0.8rem; width:36px; height:36px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.7; transition:opacity 0.2s,background 0.2s; }
+  .rich-modal-close:hover { opacity:1; background:rgba(245,242,235,0.14); }
   .media-row { display:flex; gap:2rem; align-items:center; margin:3rem 0; }
   .media-row > img { flex:0 0 45%; width:45%; display:block; margin:0; opacity:0.9; }
   .media-row .media-text { flex:1; min-width:0; }
@@ -238,7 +246,7 @@
 
     <div class="section section-zoom">
       <div class="interactive-image">
-        <img src="2026-images/2026-p8/3/_main.webp" alt="">
+        <img src="2026-images/2026-p8/3/main.webp" alt="">
         <svg class="hotspot-overlay" id="overlay-svg4" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     </div>
@@ -300,12 +308,12 @@
 
     <div class="section section-zoom">
       <div class="interactive-image">
-        <img src="2026-images/2026-p8/5/_main.webp" alt="">
+        <img src="2026-images/2026-p8/5/main.webp" alt="">
         <svg class="hotspot-overlay" id="overlay-svg9" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     </div>
 
-    <div class="section section-stack" style="margin-top:5vh;">
+    <div class="section section-stack" style="margin-top:10vh;">
       <div class="interactive-image">
         <img src="2026-images/2026-p8/6/1.webp" alt="">
         <svg class="hotspot-overlay" id="overlay-svg10a" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -314,6 +322,32 @@
         <img src="2026-images/2026-p8/6/2.webp" alt="">
         <svg class="hotspot-overlay" id="overlay-svg10b" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
+    </div>
+
+    <div class="section">
+      <div style="display:flex; flex-direction:column; align-items:center; width:fit-content; max-width:100%; margin:0 auto;">
+        <p style="font-size:1.5rem; margin:0 0 1rem 0;">Site Evolution Through Time</p>
+        <video autoplay loop muted playsinline style="max-height:calc(100vh - 52px - 6rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0;">
+          <source src="2026-images/2026-p8/7/group8_gif4.mp4" type="video/mp4">
+        </video>
+        <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Google Earth Pro historical imagery, accessed June 2026. Compilation and animation by authors.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <p style="text-align:justify; margin-bottom:1rem;">This macro-spatial timelapse captures the <strong>helical metabolism</strong> of the Çubuk Valley, visualizing the landscape's continuous transformation from an open ecological network into an engineered fix. It begins with the unconstrained Arkhe, representing a state of pure biological homeostasis. In this phase, the natural valley topography dictates high biological permeability and uninterrupted hydrological flow, allowing the <strong>bio-infrastructure of the soil to breathe and metabolize without constraint</strong>.</p>
+      <p style="text-align:justify; margin-bottom:1rem;">The aggressive onset of the Tekton phase overrides this baseline. Driven by state investment and the modernization ideal, the dam infrastructure and creeping urbanization enclose the site. This tectonic expansion actively <strong>destroys environmental homeostasis</strong>, spiking <strong>spatial differentiation</strong> and restricting the permeability of the critical zone. This in turn forces the active pedogenesis of the soil either underground or submerges it underwater, masking the biological labor required to sustain the natural environment.</p>
+      <p style="text-align:justify;">However, as the timeline progresses toward environmental degradation and functional loss, the imagery reveals the slow, relentless transition into Entropy. <strong>This phase fundamentally rejects any narrative of human exceptionalism in environmental design</strong>. The expanding footprint of sedimentation within the reservoir and the visible pushback of the ecosystem at the edges highlight the <strong>site's inherent resilience</strong>. On a macroscopic scale, the constructed environment is continually being digested; the rigid cells of the urban and infrastructural grid are broken down, proving that <strong>human mastery is ultimately composted back into the earth to synthesize the next cycle of life</strong>.</p>
+    </div>
+
+    <div class="section">
+      <div class="interactive-image">
+        <img src="2026-images/2026-p8/8/main.webp" alt="">
+        <svg class="hotspot-overlay" id="overlay-svg13" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+
+    <div class="section">
     </div>
 
     <div class="section section-zoom">
@@ -507,6 +541,14 @@
 </div>
 <div class="hover-popup" id="hover-popup"><img id="hover-popup-img" src="" alt=""></div>
 <div class="line-tooltip" id="line-tooltip"></div>
+<div class="rich-modal" id="rich-modal">
+  <div class="rich-modal-frame">
+    <button class="rich-modal-close" id="rich-modal-close" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+    </button>
+    <div id="rich-modal-content"></div>
+  </div>
+</div>
 <script>
   const slider2Images = [
     '2026-images/2026-p8/Görsel7.webp',
@@ -824,6 +866,68 @@
   }
   loadCemberOverlay(overlaySvg10a, '1');
   loadCemberOverlay(overlaySvg10b, '2');
+
+  const richModal = document.getElementById('rich-modal');
+  const richModalContent = document.getElementById('rich-modal-content');
+  function openRichModal(html) {
+    richModalContent.innerHTML = html;
+    richModal.classList.add('active');
+  }
+  function closeRichModal() {
+    richModal.classList.remove('active');
+  }
+  document.getElementById('rich-modal-close').addEventListener('click', closeRichModal);
+  richModal.addEventListener('click', (e) => { if (e.target === richModal) closeRichModal(); });
+
+  const SU_MODAL_HTML = `
+    <h2>Waterline Metabolism</h2>
+    <img src="2026-images/2026-p8/8/su/SUKÜTLESİSON.webp" alt="" style="margin-bottom:1.5rem;">
+    <p style="margin-bottom:1.5rem;">The waterline of the reservoir functions as a <strong>dynamic metabolic boundary rather than a static edge</strong>. Driven by the environmental reality of seasonal and annual precipitation, its continuous expansion and regression visually map the <strong>ongoing friction between the cycles</strong>.</p>
+    <p style="margin-bottom:1.5rem;">When precipitation is high, the expanding waterline asserts the structural hegemony of the dam, submerging the critical zone, enforcing the tectonic order, and temporarily halting surface-level waterline biology. However, as the water regresses during seasonal cycles, it exposes the inherent vulnerability of the site. This regression unveils the <strong>heavy accumulation of sediment along the banks</strong>. More crucially, it temporarily releases the site into localized Entropy. In these exposed, liminal margins, the suppressed <strong>bio-infrastructure briefly reclaims the soil</strong> before the tectonic cycle inevitably submerges them once again.</p>
+    <img src="2026-images/2026-p8/8/su/2. çubuk.webp" alt="" style="margin-bottom:0;">
+    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; margin-bottom:1.5rem; text-align:right;">Historical and contemporary views of Çubuk-1 Dam Recreation Area. Collage prepared by the authors using and adapting visual materials from Anka Haber (https://ankahaber.net/haber/cubuk1_baraji_rekreasyon_alani_yillar_sonra_yeniden_civil_civil_20652) and SALT Research Archive (https://archives.saltresearch.org/handle/123456789/113037).</p>
+    <p style="margin-bottom:1.5rem;">The fluid and expansive water form has been reshaped into a narrow, linear channel. The central island has been removed, turning the water surface into a single, directed form. The shoreline has also been sharpened and more clearly bounded.</p>
+    <video autoplay loop muted playsinline>
+      <source src="2026-images/2026-p8/8/su/group8_gif3.mp4" type="video/mp4">
+    </video>
+  `;
+
+  const BETON_MODAL_HTML = `
+    <h2>Built Environment Metabolism</h2>
+    <img src="2026-images/2026-p8/8/beton/Diorama2.png" alt="" style="margin-bottom:0;">
+    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; margin-bottom:1.5rem; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
+    <img src="2026-images/2026-p8/8/beton/gif1.gif" alt="" style="margin-bottom:0;">
+    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right;">Source: Animation prepared by the authors using images from Kültür Envanteri (https://kulturenvanteri.com/en/yer/cubuk-1-baraji/) and Wikimedia Commons (Modern primat, 2022, CC BY-SA 4.0, https://tr.wikipedia.org/wiki/Çubuk-1_Barajı#/media/Dosya:Çubuk-1_Barajı.jpg)</p>
+  `;
+
+  const TOPRAK_MODAL_HTML = `
+    <h2>Soil Metabolism</h2>
+    <img src="2026-images/2026-p8/8/toprak/diorama.png" alt="" style="margin-bottom:0;">
+    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; margin-bottom:1.5rem; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
+    <img src="2026-images/2026-p8/8/toprak/1.webp" alt="" style="margin-bottom:0;">
+    <img src="2026-images/2026-p8/8/toprak/2.webp" alt="" style="margin-bottom:0;">
+    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
+  `;
+
+  const overlaySvg13 = document.getElementById('overlay-svg13');
+  const BASE_SVG13 = '2026-images/2026-p8/8/svg/';
+  const FILES13 = [
+    { svg:'BETON-KIRMIZI RENK.svg', html:BETON_MODAL_HTML },
+    { svg:'SU-KIRMIZI RENK.svg', html:SU_MODAL_HTML },
+    { svg:'TOPRAK-KIRMIZIRENK.svg', html:TOPRAK_MODAL_HTML }
+  ];
+
+  FILES13.forEach(cfg => {
+    fetch(encodeURI(BASE_SVG13 + cfg.svg))
+      .then(r => r.text())
+      .then(svgText => {
+        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const path = document.importNode(parsed.querySelector('path'), true);
+        path.setAttribute('class', 'hotspot-area');
+        if (cfg.html) path.addEventListener('click', () => openRichModal(cfg.html));
+        overlaySvg13.appendChild(path);
+      });
+  });
 
   const FILES5 = [
     { svg:'taralı alan 1.svg', webp:'ETKİLEŞİMLİ GÖRSEL 5 İÇ GÖRSEL1.webp', caption:`This highlighted intersection marks the critical threshold where the structural hegemony of the Tekton begins to fracture, initiating the onset of Entropy. In this transitionary zone, the landscape's Resilience forces a physical rupture that allows Biodiversity to reclaim the site. As the engineered watertightness and concrete surfaces degrade, biological permeability returns. Here, Resilience performs the geological labor of breaking the spatial fix, while Biodiversity leverages these fractures to infiltrate the ruins, jumpstart pedogenesis, and begin composting the industrial remnants into a new, historically altered Arkhe.` },
