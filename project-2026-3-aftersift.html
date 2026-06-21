@@ -33,9 +33,6 @@
   .page-link-btn:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
 
   .section { position:relative; scroll-margin-top:52px; min-height:calc(100vh - 52px); height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
-  .hero-overlay { position:absolute; top:0; left:0; right:0; z-index:20; padding:1.2rem 2rem 0; }
-  .hero-overlay .caption-block { margin-top:3.96rem; }
-  .img-row.shift-down { margin-top:15.84rem; }
   .img-row { display:flex; align-items:center; justify-content:space-between; }
   .img-row > img { flex:0 0 auto; height:auto; display:block; max-width:calc(100% - 120px); }
   .img-row > img.img-common { width:var(--img-w); }
@@ -90,13 +87,14 @@
   <div class="body">
 
     <div class="section" id="section-1">
-      <div class="hero-overlay">
-        <div class="caption-block">
-          <p>Ecological crises are often reduced to objective "matters of fact" that propose green technocapitalism as the sole remedy. "Sifting Ankara Soil" reclaims these crises as "matters of concern," synthesizing scientific data with sensible experience.</p>
-          <p>This brings us to the our transition from analysis to intervention. Sifting is an awakening that repurposes the traditional urban grid into a diagnostic sensor. Cracked foundations and wavy asphalt are no longer accidental flaws, but tangible proof of ignored geological reality. We begin to treat design as an active form of repair, paving the way for our speculative solutions in the following scenes.</p>
-        </div>
+      <div class="caption-block">
+        <p>Ecological crises are often reduced to objective "matters of fact" that propose green technocapitalism as the sole remedy. "Sifting Ankara Soil" reclaims these crises as "matters of concern," synthesizing scientific data with sensible experience.</p>
+        <p>This brings us to the our transition from analysis to intervention. Sifting is an awakening that repurposes the traditional urban grid into a diagnostic sensor. Cracked foundations and wavy asphalt are no longer accidental flaws, but tangible proof of ignored geological reality. We begin to treat design as an active form of repair, paving the way for our speculative solutions in the following scenes.</p>
       </div>
-      <div class="img-row shift-down">
+    </div>
+
+    <div class="section" id="section-2">
+      <div class="img-row">
         <button class="img-arrow" id="as1-prev" aria-label="Previous" data-tooltip="Click Back To Sifting What?">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
@@ -107,7 +105,7 @@
       </div>
     </div>
 
-    <div class="section" id="section-2">
+    <div class="section" id="section-3">
       <div class="img-row">
         <button class="img-arrow" id="as2-prev" aria-label="Previous" data-tooltip="Click Back To Sifting What?">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -119,7 +117,7 @@
       </div>
     </div>
 
-    <div class="section" id="section-3">
+    <div class="section" id="section-4">
       <div class="img-row">
         <button class="img-arrow" id="as3-prev" aria-label="Previous" data-tooltip="Click Back To Sifting What?">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -170,11 +168,11 @@
   document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
   document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
 
-  document.getElementById('as1-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-siftingwhatdetectingerrors.html#section-1'; });
+  document.getElementById('as1-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-siftingwhatdetectingerrors.html#section-2'; });
   document.getElementById('as1-next').addEventListener('click', () => { window.location.href = 'project-2026-3-sceneexplanations.html#section-1'; });
-  document.getElementById('as2-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-siftingwhatdetectingerrors.html#section-2'; });
+  document.getElementById('as2-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-siftingwhatdetectingerrors.html#section-3'; });
   document.getElementById('as2-next').addEventListener('click', () => { window.location.href = 'project-2026-3-sceneexplanations.html#section-2'; });
-  document.getElementById('as3-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-siftingwhatdetectingerrors.html#section-3'; });
+  document.getElementById('as3-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-siftingwhatdetectingerrors.html#section-4'; });
   document.getElementById('as3-next').addEventListener('click', () => { window.location.href = 'project-2026-3-sceneexplanations.html#section-3'; });
 
   document.addEventListener('keydown', (e) => {

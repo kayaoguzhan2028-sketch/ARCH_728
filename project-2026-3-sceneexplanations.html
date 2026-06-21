@@ -29,6 +29,7 @@
   .section { scroll-margin-top:52px; min-height:calc(100vh - 52px); height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
   .section.section-auto { height:auto; overflow:visible; padding:4rem 0; }
   .caption-block { max-width:900px; margin:0 auto; font-size:1.1rem; line-height:1.7; opacity:0.82; }
+  .section-auto .caption-block { max-width:calc(100% - 120px); }
   .caption-block h2 { font-size:1rem; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 0.8rem; }
   .caption-block p { margin-bottom:1rem; }
   .caption-block p:last-child { margin-bottom:0; }
@@ -39,7 +40,9 @@
   .img-row > img.img-common { width:var(--img-w); }
   .img-row > img.img-portrait { width:auto; height:calc((100vh - 52px - 4rem) * 0.9); max-width:none; }
   .img-text-pair { display:flex; flex-direction:row-reverse; align-items:center; justify-content:center; gap:3rem; flex:1 1 auto; min-width:0; max-width:calc(100% - 120px); }
-  .img-text-pair img { flex:0 1 480px; width:480px; max-width:45%; height:auto; display:block; }
+  .inspo-img-col { flex:0 1 480px; width:480px; max-width:45%; display:flex; flex-direction:column; gap:0.6rem; }
+  .inspo-img-col img { width:100%; height:auto; display:block; }
+  .inspo-caption { font-size:0.66rem; line-height:1.55; letter-spacing:0.02em; opacity:0.38; }
   .img-text-pair .text-col { flex:1 1 380px; min-width:0; max-width:460px; font-size:1.1rem; line-height:1.7; opacity:0.82; }
   .img-text-pair .text-col h2 { font-size:1rem; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 0.8rem; }
   .img-text-pair .text-col p { margin-bottom:1rem; }
@@ -65,7 +68,7 @@
     .img-row > img { max-width:calc(100% - 100px); }
     .placeholder-box { max-width:calc(100% - 100px); }
     .img-text-pair { flex-direction:column; gap:1.5rem; max-width:calc(100% - 100px); }
-    .img-text-pair img { width:100%; max-width:320px; }
+    .inspo-img-col { width:100%; max-width:320px; }
   }
 
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
@@ -102,7 +105,16 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div class="img-text-pair">
-          <img src="2026-images/2026-p3/6 scene explanations page-6/inspo-1.webp" alt="Scene Explanations 1">
+          <div class="inspo-img-col">
+            <img src="2026-images/2026-p3/6 scene explanations page-6/inspo-1.webp" alt="Scene Explanations 1">
+            <div class="inspo-caption">
+              <strong>Trash Peaks</strong><br>
+              Seoul Biennale, 2017<br>
+              Project Team:<br>
+              El Hadi Jazairy + Rania Ghosn<br>
+              Reid Fellenbaum, Victor Lee, Monica Britt Hutton, Beth Savrann
+            </div>
+          </div>
           <div class="text-col">
             <h2>The Monument Scene</h2>
             <p>In this specific scene, the transition from the analytical "sifter" phase to the speculative "after-sift" condition vividly demonstrates the application of our diagnostic framework. Initially, the gridded hillside reveals a substrate overwhelmed by uncared-for externalities: scattered refuse, toxic leaks, and construction debris, all crowned by an abandoned concrete monument that symbolizes the failures of geographic abstraction. Through the sifting process, these detected "errors" are reclaimed as matters of concern. Drawing directly from Design Earth's Trash Peaks, the passive concrete structure at the summit is replaced by an active, speculative architectural apparatus—a new monument dedicated to collecting, processing, and metabolizing the landscape's historical waste. Purged of its unmanaged toxicities, the slope is radically remediated into a hybridized ecosystem where the technosphere and the biosphere deeply entangle. In the spirit of Latour's "Living with Frankenstein," machines are not expelled but are integrated to actively care for the environment; autonomous agricultural drones nurture the terrain alongside thriving, non-human inhabitants. Ultimately, this after-sift scene transcends the dichotomy of nature versus machine, evolving into a resilient agricultural landscape that allows the inherent metabolism of the soil to function, breathe, and flourish within a newly constructed ecology of care.</p>
@@ -120,7 +132,16 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div class="img-text-pair">
-          <img src="2026-images/2026-p3/6 scene explanations page-6/inspo-2.webp" alt="Scene Explanations 2">
+          <div class="inspo-img-col">
+            <img src="2026-images/2026-p3/6 scene explanations page-6/inspo-2.webp" alt="Scene Explanations 2">
+            <div class="inspo-caption">
+              <strong>Trash Peaks</strong><br>
+              Seoul Biennale, 2017<br>
+              Project Team:<br>
+              El Hadi Jazairy + Rania Ghosn<br>
+              Reid Fellenbaum, Victor Lee, Monica Britt Hutton, Beth Savrann
+            </div>
+          </div>
           <div class="text-col">
             <h2>The Dump Scene</h2>
             <p>Confronting an alienated, hostile terrain initially devoid of human presence, the diagnostic sifting apparatus deploys a highly complex grid to identify monumental industrial detritus—such as impenetrable tangles of wire, machine fragments, and concrete rubble—as profound spatial "errors." The speculative "after-sift" condition radically reconfigures this wasteland by metabolizing its accumulated neglect into a new ecological synthesis. The dense, unmovable bundles of debris are conceptually transmuted into provocative vegetative formations, while the distant, oppressive mountains of refuse are boldly reimagined as speculative forests. To functionally anchor this hybridized ecosystem, a "Trash Peak" (drawing from Design Earth's spatial lexicon) is surgically inserted onto the barren slope; it operates as an active architectural agent that manages the technosphere and orchestrates continuous terrestrial care. Simultaneously, the integration of a "Georama of Trash" in the deep background projects this localized remediation onto the broader urban scale, illustrating the city-wide potential of this metabolic infrastructure. In this fully realized scene, the rigid dichotomies between the natural and the artificial dissolve entirely. Robotic appendages, human stewards, and resilient flora dynamically coexist and adapt, epitomizing the ethos of "Living with Frankenstein" within a meticulously curated, multi-scalar landscape.</p>
@@ -138,7 +159,16 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div class="img-text-pair">
-          <img src="2026-images/2026-p3/6 scene explanations page-6/inspo-3.webp" alt="Scene Explanations 3">
+          <div class="inspo-img-col">
+            <img src="2026-images/2026-p3/6 scene explanations page-6/inspo-3.webp" alt="Scene Explanations 3">
+            <div class="inspo-caption">
+              <strong>Georama of Trash</strong><br>
+              Lisbon Architecture Triennale, The World in Our Eyes, 2016<br>
+              Project Team:<br>
+              El Hadi Jazairy + Rania Ghosn<br>
+              Jia Weng, Ya Suo, Sheung Chui Carol Nung
+            </div>
+          </div>
           <div class="text-col">
             <h2>The Sifterman Scene</h2>
             <p>Shifting from the macro-territorial to the intimate human scale, this scene reconfigures the sifting apparatus into a localized, less rigid analytical grid. At this tactile resolution, the initial sifter acts as a forensic diagnostic, detecting the fragmented detritus of industrial modernity—scattered plastics, synthetic residues, and discarded machine parts—and classifying them as immediate anthropogenic "errors" disrupting the substrate. In the speculative "after-sift" condition, the remediation of these localized externalities catalyzes the emergence of a new architectural subjectivity: the "Sifterman" persona. Moving decisively beyond the passive, detached observation of the modernist flâneur—who merely navigated the abstracted, paved surfaces of the city as a spectator—the Sifterman embodies an active, deeply entangled stewardship. By stepping barefoot onto the remediated, nutrient-rich earth, equipped simultaneously with the instruments of cultivation and the tools of empirical measurement, this persona learns to live with and care for the ground. This human-scale intervention transforms the act of sifting from a purely analytical framework into a lived practice of terrestrial care, allowing the human agent to actively participate in, and benefit from, the recovered metabolism of the soil.</p>
@@ -195,9 +225,9 @@
   document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
   document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
 
-  document.getElementById('se1-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-1'; });
-  document.getElementById('se2-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-2'; });
-  document.getElementById('se3-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-3'; });
+  document.getElementById('se1-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-2'; });
+  document.getElementById('se2-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-3'; });
+  document.getElementById('se3-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-4'; });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }

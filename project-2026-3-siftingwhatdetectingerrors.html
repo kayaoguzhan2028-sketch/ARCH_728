@@ -44,8 +44,6 @@
 
   .section { position:relative; scroll-margin-top:52px; min-height:calc(100vh - 52px); height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
   .section > img { width:var(--img-w); max-width:100%; height:auto; display:block; margin:0 auto; }
-  .hero-overlay { position:absolute; top:0; left:0; right:0; z-index:20; padding:1.2rem 2rem 0; }
-  .img-row.shift-down { margin-top:15.84rem; }
   .img-row { display:flex; align-items:center; justify-content:space-between; }
   .img-row > img { flex:0 0 auto; height:auto; display:block; max-width:calc(100% - 120px); }
   .img-row > img.img-common { width:var(--img-w); }
@@ -98,13 +96,14 @@
   <div class="body">
 
     <div class="section" id="section-1">
-      <div class="hero-overlay">
-        <div class="caption-block">
-          <p>This intervention is rooted in Bruno Latour's concept of Living with Frankenstein. Rather than erasing our industrial and technological creations (landfills, mine pits, oil spills), we accept them as legitimate elements of urban design worthy of attention and respect. The sifter evaluates these scenes through a critical matrix of dualities to determine the required care. These diagnostic questions map across multi-dimensional matrices, evaluating layers from "waste contamination" to "environment & nature," and from "trash" and "residues" to "humans & non-humans".</p>
-          <p class="text-center" style="margin-top:2.64rem;">CARE OR <strong>NOT-CARE?</strong>, IN ATTENTION OR <strong>ABANDONED?</strong>, INTERNAL OR <strong>EXTERNAL?</strong>, LOVE OR <strong>HATE?</strong>, WORTHY OR <strong>UN-WORTHY?</strong>, OPPORTUNITY OR <strong>THREAT?</strong>, WANTED OR <strong>UNWANTED?</strong>, POTENTIAL OR <strong>ERROR?</strong>, NOT-SIFTED OR <strong>SIFTED?</strong></p>
-        </div>
+      <div class="caption-block">
+        <p>This intervention is rooted in Bruno Latour's concept of Living with Frankenstein. Rather than erasing our industrial and technological creations (landfills, mine pits, oil spills), we accept them as legitimate elements of urban design worthy of attention and respect. The sifter evaluates these scenes through a critical matrix of dualities to determine the required care. These diagnostic questions map across multi-dimensional matrices, evaluating layers from "waste contamination" to "environment & nature," and from "trash" and "residues" to "humans & non-humans".</p>
+        <p class="text-center" style="margin-top:2.64rem;">CARE OR <strong>NOT-CARE?</strong>, IN ATTENTION OR <strong>ABANDONED?</strong>, INTERNAL OR <strong>EXTERNAL?</strong>, LOVE OR <strong>HATE?</strong>, WORTHY OR <strong>UN-WORTHY?</strong>, OPPORTUNITY OR <strong>THREAT?</strong>, WANTED OR <strong>UNWANTED?</strong>, POTENTIAL OR <strong>ERROR?</strong>, NOT-SIFTED OR <strong>SIFTED?</strong></p>
       </div>
-      <div class="img-row shift-down">
+    </div>
+
+    <div class="section" id="section-2">
+      <div class="img-row">
         <button class="img-arrow" id="sw1-prev" aria-label="Previous" data-tooltip="Click Back To Sifters">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
@@ -115,7 +114,7 @@
       </div>
     </div>
 
-    <div class="section" id="section-2">
+    <div class="section" id="section-3">
       <div class="img-row">
         <button class="img-arrow" id="sw2-prev" aria-label="Previous" data-tooltip="Click Back To Sifters">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -127,7 +126,7 @@
       </div>
     </div>
 
-    <div class="section" id="section-3">
+    <div class="section" id="section-4">
       <div class="img-row">
         <button class="img-arrow" id="sw3-prev" aria-label="Previous" data-tooltip="Click Back To Sifters">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -178,12 +177,12 @@
   document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
   document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
 
-  document.getElementById('sw1-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-soilscenesifters.html#section-1'; });
-  document.getElementById('sw1-next').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-1'; });
-  document.getElementById('sw2-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-soilscenesifters.html#section-2'; });
-  document.getElementById('sw2-next').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-2'; });
-  document.getElementById('sw3-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-soilscenesifters.html#section-3'; });
-  document.getElementById('sw3-next').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-3'; });
+  document.getElementById('sw1-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-soilscenesifters.html#section-2'; });
+  document.getElementById('sw1-next').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-2'; });
+  document.getElementById('sw2-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-soilscenesifters.html#section-3'; });
+  document.getElementById('sw2-next').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-3'; });
+  document.getElementById('sw3-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-soilscenesifters.html#section-4'; });
+  document.getElementById('sw3-next').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-4'; });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
