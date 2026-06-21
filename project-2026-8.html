@@ -89,7 +89,7 @@
   .section-rows .media-row { margin:0; align-items:center; }
   .section-rows .media-row > img { flex:0 0 42.75%; width:42.75%; max-height:calc((100vh - 52px) / 3); object-fit:contain; }
   .section-stack .interactive-image { margin:0; aspect-ratio:1985/1418; width:calc((100vh - 52px) * 1.05); max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
-  .section-stack .interactive-image:first-child { transform:translateX(-50%) translateY(-12rem); }
+  .section-stack .interactive-image:first-child { top:-12rem; }
   .section-stack .interactive-image + .interactive-image { margin-top:calc((100vh - 52px) * -0.5); }
   .section.section-stack { overflow:visible; gap:0; }
   .section.section-zoom { overflow:visible; }
@@ -114,8 +114,8 @@
   .section15-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
   .section7-grid { display:grid; grid-template-columns:100%; grid-template-rows:48% 52%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
   .section7-cell { overflow:hidden; border:1px solid red; min-height:0; }
-  .grid6-grid { display:grid; grid-template-columns:100%; grid-template-rows:50% 50%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
-  .grid6-cell { overflow:hidden; border:1px solid red; min-height:0; padding:0; display:flex; align-items:center; justify-content:center; }
+  .grid6-grid { display:grid; grid-template-columns:100%; grid-template-rows:50% 50%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.99); margin:0 auto calc((100vh - 52px) * 0.01); gap:0; }
+  .grid6-cell { overflow:hidden; border:none; min-height:0; padding:0; display:flex; align-items:center; justify-content:center; }
   .grid6-cell .interactive-image { width:100%; height:100%; margin:0; }
   .grid6-cell .interactive-image img { width:100%; height:100%; object-fit:contain; }
   .section.section-text { height:auto; overflow:visible; padding:5rem 0; }
@@ -318,14 +318,20 @@
       </div>
     </div>
 
-    <div class="section section-stack" style="margin-top:10vh;">
-      <div class="interactive-image">
-        <img src="2026-images/2026-p8/6/1.webp" alt="">
-        <svg class="hotspot-overlay" id="overlay-svg10a" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
-      </div>
-      <div class="interactive-image">
-        <img src="2026-images/2026-p8/6/2.webp" alt="">
-        <svg class="hotspot-overlay" id="overlay-svg10b" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="section">
+      <div class="grid6-grid">
+        <div class="grid6-cell">
+          <div class="interactive-image">
+            <img src="2026-images/2026-p8/6/1.webp" alt="">
+            <svg class="hotspot-overlay" id="overlay-svg10a" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+        <div class="grid6-cell">
+          <div class="interactive-image">
+            <img src="2026-images/2026-p8/6/2.webp" alt="">
+            <svg class="hotspot-overlay" id="overlay-svg10b" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -345,9 +351,9 @@
       <p style="text-align:justify;">However, as the timeline progresses toward environmental degradation and functional loss, the imagery reveals the slow, relentless transition into Entropy. <strong>This phase fundamentally rejects any narrative of human exceptionalism in environmental design</strong>. The expanding footprint of sedimentation within the reservoir and the visible pushback of the ecosystem at the edges highlight the <strong>site's inherent resilience</strong>. On a macroscopic scale, the constructed environment is continually being digested; the rigid cells of the urban and infrastructural grid are broken down, proving that <strong>human mastery is ultimately composted back into the earth to synthesize the next cycle of life</strong>.</p>
     </div>
 
-    <div class="section section-zoom" style="justify-content:flex-start;">
-      <p style="text-align:center; font-size:1.5rem; margin:2rem 0 1rem 0;">Diagramatic Abstraction of Ground Layers</p>
-      <div class="interactive-image" style="transform:translateX(-50%) translateY(-5%);">
+    <div class="section">
+      <p style="text-align:center; font-size:1.5rem; margin:0 0 1rem 0;">Diagramatic Abstraction of Ground Layers</p>
+      <div class="interactive-image">
         <img src="2026-images/2026-p8/8/main.webp" alt="">
         <svg class="hotspot-overlay" id="overlay-svg13" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
@@ -429,24 +435,6 @@
   </div>
 </div>
 <script>
-  const slider2Images = [
-    '2026-images/2026-p8/Görsel7.webp',
-    '2026-images/2026-p8/Görsel8.webp'
-  ];
-  const slider2Img  = document.getElementById('slider2-img');
-  const slider2Dots = document.querySelectorAll('.slider-dots .slider-dot');
-  let slider2Current = 0;
-
-  function slider2GoTo(index) {
-    slider2Current = (index + slider2Images.length) % slider2Images.length;
-    slider2Img.src = slider2Images[slider2Current];
-    slider2Dots.forEach((dot, i) => dot.classList.toggle('active', i === slider2Current));
-  }
-
-  document.getElementById('slider2-prev').addEventListener('click', () => slider2GoTo(slider2Current - 1));
-  document.getElementById('slider2-next').addEventListener('click', () => slider2GoTo(slider2Current + 1));
-  slider2Dots.forEach((dot, i) => dot.addEventListener('click', () => slider2GoTo(i)));
-
   const sections = document.querySelectorAll('.body .section');
   const sectionOffset = 52;
 
@@ -719,7 +707,7 @@
       .then(svgText => {
         const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
         const path = document.importNode(parsed.querySelector('path'), true);
-        path.setAttribute('class', 'hotspot-area');
+        path.setAttribute('class', 'hotspot-line');
         path.addEventListener('mouseenter', (e) => showLineTooltip(cfg.text, e.clientX, e.clientY));
         path.addEventListener('mousemove', (e) => moveLineTooltip(e.clientX, e.clientY));
         path.addEventListener('mouseleave', hideLineTooltip);
