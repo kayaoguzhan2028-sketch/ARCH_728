@@ -14,7 +14,7 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-center { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; opacity:0.55; white-space:nowrap; }
 
   .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
   .info-btn:hover { opacity:1; }
@@ -22,6 +22,9 @@
 
   #info-panel { position:fixed; top:52px; left:0; z-index:90; width:380px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
   #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  #research-panel { position:fixed; top:52px; right:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-left:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
+  #research-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  #research-panel p { font-size:0.95rem; line-height:1.7; opacity:0.85; text-align:justify; }
   .info-nav { list-style:none; font-size:0.92rem; line-height:1.9; }
   .info-nav a { color:var(--white); text-decoration:none; opacity:0.75; transition:opacity 0.2s; }
   .info-nav a:hover { opacity:1; text-decoration:underline; }
@@ -30,7 +33,7 @@
   .accordion-content { list-style:none; padding-left:1.2rem; max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
   .accordion-content.open { max-height:20rem; }
 
-  .wrap { max-width:1100px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .wrap { margin:0; padding:52px 0 0; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
@@ -41,43 +44,48 @@
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:1; filter:brightness(1) contrast(1); }
-  .triangle-up { display:flex; justify-content:center; }
-  .triangle-up a { display:block; line-height:0; }
-  .triangle-up svg { width:30px; height:30px; display:block; transition:opacity 0.2s; }
+  .triangle-up { display:flex; justify-content:center; margin:1rem 0; }
+  .triangle-up a { display:block; line-height:0; position:relative; }
+  .triangle-up svg { width:15px; height:15px; display:block; transition:opacity 0.2s; }
   .triangle-up a:hover svg { opacity:0.6; }
-  .grid3x3 { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:0 0 2.5rem; }
-  .connector-overlay { position:absolute; top:0; left:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:5; }
-  .connector-overlay path { fill:none; stroke:#e07b00; stroke-width:1.5; stroke-dasharray:6 6; }
-  .grid3x3 .grid-cell.connector-front { position:relative; z-index:10; }
-  .grid3x3 .grid-cell { display:flex; align-items:center; justify-content:center; aspect-ratio:1; overflow:hidden; }
+  .triangle-up a[data-tooltip]::after { content:attr(data-tooltip); position:absolute; bottom:140%; left:50%; transform:translateX(-50%); background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; }
+  .triangle-up a[data-tooltip]:hover::after { opacity:1; }
+  .grid3x3 { position:relative; display:grid; grid-template-columns:1fr min(1600px,40vw) 1fr; grid-template-rows:3fr 2fr 3fr; height:calc(100vh - 52px); gap:0; margin:0; }
+  .grid3x3 .grid-cell { display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .grid3x3 .grid-cell.info-cell { --gif-w:100%; align-items:flex-start; justify-content:flex-start; flex-direction:column; padding:0.3rem; }
+  .grid3x3 .grid-cell.info-cell .cell-title { width:100%; text-align:right; font-size:0.88rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; margin-bottom:0; }
+  .grid3x3 .grid-cell.info-cell img { width:var(--gif-w); height:auto; object-fit:cover; object-position:bottom; margin:0; align-self:flex-end; }
+  .grid3x3 .grid-cell.info-cell p { display:flex; flex-direction:column; gap:0.7rem; width:var(--gif-w); align-self:flex-end; text-align:justify; text-align-last:right; font-size:0.72rem; line-height:1.55; opacity:0.82; margin:0 0 0.7rem; }
+  .grid3x3 .grid-cell.info-cell p:last-child { margin-bottom:0; }
+  .grid3x3 .grid-cell.info-cell p span, .izohips-text p span { display:block; line-height:1; }
+  .grid3x3 .grid-cell.label-overlay { position:relative; }
+  .grid3x3 .grid-cell.label-overlay .cell-title { position:absolute; top:1rem; right:1rem; text-align:right; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; z-index:20; margin:0; }
   .grid3x3 .grid-cell img, .grid3x3 .grid-cell video { width:100%; height:100%; object-fit:cover; margin:0; opacity:1; filter:brightness(1) contrast(1); }
-  .grid3x3 .grid-cell.full-img { position:relative; overflow:visible; }
-  .grid3x3 .grid-cell.full-img img { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:800px; max-width:90vw; height:auto; object-fit:contain; z-index:2; }
-  .grid3x3 .grid-cell.full-img .section-marker { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:800px; max-width:90vw; height:auto; z-index:3; pointer-events:none; }
-  .grid3x3 .grid-cell.full-img .section-marker svg { width:100%; height:100%; display:block; }
-  .grid3x3 .grid-cell.full-img .section-marker .marker-shape { fill:var(--white); opacity:0; pointer-events:auto; cursor:pointer; transition:opacity 0.3s ease, filter 0.3s ease; }
-  .grid3x3 .grid-cell.full-img .section-marker .marker-shape:hover { opacity:0.5; filter:drop-shadow(0 0 14px var(--white)); }
-  .grid3x3 .grid-cell.video-cell { flex-direction:column; aspect-ratio:auto; overflow:visible; margin-bottom:20rem; }
-  .grid3x3 .grid-cell.video-cell video { width:80%; max-width:500px; height:auto; object-fit:contain; margin:0; }
-  .grid3x3 .grid-cell.video-cell .triangle-up { margin-top:4rem; }
-  .grid3x3 .grid-cell.multi-video { flex-direction:row; aspect-ratio:auto; align-items:center; justify-content:center; gap:0.5rem; overflow:visible; }
-  .grid3x3 .grid-cell.multi-video video { flex:0 0 auto; width:45%; height:auto; aspect-ratio:auto; object-fit:contain; margin:0; }
-  .grid3x3 .grid-cell.shift-up-left { transform:translate(-16rem,-15rem); }
-  .grid3x3 .grid-cell.shift-down { transform:translateY(5rem); }
-  .grid3x3 #vid-s6 { width:45%; height:auto; aspect-ratio:auto; object-fit:contain; transform:translateX(10rem); }
+  .grid3x3 .grid-cell.full-img { grid-row:span 2; }
+  .grid3x3 .grid-cell.full-img img { width:100%; height:100%; object-fit:contain; }
+  .grid3x3 .grid-cell.video-cell { flex-direction:column; }
+  .izohips-row { display:flex; align-items:center; justify-content:center; gap:0; width:100%; }
+  .izohips-text { flex:0 1 auto; max-width:50%; min-width:0; text-align:right; }
+  .izohips-text p { display:flex; flex-direction:column; gap:0.7rem; margin:0 0 0.8rem; opacity:0.85; }
+  .izohips-text p:last-child { margin-bottom:0; }
+  .izohips-img-col { width:35%; flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
+  .grid3x3 .grid-cell.video-cell video, .grid3x3 .grid-cell.video-cell img { width:100%; height:auto; object-fit:contain; margin:0; }
   @media (max-width:640px) {
-    .grid3x3 { grid-template-columns:1fr; }
-    .grid3x3 .grid-cell { aspect-ratio:auto; }
+    .grid3x3 { grid-template-columns:1fr; height:auto; }
   }
-  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
-  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
-  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
-  .meta-item dd { font-size:0.88rem; opacity:0.65; }
 
   .video-lightbox-trigger { cursor:pointer; }
   .video-lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.92); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
   .video-lightbox.active { display:flex; }
-  .video-lightbox video { max-width:100%; max-height:100%; object-fit:contain; }
+  .video-lightbox-content { display:flex; flex-direction:column; align-items:center; gap:1.5rem; max-width:90vw; max-height:90vh; overflow-y:auto; }
+  .video-lightbox video, .video-lightbox img { max-width:100%; max-height:65vh; object-fit:contain; display:none; }
+  .video-lightbox video.active, .video-lightbox img.active { display:block; }
+  #video-lightbox-title { align-self:flex-end; max-width:700px; font-size:1.2rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; text-align:right; }
+  #video-lightbox-title:empty { display:none; }
+  #video-lightbox-text { max-width:700px; }
+  #video-lightbox-text:empty { display:none; }
+  #video-lightbox-text p { font-size:1.1rem; line-height:1.6; opacity:0.85; margin:0 0 0.8rem; }
+  #video-lightbox-text p:last-child { margin-bottom:0; }
   .video-lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:#f5f2eb; font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); z-index:1001; }
   .video-lightbox-close:hover { opacity:0.7; }
 </style>
@@ -86,10 +94,15 @@
 <nav>
   <div style="display:flex;align-items:center;">
     <a href="2026.html" class="nav-back">← 2026</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
+    <button class="info-btn" id="info-toggle">Project Navigation</button>
   </div>
-  <span class="nav-tag">Field Report</span>
+  <span class="nav-center">DISPLACED VOLUME OF BILKENT AREA / 2007 AND 2023 TIMELAPSE</span>
+  <button class="info-btn" id="research-toggle">Research Question</button>
 </nav>
+
+<div id="research-panel">
+  <p>How does the mobility of urban soil reconfigure new ecological conditions and generate unexpected habitats? In the case of partial observation (Beytepe Pond, Bilkent City Hospital and arboretum) do the emergent plant formations prove the erasure of the steppe, or do they reveal the soil’s capacity to retain and rearticulate its own ecological archive in a new location?</p>
+</div>
 
 <div id="info-panel">
   <ul class="info-nav">
@@ -121,63 +134,69 @@
 <div class="wrap">
   <div class="body">
     <section class="grid3x3">
-      <svg class="connector-overlay" id="connector-overlay"><path id="connector-path"/><path id="connector-path-2"/><path id="connector-path-3"/></svg>
-      <div class="grid-cell"></div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -1 : BİLKENT HOSPITAL</div>
+        <img class="video-lightbox-trigger" style="aspect-ratio:2.459;" src="2026-images/2026-p4/gif/section_1_full_color_invert.gif" alt="Section 1">
+        <p>
+          <span>The first context is what we call the sterilized. This refers to Bilkent City Hospital and its immediate surroundings. It is a highly controlled, concrete and organized environment.</span>
+          <span style="font-size:1.5rem; font-weight:bold;">2.024.470 m³</span>
+          <span>soil has been excavated for Hospital Building and roads.</span>
+        </p>
+      </div>
       <div class="grid-cell video-cell">
-        <video autoplay loop muted playsinline>
-          <source src="2026-images/2026-p4/gif/plan view izohips.mp4" type="video/mp4">
-        </video>
-        <div class="triangle-up">
-          <a href="project-2026-4-aerial-assessment.html" aria-label="Aerial assessment">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,0 100,100 0,100" fill="#f5f2eb"/></svg>
-          </a>
+        <div class="izohips-row">
+          <div class="izohips-text">
+            <p>
+              <span style="font-size:0.72rem;">SOIL METABOLISM IS THE CENTER OF THE INVESTIGATION.</span>
+              <span style="font-size:1.1rem; font-weight:bold;">SOIL DOES NOT SIMPLY REMAIN IN PLACE...</span>
+            </p>
+          </div>
+          <div class="izohips-img-col">
+            <img class="video-lightbox-trigger" src="2026-images/2026-p4/gif/plan view izohips.gif" alt="Plan view izohips">
+            <div class="triangle-up">
+              <a href="project-2026-4-aerial-assessment.html" aria-label="Aerial assessment" data-tooltip="Click To See Aerial Assessment">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,0 100,100 0,100" fill="#f5f2eb"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="grid-cell"></div>
-      <div class="grid-cell"></div>
-      <div class="grid-cell full-img connector-front">
-        <img src="2026-images/2026-p4/webp/0.entry/0.Superposed Izohips 3D view with section lines-01.webp" alt="Superposed Izohips 3D view with section lines">
-        <a href="project-2026-4-sections1.html" class="section-marker" aria-label="Section 1" data-node="m1">
-          <svg viewBox="0 0 1504.4 1050.9" xmlns="http://www.w3.org/2000/svg"><polygon class="marker-shape" points="236.5,557.6 501.7,495.3 505.7,507.6 239.9,578"/></svg>
-        </a>
-        <a href="project-2026-4-sections2.html" class="section-marker" aria-label="Section 2" data-node="m2">
-          <svg viewBox="0 0 1504.4 1050.9" xmlns="http://www.w3.org/2000/svg"><polygon class="marker-shape" points="609,458.3 770.3,420.8 778.5,432.5 615.1,476.7"/></svg>
-        </a>
-        <a href="project-2026-4-sections3.html" class="section-marker" aria-label="Section 3" data-node="m3">
-          <svg viewBox="0 0 1504.4 1050.9" xmlns="http://www.w3.org/2000/svg"><polygon class="marker-shape" points="1289.4,273.7 1081.4,321.4 1080.3,330.3 1089.9,341 1093.7,334 1300.3,282.9"/></svg>
-        </a>
-        <a href="project-2026-4-sections4.html" class="section-marker" aria-label="Section 4" data-node="m4">
-          <svg viewBox="0 0 1504.4 1050.9" xmlns="http://www.w3.org/2000/svg"><polygon class="marker-shape" points="731,900.5 856.9,775.9 876.5,787.9 752.2,916.3 750.9,930.9 731,916.9"/></svg>
-        </a>
-        <a href="project-2026-4-sections5.html" class="section-marker" aria-label="Section 5" data-node="m5">
-          <svg viewBox="0 0 1504.4 1050.9" xmlns="http://www.w3.org/2000/svg"><polygon class="marker-shape" points="829.5,644.1 830.2,628.7 930,541.5 946.6,549.4 849.2,635.9 846.8,652.9"/></svg>
-        </a>
-        <a href="project-2026-4-sections6.html" class="section-marker" aria-label="Section 6" data-node="m6">
-          <svg viewBox="0 0 1504.4 1050.9" xmlns="http://www.w3.org/2000/svg"><polygon class="marker-shape" points="782.2,527.5 993.9,722.4 993.8,736.6 1011.4,726.1 1013.3,709.8 798.2,519.1"/></svg>
-        </a>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -4 : ARBORETUM</div>
+        <img class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_4.gif" alt="Section 4">
+        <p>The third context is the incomplete: The arboretum and the Botanical Park surroundings. There is observed uncontrolled growth, reed formations, spontaneous vegetation, and unexpected encounters between steppe ecologies and transported landscape. This became a particularly critical site for us.</p>
       </div>
-      <div class="grid-cell"></div>
-      <div class="grid-cell multi-video connector-front shift-up-left">
-        <video autoplay loop muted playsinline id="vid-s3" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section 3.mp4" type="video/mp4"></video>
-        <video autoplay loop muted playsinline id="vid-s2" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_2.mp4" type="video/mp4"></video>
-        <video autoplay loop muted playsinline id="vid-s1" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_1.mp4" type="video/mp4"></video>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -2 : 6002. ST/1</div>
+        <img class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_2.gif" alt="Section 2">
       </div>
-      <div class="grid-cell multi-video connector-front shift-down">
-        <video autoplay loop muted playsinline id="vid-s4" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_4.mp4" type="video/mp4"></video>
-        <video autoplay loop muted playsinline id="vid-s5" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_5.mp4" type="video/mp4"></video>
+      <div class="grid-cell full-img">
+        <img src="2026-images/2026-p4/webp/0.entry/ANA SAYFA  image.webp" alt="Ana Sayfa">
       </div>
-      <div class="grid-cell connector-front">
-        <video autoplay loop muted playsinline id="vid-s6" class="video-lightbox-trigger"><source src="2026-images/2026-p4/gif/section_6.mp4" type="video/mp4"></video>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -5 : 6002. ST/2</div>
+        <img class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_5.gif" alt="Section 5">
+      </div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -3 : BEYTEPE POND</div>
+        <img id="vid-s3" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section-3.gif" alt="Section 3">
+        <p>The second context is the refurbished, which particularly refers to Beytepe Pond and unfinished surrounding areas. Here is a designed landscape. Species are selected, labeled, and intentionally organized. However, within a dispersion from this environment, we observed unexpected growth patterns and discontinuities that appear to emerge alongside displaced soil such as reeds, land snails, and dead nettle.</p>
+      </div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -6 : 6002. ST/6</div>
+        <img id="vid-s6" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_6.gif" alt="Section 6">
       </div>
     </section>
   </div>
-  <dl class="meta">
-    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
-  </dl>
 </div>
 <div class="video-lightbox" id="video-lightbox">
   <button class="video-lightbox-close" id="video-lightbox-close">×</button>
-  <video id="video-lightbox-player" autoplay loop muted playsinline controls></video>
+  <div class="video-lightbox-content">
+    <div id="video-lightbox-title"></div>
+    <video id="video-lightbox-player" autoplay loop muted playsinline controls></video>
+    <img id="video-lightbox-image" alt="">
+    <div id="video-lightbox-text"></div>
+  </div>
 </div>
 <script>
   const infoBtn = document.getElementById('info-toggle');
@@ -187,97 +206,62 @@
     infoBtn.classList.toggle('open', open);
   });
 
+  const researchBtn = document.getElementById('research-toggle');
+  const researchPanel = document.getElementById('research-panel');
+  researchBtn.addEventListener('click', () => {
+    const open = researchPanel.classList.toggle('open');
+    researchBtn.classList.toggle('open', open);
+  });
+
   document.querySelectorAll('.accordion-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
       document.getElementById(btn.dataset.target).classList.toggle('open');
     });
   });
 
-  function smoothPath(points) {
-    let d = '';
-    for (let i = 0; i < points.length - 1; i++) {
-      const p0 = points[i - 1] || points[i];
-      const p1 = points[i];
-      const p2 = points[i + 1];
-      const p3 = points[i + 2] || p2;
-      const cp1x = p1.x + (p2.x - p0.x) / 6;
-      const cp1y = p1.y + (p2.y - p0.y) / 6;
-      const cp2x = p2.x - (p3.x - p1.x) / 6;
-      const cp2y = p2.y - (p3.y - p1.y) / 6;
-      if (i === 0) d += `M ${p1.x},${p1.y} `;
-      d += `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y} `;
-    }
-    return d;
-  }
-
-  function markerPoint(anchor, gridRect) {
-    const svg = anchor.querySelector('svg');
-    const polygon = anchor.querySelector('.marker-shape');
-    const bbox = polygon.getBBox();
-    const pt = svg.createSVGPoint();
-    pt.x = bbox.x + bbox.width / 2;
-    pt.y = bbox.y + bbox.height / 2;
-    const screenPt = pt.matrixTransform(svg.getScreenCTM());
-    return { x: screenPt.x - gridRect.left, y: screenPt.y - gridRect.top };
-  }
-
-  function videoTopPoint(video, gridRect) {
-    const r = video.getBoundingClientRect();
-    return { x: r.left + r.width / 2 - gridRect.left, y: r.top - gridRect.top };
-  }
-
-  function updateConnector() {
-    const grid = document.querySelector('.grid3x3');
-    const path = document.getElementById('connector-path');
-    const gridRect = grid.getBoundingClientRect();
-
-    const m3 = markerPoint(document.querySelector('[data-node="m3"]'), gridRect);
-    const m2 = markerPoint(document.querySelector('[data-node="m2"]'), gridRect);
-    const m1 = markerPoint(document.querySelector('[data-node="m1"]'), gridRect);
-    const v1 = videoTopPoint(document.getElementById('vid-s1'), gridRect);
-    const v2 = videoTopPoint(document.getElementById('vid-s2'), gridRect);
-    const v3 = videoTopPoint(document.getElementById('vid-s3'), gridRect);
-
-    path.setAttribute('d', smoothPath([m3, m2, m1, v1, v2, v3]));
-
-    const path2 = document.getElementById('connector-path-2');
-    const m5 = markerPoint(document.querySelector('[data-node="m5"]'), gridRect);
-    const m4 = markerPoint(document.querySelector('[data-node="m4"]'), gridRect);
-    const v4 = videoTopPoint(document.getElementById('vid-s4'), gridRect);
-    const v5 = videoTopPoint(document.getElementById('vid-s5'), gridRect);
-
-    path2.setAttribute('d', smoothPath([m5, m4, v4, v5]));
-
-    const path3 = document.getElementById('connector-path-3');
-    const m6 = markerPoint(document.querySelector('[data-node="m6"]'), gridRect);
-    const v6 = videoTopPoint(document.getElementById('vid-s6'), gridRect);
-
-    path3.setAttribute('d', smoothPath([m6, v6]));
-  }
-
-  window.addEventListener('load', updateConnector);
-  window.addEventListener('resize', updateConnector);
-  document.querySelectorAll('.grid3x3 video').forEach((v) => {
-    v.addEventListener('loadedmetadata', updateConnector);
-  });
-
   const videoLightbox = document.getElementById('video-lightbox');
   const videoLightboxPlayer = document.getElementById('video-lightbox-player');
+  const videoLightboxImage = document.getElementById('video-lightbox-image');
+  const videoLightboxTitle = document.getElementById('video-lightbox-title');
+  const videoLightboxText = document.getElementById('video-lightbox-text');
 
   function closeVideoLightbox() {
     videoLightbox.classList.remove('active');
     videoLightboxPlayer.pause();
+    videoLightboxPlayer.classList.remove('active');
+    videoLightboxImage.classList.remove('active');
+    videoLightboxTitle.innerHTML = '';
+    videoLightboxText.innerHTML = '';
   }
 
   document.querySelectorAll('.video-lightbox-trigger').forEach((v) => {
     v.addEventListener('click', () => {
-      videoLightboxPlayer.querySelectorAll('source').forEach((s) => s.remove());
-      const source = document.createElement('source');
-      source.src = v.querySelector('source').src;
-      source.type = 'video/mp4';
-      videoLightboxPlayer.appendChild(source);
-      videoLightboxPlayer.load();
-      videoLightboxPlayer.play();
+      if (v.tagName === 'IMG') {
+        videoLightboxPlayer.pause();
+        videoLightboxPlayer.classList.remove('active');
+        videoLightboxImage.src = v.src;
+        videoLightboxImage.classList.add('active');
+      } else {
+        videoLightboxImage.classList.remove('active');
+        videoLightboxPlayer.querySelectorAll('source').forEach((s) => s.remove());
+        const source = document.createElement('source');
+        source.src = v.querySelector('source').src;
+        source.type = 'video/mp4';
+        videoLightboxPlayer.appendChild(source);
+        videoLightboxPlayer.load();
+        videoLightboxPlayer.play();
+        videoLightboxPlayer.classList.add('active');
+      }
+
+      videoLightboxTitle.innerHTML = '';
+      videoLightboxText.innerHTML = '';
+      const cell = v.closest('.grid-cell');
+      if (cell) {
+        const title = cell.querySelector('.cell-title');
+        if (title) videoLightboxTitle.appendChild(title.cloneNode(true));
+        cell.querySelectorAll('p').forEach((p) => videoLightboxText.appendChild(p.cloneNode(true)));
+      }
+
       videoLightbox.classList.add('active');
     });
   });
