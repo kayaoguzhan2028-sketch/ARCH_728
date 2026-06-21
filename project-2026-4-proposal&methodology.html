@@ -35,11 +35,17 @@
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
   .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
   .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
-  .body p { margin-bottom:1.6rem; }
+  .body p { margin-bottom:1.6rem; text-align:justify; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+  .lightbox-trigger { cursor:pointer; }
+  .lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.92); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
+  .lightbox.active { display:flex; }
+  .lightbox img { max-width:100%; max-height:100%; object-fit:contain; }
+  .lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:#f5f2eb; font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); z-index:1001; }
+  .lightbox-close:hover { opacity:0.7; }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
@@ -106,7 +112,7 @@
 
     <p>In the cases of Beytepe Pond, Bilkent City Hospital, and the arboretum, do emergent plant formations indicate the erasure of the steppe, or do they reveal soil's capacity to retain, reactivate, and rearticulate its own ecological archive in a new location?</p>
 
-    <img src="2026-images/2026-p4/webp/1.proposal & methodology/methodology_maps.webp" alt="Methodology maps">
+    <img src="2026-images/2026-p4/webp/1.proposal & methodology/methodology_maps.webp" alt="Methodology maps" class="lightbox-trigger">
 
     <h2>Methodology</h2>
 
@@ -122,6 +128,10 @@
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">×</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
 <script>
   const infoBtn = document.getElementById('info-toggle');
   const infoPanel = document.getElementById('info-panel');
@@ -134,6 +144,21 @@
     btn.addEventListener('click', () => {
       document.getElementById(btn.dataset.target).classList.toggle('open');
     });
+  });
+
+  document.querySelectorAll('.lightbox-trigger').forEach(function(img){
+    img.addEventListener('click', function(){
+      var lbImg = document.getElementById('lightboxImg');
+      lbImg.src = this.src;
+      lbImg.alt = this.alt;
+      document.getElementById('lightbox').classList.add('active');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', function(){
+    document.getElementById('lightbox').classList.remove('active');
+  });
+  document.getElementById('lightbox').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('active');
   });
 </script>
 </body>

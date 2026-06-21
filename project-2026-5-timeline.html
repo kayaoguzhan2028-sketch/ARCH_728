@@ -31,7 +31,7 @@
   .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
 
   .interactive-image { position:relative; width:100%; margin:2.5rem 0; }
-  .interactive-image img { width:100%; display:block; margin:0; opacity:0.9; cursor:zoom-in; }
+  .interactive-image img { width:100%; display:block; margin:0; opacity:0.9; cursor:pointer; }
   .hotspot-overlay { position:absolute; top:0; left:0; width:100%; height:100%; }
   .hotspot-zone { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-zone:hover { opacity:0.25; }
@@ -40,7 +40,7 @@
   .timeline-result { display:none; flex-direction:column; gap:1.5rem; margin-top:3.5rem; padding-top:3rem; border-top:1px solid var(--border); scroll-margin-top:5rem; }
   .timeline-result.active { display:flex; }
   .timeline-result h3 { font-size:0.72rem; font-weight:400; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin:0; }
-  .timeline-result img { max-width:100%; max-height:60vh; width:auto; display:block; margin:0 auto; opacity:0.92; cursor:zoom-in; }
+  .timeline-result img { max-width:100%; max-height:60vh; width:auto; display:block; margin:0 auto; opacity:0.92; cursor:pointer; }
   .timeline-result p { font-size:1.1rem; line-height:1.95; opacity:0.82; margin:0; }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
@@ -52,6 +52,9 @@
   .panel-overlay img { max-width:90vw; max-height:90vh; display:block; }
   .panel-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
   .panel-close:hover { opacity:1; background:var(--accent); color:var(--black); }
+
+  #expand-tooltip { position:fixed; background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:400; transform:translate(-50%,-140%); }
+  #expand-tooltip.show { opacity:1; }
 </style>
 </head>
 <body>
@@ -78,8 +81,9 @@
 
     <div class="timeline-result" id="timeline-result">
       <h3 id="timeline-result-title"></h3>
-      <img id="timeline-result-img" src="" alt="">
+      <img id="timeline-result-img-top" src="" alt="">
       <p id="timeline-result-text"></p>
+      <img id="timeline-result-img-bottom" src="" alt="">
     </div>
 
   </div>
@@ -93,15 +97,18 @@
   <img id="panel-img" src="" alt="">
 </div>
 
+<div id="expand-tooltip">Click To Expand</div>
+
 <script>
   const timelineData = [
-    { img: '2026-images/2026-p5/02-Timeline/Current-Extended.webp', title: 'Initiation Phase', text: 'In the first years after abandonment, the carbonation process began in the reinforced concrete structural elements, and due to the effects of rain and groundwater, calcium components in the concrete seeped into the surrounding soil, causing localized alkalization. Although visible deterioration in the building materials was limited during this period, the weakening of the protective concrete layer initiated the initial stages of corrosion in the reinforcing steel, and the chemical interaction between the structure and the soil gradually increased.' },
-    { img: '2026-images/2026-p5/02-Timeline/Stage-1-Extended.webp', title: 'Activation Phase', text: 'During this phase, the structure transitions from a completely dormant state to an "activation" process where environmental impacts intensify and material degradation accelerates. Cracks deepen in the concrete surfaces, reinforcement corrosion becomes more visible, and chemical components carried by rainwater spread over a wider area in the soil. In this process, the structure ceases to be merely a physical remnant, it expands its spatial impact by establishing an active exchange of substances with the surrounding soil system.' },
-    { img: '2026-images/2026-p5/02-Timeline/Stage-2-Extended.webp', title: 'Fragmentation Phase', text: 'At this stage, the structure undergoes a transformation process where it loses a significant degree of structural integrity, and disintegration becomes permanent. The load-bearing systems weaken considerably, the concrete masses disintegrate into brittle blocks, and the reinforcing elements are completely exposed and rapidly corrode. Atmospheric effects and water infiltration, along with continuous disintegration of the material, cause it to mix with the surrounding soil. In this process, the structure integrates into the environmental system not as a stable form, but as an expanding debris field and a heterogeneous material distribution.' }
+    { imgTop: '2026-images/2026-p5/02-Timeline/Current-Extended_new.webp', imgBottom: '2026-images/2026-p5/02-Timeline/Current-bottom_new.webp', title: 'Initiation Phase', text: 'In the first years after abandonment, the carbonation process began in the reinforced concrete structural elements, and due to the effects of rain and groundwater, calcium components in the concrete seeped into the surrounding soil, causing localized alkalization. Although visible deterioration in the building materials was limited during this period, the weakening of the protective concrete layer initiated the initial stages of corrosion in the reinforcing steel, and the chemical interaction between the structure and the soil gradually increased.' },
+    { imgTop: '2026-images/2026-p5/02-Timeline/Stage-1-Extended_new.webp', imgBottom: '2026-images/2026-p5/02-Timeline/Stage-1-bottom_new.webp', title: 'Activation Phase', text: 'During this phase, the structure transitions from a completely dormant state to an "activation" process where environmental impacts intensify and material degradation accelerates. Cracks deepen in the concrete surfaces, reinforcement corrosion becomes more visible, and chemical components carried by rainwater spread over a wider area in the soil. In this process, the structure ceases to be merely a physical remnant, it expands its spatial impact by establishing an active exchange of substances with the surrounding soil system.' },
+    { imgTop: '2026-images/2026-p5/02-Timeline/Stage-2-Extended_new.webp', imgBottom: '2026-images/2026-p5/02-Timeline/Stage-2-bottom_new.webp', title: 'Fragmentation Phase', text: 'At this stage, the structure undergoes a transformation process where it loses a significant degree of structural integrity, and disintegration becomes permanent. The load-bearing systems weaken considerably, the concrete masses disintegrate into brittle blocks, and the reinforcing elements are completely exposed and rapidly corrode. Atmospheric effects and water infiltration, along with continuous disintegration of the material, cause it to mix with the surrounding soil. In this process, the structure integrates into the environmental system not as a stable form, but as an expanding debris field and a heterogeneous material distribution.' }
   ];
 
   const timelineResult = document.getElementById('timeline-result');
-  const timelineResultImg = document.getElementById('timeline-result-img');
+  const timelineResultImgTop = document.getElementById('timeline-result-img-top');
+  const timelineResultImgBottom = document.getElementById('timeline-result-img-bottom');
   const timelineResultTitle = document.getElementById('timeline-result-title');
   const timelineResultText = document.getElementById('timeline-result-text');
   const hotspotZones = document.querySelectorAll('.hotspot-zone');
@@ -117,9 +124,30 @@
   panelOverlay.addEventListener('click', e => { if (e.target === panelOverlay) panelOverlay.classList.remove('open'); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') panelOverlay.classList.remove('open'); });
 
-  document.querySelectorAll('.interactive-image img, .timeline-result img').forEach(img => {
+  document.querySelectorAll('.interactive-image img').forEach(img => {
     img.addEventListener('click', () => openPanel(img.src));
   });
+  document.addEventListener('click', e => {
+    if (e.target.matches('.timeline-result img')) openPanel(e.target.src);
+  });
+
+  const expandTooltip = document.getElementById('expand-tooltip');
+  document.addEventListener('mouseenter', e => {
+    if (e.target.matches && e.target.matches('.interactive-image img, .timeline-result img')) {
+      expandTooltip.classList.add('show');
+    }
+  }, true);
+  document.addEventListener('mousemove', e => {
+    if (e.target.matches && e.target.matches('.interactive-image img, .timeline-result img')) {
+      expandTooltip.style.left = e.clientX + 'px';
+      expandTooltip.style.top = e.clientY + 'px';
+    }
+  });
+  document.addEventListener('mouseleave', e => {
+    if (e.target.matches && e.target.matches('.interactive-image img, .timeline-result img')) {
+      expandTooltip.classList.remove('show');
+    }
+  }, true);
 
   hotspotZones.forEach((zone, i) => {
     zone.addEventListener('click', () => {
@@ -129,9 +157,10 @@
       hotspotZones.forEach((z, j) => z.classList.toggle('active', j === i));
 
       const scrollToResult = () => timelineResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      timelineResultImg.onload = scrollToResult;
-      timelineResultImg.src = timelineData[i].img;
-      if (timelineResultImg.complete) scrollToResult();
+      timelineResultImgTop.onload = scrollToResult;
+      timelineResultImgTop.src = timelineData[i].imgTop;
+      timelineResultImgBottom.src = timelineData[i].imgBottom;
+      if (timelineResultImgTop.complete) scrollToResult();
     });
   });
 </script>

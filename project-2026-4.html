@@ -44,9 +44,9 @@
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:1; filter:brightness(1) contrast(1); }
-  .triangle-up { display:flex; justify-content:center; margin:1rem 0; }
+  .triangle-up { display:flex; justify-content:center; margin:1rem 0 1rem -40%; }
   .triangle-up a { display:block; line-height:0; position:relative; }
-  .triangle-up svg { width:15px; height:15px; display:block; transition:opacity 0.2s; animation:trianglePulse 2.6s ease-in-out infinite; transform-origin:center; }
+  .triangle-up svg { width:19.5px; height:19.5px; display:block; transition:opacity 0.2s; animation:trianglePulse 2.6s ease-in-out infinite; transform-origin:center; }
   .triangle-up svg polygon { animation:triangleColorRing 12s linear infinite; }
   @keyframes trianglePulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
   @keyframes triangleColorRing { 0% { fill:#8e44ad; } 33% { fill:#ff8c1a; } 66% { fill:#ffffff; } 100% { fill:#8e44ad; } }
@@ -57,9 +57,9 @@
   .grid3x3 .grid-cell { display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .grid3x3 .grid-cell.info-cell { --gif-w:100%; align-items:flex-start; justify-content:flex-start; flex-direction:column; padding:0.3rem; }
   .grid3x3 .grid-cell.info-cell .cell-title { width:100%; text-align:right; font-size:0.88rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; margin-bottom:0; }
-  .grid3x3 .grid-cell.info-cell img { width:var(--gif-w); height:auto; object-fit:cover; object-position:bottom; margin:0; align-self:flex-end; transition:filter 0.2s, outline-color 0.2s; }
-  .grid3x3 .grid-cell.info-cell img.gif-highlight { outline:2px solid var(--accent); outline-offset:-2px; filter:brightness(1.3) contrast(1.05); }
-  .grid3x3 .grid-cell.info-cell p { display:flex; flex-direction:column; gap:0.7rem; width:var(--gif-w); align-self:flex-end; text-align:justify; text-align-last:right; font-size:0.72rem; line-height:1.55; opacity:0.82; margin:0 0 0.7rem; }
+  .grid3x3 .grid-cell.info-cell img, .grid3x3 .grid-cell.info-cell video { width:var(--gif-w); height:auto; object-fit:cover; object-position:bottom; margin:0; align-self:flex-end; transition:filter 0.2s, outline-color 0.2s; }
+  .grid3x3 .grid-cell.info-cell img.gif-highlight, .grid3x3 .grid-cell.info-cell video.gif-highlight { outline:2px solid var(--accent); outline-offset:-2px; filter:brightness(1.3) contrast(1.05); }
+  .grid3x3 .grid-cell.info-cell p { width:var(--gif-w); align-self:flex-end; text-align:justify; text-align-last:right; font-size:0.72rem; line-height:1.55; opacity:0.82; margin:0 0 0.7rem; padding-left:5%; }
   .grid3x3 .grid-cell.info-cell p:last-child { margin-bottom:0; }
   .grid3x3 .grid-cell.info-cell p span, .izohips-text p span { display:block; line-height:1; }
   .grid3x3 .grid-cell.label-overlay { position:relative; }
@@ -81,11 +81,12 @@
   .hero-text p { margin:0 0 4px; }
   .hero-text p:last-child { margin-bottom:0; }
   .grid3x3 .grid-cell.video-cell { flex-direction:column; }
-  .izohips-row { display:flex; align-items:center; justify-content:center; gap:0; width:100%; }
+  .izohips-row { display:flex; align-items:center; justify-content:center; gap:0; width:100%; padding-right:20%; }
   .izohips-text { flex:0 1 auto; max-width:50%; min-width:0; text-align:right; }
   .izohips-text p { display:flex; flex-direction:column; gap:0.7rem; margin:0 0 0.8rem; opacity:0.85; }
   .izohips-text p:last-child { margin-bottom:0; }
   .izohips-img-col { width:35%; flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
+  .izohips-img-col video { margin-top:20%; }
   .grid3x3 .grid-cell.video-cell video, .grid3x3 .grid-cell.video-cell img { width:100%; height:auto; object-fit:contain; margin:0; }
   @media (max-width:640px) {
     .grid3x3 { grid-template-columns:1fr; height:auto; }
@@ -153,23 +154,19 @@
     <section class="grid3x3">
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -1 : BİLKENT HOSPITAL</div>
-        <img id="vid-s1" class="video-lightbox-trigger" style="aspect-ratio:2.459;" src="2026-images/2026-p4/gif/section_1_full_color_invert.gif" alt="Section 1">
-        <p>
-          <span>The first context is what we call the sterilized. This refers to Bilkent City Hospital and its immediate surroundings. It is a highly controlled, concrete and organized environment.</span>
-          <span style="font-size:1.5rem; font-weight:bold;">2.024.470 m³</span>
-          <span>soil has been excavated for Hospital Building and roads.</span>
-        </p>
+        <video id="vid-s1" class="video-lightbox-trigger" style="aspect-ratio:2.459;" autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/section_1_full_color_invert.mp4" type="video/mp4"></video>
+        <p>The first context is what we call the sterilized. This refers to Bilkent City Hospital and its immediate surroundings. It is a highly controlled, concrete and organized environment.<br><span style="font-size:1.5rem; font-weight:bold; line-height:1.2;">2.024.470 m³</span>soil has been excavated for Hospital Building and roads.</p>
       </div>
       <div class="grid-cell video-cell">
         <div class="izohips-row">
           <div class="izohips-text">
             <p>
-              <span style="font-size:0.72rem;">SOIL METABOLISM IS THE CENTER OF THE INVESTIGATION.</span>
-              <span style="font-size:1.1rem; font-weight:bold;">SOIL DOES NOT SIMPLY REMAIN IN PLACE...</span>
+              <span style="font-size:0.62rem;">SOIL METABOLISM IS THE CENTER OF THE INVESTIGATION.</span>
+              <span style="font-size:1.1rem; font-weight:bold;">SOIL DOES NOT SIMPLY<br>REMAIN IN PLACE...</span>
             </p>
           </div>
           <div class="izohips-img-col">
-            <img class="video-lightbox-trigger" src="2026-images/2026-p4/gif/plan view izohips.gif" alt="Plan view izohips">
+            <video class="video-lightbox-trigger" autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/plan view izohips.mp4" type="video/mp4"></video>
             <div class="triangle-up">
               <a href="project-2026-4-aerial-assessment.html" aria-label="Aerial assessment" data-tooltip="Click To See Aerial Assessment">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,0 100,100 0,100" fill="#f5f2eb"/></svg>
@@ -180,12 +177,12 @@
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -4 : ARBORETUM</div>
-        <img id="vid-s4" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_4.gif" alt="Section 4">
+        <video id="vid-s4" class="video-lightbox-trigger" style="aspect-ratio:2.222;" autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/section_4.mp4" type="video/mp4"></video>
         <p>The third context is the incomplete: The arboretum and the Botanical Park surroundings. There is observed uncontrolled growth, reed formations, spontaneous vegetation, and unexpected encounters between steppe ecologies and transported landscape. This became a particularly critical site for us.</p>
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -2 : 6002. ST/1</div>
-        <img id="vid-s2" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_2.gif" alt="Section 2">
+        <video id="vid-s2" class="video-lightbox-trigger" style="aspect-ratio:2.222;" autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/section_2.mp4" type="video/mp4"></video>
       </div>
       <div class="grid-cell full-img">
         <img id="ana-sayfa-img" src="2026-images/2026-p4/webp/0.entry/ANA SAYFA  image.webp" alt="Ana Sayfa">
@@ -239,16 +236,16 @@
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -5 : 6002. ST/2</div>
-        <img id="vid-s5" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_5.gif" alt="Section 5">
+        <video id="vid-s5" class="video-lightbox-trigger" style="aspect-ratio:2.222;" autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/section_5.mp4" type="video/mp4"></video>
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -3 : BEYTEPE POND</div>
-        <img id="vid-s3" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section-3.gif" alt="Section 3">
+        <video id="vid-s3" class="video-lightbox-trigger" style="aspect-ratio:2.222;" autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/section-3.mp4" type="video/mp4"></video>
         <p>The second context is the refurbished, which particularly refers to Beytepe Pond and unfinished surrounding areas. Here is a designed landscape. Species are selected, labeled, and intentionally organized. However, within a dispersion from this environment, we observed unexpected growth patterns and discontinuities that appear to emerge alongside displaced soil such as reeds, land snails, and dead nettle.</p>
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -6 : 6002. ST/6</div>
-        <img id="vid-s6" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_6.gif" alt="Section 6">
+        <video id="vid-s6" class="video-lightbox-trigger" style="aspect-ratio:2.222;" autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/section_6.mp4" type="video/mp4"></video>
       </div>
     </section>
   </div>
@@ -257,7 +254,7 @@
   <button class="video-lightbox-close" id="video-lightbox-close">×</button>
   <div class="video-lightbox-content">
     <div id="video-lightbox-title"></div>
-    <video id="video-lightbox-player" autoplay loop muted playsinline controls></video>
+    <video id="video-lightbox-player" autoplay loop muted playsinline></video>
     <img id="video-lightbox-image" alt="">
     <div id="video-lightbox-text"></div>
   </div>

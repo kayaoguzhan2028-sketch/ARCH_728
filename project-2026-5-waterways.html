@@ -30,6 +30,14 @@
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
 
+  .waterways-map { position:relative; width:100%; margin:2.5rem 0; }
+  .waterways-map img { width:100%; display:block; margin:0; opacity:0.9; }
+  .waterways-overlay { position:absolute; top:0; left:0; width:100%; height:100%; }
+  .waterway-path { fill:var(--accent); opacity:0; cursor:pointer; pointer-events:fill; transition:opacity 0.25s ease, filter 0.25s ease; }
+  .waterway-path:hover { opacity:0.65; filter:drop-shadow(0 0 14px var(--accent)); }
+  #waterways-tooltip { position:fixed; background:var(--black); color:var(--white); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; transform:translate(-50%,-140%); }
+  #waterways-tooltip.show { opacity:1; }
+
   .site-focus { display:flex; gap:2rem; align-items:flex-start; flex-wrap:wrap; margin:2.5rem 0; }
   .site-focus img { flex:2 1 380px; max-width:65%; display:block; margin:0; opacity:0.9; }
   .site-focus p { flex:1 1 220px; margin:0; }
@@ -64,7 +72,11 @@
 
     <p>Ankara's waterways, which are mostly covered with soil and concrete, enable contamination, soil and materials to flow into each other and across the city. By mapping these waterways, the hydrological connections near the Grand Çankaya Hotel site are revealed.</p>
 
-    <img src="2026-images/2026-p5/04-WaterWays/city-scale.webp" alt="City-scale waterways map">
+    <div class="waterways-map">
+      <img src="2026-images/2026-p5/04-WaterWays/city-scale.webp" alt="City-scale waterways map">
+      <svg class="waterways-overlay" id="waterways-overlay" viewBox="0 0 5071 3060" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div id="waterways-tooltip"></div>
 
     <h2>Site Focus</h2>
 
@@ -107,5 +119,56 @@
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
+<script>
+  const riverNames = [
+    'Ankara Çayı',
+    'Bağlum Deresi',
+    'Cevizlidere',
+    'Dikmen Deresi',
+    'Hatip Çayı',
+    'Kavaklıdere',
+    'Kepir Deresi',
+    'Kurtini Deresi',
+    'Kıyam Deresi',
+    'Macun Deresi',
+    'Sazlık Deresi',
+    'Söğütözü Deresi',
+    'Uğ Deresi',
+    'Çobançeşmesi Deresi',
+    'Çubuk Çayı',
+    'Öveçler Deresi',
+    'İncesu Deresi',
+    'İğdeli Deresi'
+  ];
+
+  const waterwaysOverlay = document.getElementById('waterways-overlay');
+  const waterwaysTooltip = document.getElementById('waterways-tooltip');
+
+  riverNames.forEach((name) => {
+    fetch('2026-images/2026-p5/04-WaterWays/hover-glow-svg/' + encodeURIComponent(name) + '.svg')
+      .then((res) => res.text())
+      .then((svgText) => {
+        const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const srcPath = doc.querySelector('path');
+        if (!srcPath) return;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', srcPath.getAttribute('d'));
+        path.setAttribute('data-name', name);
+        path.classList.add('waterway-path');
+        path.addEventListener('mouseenter', () => {
+          waterwaysTooltip.textContent = name;
+          waterwaysTooltip.classList.add('show');
+        });
+        path.addEventListener('mousemove', (e) => {
+          waterwaysTooltip.style.left = e.clientX + 'px';
+          waterwaysTooltip.style.top = e.clientY + 'px';
+        });
+        path.addEventListener('mouseleave', () => {
+          waterwaysTooltip.classList.remove('show');
+        });
+        waterwaysOverlay.appendChild(path);
+      });
+  });
+</script>
 </body>
 </html>
