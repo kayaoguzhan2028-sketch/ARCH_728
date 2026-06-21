@@ -47,6 +47,8 @@
   .hover-popup { position:fixed; z-index:500; pointer-events:none; opacity:0; transition:opacity 0.15s ease; max-width:260px; }
   .hover-popup.visible { opacity:1; }
   .hover-popup img { width:100%; display:block; border:1px solid var(--border); background:var(--black); }
+  .line-tooltip { position:fixed; z-index:500; pointer-events:none; opacity:0; transition:opacity 0.15s ease; max-width:280px; font-size:0.85rem; line-height:1.5; background:rgba(10,10,10,0.92); border:1px solid var(--border); padding:0.6rem 0.8rem; color:var(--white); }
+  .line-tooltip.visible { opacity:1; }
   .media-row { display:flex; gap:2rem; align-items:center; margin:3rem 0; }
   .media-row > img { flex:0 0 45%; width:45%; display:block; margin:0; opacity:0.9; }
   .media-row .media-text { flex:1; min-width:0; }
@@ -93,8 +95,16 @@
   .section2-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
   .section3-grid { display:grid; grid-template-columns:100%; grid-template-rows:65% 35%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
   .section3-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
-  .section5-grid { display:grid; grid-template-columns:100%; grid-template-rows:42% 58%; width:100%; min-height:0; gap:0; }
+  .section5-grid { display:grid; grid-template-columns:100%; grid-template-rows:42% 58%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.85); margin:0 auto calc((100vh - 52px) * 0.05); gap:0; }
   .section5-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
+  .section6-grid { display:grid; grid-template-columns:100%; grid-template-rows:48% 52%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
+  .section6-cell { overflow:hidden; border:1px solid red; min-height:0; }
+  .section7-grid { display:grid; grid-template-columns:100%; grid-template-rows:48% 52%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
+  .section7-cell { overflow:hidden; border:1px solid red; min-height:0; }
+  .grid6-grid { display:grid; grid-template-columns:100%; grid-template-rows:50% 50%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
+  .grid6-cell { overflow:hidden; border:1px solid red; min-height:0; padding:0; display:flex; align-items:center; justify-content:center; }
+  .grid6-cell .interactive-image { width:100%; height:100%; margin:0; }
+  .grid6-cell .interactive-image img { width:100%; height:100%; object-fit:contain; }
   .section.section-text { height:auto; overflow:visible; padding:5rem 0; }
   .section-text ul { padding-left:1.2rem; margin:0 0 1.6rem; }
   .section-text ul li { margin-bottom:1rem; }
@@ -120,7 +130,7 @@
   .image-modal-frame { position:relative; width:100%; max-width:620px; max-height:90vh; overflow-y:auto; background:var(--black); border:1px solid var(--border); padding:3rem 2rem 2rem; }
   .image-modal-frame img { width:100%; display:block; margin:0 0 1.5rem; opacity:0.92; transition:opacity 0.15s ease; }
   .image-modal-frame img.loading { opacity:0; }
-  .image-modal-frame p { font-size:1.1rem; line-height:1.95; opacity:0.82; margin:0; }
+  .image-modal-frame p { font-size:1.1rem; line-height:1.95; opacity:0.82; margin:0; text-align:justify; }
   .image-modal-close { position:absolute; top:0.8rem; right:0.8rem; width:36px; height:36px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.7; transition:opacity 0.2s,background 0.2s; }
   .image-modal-close:hover { opacity:1; background:rgba(245,242,235,0.14); }
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; padding:2rem; }
@@ -234,14 +244,13 @@
     </div>
 
     <div class="section">
-      <div style="display:flex; flex-direction:column; height:calc(100vh - 52px); width:100%; max-width:620px; margin:0 auto;">
-      <p style="padding:0 4%; margin:0;">Technical Details of Çubuk 1 Dam</p>
-      <div class="section5-grid" style="flex:1 1 auto; min-height:0;">
-        <div class="section5-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-          <img src="2026-images/2026-p8/4/1.webp" alt="" style="max-width:100%;max-height:80%;object-fit:contain;display:block;">
-          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0.5rem; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
+      <p style="width:100%; max-width:620px; margin:0 auto; padding:0 4%; font-size:1.5rem;">Technical Details of Çubuk 1 Dam</p>
+      <div class="section5-grid">
+        <div class="section5-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;">
+          <img src="2026-images/2026-p8/4/1.webp" alt="" style="max-width:100%;max-height:80%;object-fit:contain;display:block;margin:0;">
+          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
         </div>
-        <div class="section5-cell">
+        <div class="section5-cell" style="padding:0;">
           <p style="text-align:justify; margin-bottom:1rem;">The Çubuk basin's Arkhe is defined by an ephemeral, <strong>seasonal water system</strong> rather than abundant accumulation.</p>
           <p style="text-align:justify; margin-bottom:1rem;">The dam's <strong>700 km² catchment area</strong> is situated in a <strong>strictly water-scarce region</strong>, receiving an <strong>average annual precipitation of only ~250 mm</strong> (comprising both rain and snow).</p>
           <ul style="margin:0 0 1rem; padding-left:1.2rem;">
@@ -250,6 +259,60 @@
           <p style="text-align:justify;">The spatial ambition of the Çubuk Dam was fundamentally at odds with the environmental reality of its site. By imposing a massive infrastructure onto a low-precipitation basin, <strong>the modernization project demanded an extraction of water that pushed the regional ecosystem to the limits of its metabolic capacity, transforming a seasonal watershed into a heavily regulated urban reservoir</strong>.</p>
         </div>
       </div>
+    </div>
+
+    <div class="section">
+      <div class="section6-grid">
+        <div class="section6-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <img src="2026-images/2026-p8/4/2.webp" alt="" style="max-width:100%;max-height:80%;object-fit:contain;display:block;margin:0;">
+          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
+        </div>
+        <div class="section6-cell">
+          <p style="text-align:justify; margin-bottom:1rem;">The site's geology did not passively accept construction; the <strong>initial bedrock found at a 17m depth</strong> was weathered and saturated with pyrite (FeS), <strong>actively threatening the durability of any intervention</strong>.</p>
+          <p style="text-align:justify; margin-bottom:1rem;">Bypassing further <strong>weak structural layers at 20m</strong>, engineers were forced to excavate through soft, dissolving kaolin down to <strong>28–33 m to find stable ground, requiring extensive tie-back retaining walls</strong> to safely enforce the Tekton.</p>
+          <ul style="margin:0; padding-left:1.2rem;">
+            <li style="text-align:justify;">The sheer material resistance of the soil altered the architectural outcome; while designed visually as an arch dam, the structure relies fundamentally on gravity to transfer its load, using unyielding mass to conquer the site.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section7-grid">
+        <div class="section7-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <img src="2026-images/2026-p8/4/3.webp" alt="" style="max-width:100%;max-height:80%;object-fit:contain;display:block;margin:0;">
+          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
+        </div>
+        <div class="section7-cell">
+          <p style="text-align:justify; margin-bottom:1rem;">To stave off the inevitable Entropy threatened by the <strong>pyrite-rich soil, trass was actively added to the concrete mix to neutralize deterioration</strong>, while copper waterstops were embedded at the joints to enforce absolute watertightness.</p>
+          <p style="text-align:justify; margin-bottom:1rem;">A highly controlled <strong>drainage system</strong>, cast from <strong>permeable</strong>, <strong>sand-free concrete</strong> and <strong>arrayed in a grid</strong>, was installed <strong>1.75 m behind the upstream face to manage hydrostatic pressure and internal water flows</strong>.</p>
+          <ul style="margin:0 0 1rem; padding-left:1.2rem;">
+            <li style="text-align:justify;"><strong>The concrete</strong> itself was engineered to strict German Railway standards, comprising <strong>390 L of fine aggregate and 530 L of coarse aggregate</strong>, with <strong>clay content scrubbed below 3%</strong> to create a highly regulated material order.</li>
+          </ul>
+          <p style="text-align:justify;">To sustain this structural hegemony and delay the inevitable onset of Entropy, the dam required a highly specific, <strong>engineered second nature</strong>. This system functions as <strong>the dam's artificial metabolism</strong>, continuously managing hydrostatic pressure and internal flows to prolong the survival of the Tekton against the relentless, dissolving forces of the landscape.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <img src="2026-images/2026-p8/4/4.webp" alt="">
+    </div>
+
+    <div class="section section-zoom">
+      <div class="interactive-image">
+        <img src="2026-images/2026-p8/5/_main.webp" alt="">
+        <svg class="hotspot-overlay" id="overlay-svg9" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+
+    <div class="section section-stack" style="margin-top:5vh;">
+      <div class="interactive-image">
+        <img src="2026-images/2026-p8/6/1.webp" alt="">
+        <svg class="hotspot-overlay" id="overlay-svg10a" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="interactive-image">
+        <img src="2026-images/2026-p8/6/2.webp" alt="">
+        <svg class="hotspot-overlay" id="overlay-svg10b" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     </div>
 
@@ -425,6 +488,7 @@
     </button>
     <img id="image-modal-img" src="" alt="">
     <p id="image-modal-text"></p>
+    <img id="image-modal-img2" src="" alt="" style="display:none;">
   </div>
 </div>
 <div class="panel-overlay" id="panel-overlay">
@@ -442,6 +506,7 @@
   </div>
 </div>
 <div class="hover-popup" id="hover-popup"><img id="hover-popup-img" src="" alt=""></div>
+<div class="line-tooltip" id="line-tooltip"></div>
 <script>
   const slider2Images = [
     '2026-images/2026-p8/Görsel7.webp',
@@ -516,12 +581,23 @@
   const imageModal = document.getElementById('image-modal');
   const imageModalImg = document.getElementById('image-modal-img');
   const imageModalText = document.getElementById('image-modal-text');
+  const imageModalImg2 = document.getElementById('image-modal-img2');
 
   function openImageModal(index) {
     swapImageSrc(imageModalImg, hotspotModalData[index].img);
     const text = hotspotModalData[index].text;
     imageModalText.textContent = text;
     imageModalText.style.display = text ? '' : 'none';
+    imageModalImg2.style.display = 'none';
+    imageModal.classList.add('active');
+  }
+
+  function openAlanModal(topSrc, html, bottomSrc) {
+    swapImageSrc(imageModalImg, topSrc);
+    imageModalText.innerHTML = html;
+    imageModalText.style.display = html ? '' : 'none';
+    swapImageSrc(imageModalImg2, bottomSrc);
+    imageModalImg2.style.display = 'block';
     imageModal.classList.add('active');
   }
 
@@ -658,6 +734,96 @@
         overlaySvg4.appendChild(path);
       });
   });
+
+  const overlaySvg9 = document.getElementById('overlay-svg9');
+  const BASE_SVG9_ALAN = '2026-images/2026-p8/5/svg/alan/';
+  const BASE_SVG9_LINES = '2026-images/2026-p8/5/svg/çizgiler/';
+
+  const BASE_IMG9 = '2026-images/2026-p8/5/';
+  const FILES9_ALAN = [
+    { svg:'ALAN1.svg', top:'1.1.webp', bottom:'1.2.webp', html:'This highlighted section captures the fundamental metabolic rift that occurs as the landscape transitions out of the Arkhe. As the ground is sealed, the space is fractured. In the unbothered Arkhe, the natural colluvium layer is fully porous, allowing for maximum <strong>biological and hydrological exchange</strong>. However, as the timeline moves forward, this permeability experiences gradual decline. The imposition of the Tekton specifically the deep excavation and concrete seals the earth. The open bio-infrastructure is choked, and the <strong>natural flows are restricted</strong>. Conversely, differentiation steadily rises. In its original state, the valley functioned as a relatively contiguous, unbroken ecological system. But as human intervention takes hold, it actively produces geographical inequalities. The landscape is segmented into specific, engineered zones: the submerged reservoir, the dry downstream riverbed, the sealed concrete spillways, and the promenades. As we move toward Entropy, this differentiation continues to create varying, localized micro-ecologies across the site.' },
+    { svg:'ALAN2.svg', top:'2.1.webp', bottom:'2.2.webp', html:'Spanning from the height of the Tekton phase through the absolute completion of Entropy, this zone illustrates eventual synthesis between the accumulation of human architecture and the visibility of the earth\'s <strong>metabolic labor</strong>. At the height of the dam\'s operational hegemony, Stratification is actively occurring as an architectural and social imposition as well as part of pedogenesis. The relentless, subterranean labor of the soil and the forced accumulation of sediment are completely masked by the tektonic structre. As the Tekton reaches its material limits and Entropy sets in, the architecture fractures, visibility starts rising up. The internal, hidden layers of the dam, the trapped soil, and the hidden pedogenesis, are violently exposed to the observer. The landscape\'s suppressed metabolism breaks the surface. By the end of the entropic cycle, <strong>the dam has been assimilated by the earth</strong> becoming just another layer within the site\'s ongoing Stratification. What was once a symbol of human mastery is now fully visible as a  layer of soil and thriving bio-infrastructure, ready to serve as the foundation for the next Arkhe.' },
+    { svg:'ALAN3.svg', top:'3.1.webp', bottom:'3.2.webp', html:'This highlighted intersection illustrates the hidden, continuous labor of the soil operating directly beneath the structural hegemony of the Tekton phase. The architectural spatial fix of the dam forces <strong>unnatural accumulation</strong> of matter, which the earth immediately begins to metabolize. The dam fundamentally alters the site\'s hydrology, turning the reservoir into a massive, static trap. Silt, organic runoff, and upstream debris are halted by the concrete wall. This is a forced sedimentation dictated entirely by human engineering. Even while trapped the site\'s bio-infrastructure does not cease to function. Microorganisms and life in the reservoir actively <strong>digest</strong> this trapped sediment.' },
+    { svg:'ALAN4.svg', top:'4.1.webp', bottom:'4.2.webp', html:'This highlighted intersection marks the critical threshold where the structural hegemony of the <strong>Tekton begins to fracture</strong>, initiating the onset of Entropy. In this transitionary zone, the landscape\'s Resilience forces a physical rupture that allows Biodiversity to reclaim the site. As the engineered watertightness and concrete surfaces degrade, biological permeability returns.<br><br>Here, Resilience performs the geological labor of breaking the spatial fix, while Biodiversity leverages these fractures to infiltrate the ruins, jumpstart pedogenesis, and begin composting the industrial remnants into a new, <strong>historically altered Arkhe</strong>.' }
+  ];
+  const FILES9_LINES = [
+    { svg:'biodiversity.svg', text:'Biodiversity: Rather than a mere metric of species count, <strong>this represents the dense, interdependent network of non-human actors within the soil\'s bio-infrastructure</strong>. It is the <strong>living baseline of the Arkhe</strong>, measuring the ecocentric health of the site before, during, and after tectonic interventions.' },
+    { svg:'critical zone.svg', text:'Critical Zone: The active, liminal envelope of the Earth from the vegetation canopy down to the deep bedrock. Fundamentally, it is the biosphere; <strong>the myriad forms of life on, in, and within the soil actively comprise the critical zone itself</strong>. Simply put: where there is life intimately tied to the soil, there is the critical zone. It represents the primary spatial arena where the friction between environmental homeostasis and tectonic engineering takes place.' },
+    { svg:'differentiation.svg', text:'Differentiation: The spatial and material variations that emerge across the landscape as the intensities of the other parameters intersect and diverge. It highlights <strong>how human intervention actively produces highly specific geographic inequalities</strong>. It proves that the site is never a homogenous block, but <strong>a deeply fragmented bio-infrastructure shaped by distinct socio-spatial modifications</strong>.' },
+    { svg:'habitability.svg', text:'Habitability: An ecocentric, rather than strictly human-centric, condition. It defines <strong>the capacity of the ground to sustain</strong> its complex, interspecies relations against the socio-spatial pressures that seek to fragment, segment, or enclose the environment. It tracks how effectively the bio-infrastructure can <strong>maintain a livable, supportive network for non-human actors</strong> when subjected to the unequal burdens and extraction of intensive modernization.' },
+    { svg:'pedogenesis.svg', text:'Pedogenesis: The active, continuous <strong>history of soil formation</strong>, proving that soil is a continuously produced material reality rather than a static backdrop. This includes urban pedogenesis a process of soil transformation that actively takes place even under the heavy constraints of the Tekton phase. This heavily engineered, modified <strong>urban soil then becomes the literal and metabolic basis</strong> for the regenerative construction of new earth in the subsequent Entropy phase.' },
+    { svg:'permability.svg', text:'Permeability: The physical and systemic capacity of the landscape to allow <strong>the flow of water and matter</strong>, but more crucially, the <strong>permeability of life itself</strong>. It measures the <strong>ability of organic actors</strong>, roots, and microorganisms <strong>to move, exchange, and metabolize within the soil</strong>. The Tekton phase severely restricts this biological permeability, forcing a <strong>metabolic rift</strong> that the soil\'s living network eventually seeks to break through during Entropy.' },
+    { svg:'regeneration.svg', text:'Regeneration: The generative, <strong>metabolic labor of Entropy</strong>. This is the process by which the <strong>soil actively composts</strong> the physical ruins and obsolete structures of the engineered landscape. By <strong>digesting the remnants of human mastery</strong>, turning concrete, steel, and accumulated waste into a <strong>foundational substrate</strong>, regeneration performs the <strong>crucial labor required to establish a new, historically altered Arkhe</strong>.' },
+    { svg:'resilience.svg', text:'Resilience: The <strong>landscape\'s inherent capacity to absorb</strong> the violent shocks of deep excavation, material extraction, and structural imposition. However, it is not merely passive endurance; resilience is <strong>nature\'s active capacity to keep fighting back</strong> against the Tekton. It is the relentless push of biological and geological forces that ultimately breaks the human construct, <strong>forcing the site to construct a new ecological equilibrium</strong>.' },
+    { svg:'sedimentatior.svg', text:'Sedimentation: This operates on two distinct, intersecting levels. Conceptually, within our methodology, it is <strong>the accumulation of historical time and social settings</strong>. Materially, it is the literal <strong>accumulation of matter</strong>, silt, runoff, organic debris, and industrial remnants, building up at the bottom of the dam\'s water reservoir. This physical buildup eventually chokes the tectonic infrastructure while <strong>directly contributing fresh, dynamic material to the site\'s ongoing soil metabolism</strong>.' },
+    { svg:'stratification.svg', text:'Stratification: The vertical dimension of the site\'s transformation, focusing on the <strong>material layering of social and spatial phenomena over time</strong>. It acts as the accumulation of "bricks" in our environmental metabolic historiography. As the Arkhe, Tekton, and Entropy phases chain together, their helical progression forms the metaphorical cylinder of the site, where this <strong>dense stratification continuously accumulates and physically records the site\'s history</strong>.' },
+    { svg:'symbiosis.svg', text:'Symbiosis: The mutual, asynchronous <strong>coexistence of multiple environmental and spatial cycles</strong>. Rather than a static state of harmony, this curve focuses on the <strong>adaptive capacity of the site</strong>, the ongoing ability of human and non-human actors to <strong>improve their ways of living symbiotically</strong>, continually adjusting and <strong>finding new ecological balances</strong> even as the broader environment, hydrology, and soil composition undergo relentless changes.' },
+    { svg:'visibility.svg', text:'Visibility: This parameter tracks the <strong>recognition of the soil\'s active metabolic labor</strong>. Visibility is at its absolute lowest during the Tekton phase; the hyper-engineered infrastructure paves over the ground, <strong>rendering the vital, regenerative labor of the soil and non-human actors entirely invisible</strong>. As the site shifts toward Entropy, this <strong>metabolic labor</strong> breaks the surface and <strong>becomes visible once again</strong>.' }
+  ];
+
+  const lineTooltip = document.getElementById('line-tooltip');
+  function showLineTooltip(text, x, y) {
+    lineTooltip.innerHTML = text;
+    lineTooltip.style.left = (x + 20) + 'px';
+    lineTooltip.style.top = (y + 20) + 'px';
+    lineTooltip.classList.add('visible');
+  }
+  function moveLineTooltip(x, y) {
+    lineTooltip.style.left = (x + 20) + 'px';
+    lineTooltip.style.top = (y + 20) + 'px';
+  }
+  function hideLineTooltip() {
+    lineTooltip.classList.remove('visible');
+  }
+
+  FILES9_ALAN.forEach(cfg => {
+    fetch(encodeURI(BASE_SVG9_ALAN + cfg.svg))
+      .then(r => r.text())
+      .then(svgText => {
+        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const path = document.importNode(parsed.querySelector('path'), true);
+        path.setAttribute('class', 'hotspot-solo');
+        if (cfg.top) {
+          path.addEventListener('click', () => openAlanModal(BASE_IMG9 + cfg.top, cfg.html, BASE_IMG9 + cfg.bottom));
+        } else {
+          path.addEventListener('click', () => openPanel(BASE_IMG9, cfg.bottom, cfg.html));
+        }
+        overlaySvg9.appendChild(path);
+      });
+  });
+
+  FILES9_LINES.forEach(cfg => {
+    fetch(encodeURI(BASE_SVG9_LINES + cfg.svg))
+      .then(r => r.text())
+      .then(svgText => {
+        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const path = document.importNode(parsed.querySelector('path'), true);
+        path.setAttribute('class', 'hotspot-area');
+        path.addEventListener('mouseenter', (e) => showLineTooltip(cfg.text, e.clientX, e.clientY));
+        path.addEventListener('mousemove', (e) => moveLineTooltip(e.clientX, e.clientY));
+        path.addEventListener('mouseleave', hideLineTooltip);
+        overlaySvg9.appendChild(path);
+      });
+  });
+
+  const overlaySvg10a = document.getElementById('overlay-svg10a');
+  const overlaySvg10b = document.getElementById('overlay-svg10b');
+  const CEMBER_FILES = ['çember 1.svg','çember 2.svg','çember 3.svg','çember 4.svg','çember 5.svg','çember 6.svg','çember 7.svg','çember 8.svg','çember 9.svg'];
+
+  function loadCemberOverlay(overlayEl, baseFolder) {
+    CEMBER_FILES.forEach(f => {
+      fetch(encodeURI('2026-images/2026-p8/6/svg/' + baseFolder + '/' + f))
+        .then(r => r.text())
+        .then(svgText => {
+          const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+          const path = document.importNode(parsed.querySelector('path'), true);
+          path.setAttribute('class', 'hotspot-area');
+          overlayEl.appendChild(path);
+        });
+    });
+  }
+  loadCemberOverlay(overlaySvg10a, '1');
+  loadCemberOverlay(overlaySvg10b, '2');
 
   const FILES5 = [
     { svg:'taralı alan 1.svg', webp:'ETKİLEŞİMLİ GÖRSEL 5 İÇ GÖRSEL1.webp', caption:`This highlighted intersection marks the critical threshold where the structural hegemony of the Tekton begins to fracture, initiating the onset of Entropy. In this transitionary zone, the landscape's Resilience forces a physical rupture that allows Biodiversity to reclaim the site. As the engineered watertightness and concrete surfaces degrade, biological permeability returns. Here, Resilience performs the geological labor of breaking the spatial fix, while Biodiversity leverages these fractures to infiltrate the ruins, jumpstart pedogenesis, and begin composting the industrial remnants into a new, historically altered Arkhe.` },
