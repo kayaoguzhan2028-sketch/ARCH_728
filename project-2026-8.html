@@ -28,7 +28,7 @@
   #info-panel ul li:last-child { margin-bottom:0; }
   #info-panel em { font-style:italic; }
 
-  .wrap { max-width:620px; margin:0 auto; padding:4.25rem 2rem 1.25rem; }
+  .wrap { width:90%; max-width:800px; margin:0 auto; padding:4.25rem 2rem 1.25rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
@@ -44,6 +44,9 @@
   .hotspot-overlay { position:absolute; top:0; left:0; width:100%; height:100%; }
   .hotspot-area { fill:var(--accent); opacity:0; stroke:transparent; stroke-width:25px; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-area:hover { opacity:0.25; }
+  .hover-popup { position:fixed; z-index:500; pointer-events:none; opacity:0; transition:opacity 0.15s ease; max-width:260px; }
+  .hover-popup.visible { opacity:1; }
+  .hover-popup img { width:100%; display:block; border:1px solid var(--border); background:var(--black); }
   .media-row { display:flex; gap:2rem; align-items:center; margin:3rem 0; }
   .media-row > img { flex:0 0 45%; width:45%; display:block; margin:0; opacity:0.9; }
   .media-row .media-text { flex:1; min-width:0; }
@@ -86,6 +89,10 @@
   .section-zoom-3x .interactive-image { width:300%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
   .section.section-row-wide { overflow:visible; }
   .section-row-wide .media-row { position:relative; width:200%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
+  .section2-grid { display:grid; grid-template-columns:35% 65%; grid-template-rows:35% 65%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
+  .section2-cell { overflow:hidden; border:1px solid red; padding:4%; }
+  .section3-grid { display:grid; grid-template-columns:100%; grid-template-rows:65% 35%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
+  .section3-cell { overflow:hidden; border:1px solid red; padding:4%; }
   .section.section-text { height:auto; overflow:visible; padding:5rem 0; }
   .section-text ul { padding-left:1.2rem; margin:0 0 1.6rem; }
   .section-text ul li { margin-bottom:1rem; }
@@ -187,19 +194,44 @@
   <div class="body">
 
     <div class="section">
-      <img src="2026-images/2026-p8/Main.webp" alt="" style="width:100%;display:block;margin:0;">
+      <div style="display:flex; flex-direction:column; width:fit-content; max-width:100%; margin:0 auto;">
+        <img src="2026-images/2026-p8/1/Main.webp" alt="" style="max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0;">
+        <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0.6rem; text-align:right;">Source: Cover of Çubuk Barajı / Le Barrage de Çubuk (1939), published by T.C. Nafıa Vekâleti.</p>
+      </div>
     </div>
 
-    <div class="section section-text">
-      <h2>The Helical Metabolism of the Landscape</h2>
-      <p>The spatial history of the site is not defined by its erasure, but by its incomplete, continuous transformation. The environment does not exist as a passive backdrop; rather, every material alteration is bound to its ecological origin, progressing not as a linear teleology, but as a circular completion. This asynchronous cycle operates through three interconnected phases:</p>
-      <ul>
-        <li><strong>Arkhe:</strong> The foundational bio-infrastructure and the first principle of the site. It is the pre-intervention state of biological homeostasis, where soil, matter, and non-human actors operate within an unbothered environmental metabolism. It represents the inherent, latent potential of the landscape before it is subjected to human-centric spatial discourse.</li>
-        <li><strong>Tekton:</strong> The era of the founder, the master, and the builder. This is the forceful imposition of an architectural order upon the Arkhe. It represents the tectonic prowess materialized into infrastructure, where the landscape is engineered, segmented, and optimized for socio-spatial reproduction and urban modernization.</li>
-        <li><strong>Entropy:</strong> The inevitable physical and systemic tendency toward natural (dis)order. As the hyper-engineered Tekton phase exhausts its environmental limits, the constructed space begins to fracture. Entropy is the utopian or dystopian breakdown of this human mastery, functioning as the ultimate equalizer that forces the landscape to return its borrowed matter to the soil.</li>
-      </ul>
-      <p>Beginning with the foundational bio-infrastructure of the Arkhe, the landscape is actively produced and mobilized through the structural hegemony of the Tekton, only to inevitably fracture and dissolve via Entropy. This metabolic chain is profoundly interrelated; each phase is not an isolated epoch, but a dialectical necessity that takes root in the material conditions of its predecessor while actively setting the stage for its successor. The Arkhe provides the ecological substrate that the Tekton engineers into a second nature, a constructed environment that, upon reaching its material and systemic limits, collapses into an entropic state. Yet, this Entropy is deeply generative, effectively composting the ruined infrastructure back into the soil to establish a new, historically altered Arkhe.</p>
-      <p>Through this continuous dialectic, the site forms a spatial helix that rises by layering upon itself. After multiple full cycles, the underlying mechanism of socio-spatial reproduction remains an absolute constant, even as the physical context and material realities drastically shift. Ultimately, the metaphorical cylinder of the site acts as a stable, deep-geological memory for this environmental history. No matter the scale or intensity of the spatial fixes we impose, every newly deposited and engineered layer eventually metabolizes, projectively tethering the newest spatial reality to the very ground where it originated.</p>
+    <div class="section">
+      <div class="section2-grid">
+        <div class="section2-cell" style="display:flex;align-items:center;justify-content:center;"><img src="2026-images/2026-p8/2/1.webp" alt="" style="max-width:100%;max-height:100%;object-fit:contain;display:block;"></div>
+        <div class="section2-cell">
+          <p>The Helical Metabolism of the Landscape</p>
+          <p style="text-align:justify;">The spatial history of the site is not defined by its erasure, but by its incomplete, continuous transformation. The environment does not exist as a passive backdrop; rather, every material alteration is bound to its ecological origin, progressing not as a linear teleology, but as a circular completion. This asynchronous cycle operates through three interconnected phases:</p>
+        </div>
+        <div class="section2-cell" style="grid-column:1/-1;">
+          <p style="text-align:justify;"><strong>Arkhe:</strong> The foundational bio-infrastructure and the first principle of the site. It is the pre-intervention state of biological homeostasis, where soil, matter, and non-human actors operate within an unbothered environmental metabolism. It represents the inherent, latent potential of the landscape before it is subjected to human-centric spatial discourse.</p>
+          <p style="text-align:justify;"><strong>Tekton:</strong> The era of the founder, the master, and the builder. This is the forceful imposition of an architectural order upon the Arkhe. It represents the tectonic prowess materialized into infrastructure, where the landscape is engineered, segmented, and optimized for socio-spatial reproduction and urban modernization.</p>
+          <p style="text-align:justify;"><strong>Entropy:</strong> The inevitable physical and systemic tendency toward natural (dis)order. As the hyper-engineered Tekton phase exhausts its environmental limits, the constructed space begins to fracture. Entropy is the utopian or dystopian breakdown of this human mastery, functioning as the ultimate equalizer that forces the landscape to return its borrowed matter to the soil.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section3-grid">
+        <div class="section3-cell" style="display:flex;align-items:center;justify-content:center;padding:0;"><img src="2026-images/2026-p8/2/2.webp" alt="" style="max-width:100%;max-height:100%;object-fit:contain;display:block;"></div>
+        <div class="section3-cell">
+          <p style="text-align:justify;">Beginning with the foundational bio-infrastructure of the Arkhe, the landscape is actively produced and mobilized through the structural hegemony of the Tekton, only to inevitably fracture and dissolve via Entropy. This metabolic chain is profoundly interrelated; each phase is a dialectical necessity that takes root in the material conditions of its predecessor while actively setting the stage for its successor.The Arkhe provides the ecological substrate that the Tekton engineers into a second nature, a constructed environment that, upon reaching its material and systemic limits, collapses into an entropic state. Yet, this Entropy is deeply generative, effectively composting the ruined infrastructure back into the soil to establish a new, historically altered Arkhe.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-zoom">
+      <div class="interactive-image">
+        <img src="2026-images/2026-p8/3/_main.webp" alt="">
+        <svg class="hotspot-overlay" id="overlay-svg4" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+
+    <div class="section">
     </div>
 
     <div class="section section-zoom">
@@ -390,6 +422,7 @@
     <p id="text-panel-body"></p>
   </div>
 </div>
+<div class="hover-popup" id="hover-popup"><img id="hover-popup-img" src="" alt=""></div>
 <script>
   const slider2Images = [
     '2026-images/2026-p8/Görsel7.webp',
@@ -551,6 +584,59 @@
         path.setAttribute('class', 'hotspot-area');
         path.addEventListener('click', () => openPanel(BASE_IMG1, cfg.webp));
         overlaySvg1.appendChild(path);
+      });
+  });
+
+  const hoverPopup = document.getElementById('hover-popup');
+  const hoverPopupImg = document.getElementById('hover-popup-img');
+
+  function showHoverPopup(src, x, y) {
+    hoverPopupImg.src = src;
+    hoverPopup.style.left = (x + 24) + 'px';
+    hoverPopup.style.top = (y + 24) + 'px';
+    hoverPopup.classList.add('visible');
+  }
+  function moveHoverPopup(x, y) {
+    hoverPopup.style.left = (x + 24) + 'px';
+    hoverPopup.style.top = (y + 24) + 'px';
+  }
+  function hideHoverPopup() {
+    hoverPopup.classList.remove('visible');
+  }
+
+  const overlaySvg4 = document.getElementById('overlay-svg4');
+  const BASE_SVG4   = '2026-images/2026-p8/3/svg/';
+  const BASE_IMG4   = '2026-images/2026-p8/3/';
+
+  const FILES4 = [
+    { svg:'Geological Studies.svg', webp:'geologicalstudies.webp' },
+    { svg:'rehabilitation.svg', webp:'Rehabilition__.webp' },
+    { svg:'loss of capacity.svg', webp:'lossofcapacity__.webp' },
+    { svg:'symbol of modern life.svg', webp:'symbol of modern life__.webp' },
+    { svg:'engineering Design.svg', webp:'Engineering Design__.webp' },
+    { svg:'social gathering.svg', webp:'social gathering__.webp' },
+    { svg:'functional loss.svg', webp:'functionalloss__.webp' },
+    { svg:'technical renewal.svg', webp:'Technical Renewal__.webp' },
+    { svg:'operation systems.svg', webp:'operation systems__.webp' },
+    { svg:'ımproved water quality.svg', webp:'improvedwaterquality__.webp' },
+    { svg:'aging infrasturcture.svg', webp:'Aging Infrastructure__.webp' },
+    { svg:'New Topography.svg', webp:'new topography__.webp' },
+    { svg:'natural flow.svg', webp:'Natural Flow__.webp' },
+    { svg:'Abandonment.svg', webp:'abandonment__.webp' },
+    { svg:'Conservation.svg', webp:'conservation2.webp' }
+  ];
+
+  FILES4.forEach(cfg => {
+    fetch(encodeURI(BASE_SVG4 + cfg.svg))
+      .then(r => r.text())
+      .then(svgText => {
+        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const path = document.importNode(parsed.querySelector('path'), true);
+        path.setAttribute('class', 'hotspot-area');
+        path.addEventListener('mouseenter', (e) => showHoverPopup(encodeURI(BASE_IMG4 + cfg.webp), e.clientX, e.clientY));
+        path.addEventListener('mousemove', (e) => moveHoverPopup(e.clientX, e.clientY));
+        path.addEventListener('mouseleave', hideHoverPopup);
+        overlaySvg4.appendChild(path);
       });
   });
 
