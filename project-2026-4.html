@@ -53,19 +53,29 @@
   .triangle-up a:hover svg { opacity:0.6; }
   .triangle-up a[data-tooltip]::after { content:attr(data-tooltip); position:absolute; bottom:140%; left:50%; transform:translateX(-50%); background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; }
   .triangle-up a[data-tooltip]:hover::after { opacity:1; }
-  .grid3x3 { position:relative; display:grid; grid-template-columns:1fr min(1600px,40vw) 1fr; grid-template-rows:3fr 2fr 3fr; height:calc(100vh - 52px); gap:0; margin:0; }
+  .grid3x3 { position:relative; display:grid; grid-template-columns:7fr 11fr 7fr; grid-template-rows:3fr 2fr 3fr; height:calc(100vh - 52px); gap:0; margin:0; }
   .grid3x3 .grid-cell { display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .grid3x3 .grid-cell.info-cell { --gif-w:100%; align-items:flex-start; justify-content:flex-start; flex-direction:column; padding:0.3rem; }
   .grid3x3 .grid-cell.info-cell .cell-title { width:100%; text-align:right; font-size:0.88rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; margin-bottom:0; }
-  .grid3x3 .grid-cell.info-cell img { width:var(--gif-w); height:auto; object-fit:cover; object-position:bottom; margin:0; align-self:flex-end; }
+  .grid3x3 .grid-cell.info-cell img { width:var(--gif-w); height:auto; object-fit:cover; object-position:bottom; margin:0; align-self:flex-end; transition:filter 0.2s, outline-color 0.2s; }
+  .grid3x3 .grid-cell.info-cell img.gif-highlight { outline:2px solid var(--accent); outline-offset:-2px; filter:brightness(1.3) contrast(1.05); }
   .grid3x3 .grid-cell.info-cell p { display:flex; flex-direction:column; gap:0.7rem; width:var(--gif-w); align-self:flex-end; text-align:justify; text-align-last:right; font-size:0.72rem; line-height:1.55; opacity:0.82; margin:0 0 0.7rem; }
   .grid3x3 .grid-cell.info-cell p:last-child { margin-bottom:0; }
   .grid3x3 .grid-cell.info-cell p span, .izohips-text p span { display:block; line-height:1; }
   .grid3x3 .grid-cell.label-overlay { position:relative; }
   .grid3x3 .grid-cell.label-overlay .cell-title { position:absolute; top:1rem; right:1rem; text-align:right; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; z-index:20; margin:0; }
   .grid3x3 .grid-cell img, .grid3x3 .grid-cell video { width:100%; height:100%; object-fit:cover; margin:0; opacity:1; filter:brightness(1) contrast(1); }
-  .grid3x3 .grid-cell.full-img { grid-row:span 2; }
-  .grid3x3 .grid-cell.full-img img { width:100%; height:100%; object-fit:contain; }
+  .grid3x3 .grid-cell.full-img { grid-row:span 2; position:relative; }
+  .grid3x3 .grid-cell.full-img img { width:96%; height:100%; object-fit:contain; }
+  .hotspot-overlay { position:absolute; top:0; bottom:0; left:2%; right:2%; }
+  .hotspot-overlay a { cursor:pointer; }
+  .hotspot-overlay .hotspot { fill:#fff; opacity:0.01; stroke:#000; stroke-width:1px; fill-rule:evenodd; transition:opacity 0.2s; }
+  .hotspot-overlay a:hover .hotspot { opacity:0.16; }
+  #hotspot-tooltip { position:fixed; background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:1500; transform:translate(-50%,-140%); }
+  #hotspot-tooltip.show { opacity:1; }
+  .hero-text { font-family:var(--font); color:var(--white); font-size:13px; line-height:1.35; text-align:justify; text-align-last:right; pointer-events:none; }
+  .hero-text p { margin:0 0 4px; }
+  .hero-text p:last-child { margin-bottom:0; }
   .grid3x3 .grid-cell.video-cell { flex-direction:column; }
   .izohips-row { display:flex; align-items:center; justify-content:center; gap:0; width:100%; }
   .izohips-text { flex:0 1 auto; max-width:50%; min-width:0; text-align:right; }
@@ -139,7 +149,7 @@
     <section class="grid3x3">
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -1 : BİLKENT HOSPITAL</div>
-        <img class="video-lightbox-trigger" style="aspect-ratio:2.459;" src="2026-images/2026-p4/gif/section_1_full_color_invert.gif" alt="Section 1">
+        <img id="vid-s1" class="video-lightbox-trigger" style="aspect-ratio:2.459;" src="2026-images/2026-p4/gif/section_1_full_color_invert.gif" alt="Section 1">
         <p>
           <span>The first context is what we call the sterilized. This refers to Bilkent City Hospital and its immediate surroundings. It is a highly controlled, concrete and organized environment.</span>
           <span style="font-size:1.5rem; font-weight:bold;">2.024.470 m³</span>
@@ -166,19 +176,34 @@
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -4 : ARBORETUM</div>
-        <img class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_4.gif" alt="Section 4">
+        <img id="vid-s4" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_4.gif" alt="Section 4">
         <p>The third context is the incomplete: The arboretum and the Botanical Park surroundings. There is observed uncontrolled growth, reed formations, spontaneous vegetation, and unexpected encounters between steppe ecologies and transported landscape. This became a particularly critical site for us.</p>
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -2 : 6002. ST/1</div>
-        <img class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_2.gif" alt="Section 2">
+        <img id="vid-s2" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_2.gif" alt="Section 2">
       </div>
       <div class="grid-cell full-img">
         <img src="2026-images/2026-p4/webp/0.entry/ANA SAYFA  image.webp" alt="Ana Sayfa">
+        <svg class="hotspot-overlay" viewBox="0 0 808 586" preserveAspectRatio="xMidYMid meet">
+          <a href="project-2026-4-sections1.html" data-highlight="vid-s1" data-section="1" aria-label="Section 3.1"><path class="hotspot" d="M115,314l150-36,1,8L117,326Z"/></a>
+          <a href="project-2026-4-sections2.html" data-highlight="vid-s2" data-section="2" aria-label="Section 3.2"><path class="hotspot" d="M416,237l4,6-92,24-4-8Z"/></a>
+          <a href="project-2026-4-sections3.html" data-highlight="vid-s3" data-section="3" aria-label="Section 3.3"><path class="hotspot" d="M709,153l6,5-2,4L597,189l-6-3v-6Z"/></a>
+          <a href="project-2026-4-sections4.html" data-highlight="vid-s4" data-section="4" aria-label="Section 3.4"><path class="hotspot" d="M465,438l10,6v7l-70,75-11-8-1-10Z"/></a>
+          <a href="project-2026-4-sections5.html" data-highlight="vid-s5" data-section="5" aria-label="Section 3.5"><path class="hotspot" d="M506,304l-57,48v11l9,5,56-55,1-4Z"/></a>
+          <a href="project-2026-4-sections6.html" data-highlight="vid-s6" data-section="6" aria-label="Section 3.6"><path class="hotspot" d="M423,303L542,415l10-6,1-10L433,293l-11,3Z"/></a>
+          <foreignObject x="0" y="265" width="108" height="70">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text">
+              <p>It is excavated.</p>
+              <p>Steril.</p>
+            </div>
+          </foreignObject>
+        </svg>
+        <div id="hotspot-tooltip"></div>
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -5 : 6002. ST/2</div>
-        <img class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_5.gif" alt="Section 5">
+        <img id="vid-s5" class="video-lightbox-trigger" style="aspect-ratio:2.222;" src="2026-images/2026-p4/gif/section_5.gif" alt="Section 5">
       </div>
       <div class="grid-cell info-cell">
         <div class="cell-title">SECTION -3 : BEYTEPE POND</div>
@@ -219,6 +244,24 @@
   document.querySelectorAll('.accordion-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
       document.getElementById(btn.dataset.target).classList.toggle('open');
+    });
+  });
+
+  const hotspotTooltip = document.getElementById('hotspot-tooltip');
+  document.querySelectorAll('.hotspot-overlay a').forEach((a) => {
+    const target = document.getElementById(a.dataset.highlight);
+    a.addEventListener('mouseenter', () => {
+      if (target) target.classList.add('gif-highlight');
+      hotspotTooltip.textContent = 'Click To See Section ' + a.dataset.section;
+      hotspotTooltip.classList.add('show');
+    });
+    a.addEventListener('mousemove', (e) => {
+      hotspotTooltip.style.left = e.clientX + 'px';
+      hotspotTooltip.style.top = e.clientY + 'px';
+    });
+    a.addEventListener('mouseleave', () => {
+      if (target) target.classList.remove('gif-highlight');
+      hotspotTooltip.classList.remove('show');
     });
   });
 
