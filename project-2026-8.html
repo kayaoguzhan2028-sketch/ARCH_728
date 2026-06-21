@@ -44,7 +44,6 @@
   .hotspot-overlay { position:absolute; top:0; left:0; width:100%; height:100%; }
   .hotspot-area { fill:var(--accent); opacity:0; stroke:transparent; stroke-width:25px; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-area:hover { opacity:0.25; }
-  #overlay-svg4 .hotspot-area { transform:scale(1,1.5); transform-box:fill-box; transform-origin:center; }
   .hover-popup { position:fixed; z-index:500; pointer-events:none; opacity:0; transition:opacity 0.15s ease; max-width:260px; }
   .hover-popup.visible { opacity:1; }
   .hover-popup img { width:100%; display:block; border:1px solid var(--border); background:var(--black); }
@@ -66,9 +65,9 @@
   .hotspot-zone { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-zone:hover, .hotspot-group:hover .hotspot-zone { opacity:0.18; }
   .hotspot-line { fill:none; stroke-width:25px; opacity:0; pointer-events:stroke; cursor:pointer; transition:opacity 0.25s ease; }
-  .hotspot-line:hover { opacity:1; }
+  .hotspot-line:hover { opacity:0.15; }
   .hotspot-solo { fill:transparent; stroke:var(--accent); stroke-width:25px; opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
-  .hotspot-solo:hover { opacity:1; }
+  .hotspot-solo:hover { opacity:0.5; }
   .slider { position:relative; width:100%; height:60vh; max-height:480px; margin:0 0 3rem; overflow:hidden; }
   .slider img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; margin:0; opacity:1; }
   .slider .arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(10,10,10,0.35); border:none; cursor:pointer; opacity:0.7; transition:opacity 0.2s; padding:0.75rem 0.9rem; z-index:2; display:flex; align-items:center; justify-content:center; border-radius:2px; color:var(--white); }
@@ -98,26 +97,30 @@
   .section-zoom-2x .interactive-image { width:200%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%) translateY(-6rem); }
   .section.section-zoom-3x { overflow:visible; }
   .section-zoom-3x .interactive-image { width:300%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
+  .section.section-zoom-120 { overflow:visible; }
+  .section-zoom-120 .interactive-image { width:120%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
   .section.section-row-wide { overflow:visible; }
   .section-row-wide .media-row { position:relative; width:200%; max-width:calc(100vw - 4rem); left:50%; transform:translateX(-50%); }
   .section2-grid { display:grid; grid-template-columns:35% 65%; grid-template-rows:35% 65%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
-  .section2-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
+  .section2-cell { overflow:hidden; border:none; padding:4%; min-height:0; }
   .section3-grid { display:grid; grid-template-columns:100%; grid-template-rows:65% 35%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
-  .section3-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
+  .section3-cell { overflow:hidden; border:none; padding:4%; min-height:0; }
   .section5-grid { display:grid; grid-template-columns:100%; grid-template-rows:42% 58%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.85); margin:0 auto calc((100vh - 52px) * 0.05); gap:0; }
-  .section5-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
+  .section5-cell { overflow:hidden; border:none; padding:4%; min-height:0; }
   .section6-grid { display:grid; grid-template-columns:100%; grid-template-rows:48% 52%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
-  .section6-cell { overflow:hidden; border:1px solid red; min-height:0; }
+  .section6-cell { overflow:hidden; border:none; min-height:0; }
   .section14-grid { display:grid; grid-template-columns:100%; grid-template-rows:48% 52%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
-  .section14-cell { overflow:hidden; border:1px solid red; min-height:0; }
+  .section14-cell { overflow:hidden; border:none; min-height:0; }
   .section15-grid { display:grid; grid-template-columns:100%; grid-template-rows:45% 55%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.85); margin:0 auto calc((100vh - 52px) * 0.05); gap:0; }
-  .section15-cell { overflow:hidden; border:1px solid red; padding:4%; min-height:0; }
+  .section15-cell { overflow:hidden; border:none; padding:4%; min-height:0; }
   .section7-grid { display:grid; grid-template-columns:100%; grid-template-rows:48% 52%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.9); margin:calc((100vh - 52px) * 0.05) auto; gap:0; }
-  .section7-cell { overflow:hidden; border:1px solid red; min-height:0; }
+  .section7-cell { overflow:hidden; border:none; min-height:0; }
   .grid6-grid { display:grid; grid-template-columns:100%; grid-template-rows:50% 50%; width:100%; max-width:620px; height:calc((100vh - 52px) * 0.99); margin:0 auto calc((100vh - 52px) * 0.01); gap:0; }
   .grid6-cell { overflow:hidden; border:none; min-height:0; padding:0; display:flex; align-items:center; justify-content:center; }
-  .grid6-cell .interactive-image { width:100%; height:100%; margin:0; }
-  .grid6-cell .interactive-image img { width:100%; height:100%; object-fit:contain; }
+  .grid6-cell:first-child { margin-bottom:-6rem; }
+  .grid6-cell + .grid6-cell { margin-top:-6rem; }
+  .grid6-cell .interactive-image { width:auto; height:auto; max-width:100%; max-height:100%; aspect-ratio:1984/1417; margin:0; }
+  .grid6-cell .interactive-image img { width:100%; height:100%; object-fit:fill; }
   .section.section-text { height:auto; overflow:visible; padding:5rem 0; }
   .section-text ul { padding-left:1.2rem; margin:0 0 1.6rem; }
   .section-text ul li { margin-bottom:1rem; }
@@ -351,9 +354,9 @@
       <p style="text-align:justify;">However, as the timeline progresses toward environmental degradation and functional loss, the imagery reveals the slow, relentless transition into Entropy. <strong>This phase fundamentally rejects any narrative of human exceptionalism in environmental design</strong>. The expanding footprint of sedimentation within the reservoir and the visible pushback of the ecosystem at the edges highlight the <strong>site's inherent resilience</strong>. On a macroscopic scale, the constructed environment is continually being digested; the rigid cells of the urban and infrastructural grid are broken down, proving that <strong>human mastery is ultimately composted back into the earth to synthesize the next cycle of life</strong>.</p>
     </div>
 
-    <div class="section">
-      <p style="text-align:center; font-size:1.5rem; margin:0 0 1rem 0;">Diagramatic Abstraction of Ground Layers</p>
-      <div class="interactive-image">
+    <div class="section section-zoom-120">
+      <p style="text-align:center; font-size:1.5rem; margin:0; transform:translateY(4rem); position:relative; z-index:1;">Diagramatic Abstraction of Ground Layers</p>
+      <div class="interactive-image" style="margin-top:0;">
         <img src="2026-images/2026-p8/8/main.webp" alt="">
         <svg class="hotspot-overlay" id="overlay-svg13" viewBox="0 0 1984 1417" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
