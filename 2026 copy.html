@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
+<title>2026 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { width:100%; background:var(--black); color:var(--white); font-family:var(--font); }
+  .hero-screen { position:relative; width:100%; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .hero-content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .hero-eyebrow { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; opacity:0.35; margin-bottom:1.2rem; }
+  .hero-title { font-size:clamp(4rem,14vw,10rem); font-weight:600; letter-spacing:0.12em; text-transform:uppercase; line-height:1; color:var(--white); margin-bottom:0.6rem; }
+  .hero-subtitle { font-size:clamp(0.9rem,2vw,1.15rem); font-style:italic; color:var(--mid); letter-spacing:0.04em; margin-bottom:3rem; }
+  .project-circle { position:relative; width:min(440px,88vw); height:min(440px,88vw); margin:0 auto; }
+  .project-circle::before { content:''; position:absolute; inset:30px; border:1px solid rgba(245,242,235,0.12); border-radius:50%; }
+  .circle-node { position:absolute; width:60px; height:60px; margin:-30px 0 0 -30px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(245,242,235,0.35); color:var(--white); font-family:var(--font); font-size:0.85rem; letter-spacing:0.15em; text-decoration:none; background:var(--black); overflow:hidden; transition:border-color 0.3s, transform 0.3s ease; }
+  .circle-node::before { content:''; position:absolute; inset:0; background:var(--white); border-radius:50%; transform:scale(0); transition:transform 0.32s cubic-bezier(0.4,0,0.2,1); z-index:0; }
+  .circle-node span { position:relative; z-index:1; transition:color 0.32s; }
+  .circle-node:hover { border-color:var(--white); transform:scale(1.15); }
+  .circle-node:hover::before { transform:scale(1); }
+  .circle-node:hover span { color:var(--black); }
+  .circle-node.red { background:#a3192c; }
+  .circle-node.black { background:#161616; }
+  .circle-node.green { background:#1c6b3f; }
+  .circle-preview { position:absolute; top:50%; left:50%; width:62%; height:62%; transform:translate(-50%,-50%); border-radius:50%; overflow:hidden; pointer-events:none; opacity:0; transition:opacity 0.35s ease; }
+  .circle-preview.active { opacity:1; }
+  .circle-preview img, .circle-preview video { width:100%; height:100%; object-fit:cover; display:block; }
+  .circle-preview .layer-stack { position:absolute; top:0; left:0; }
+  #preview-5 img { object-fit:contain; background:var(--black); }
+  #preview-8 img { object-fit:contain; background:var(--black); }
+  @media (max-width:480px) {
+    .project-circle { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:min(320px,90vw); height:auto; }
+    .project-circle::before { display:none; }
+    .circle-node { position:static; margin:0; width:100%; height:56px; border-radius:0; }
+    .circle-node:hover { transform:none; }
+    .circle-preview { display:none; }
+  }
+  .lucky-btn { margin-top:2.2rem; padding:0.75em 1.8em; font-family:var(--font); font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); background:none; border:1px solid rgba(245,242,235,0.35); cursor:pointer; transition:opacity 0.2s,border-color 0.2s,background 0.2s; opacity:0.75; }
+  .lucky-btn:hover { opacity:1; border-color:var(--white); }
+  .lucky-btn:disabled { opacity:0.3; cursor:default; }
+  .roulette-wrap { position:absolute; top:50%; left:50%; width:0; height:0; }
+  .roulette-ball { position:absolute; top:-190px; left:-5px; width:10px; height:10px; border-radius:50%; background:var(--white); box-shadow:0 0 10px 2px rgba(245,242,235,0.8); opacity:0; transition:opacity 0.2s ease; }
+  .roulette-ball.spinning { opacity:1; }
+  .circle-node.landed { border-color:var(--white); transform:scale(1.25); }
+  .circle-node.landed::before { transform:scale(1); }
+  .circle-node.landed span { color:var(--black); }
+  .scroll-hint { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.2; z-index:1; }
+  .nav-back { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:rgba(10,10,10,0.8); backdrop-filter:blur(6px); }
+  .nav-back a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; transition:opacity 0.2s; }
+  .nav-back a:hover { opacity:1; }
+  .nav-back-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.2; }
+  .description { max-width:680px; margin:0 auto; padding:5rem 2rem 4rem; border-top:1px solid var(--border); }
+  .description p { font-size:1.1rem; line-height:1.85; opacity:0.82; margin-bottom:1.5rem; }
+  .description p:last-child { margin-bottom:0; }
+  .quotes { max-width:720px; margin:0 auto; padding:2rem 2rem 5rem; }
+  .quote-item { padding:2.2rem 0; border-top:1px solid var(--border); }
+  .quote-item:last-child { border-bottom:1px solid var(--border); }
+  .quote-text { font-size:1.05rem; font-style:italic; line-height:1.8; opacity:0.78; margin-bottom:0.6rem; }
+  .quote-attr { font-size:0.8rem; letter-spacing:0.08em; color:var(--mid); opacity:0.7; }
+  .credits { padding:4rem 2rem 3rem; border-top:1px solid var(--border); max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:3rem 2rem; }
+  .credit-group h3 { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.6; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); font-weight:400; }
+  .credit-group ul { list-style:none; }
+  .credit-group li { font-size:0.88rem; line-height:1.9; opacity:0.65; }
+  .credit-group.wide { grid-column:1/-1; }
+  .credit-group.wide ul { columns:4; column-gap:2rem; }
+  footer { border-top:1px solid var(--border); padding:2rem 2.5rem; text-align:center; font-size:0.78rem; opacity:0.35; letter-spacing:0.05em; line-height:2; }
+</style>
+</head>
+<body>
+<nav class="nav-back">
+  <a href="explore.html">← Atlas</a>
+  <span class="nav-back-tag">ARCH 728 · 2026</span>
+</nav>
+<div class="hero-screen">
+  
+  <div class="hero-content">
+    <p class="hero-eyebrow">ARCH 728 · Reflections on Landscape · ODTÜ</p>
+    <h1 class="hero-title">2026</h1>
+    <p class="hero-subtitle">Urban Soil Metabolism · Spring Semester · 9 Project</p>
+    <div class="project-circle">
+      <div class="circle-preview" id="preview-1"><img src="2026-images/2026-p1/1-mainpage/2026-1-728-GruplarArasıDaireGörseli.webp" alt=""></div>
+      <div class="circle-preview" id="preview-2"><img src="2026-images/2026-p2/themodel/00-model-hepsi.webp" alt=""></div>
+      <div class="circle-preview" id="preview-3"><img src="2026-images/2026-p3/5 after sift page-5/after sift-5.3.webp" alt=""></div>
+      <div class="circle-preview" id="preview-4"><video autoplay loop muted playsinline><source src="2026-images/2026-p4/gif/species_tags.mp4" type="video/mp4"></video></div>
+      <div class="circle-preview" id="preview-5"><img src="2026-images/2026-p5/ikon/ikon.webp" alt=""></div>
+      <div class="circle-preview" id="preview-6"><img src="2026-images/2026-p6/0-Main Page/2026-6-by year visual-webp.webp" alt=""></div>
+      <div class="circle-preview" id="preview-8"><img src="2026-images/2026-p8/2/1.webp" alt=""></div>
+      <div class="circle-preview" id="preview-7">
+        <img src="2026-images/2026-p7/Opening Page/Axon all/01_trailmap_son.webp" alt="">
+        <img class="layer-stack" src="2026-images/2026-p7/Opening Page/Axon all/02_barbarianmap.webp" alt="">
+      </div>
+      <div class="circle-preview" id="preview-9"><img src="2026-images/2026-p9/Harita.webp" alt=""></div>
+      <a href="project-2026-1.html" class="circle-node green" style="top:6.82%;left:50%;"><span>01</span></a>
+      <a href="project-2026-2.html" class="circle-node red" style="top:16.93%;left:77.75%;"><span>02</span></a>
+      <a href="project-2026-3.html" class="circle-node black" style="top:42.5%;left:92.53%;"><span>03</span></a>
+      <a href="project-2026-4.html" class="circle-node red" style="top:71.59%;left:87.39%;"><span>04</span></a>
+      <a href="2026-pages/p5-pages/2026-5.html" class="circle-node black" style="top:90.58%;left:64.77%;"><span>05</span></a>
+      <a href="project-2026-6.html" class="circle-node red" style="top:90.58%;left:35.23%;"><span>06</span></a>
+      <a href="project-2026-7.html" class="circle-node black" style="top:71.59%;left:12.61%;"><span>07</span></a>
+      <a href="project-2026-8.html" class="circle-node red" style="top:42.5%;left:7.47%;"><span>08</span></a>
+      <a href="project-2026-9.html" class="circle-node black" style="top:16.93%;left:22.25%;"><span>09</span></a>
+      <div class="roulette-wrap" id="roulette-wrap"><div class="roulette-ball" id="roulette-ball"></div></div>
+    </div>
+    <button class="lucky-btn" id="lucky-btn">I'm Feeling Lucky</button>
+  </div>
+  <p class="scroll-hint">&#8595; scroll</p>
+</div>
+<section class="description">
+  <p>Soil is examined as a metabolically active urban medium — continuously produced, displaced, transformed, and regulated through intertwined human and non-human forces. In this context, Ankara foregrounds the soil's agency, revealing the ground as a dynamic force within the city's transformations.</p>
+</section>
+<section class="quotes">
+  <div class="quote-item"><p class="quote-text">"When does soil become visible — and when is it rendered invisible in the city?"</p><p class="quote-attr">— Visibility</p></div>
+  <div class="quote-item"><p class="quote-text">"When is soil alive, inert, or waste? And whose labor sustains it?"</p><p class="quote-attr">— (In)Habitability</p></div>
+  <div class="quote-item"><p class="quote-text">"What does soil carry and transform as it moves?"</p><p class="quote-attr">— Transportability</p></div>
+</section>
+<div class="credits">
+  <div class="credit-group"><h3>Curated and Taught by</h3><ul><li>Funda Baş Bütüner</li><li>Gizem Deniz Güneri Söğüt</li><li>Ebru Evin</li></ul></div>
+  <div class="credit-group"><h3>Institution</h3><ul><li>METU · Department of Architecture</li></ul></div>
+  <div class="credit-group wide"><h3>Projeler — Spring 2026</h3><ul>
+    <li><a href="project-2026-1.html" style="color:inherit;text-decoration:none;opacity:0.65;">01 — Project 01</a></li>
+    <li><a href="project-2026-2.html" style="color:inherit;text-decoration:none;opacity:0.65;">02 — Project 02</a></li>
+    <li><a href="project-2026-3.html" style="color:inherit;text-decoration:none;opacity:0.65;">03 — Project 03</a></li>
+    <li><a href="project-2026-4.html" style="color:inherit;text-decoration:none;opacity:0.65;">04 — Project 04</a></li>
+    <li><a href="2026-pages/p5-pages/2026-5.html" style="color:inherit;text-decoration:none;opacity:0.65;">05 — Project 05</a></li>
+    <li><a href="project-2026-6.html" style="color:inherit;text-decoration:none;opacity:0.65;">06 — Project 06</a></li>
+    <li><a href="project-2026-7.html" style="color:inherit;text-decoration:none;opacity:0.65;">07 — İlker Mahallesi</a></li>
+    <li><a href="project-2026-8.html" style="color:inherit;text-decoration:none;opacity:0.65;">08 — Project 08</a></li>
+    <li><a href="project-2026-9.html" style="color:inherit;text-decoration:none;opacity:0.65;">09 — Project 09</a></li>
+  </ul></div>
+</div>
+<footer><p>© 2026 METU · ARCH 728 · Spring Semester</p></footer>
+<script>
+  const previews = {
+    1:{ id:'preview-1', href:'project-2026-1.html' },
+    2:{ id:'preview-2', href:'project-2026-2.html' },
+    3:{ id:'preview-3', href:'project-2026-3.html' },
+    4:{ id:'preview-4', href:'project-2026-4.html' },
+    5:{ id:'preview-5', href:'2026-pages/p5-pages/2026-5.html' },
+    6:{ id:'preview-6', href:'project-2026-6.html' },
+    7:{ id:'preview-7', href:'project-2026-7.html' },
+    8:{ id:'preview-8', href:'project-2026-8.html' },
+    9:{ id:'preview-9', href:'project-2026-9.html' }
+  };
+  Object.values(previews).forEach(({ id, href }) => {
+    const node = document.querySelector('a[href="' + href + '"]');
+    const preview = document.getElementById(id);
+    node.addEventListener('mouseenter', () => preview.classList.add('active'));
+    node.addEventListener('mouseleave', () => preview.classList.remove('active'));
+  });
+
+  // Roulette: nodes sit every 40deg around the circle, starting at the top (project 01 = 0deg, clockwise).
+  const luckyBtn = document.getElementById('lucky-btn');
+  const rouletteWrap = document.getElementById('roulette-wrap');
+  const rouletteBall = document.getElementById('roulette-ball');
+  const nodeNumbers = Object.keys(previews).map(Number).sort((a, b) => a - b);
+  let currentRotation = 0;
+  let activePreviewId = null;
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function setActivePreview(pick) {
+    if (activePreviewId) document.getElementById(activePreviewId).classList.remove('active');
+    activePreviewId = previews[pick].id;
+    document.getElementById(activePreviewId).classList.add('active');
+  }
+
+  luckyBtn.addEventListener('click', () => {
+    luckyBtn.disabled = true;
+    document.querySelectorAll('.circle-node.landed').forEach((n) => n.classList.remove('landed'));
+
+    const pick = nodeNumbers[Math.floor(Math.random() * nodeNumbers.length)];
+    const targetAngle = (pick - 1) * 40;
+    const extraSpins = 7;
+    const currentMod = ((currentRotation % 360) + 360) % 360;
+    const delta = ((targetAngle - currentMod) + 360) % 360;
+    const startRotation = currentRotation;
+    const totalDelta = extraSpins * 360 + delta;
+    const duration = 6200;
+
+    rouletteBall.classList.add('spinning');
+    const startTime = performance.now();
+
+    function frame(now) {
+      const t = Math.min((now - startTime) / duration, 1);
+      const angle = startRotation + totalDelta * easeOutCubic(t);
+      rouletteWrap.style.transform = 'rotate(' + angle + 'deg)';
+
+      const angleMod = ((angle % 360) + 360) % 360;
+      let nearestPick = nodeNumbers[0], nearestDist = Infinity;
+      nodeNumbers.forEach((n) => {
+        const nodeAngle = (n - 1) * 40;
+        const d = Math.min(Math.abs(angleMod - nodeAngle), 360 - Math.abs(angleMod - nodeAngle));
+        if (d < nearestDist) { nearestDist = d; nearestPick = n; }
+      });
+      if (previews[nearestPick].id !== activePreviewId) setActivePreview(nearestPick);
+
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        currentRotation = startRotation + totalDelta;
+        const { href } = previews[pick];
+        document.querySelector('a[href="' + href + '"]').classList.add('landed');
+        rouletteBall.classList.remove('spinning');
+        setTimeout(() => { window.location.href = href; }, 900);
+      }
+    }
+    requestAnimationFrame(frame);
+  });
+</script>
+</body>
+</html>
