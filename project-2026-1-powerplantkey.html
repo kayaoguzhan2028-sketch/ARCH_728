@@ -29,19 +29,20 @@
   .sec:first-child .sec-head { padding-top:0; border-top:none; }
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
   .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
-  .grid-2x2 { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .grid-2x2 { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start; }
   .grid-2x2 .span-2 { grid-column:1 / -1; }
   .grid-2x2 .span-2-row { grid-row:span 2; }
-  .grid-2x2 .fig img { aspect-ratio:4/3; object-fit:cover; }
-  .grid-2x2 .span-2 img { aspect-ratio:16/9; }
-  .grid-2x2 .span-2-row img { height:100%; aspect-ratio:auto; }
-  .grid-2x2 .fig.natural { align-self:start; }
-  .grid-2x2 .fig.natural img { aspect-ratio:auto; object-fit:contain; }
+  .grid-2x2 .fig img { aspect-ratio:auto; object-fit:contain; }
+  .grid-2x2 .span-2-row img { max-width:75%; }
+  #sec-ashlake .grid-2x2 .span-2 img { max-width:60%; margin:0 auto; }
+  #sec-ashlake .grid-2x2 .span-2 figcaption { text-align:center; }
+  #img-kulgoleti-tiktok { max-width:70%; }
   .fig img { width:100%; height:auto; display:block; margin:0; }
   figcaption { font-size:0.56rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--mid); opacity:0.4; margin-top:0.5rem; }
   figcaption a { color:var(--accent); text-decoration:underline; word-break:break-all; }
   .sec-text { font-size:0.95rem; line-height:1.9; opacity:0.7; }
   .sec-text > .label, .sec-text > p:first-child { margin-top:-0.3em; }
+  #sec-cayirhan .sec-text > .label { margin-top:0; margin-bottom:0; }
   .sec-text p { margin-bottom:1rem; text-align:justify; }
   .sec-text a { color:var(--accent); text-decoration:underline; word-break:break-all; }
   .sec-text ol { padding-left:1.4rem; }
@@ -50,7 +51,6 @@
   @media (max-width:680px) {
     .two-col,.three-col,.grid-2x2 { grid-template-columns:1fr; }
     .grid-2x2 .span-2-row { grid-row:auto; }
-    .grid-2x2 .span-2-row img { height:auto; aspect-ratio:4/3; }
   }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
@@ -157,11 +157,11 @@
           <p>The ash lake is one of the visible products of energy consumption materialised in the rural landscape. Tons of fly ash and slag produced by burning coal accumulate in these artificial basins, creating a new artificial soil layer, technosol, that does not naturally exist.</p>
           <p>To prevent airborne damage from the large amounts of ash released from coal-fired power plants, this waste is usually dumped into pits or storage areas near the plant and submerged. Over time, rainwater and this wetting process combine to form large lakes. Soluble ions and minerals in the ash give the water clear turquoise, blue, and green hues. These vibrant colors attract visual attention and become focal points for living things in the surrounding area. However, the water in these lakes does not allow any life to thrive.<sup>5</sup> In analyses conducted on different ash lakes by institutions such as TÜBİTAK and the Climate Change Policy and Research Association<sup>1</sup>, high levels of heavy metals harmful to human and environmental health have been detected in various ash lake waters. Therefore, entering or drinking their water is dangerous. A similar example of an ash lake can be found in Çayırhan.</p>
         </div>
-        <figure class="fig span-2-row">
-          <img src="2026-images/2026-p1/4-power-plant/2026-1-KülGöleti-TikTok.webp" loading="lazy" alt="">
+        <figure class="fig">
+          <img id="img-kulgoleti-tiktok" src="2026-images/2026-p1/4-power-plant/2026-1-KülGöleti-TikTok.webp" loading="lazy" alt="">
           <figcaption>View from Ash Lake — <a href="https://www.tiktok.com/@ankaradagezilecekyerler/video/7341658911264509189" target="_blank" rel="noopener">Source</a></figcaption>
         </figure>
-        <figure class="fig">
+        <figure class="fig span-2">
           <img src="2026-images/2026-p1/4-power-plant/2026-1-ÇayırhanTermik2-ÖÖztaş.webp" loading="lazy" alt="">
           <figcaption>Photograph of Çayırhan Power Plant</figcaption>
         </figure>
