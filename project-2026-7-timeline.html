@@ -34,6 +34,14 @@
   #timeline-lightbox-content figure:last-child { margin-bottom:0; }
   #timeline-lightbox-content img { width:100%; height:auto; object-fit:contain; display:block; }
   #timeline-lightbox-content figcaption { margin-top:0.8rem; font-size:0.82rem; line-height:1.6; opacity:0.6; text-align:center; }
+  #timeline-lightbox-content .text-block { font-size:1rem; line-height:1.85; opacity:0.85; text-align:left; margin-top:1rem; }
+  #timeline-lightbox-content .text-block h3 { font-size:1.15rem; font-weight:400; letter-spacing:0.02em; margin:2.5rem 0 1rem; opacity:1; }
+  #timeline-lightbox-content .text-block h3:first-child { margin-top:0; }
+  #timeline-lightbox-content .text-block p { margin-bottom:1.2rem; text-align:justify; }
+  #timeline-lightbox-content .text-block .references { margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border); font-size:0.8rem; line-height:1.7; opacity:0.6; }
+  #timeline-lightbox-content .text-block .references h3 { font-size:0.9rem; margin-bottom:1rem; }
+  #timeline-lightbox-content .text-block .references p { margin-bottom:0.8rem; text-align:left; }
+  #timeline-lightbox-content .text-block a { color:var(--accent); }
   .timeline-lightbox-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; z-index:301; }
   .timeline-lightbox-close:hover { opacity:1; background:var(--accent); color:var(--black); }
 </style>
@@ -128,11 +136,27 @@ const TIMELINE_BASE  = '2026-images/2026-p7/Timeline/';
 const LIGHTBOX1_BASE = '2026-images/2026-p7/Timeline/Lightbox1/';
 
 const EXTRA_IMAGES = {
-  '1': [{ file: '1-Dikmen vadisi - 1977Sol taraf Yukarı Ayrancı sağ taraf Dikmen Vadinin sonunda kavaklıkların oldu.webp', caption: 'Dikmen Vadisi - 1977\nFoto : Aydın Kılcıoğlu' }],
-  '2': [{ file: '2-Ekran Resmi 2026-06-22 22.50.13.webp', caption: 'Güngör, Z. ANKARA DIKMEN VADISI.' }],
-  '3': [{ file: '3.0-Ekran Resmi 2026-06-22 22.48.43.webp', caption: 'Dikmen Vadisi 1989: gecekondu evleri\nKaynak: personal archive of Kenan Ozdemir.' }, { file: '3.1-e koyulacak.webp', caption: 'Güngör, Z. ANKARA DIKMEN VADISI.' }],
-  '4': [{ file: '4.0-dikmen-vadisinde-gecekondu-yikimi-3531306_amp.webp', caption: 'Source: <a href="https://www.haberler.com/dikmen-vadisinde-gecekondu-yikimi-3531306-haberi/" target="_blank" rel="noopener">https://www.haberler.com/dikmen-vadisinde-gecekondu-yikimi-3531306-haberi/</a>' }],
-  '6': [{ file: '6.0.webp' }, { file: '6.1-7E5D57B22AF977578C703396056F27C119461009.webp' }, { file: '6.2Ankara-Koz-Oran.webp' }, { file: '6.3x16_1200754b395b4a7fff9e75136ba89818c9816-3.jpg' }],
+  '1': [{ file: '1-dikmen-vadisi-1977.webp', caption: 'Dikmen Vadisi - 1977\nFoto : Aydın Kılcıoğlu' }],
+  '2': [{ file: '2-dikmen-vadisi-source.webp', caption: 'Güngör, Z. ANKARA DIKMEN VADISI.' }],
+  '3': [{ file: '3.0-dikmen-vadisi-1989.webp', caption: 'Dikmen Vadisi 1989: gecekondu evleri\nKaynak: personal archive of Kenan Ozdemir.' }, { file: '3.1-dikmen-vadisi-source2.webp', caption: 'Güngör, Z. ANKARA DIKMEN VADISI.' }],
+  '4': [{ file: '4.0-gecekondu-yikimi.webp', caption: 'Source: <a href="https://www.haberler.com/dikmen-vadisinde-gecekondu-yikimi-3531306-haberi/" target="_blank" rel="noopener">https://www.haberler.com/dikmen-vadisinde-gecekondu-yikimi-3531306-haberi/</a>' }],
+  '6': [{ file: '6.0.webp' }, { file: '6.1-reference.webp' }, { file: '6.2-ankara-koz-oran.webp' }, { file: '6.3-reference.jpg' }],
+};
+
+const EXTRA_TEXT = {
+  '5': `
+    <h3>Dikmen Valley, what it was and how it fell</h3>
+    <p>Dikmen Valley runs across about 250 hectares of Ankara, from Oran to Dikmen, and for more than thirty years it was a gecekondu neighborhood. From the 1970s, migrants built their own houses here on what had once been the village pasture. There was no electricity, no water, no sewage. They carried the bricks on their backs and raised the rooms one by one, over years. The streets grew like a labyrinth, against the symmetry of the city's boulevards and towers, and these streets carried a life and an organism of their own.</p>
+    <p>In 2006 the municipality opened the fourth and fifth stages of an urban transformation project over the valley. Residents, with papers or without, were told to sign the contracts and leave within seven days. About twelve hundred households left. Six hundred refused, unable to pay for what was offered, or unwilling to be moved. Then the pressure turned material. Water was cut for days, electricity went out, rubble was dumped across the roads, and the demolition crews pulled down stairs and poles along with the houses. One of the oldest residents said he was being forced back into a wandering life. The valley turned from a place people had built into a place they were made to leave. (Kaya, 2011)</p>
+    <h3>Who lives in the ruins now</h3>
+    <p>By 2018 the demolitions were still going, carried on by one mayor after another. The fourth and fifth stages were being cleared by the metropolitan municipality, and the people left among the ruins were now Syrian refugees. They lived in tents pitched in the debris, with no water and no electricity, and made a living collecting paper. A mother said her children slept on wet blankets and were sick almost every day. They had lived in a gecekondu higher up the slope until they were told to find themselves a house, because this one was coming down.</p>
+    <p>They were told what the others had been told: big buildings are coming, so leave. For the poorest, nothing was waiting on the other side. A fifteen-year-old boy shined shoes instead of going to school, and filled water jugs from the one gecekondu line that had not yet been cut; his family was already planning to move again, this time to Gebze. The residents remembered the elections. Before the vote, people came and promised to fix everything. After it, no one came, and no one asking for a vote had ever said the word demolition. Winter was close, and they asked whether a person is really put out the door in the cold. (Alan, 2018)</p>
+    <div class="references">
+      <h3>References</h3>
+      <p>Alan, Serkan. "Dikmenliler: Oy isterken kimse yıkım demiyor." Gazete Duvar, 19 October 2018 (updated 16 November 2020). <a href="https://www.gazeteduvar.com.tr/gundem/2018/10/19/dikmenliler-oy-isterken-kimse-yikim-demiyor" target="_blank" rel="noopener">gazeteduvar.com.tr</a></p>
+      <p>Kaya, Tuğba. "Ankara Dikmen Vadisi gecekondularında son beş yılda gündelik yaşamdaki değişim: Yıkıma karşı dayanışma." Birikim, 10 June 2011. Republished on sendika.org. <a href="https://sendika.org/2011/06/ankara-dikmen-vadisi-gecekondularinda-son-bes-yilda-gundelik-yasamdaki-degisim-yikima-karsi-dayanisma-tugba-kaya-birikim" target="_blank" rel="noopener">sendika.org</a></p>
+    </div>
+  `,
 };
 
 function addLightboxImage(src, caption) {
@@ -148,6 +172,13 @@ function addLightboxImage(src, caption) {
   timelineLightboxContent.appendChild(figure);
 }
 
+function addLightboxText(html) {
+  const block = document.createElement('div');
+  block.className = 'text-block';
+  block.innerHTML = html;
+  timelineLightboxContent.appendChild(block);
+}
+
 document.querySelectorAll('.map-hotspot').forEach(svg => {
   const id = svg.dataset.layer;
   const layer = document.querySelector(`.map-layer[data-layer="${id}"]`);
@@ -158,6 +189,7 @@ document.querySelectorAll('.map-hotspot').forEach(svg => {
       timelineLightboxContent.innerHTML = '';
       addLightboxImage(TIMELINE_BASE + id + '-lightbox-map.webp');
       (EXTRA_IMAGES[id] || []).forEach(item => addLightboxImage(LIGHTBOX1_BASE + item.file, item.caption));
+      if (EXTRA_TEXT[id]) addLightboxText(EXTRA_TEXT[id]);
       timelineLightbox.classList.add('open');
     });
   });
