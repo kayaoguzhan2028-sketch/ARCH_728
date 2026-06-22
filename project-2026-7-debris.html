@@ -15,32 +15,19 @@
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-title { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.85; }
-  .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .wrap { max-width:50%; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body { font-size:1.2rem; line-height:1.95; opacity:0.82; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
-  .viewer { margin:3rem 0 0; }
-  .viewer-frame { position:relative; width:100%; aspect-ratio:4/3; overflow:hidden; background:#111; cursor:grab; user-select:none; }
-  .viewer-frame.grabbing { cursor:grabbing; }
-  .viewer-img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; display:none; opacity:0.88; -webkit-user-drag:none; }
-  .viewer-img.active { display:block; }
-  .viewer-nav { display:flex; border-top:1px solid var(--border); margin-top:1.2rem; }
-  .yr { flex:1; background:none; border:none; border-right:1px solid var(--border); color:var(--white); font-family:var(--font); font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; padding:0.85rem 0; cursor:pointer; opacity:0.3; transition:opacity 0.2s; }
-  .yr:last-child { border-right:none; }
-  .yr:hover { opacity:0.65; }
-  .yr.active { opacity:1; }
   .aqw-wrap { position:relative; width:100vw; left:50%; transform:translateX(-50%); margin:3rem 0; }
+  .aqw-inner { position:relative; width:60%; margin:0 auto; }
   .aqw-img { width:100%; height:auto; display:block; -webkit-user-drag:none; }
-  #tog-bar { position:fixed; top:52px; left:50%; transform:translateX(-50%); z-index:50; display:flex; gap:0; border-bottom:1px solid rgba(245,242,235,0.1); }
-  .tog-btn { background:rgba(245,242,235,0.88); color:#0a0a0a; border:none; border-right:1px solid rgba(245,242,235,0.15); font-family:var(--font); font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; padding:0.5em 1.2em; cursor:pointer; transition:background 0.2s,color 0.2s; }
-  .tog-btn:last-child { border-right:none; }
-  .tog-btn.off { background:#111; color:rgba(245,242,235,0.22); border-right-color:rgba(245,242,235,0.1); }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
@@ -49,51 +36,53 @@
   .mag-icon { position:absolute; top:0.8rem; left:0.8rem; z-index:21; width:26px; height:26px; cursor:pointer; opacity:0.7; transition:opacity 0.2s; color:#0a0a0a; }
   .mag-icon:hover { opacity:0.75; }
   .mag-icon.active { opacity:1; }
-  .aqw-wrap.mag-mode .aqw-img { cursor:none; }
+  .aqw-inner.mag-mode .aqw-img { cursor:none; }
   .mag-lens { position:fixed; z-index:999; width:360px; height:360px; border-radius:50%; border:1.5px solid rgba(245,242,235,0.4); pointer-events:none; display:none; background-repeat:no-repeat; }
   .mag-lens.visible { display:block; }
   /* Lejants */
-  #lejants-btn { position:absolute; bottom:1rem; right:1rem; z-index:20; background:rgba(245,242,235,0.88); color:#0a0a0a; border:none; font-family:var(--font); font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; padding:0.5em 1.2em; cursor:pointer; transition:background 0.2s; }
-  #lejants-btn:hover { background:var(--white); }
-  #lejants-btn.open { background:var(--mid); }
-  #lejants-overlay { position:absolute; bottom:3.2rem; right:1rem; z-index:19; width:min(300px,80%); border:1px solid rgba(245,242,235,0.2); background:#0a0a0a; opacity:0; transform:translateY(8px); transition:opacity 0.3s ease,transform 0.3s ease; pointer-events:none; }
-  #lejants-overlay.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
-  #lejants-overlay img { display:block; width:100%; height:auto; max-height:40vh; object-fit:contain; opacity:0.92; }
+  .lejants-btn { position:absolute; bottom:1rem; right:1rem; z-index:20; background:rgba(245,242,235,0.88); color:#0a0a0a; border:none; font-family:var(--font); font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; padding:0.5em 1.2em; cursor:pointer; transition:background 0.2s; }
+  .lejants-btn:hover { background:var(--white); }
+  .lejants-btn.open { background:var(--mid); }
+  .lejants-overlay { position:absolute; bottom:3.2rem; right:1rem; z-index:19; max-width:min(300px,90%); border:1px solid rgba(245,242,235,0.2); background:#0a0a0a; opacity:0; transform:translateY(8px); transition:opacity 0.3s ease,transform 0.3s ease; pointer-events:none; }
+  .lejants-overlay.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .lejants-overlay img { display:block; width:auto; height:auto; max-width:100%; max-height:60vh; object-fit:contain; opacity:0.92; }
+  /* Expand / Lightbox */
+  .expand-label { position:fixed; transform:translate(-50%, -150%); background:rgba(10,10,10,0.85); color:var(--white); font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase; padding:0.45em 0.9em; opacity:0; transition:opacity 0.15s ease; white-space:nowrap; pointer-events:none; z-index:50; }
+  .expand-label.show { opacity:1; }
+  .aqw-img { cursor:pointer; }
+  .debris-lightbox { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.94); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .debris-lightbox.open { opacity:1; pointer-events:auto; }
+  .lightbox-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; z-index:301; }
+  .lightbox-close:hover { opacity:1; background:var(--accent); color:var(--black); }
+  .aqw-inner--lightbox { display:inline-block; width:auto; cursor:default; }
+  .aqw-inner--lightbox .aqw-img { width:auto; max-width:92vw; max-height:92vh; cursor:default; }
 </style>
 </head>
 <body>
 <nav>
   <a href="project-2026-7.html" class="nav-back">← 2026</a>
-  <span class="nav-title">Debris</span>
-  <span class="nav-tag">Field Report</span>
+  <span class="nav-title">Barbarian Soil</span>
 </nav>
 <div class="wrap">
-  <span class="label">ARCH 728 · Spring 2026</span>
-  <hr class="rule">
   <div class="body"></div>
 
-  <div class="viewer">
-    <div class="viewer-frame">
-      <img class="viewer-img active" src="2026-images/2026-p7/Debris/2016-2020/2026-p7-2016.webp" alt="2026-p7-2016" data-year="2016">
-      <img class="viewer-img" src="2026-images/2026-p7/Debris/2016-2020/2026-p7-2019.webp" alt="2026-p7-2019" data-year="2019">
-      <img class="viewer-img" src="2026-images/2026-p7/Debris/2016-2020/2026-p7-2020.webp" alt="2026-p7-2020" data-year="2020">
-    </div>
-    <div class="viewer-nav">
-      <button class="yr active" data-target="2016">2016</button>
-      <button class="yr" data-target="2019">2019</button>
-      <button class="yr" data-target="2020">2020</button>
-    </div>
-  </div>
-
   <div id="sec-block">
+    <div class="body">
+      <h2 style="margin-top:0;">Debris</h2>
+      <p>When the human forgets that it will die, it controls its surroundings. Right here, in this moment, it begins to see its own laws as higher than nature. The feeling runs so deep that it orders and fixes everything around it, as if all of it would stay the same forever. For the human, what stays inside, where its laws apply, is enough. Whatever does otherwise is thrown outside the borders, outside the polis.</p>
+      <p>So everything carried away is the barbarian: the soil that threatens the laws the human built while feeling immortal, the soil that will not comply. The nomad's free mobility appears here as political punishment. This too is not nature; it is a human decision. The soil is reworked in places far from sight, and in the meantime it is forgotten. Some barbarians may be taken back into the order, if they have passed through the right regulation. Others cannot. The human has reworked the soil. But at what cost?</p>
+    </div>
     <div class="aqw-wrap">
-      <img class="aqw-img" src="2026-images/2026-p7/Debris/Debris_00.webp" alt="AQW">
-      <svg class="mag-icon" id="mag-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
-        <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
-      </svg>
-      <div id="lejants-overlay"><img src="2026-images/2026-p7/Debris/lejants.webp" alt="Lejants"></div>
-      <button id="lejants-btn">Lejants</button>
+      <div class="aqw-inner" id="aqw-inline">
+        <img class="aqw-img" src="2026-images/2026-p7/Debris/Debris_00.webp" alt="AQW">
+        <svg class="mag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+        <div class="lejants-overlay"><img src="2026-images/2026-p7/Debris/lejants.webp" alt="Lejants"></div>
+        <button class="lejants-btn">Lejants</button>
+        <span class="expand-label">Click to expand</span>
+      </div>
     </div>
     <div class="body" style="margin-top:2rem;">
       <p>Debris is not a subject or an object, but rather a record of a moment. It is in a constant state of transformation. Unlike "rubble," which implies reusable or identifiable building pieces, debris refers to matter dispersed by violence or disaster. It captures not only physical remnants but also the broader spatial transformation caused by destruction.</p>
@@ -112,100 +101,79 @@
   </dl>
 </div>
 <div class="mag-lens" id="mag-lens"></div>
-<div id="tog-bar">
-  <button class="tog-btn" id="tog-section">Section</button>
-  <button class="tog-btn" id="tog-satellite">Satellite</button>
+
+<div class="debris-lightbox" id="debris-lightbox">
+  <button class="lightbox-close" id="debris-lightbox-close" aria-label="Close">×</button>
+  <div class="aqw-inner aqw-inner--lightbox">
+    <img class="aqw-img" src="2026-images/2026-p7/Debris/Debris_00.webp" alt="AQW">
+    <svg class="mag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+      <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+    </svg>
+    <div class="lejants-overlay"><img src="2026-images/2026-p7/Debris/lejants.webp" alt="Lejants"></div>
+    <button class="lejants-btn">Lejants</button>
+  </div>
 </div>
+
 <script>
-const frame = document.querySelector('.viewer-frame');
-let vMul = 1, vTx = 0, vTy = 0, vDrag = false, vLx, vLy;
-function applyV() {
-  const img = frame.querySelector('.viewer-img.active');
-  if (!img) return;
-  const fw = frame.offsetWidth, fh = frame.offsetHeight;
-  img.style.width  = (fw * vMul) + 'px';
-  img.style.height = (fh * vMul) + 'px';
-  img.style.left   = (fw / 2 - (fw * vMul) / 2 + vTx) + 'px';
-  img.style.top    = (fh / 2 - (fh * vMul) / 2 + vTy) + 'px';
-}
-frame.addEventListener('wheel', e => { e.preventDefault(); vMul = Math.max(1, Math.min(8, vMul * (e.deltaY < 0 ? 1.1 : 0.91))); if (vMul === 1) { vTx = 0; vTy = 0; } applyV(); }, { passive: false });
-frame.addEventListener('mousedown', e => { if (vMul <= 1) return; vDrag = true; vLx = e.clientX; vLy = e.clientY; frame.classList.add('grabbing'); });
-document.addEventListener('mousemove', e => { if (!vDrag) return; vTx += e.clientX - vLx; vTy += e.clientY - vLy; vLx = e.clientX; vLy = e.clientY; applyV(); });
-document.addEventListener('mouseup', () => { vDrag = false; frame.classList.remove('grabbing'); });
-frame.addEventListener('dblclick', () => { vMul = 1; vTx = 0; vTy = 0; applyV(); });
-
-document.querySelectorAll('.yr').forEach(btn => {
-  btn.addEventListener('click', () => {
-    vMul = 1; vTx = 0; vTy = 0;
-    const year = btn.dataset.target;
-    document.querySelectorAll('.viewer-img').forEach(img => { img.classList.remove('active'); img.style.width = ''; img.style.height = ''; img.style.left = ''; img.style.top = ''; });
-    document.querySelectorAll('.yr').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.viewer-img[data-year="${year}"]`).classList.add('active');
-    btn.classList.add('active');
-  });
-});
-
-
-const viewer       = document.querySelector('.viewer');
-const secBlock     = document.getElementById('sec-block');
-const satBtn       = document.getElementById('tog-satellite');
-const secBtn       = document.getElementById('tog-section');
-const lejantsBtn   = document.getElementById('lejants-btn');
-const lejantsOverlay = document.getElementById('lejants-overlay');
-
-const panels = [{ btn: satBtn, el: viewer }, { btn: secBtn, el: secBlock }];
-
-function activate(activeBtn) {
-  panels.forEach(({ btn, el }) => {
-    const isActive = btn === activeBtn;
-    btn.classList.toggle('off', !isActive);
-    el.style.display = isActive ? '' : 'none';
-  });
-  if (activeBtn !== secBtn) {
-    lejantsOverlay.classList.remove('visible');
-    lejantsBtn.classList.remove('open');
-  }
-}
-
-panels.forEach(({ btn }) => btn.addEventListener('click', () => activate(btn)));
-
-lejantsBtn.addEventListener('click', () => {
-  const open = lejantsOverlay.classList.toggle('visible');
-  lejantsBtn.classList.toggle('open', open);
-});
-
-activate(secBtn);
-
-// ── Büyüteç ──────────────────────────────────────────────────────────────────
-const magToggle = document.getElementById('mag-toggle');
-const magLens   = document.getElementById('mag-lens');
-const aqwImg    = document.querySelector('.aqw-img');
-const aqwWrap   = document.querySelector('.aqw-wrap');
+const magLens = document.getElementById('mag-lens');
 const ZOOM = 2, LENS = 360;
-let magOn = false;
 
-magToggle.addEventListener('click', () => {
-  magOn = !magOn;
-  magToggle.classList.toggle('active', magOn);
-  aqwWrap.classList.toggle('mag-mode', magOn);
-  if (!magOn) magLens.classList.remove('visible');
+// Büyüteç + Lejants: aynı mekanik, hem inline hem lightbox kopyasında çalışır
+document.querySelectorAll('.aqw-inner').forEach(root => {
+  const magToggle = root.querySelector('.mag-icon');
+  const aqwImg    = root.querySelector('.aqw-img');
+  const lejantsBtn     = root.querySelector('.lejants-btn');
+  const lejantsOverlay = root.querySelector('.lejants-overlay');
+  let magOn = false;
+
+  magToggle.addEventListener('click', () => {
+    magOn = !magOn;
+    magToggle.classList.toggle('active', magOn);
+    root.classList.toggle('mag-mode', magOn);
+    if (!magOn) magLens.classList.remove('visible');
+  });
+
+  aqwImg.addEventListener('mousemove', e => {
+    if (!magOn) return;
+    const r = aqwImg.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    const bgW = r.width * ZOOM, bgH = r.height * ZOOM;
+    const bgX = mx * ZOOM - LENS / 2, bgY = my * ZOOM - LENS / 2;
+    magLens.style.left = (e.clientX - LENS / 2) + 'px';
+    magLens.style.top  = (e.clientY - LENS / 2) + 'px';
+    magLens.style.backgroundImage    = `url(${aqwImg.src})`;
+    magLens.style.backgroundSize     = `${bgW}px ${bgH}px`;
+    magLens.style.backgroundPosition = `-${bgX}px -${bgY}px`;
+    magLens.classList.add('visible');
+  });
+
+  aqwImg.addEventListener('mouseleave', () => magLens.classList.remove('visible'));
+
+  lejantsBtn.addEventListener('click', () => {
+    const open = lejantsOverlay.classList.toggle('visible');
+    lejantsBtn.classList.toggle('open', open);
+  });
 });
 
-aqwImg.addEventListener('mousemove', e => {
-  if (!magOn) return;
-  const r = aqwImg.getBoundingClientRect();
-  const mx = e.clientX - r.left, my = e.clientY - r.top;
-  const bgW = r.width * ZOOM, bgH = r.height * ZOOM;
-  const bgX = mx * ZOOM - LENS / 2, bgY = my * ZOOM - LENS / 2;
-  magLens.style.left = (e.clientX - LENS / 2) + 'px';
-  magLens.style.top  = (e.clientY - LENS / 2) + 'px';
-  magLens.style.backgroundImage    = `url(${aqwImg.src})`;
-  magLens.style.backgroundSize     = `${bgW}px ${bgH}px`;
-  magLens.style.backgroundPosition = `-${bgX}px -${bgY}px`;
-  magLens.classList.add('visible');
-});
+// ── Lightbox ─────────────────────────────────────────────────────────────────
+const aqwInline       = document.getElementById('aqw-inline');
+const inlineImg        = aqwInline.querySelector('.aqw-img');
+const expandLabel      = aqwInline.querySelector('.expand-label');
+const debrisLightbox   = document.getElementById('debris-lightbox');
+const debrisLightboxClose = document.getElementById('debris-lightbox-close');
 
-aqwImg.addEventListener('mouseleave', () => magLens.classList.remove('visible'));
+inlineImg.addEventListener('click', () => debrisLightbox.classList.add('open'));
+debrisLightboxClose.addEventListener('click', () => debrisLightbox.classList.remove('open'));
+debrisLightbox.addEventListener('click', e => { if (e.target === debrisLightbox) debrisLightbox.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') debrisLightbox.classList.remove('open'); });
+
+inlineImg.addEventListener('mouseenter', () => expandLabel.classList.add('show'));
+inlineImg.addEventListener('mouseleave', () => expandLabel.classList.remove('show'));
+inlineImg.addEventListener('mousemove', e => {
+  expandLabel.style.left = e.clientX + 'px';
+  expandLabel.style.top  = e.clientY + 'px';
+});
 </script>
 </body>
 </html>
