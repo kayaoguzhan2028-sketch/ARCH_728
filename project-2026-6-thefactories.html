@@ -28,13 +28,8 @@
 
   .interactive-image { position:relative; width:min(95%, calc(85vh * 2598 / 2953)); aspect-ratio:2598/2953; }
   .interactive-image img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
-  .factory-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
-  .factory-highlight.active { opacity:1; }
-
-  .hotspot-overlay { position:absolute; inset:0; }
-  .hotspot-overlay svg { width:100%; height:100%; display:block; }
-  .hotspot-overlay path, .hotspot-overlay circle { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
-  .hotspot-overlay path:hover, .hotspot-overlay circle:hover { opacity:0.3; }
+  .factory-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease, filter 0.25s ease; }
+  .factory-highlight.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,200,80,0.85)) drop-shadow(0 0 28px rgba(245,200,80,0.5)); }
 
   .preview-panel { width:100%; max-width:320px; opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; }
   .preview-panel.active { opacity:1; transform:translateY(0); }
@@ -81,14 +76,6 @@
     <img class="factory-highlight" data-factory="7" src="2026-images/2026-p6/2-The Factories/2026-6-Factory7-webp.webp" alt="">
     <img class="factory-highlight" data-factory="8" src="2026-images/2026-p6/2-The Factories/2026-6-Factory8-webp.webp" alt="">
     <img class="factory-highlight" data-factory="9" src="2026-images/2026-p6/2-The Factories/2026-6-Factory9-webp.webp" alt="">
-    <img class="factory-highlight" data-factory="10" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 10.webp" alt="">
-    <img class="factory-highlight" data-factory="11" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 11.webp" alt="">
-    <div class="hotspot-overlay">
-      <svg viewBox="0 0 2598 2953" xmlns="http://www.w3.org/2000/svg">
-        <path data-factory="10" d="M701,2228l2-57,797-4,6,80Z"/>
-        <path data-factory="11" d="M1717,2537l566,22-1-63-11-13-341-4-5-17-121-5-22,12-18-278-19-1,4,284-31-1Z"/>
-      </svg>
-    </div>
   </div>
   </div>
 
@@ -115,29 +102,10 @@
     7: '2026-6-Factory 7nin üzerine gelince.webp',
     8: '2026-6-Factory 8in üzerine gelince.webp',
     9: '2026-6-Factory 9un üzerine gelince.webp',
-    10: '2026-6-Factory 10un üzerine gelince.webp',
-    11: '2026-6-Factory 11in üzerine gelince.webp',
   };
 
   const previewPanel = document.getElementById('preview-panel');
   const previewImg = document.getElementById('preview-img');
-
-  // Factories 10-11: no highlight webp asset yet, keep the hand-drawn SVG hotspots.
-  document.querySelectorAll('.hotspot-overlay [data-factory]').forEach((shape) => {
-    const id = shape.dataset.factory;
-    const highlight = document.querySelector(`.factory-highlight[data-factory="${id}"]`);
-
-    shape.addEventListener('mouseenter', () => {
-      highlight.classList.add('active');
-      previewImg.src = basePath + hoverImages[id];
-      previewPanel.classList.add('active');
-    });
-
-    shape.addEventListener('mouseleave', () => {
-      highlight.classList.remove('active');
-      previewPanel.classList.remove('active');
-    });
-  });
 
   // Factories 1-9: hover detection follows the actual highlight image's own pixels,
   // so the hover zone always matches what lights up exactly (no hand-drawn polygon to drift out of sync).
