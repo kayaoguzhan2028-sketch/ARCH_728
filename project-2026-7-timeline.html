@@ -187,7 +187,7 @@ document.querySelectorAll('.map-hotspot').forEach(svg => {
     path.addEventListener('mouseleave', () => layer.classList.remove('active'));
     path.addEventListener('click', () => {
       timelineLightboxContent.innerHTML = '';
-      addLightboxImage(TIMELINE_BASE + id + '-lightbox-map.webp');
+      if (id !== '1') addLightboxImage(TIMELINE_BASE + id + '-lightbox-map.webp');
       (EXTRA_IMAGES[id] || []).forEach(item => addLightboxImage(LIGHTBOX1_BASE + item.file, item.caption));
       if (EXTRA_TEXT[id]) addLightboxText(EXTRA_TEXT[id]);
       timelineLightbox.classList.add('open');
