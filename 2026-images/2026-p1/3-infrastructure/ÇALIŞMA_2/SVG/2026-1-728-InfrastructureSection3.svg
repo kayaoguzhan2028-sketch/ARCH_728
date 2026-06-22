@@ -1,14 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2002" height="1543" viewBox="0 0 2002 1543">
+<svg xmlns="http://www.w3.org/2000/svg" width="2446" height="1887" viewBox="0 0 2446 1887">
   <defs>
     <style>
       .cls-1 {
-        fill: none;
+        fill: #fff;
         stroke: #000;
         stroke-width: 1px;
-        fill-rule: evenodd;
-        opacity: 0.01;
+        opacity: 0;
       }
     </style>
   </defs>
-  <path id="SECTION3" class="cls-1" d="M1008,620h992V915H1008V620Zm0,0h992V915H1008V620Zm0,0h992V915H1008V620Z"/>
+  <rect id="Rectangle_1_copy_2" data-name="Rectangle 1 copy 2" class="cls-1" x="1232" y="765" width="1209" height="357"/>
 </svg>
