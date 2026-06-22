@@ -27,9 +27,13 @@
   .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; border:none; pointer-events:none; }
   .map-hotspot path { fill:transparent; pointer-events:all; cursor:pointer; }
 
-  .timeline-lightbox { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.94); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .timeline-lightbox { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.94); display:flex; align-items:flex-start; justify-content:center; overflow-y:auto; padding:4rem 0; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .timeline-lightbox.open { opacity:1; pointer-events:auto; }
-  .timeline-lightbox img { max-width:92vw; max-height:92vh; object-fit:contain; display:block; }
+  #timeline-lightbox-content { width:50vw; margin:0 auto; }
+  #timeline-lightbox-content figure { margin:0 0 3rem; }
+  #timeline-lightbox-content figure:last-child { margin-bottom:0; }
+  #timeline-lightbox-content img { width:100%; height:auto; object-fit:contain; display:block; }
+  #timeline-lightbox-content figcaption { margin-top:0.8rem; font-size:0.82rem; line-height:1.6; opacity:0.6; text-align:center; }
   .timeline-lightbox-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; z-index:301; }
   .timeline-lightbox-close:hover { opacity:1; background:var(--accent); color:var(--black); }
 </style>
@@ -113,14 +117,36 @@
 
 <div class="timeline-lightbox" id="timeline-lightbox">
   <button class="timeline-lightbox-close" id="timeline-lightbox-close" aria-label="Close">×</button>
-  <img id="timeline-lightbox-img" src="" alt="">
+  <div id="timeline-lightbox-content"></div>
 </div>
 
 <script>
-const timelineLightbox      = document.getElementById('timeline-lightbox');
-const timelineLightboxImg   = document.getElementById('timeline-lightbox-img');
-const timelineLightboxClose = document.getElementById('timeline-lightbox-close');
-const TIMELINE_BASE = '2026-images/2026-p7/Timeline/';
+const timelineLightbox        = document.getElementById('timeline-lightbox');
+const timelineLightboxContent = document.getElementById('timeline-lightbox-content');
+const timelineLightboxClose   = document.getElementById('timeline-lightbox-close');
+const TIMELINE_BASE  = '2026-images/2026-p7/Timeline/';
+const LIGHTBOX1_BASE = '2026-images/2026-p7/Timeline/Lightbox1/';
+
+const EXTRA_IMAGES = {
+  '1': [{ file: '1-Dikmen vadisi - 1977Sol taraf Yukarı Ayrancı sağ taraf Dikmen Vadinin sonunda kavaklıkların oldu.webp', caption: 'Dikmen Vadisi - 1977\nFoto : Aydın Kılcıoğlu' }],
+  '2': [{ file: '2-Ekran Resmi 2026-06-22 22.50.13.webp', caption: 'Güngör, Z. ANKARA DIKMEN VADISI.' }],
+  '3': [{ file: '3.0-Ekran Resmi 2026-06-22 22.48.43.webp', caption: 'Dikmen Vadisi 1989: gecekondu evleri\nKaynak: personal archive of Kenan Ozdemir.' }, { file: '3.1-e koyulacak.webp', caption: 'Güngör, Z. ANKARA DIKMEN VADISI.' }],
+  '4': [{ file: '4.0-dikmen-vadisinde-gecekondu-yikimi-3531306_amp.webp', caption: 'Source: <a href="https://www.haberler.com/dikmen-vadisinde-gecekondu-yikimi-3531306-haberi/" target="_blank" rel="noopener">https://www.haberler.com/dikmen-vadisinde-gecekondu-yikimi-3531306-haberi/</a>' }],
+  '6': [{ file: '6.0.webp' }, { file: '6.1-7E5D57B22AF977578C703396056F27C119461009.webp' }, { file: '6.2Ankara-Koz-Oran.webp' }, { file: '6.3x16_1200754b395b4a7fff9e75136ba89818c9816-3.jpg' }],
+};
+
+function addLightboxImage(src, caption) {
+  const figure = document.createElement('figure');
+  const img = document.createElement('img');
+  img.src = encodeURI(src);
+  figure.appendChild(img);
+  if (caption) {
+    const figcaption = document.createElement('figcaption');
+    figcaption.innerHTML = caption.split('\n').map(line => line).join('<br>');
+    figure.appendChild(figcaption);
+  }
+  timelineLightboxContent.appendChild(figure);
+}
 
 document.querySelectorAll('.map-hotspot').forEach(svg => {
   const id = svg.dataset.layer;
@@ -129,7 +155,9 @@ document.querySelectorAll('.map-hotspot').forEach(svg => {
     path.addEventListener('mouseenter', () => layer.classList.add('active'));
     path.addEventListener('mouseleave', () => layer.classList.remove('active'));
     path.addEventListener('click', () => {
-      timelineLightboxImg.src = TIMELINE_BASE + id + '-lightbox-map.webp';
+      timelineLightboxContent.innerHTML = '';
+      addLightboxImage(TIMELINE_BASE + id + '-lightbox-map.webp');
+      (EXTRA_IMAGES[id] || []).forEach(item => addLightboxImage(LIGHTBOX1_BASE + item.file, item.caption));
       timelineLightbox.classList.add('open');
     });
   });
