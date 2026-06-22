@@ -20,10 +20,10 @@
   .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
   .nav-links a:hover { opacity:1; }
 
-  .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:1fr 1fr; grid-template-areas:"preview visual" "info visual"; }
+  .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:45fr 55fr; grid-template-areas:"preview visual" "info visual"; }
   .cell { display:flex; align-items:center; justify-content:center; padding:2rem; overflow:hidden; }
   .cell-preview { grid-area:preview; }
-  .cell-info { grid-area:info; }
+  .cell-info { grid-area:info; overflow-y:auto; }
   .cell-visual { grid-area:visual; }
 
   .interactive-image { position:relative; width:min(95%, calc(85vh * 2598 / 2953)); aspect-ratio:2598/2953; }
