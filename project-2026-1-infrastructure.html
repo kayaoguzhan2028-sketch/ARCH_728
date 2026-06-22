@@ -56,6 +56,7 @@
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .panel-overlay.open { opacity:1; pointer-events:auto; }
   .panel-overlay img { max-width:90vw; max-height:90vh; display:block; }
+  .panel-overlay img.rotate-left { max-width:90vh; max-height:90vw; transform:rotate(-90deg); }
   .panel-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
   .panel-close:hover { opacity:1; background:var(--accent); color:var(--black); }
 </style>
@@ -127,7 +128,13 @@
   const panelImg     = document.getElementById('panel-img');
 
   function openPanel(webp) {
+    panelImg.classList.remove('rotate-left');
     panelImg.src = encodeURI(BASE_IMG + webp);
+    panelOverlay.classList.add('open');
+  }
+  function openPanelRotated(path) {
+    panelImg.classList.add('rotate-left');
+    panelImg.src = encodeURI(path);
     panelOverlay.classList.add('open');
   }
   document.getElementById('panel-close').addEventListener('click', () => panelOverlay.classList.remove('open'));
@@ -161,7 +168,13 @@
   const traceWrap  = document.querySelector('.img-wrap3');
   const expandLbl  = traceWrap.querySelector('.expand-label');
 
-  traceWrap.addEventListener('click', () => traceImg.classList.toggle('expanded'));
+  traceWrap.addEventListener('click', () => {
+    if (traceImg.classList.contains('expanded')) {
+      openPanelRotated('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp');
+    } else {
+      traceImg.classList.add('expanded');
+    }
+  });
   traceWrap.addEventListener('mouseenter', () => expandLbl.classList.add('show'));
   traceWrap.addEventListener('mouseleave', () => expandLbl.classList.remove('show'));
   traceWrap.addEventListener('mousemove', e => {
