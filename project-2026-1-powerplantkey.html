@@ -24,7 +24,7 @@
   .overlay-img.hover { opacity:1; filter:drop-shadow(0 0 6px rgba(245,220,140,0.55)); }
   .overlay-img.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,220,140,1)) drop-shadow(0 0 32px rgba(245,200,80,0.7)); }
   .wrap { max-width:960px; margin:0 auto; padding:2rem 2rem 8rem; }
-  .sec { margin-bottom:6rem; }
+  .sec { margin-bottom:6rem; scroll-margin-top:52px; }
   .sec-head { font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); opacity:0.6; padding-top:2rem; border-top:1px solid var(--border); margin-bottom:2.5rem; display:block; }
   .sec:first-child .sec-head { padding-top:0; border-top:none; }
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
@@ -64,6 +64,9 @@
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
+
+  .reset-btn { position:fixed; left:1.5rem; bottom:1.5rem; z-index:200; width:42px; height:42px; border-radius:50%; border:1px solid var(--accent); background:var(--black); color:var(--white); display:flex; align-items:center; justify-content:center; font-size:1.3rem; line-height:1; cursor:pointer; opacity:0.6; transition:opacity 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.4s ease; }
+  .reset-btn:hover { opacity:1; background:var(--accent); color:var(--black); transform:rotate(-90deg); }
 </style>
 </head>
 <body>
@@ -105,7 +108,7 @@
       </div>
     </div>
 
-    <div class="sec">
+    <div class="sec" id="sec-baraj">
       <span class="sec-head">The Sarıyar Dam</span>
       <div class="grid-2x2">
         <div class="sec-text">
@@ -123,7 +126,7 @@
       </div>
     </div>
 
-    <div class="sec">
+    <div class="sec" id="sec-fabrika">
       <span class="sec-head">Çayırhan Power Plant</span>
       <div class="grid-2x2">
         <div class="sec-text">
@@ -138,7 +141,7 @@
       </div>
     </div>
 
-    <div class="sec">
+    <div class="sec" id="sec-ashlake">
       <span class="sec-head">About the Ash Lake</span>
       <div class="grid-2x2">
         <div class="sec-text">
@@ -166,7 +169,7 @@
       </div>
     </div>
 
-    <div class="sec">
+    <div class="sec" id="sec-production">
       <span class="sec-head">The Production Trend</span>
       <div class="grid-2x2">
         <div class="sec-text">
@@ -181,7 +184,7 @@
       </div>
     </div>
 
-    <div class="sec">
+    <div class="sec" id="sec-circle">
       <span class="sec-head">Invisible Contamination Cycle</span>
       <div class="two-col">
         <div class="sec-text">
@@ -193,7 +196,7 @@
       </div>
     </div>
 
-    <div class="sec">
+    <div class="sec" id="sec-waste">
       <span class="sec-head">Cumulative Waste Production</span>
       <div class="grid-2x2">
         <div class="sec-text">
@@ -209,7 +212,7 @@
       </div>
     </div>
 
-    <div class="sec">
+    <div class="sec" id="sec-risk">
       <span class="sec-head">Environmental Risk Profile</span>
       <div class="two-col">
         <div class="sec-text">
@@ -249,7 +252,12 @@
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
+<button class="reset-btn" id="reset-btn" aria-label="Scroll to top" title="Back to top">⟲</button>
 <script>
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   const BASE    = '2026-images/2026-p1/4-power-plant/SVG/';
   const mainImg = document.querySelector('.img-stage > img');
   const stage   = document.querySelector('.img-stage');
@@ -263,6 +271,17 @@
   svgEl.style.position = 'absolute';
   svgEl.style.inset = '0';
   layer.appendChild(svgEl);
+
+  const SCROLL_TARGETS = {
+    cayirhan:   'sec-cayirhan',
+    baraj:      'sec-baraj',
+    fabrika:    'sec-fabrika',
+    ashlake:    'sec-ashlake',
+    production: 'sec-production',
+    circle:     'sec-circle',
+    waste:      'sec-waste',
+    risk:       'sec-risk',
+  };
 
   const FILES = [
     { id:'ashlake',    svg:'2026-1-728_deneme_ÖneÇıkanlarASHLAKE.svg',    webp:'2026-1-728_deneme_ÖneÇıkanlarASHLAKE.webp'    },
@@ -317,8 +336,9 @@
           shape.addEventListener('click', () => {
             g.classList.toggle('active');
             g.classList.remove('hover');
-            if (cfg.id === 'cayirhan') {
-              document.getElementById('sec-cayirhan').scrollIntoView({ behavior: 'smooth' });
+            const targetId = SCROLL_TARGETS[cfg.id];
+            if (targetId) {
+              document.getElementById(targetId).scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           });
         });

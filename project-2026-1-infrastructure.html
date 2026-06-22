@@ -50,8 +50,8 @@
   .img-wrap3.hover svg polyline, .img-wrap3.hover svg line { opacity:0.9; filter:drop-shadow(0 0 14px rgba(245,200,80,0.85)); }
   .trace-highlight { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .img-wrap3.hover .trace-highlight { opacity:1; }
-  .expand-label { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(10,10,10,0.55); color:var(--white); font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0; transition:opacity 0.2s ease; text-align:center; padding:1rem; pointer-events:none; }
-  .img-wrap3.hover .expand-label { opacity:1; }
+  .expand-label { position:fixed; transform:translate(-50%, -150%); background:rgba(10,10,10,0.85); color:var(--white); font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase; padding:0.45em 0.9em; opacity:0; transition:opacity 0.15s ease; white-space:nowrap; pointer-events:none; z-index:50; }
+  .expand-label.show { opacity:1; }
 
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .panel-overlay.open { opacity:1; pointer-events:auto; }
@@ -156,11 +156,18 @@
       });
   });
 
-  const svgEl3    = document.getElementById('overlay-svg3');
-  const traceImg  = document.getElementById('trace-img');
-  const traceWrap = document.querySelector('.img-wrap3');
+  const svgEl3     = document.getElementById('overlay-svg3');
+  const traceImg   = document.getElementById('trace-img');
+  const traceWrap  = document.querySelector('.img-wrap3');
+  const expandLbl  = traceWrap.querySelector('.expand-label');
 
   traceWrap.addEventListener('click', () => traceImg.classList.toggle('expanded'));
+  traceWrap.addEventListener('mouseenter', () => expandLbl.classList.add('show'));
+  traceWrap.addEventListener('mouseleave', () => expandLbl.classList.remove('show'));
+  traceWrap.addEventListener('mousemove', e => {
+    expandLbl.style.left = e.clientX + 'px';
+    expandLbl.style.top  = e.clientY + 'px';
+  });
 
   fetch(encodeURI('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_svgsi-01-01.svg'))
     .then(r => r.text())
