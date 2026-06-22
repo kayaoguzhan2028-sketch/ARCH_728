@@ -9,7 +9,7 @@
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
-  html, body { min-height: 100%; background: var(--black); color: var(--white); font-family: var(--font); }
+  html, body { min-height: 100%; background: var(--black); color: var(--white); font-family: var(--font); scroll-behavior: smooth; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
@@ -31,9 +31,9 @@
   .btn-row a { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); border:1px solid var(--accent); padding:0.7em 1.6em; text-decoration:none; opacity:0.65; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
   .btn-row a:hover, .btn-row a.linked-hover { opacity:1; background:var(--accent); color:var(--black); }
 
-  .section-split { flex-direction:row; align-items:center; justify-content:center; gap:4rem; text-align:left; }
+  .section-split { flex-direction:row; align-items:center; justify-content:center; gap:4rem; text-align:left; flex-wrap:wrap; }
   .clip-text { flex:1; max-width:560px; }
-  .clip-text p { margin-bottom:1.2rem; font-size:0.95rem; line-height:1.75; opacity:0.8; }
+  .clip-text p { margin-bottom:1.2rem; font-size:0.95rem; line-height:1.75; opacity:0.8; text-align:justify; text-align-last:right; }
   .clip-text p:last-child { margin-bottom:0; }
   .clip-text .poem { font-style:italic; opacity:0.85; }
   .clip-text .reference { font-size:0.76rem; line-height:1.7; opacity:0.45; }
@@ -42,6 +42,13 @@
 
   .future-image { flex:1; max-width:600px; }
   .future-image img { width:100%; height:auto; max-height:70vh; object-fit:contain; display:block; }
+
+  #future-section { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); grid-template-rows:repeat(3, minmax(0, 1fr)); gap:0; width:100%; max-width:1100px; height:calc(100vh - 52px - 3rem); margin:0 auto; border:1px solid red; overflow:hidden; }
+  #future-section .grid-cell { overflow:hidden; min-height:0; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+  #future-section .grid-cell:nth-child(odd) { border-right:1px solid red; }
+  #future-section .grid-cell:nth-child(-n+4) { border-bottom:1px solid red; }
+  #future-section .grid-cell img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+  #future-section .grid-cell .reference { font-size:0.76rem; line-height:1.7; opacity:0.45; }
 
   .section-flow { height:auto; min-height:calc(100vh - 52px); overflow:visible; padding:4rem 2rem; }
   .collage-row { display:flex; gap:3rem; max-width:1240px; width:100%; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
@@ -61,7 +68,6 @@
 <nav>
   <a href="2026.html" class="nav-back">← 2026</a>
   <span class="nav-title">Interactive Page</span>
-  <span class="nav-tag">Field Report</span>
 </nav>
 
 <div class="wrap">
@@ -93,28 +99,32 @@
     <div class="clip-video">
       <iframe src="https://www.dailymotion.com/embed/video/k1yr9T9pCACLd3GHers" title="Soil and Ash Metabolism — Video" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
+    <div class="btn-row" style="flex:0 0 100%;">
+      <a href="#future-section">Alternative Scenarios</a>
+    </div>
   </section>
 
-  <section class="section section-split">
-    <div class="future-image">
+  <section class="section section-split" id="future-section">
+    <div class="grid-cell">
       <img src="2026-images/2026-p1/2-interactive-page/2026-1-728-INTERACTIVEPAGE_2NDIMAGE.webp" alt="">
     </div>
-    <div class="clip-text">
+    <div class="grid-cell">
       <p>The final phase of the Çayırhan project looks beyond the crisis of leakage to explore a future of landscape on-site remediation. By deploying localized botanical and soil-cleansing strategies, the design actively counteracts decades of chemical and thermal accumulation within the terrain. The resulting landscape serves as a living laboratory where vegetation absorbs the slow violence of the past, paving the way for the ultimate recovery of regional skyways and water bodies.</p>
     </div>
-  </section>
-
-  <section class="section section-flow">
-    <div class="collage-row">
-      <div class="collage-item">
-        <img src="2026-images/2026-p1/2-interactive-page/2026-1-728-collage1.webp" alt="">
+    <div class="grid-cell">
+      <img src="2026-images/2026-p1/2-interactive-page/2026-1-728-collage1.webp" alt="">
+    </div>
+    <div class="grid-cell">
+      <img src="2026-images/2026-p1/2-interactive-page/2026-1-728-collage2.webp" alt="">
+    </div>
+    <div class="grid-cell">
+      <div>
         <p>This speculative collage work illustrates an alternative scenario that the power plant transforms it internally instead of leaking its waste into the outside world. Instead of turning the waste into an ash lake that poisons the landscape, a closed loop industrial metabolism ecosystem is created inside the factory, which transforms it into building materials such as concrete binder, brick, aerated concrete, and gypsum plaster. Therefore, the scene transforms the factory from a destructive machine, that consumes nature with residues, into a circular production center.</p>
         <p class="reference">Çavuşoğlu, İ. (2008). UÇUCU KÜLLERİN DOLGU MALZEMESİ OLARAK KULLANILMASI: ÖRNEK BİR UYGULAMA (ÇAYIRHAN). Bilimsel Madencilik Dergisi, 47(3), 3-13.</p>
       </div>
-      <div class="collage-item">
-        <img src="2026-images/2026-p1/2-interactive-page/2026-1-728-collage2.webp" alt="">
-        <p>This speculative collage work illustrates the multi layered landscape which supports life cycle as a healing space in an alternative scenario where a power plant transforms it internally instead of leaking its residue into the outside world. In this scenario, the area of the lake is a natural wetland ecosystem which provides healthy areas for fish farms and local production near Çayırhan Dam. Moreover, since the invisible wall of pollution created by the power plant in the air has disappeared, birds are regaining their historical migration routes and can safely locate themselves in this basin.</p>
-      </div>
+    </div>
+    <div class="grid-cell">
+      <p>This speculative collage work illustrates the multi layered landscape which supports life cycle as a healing space in an alternative scenario where a power plant transforms it internally instead of leaking its residue into the outside world. In this scenario, the area of the lake is a natural wetland ecosystem which provides healthy areas for fish farms and local production near Çayırhan Dam. Moreover, since the invisible wall of pollution created by the power plant in the air has disappeared, birds are regaining their historical migration routes and can safely locate themselves in this basin.</p>
     </div>
   </section>
 
@@ -135,7 +145,14 @@
     { id:'yapi',         svg:'2026-1-cayirhanmainphoto_03.01-onecikanlaryapi.svg',           webp:'2026-1-cayirhanmainphoto_03.01-onecikanlaryapi.webp'           },
   ];
 
-  FILES.forEach(cfg => {
+  function insertInOrder(g, order) {
+    g.dataset.order = order;
+    const next = Array.from(svgEl.children).find(child => Number(child.dataset.order) > order);
+    if (next) svgEl.insertBefore(g, next);
+    else svgEl.appendChild(g);
+  }
+
+  FILES.forEach((cfg, order) => {
     fetch(encodeURI(BASE + cfg.svg))
       .then(r => r.text())
       .then(svgText => {
@@ -217,7 +234,7 @@
           }
         });
 
-        svgEl.appendChild(g);
+        insertInOrder(g, order);
       });
   });
 
