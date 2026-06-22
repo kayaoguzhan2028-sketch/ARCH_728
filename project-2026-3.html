@@ -48,6 +48,15 @@
   .section { scroll-margin-top:52px; min-height:calc(100vh - 52px); height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
   .section > img { max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0 auto; }
   .section-full > img { width:var(--main-w); height:100%; max-height:none; object-fit:contain; margin:0 auto; cursor:pointer; opacity:1; }
+
+  .soil-map-wrap { position:relative; width:var(--main-w); height:100%; margin:0 auto; }
+  .soil-map-wrap > img { width:100%; height:100%; max-height:none; object-fit:contain; display:block; margin:0; cursor:pointer; opacity:1; }
+  .soil-map-wrap > svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .soil-map-wrap > svg .hover-shape { pointer-events:visiblePainted; cursor:pointer; }
+
+  .look-preview { position:fixed; top:6.5rem; right:2rem; z-index:150; width:min(360px, 28vw); opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; pointer-events:none; }
+  .look-preview.active { opacity:1; transform:translateY(0); }
+  .look-preview img { width:100%; display:block; border:1px solid var(--border); background:var(--black); }
   .section-padded { padding-left:5%; padding-right:5%; }
   .media-row { display:flex; gap:3rem; align-items:flex-start; }
   .media-row > img { flex:0 0 30%; width:30%; max-height:calc(100vh - 52px - 4rem); object-fit:contain; display:block; margin:0; opacity:0.9; }
@@ -127,7 +136,14 @@
     </div>
 
     <div class="section section-full">
-      <img id="soil-map" src="2026-images/2026-p3/1 entrance page-1/key image-soil grounds-1.1.webp" alt="Key image — soil grounds">
+      <div class="soil-map-wrap" id="soil-map-wrap">
+        <img id="soil-map" src="2026-images/2026-p3/1 entrance page-1/key image-soil grounds-1.1.webp" alt="Key image — soil grounds">
+        <svg id="soil-map-svg" viewBox="0 0 2383.9 1683.8" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+
+    <div class="look-preview" id="look-preview">
+      <img id="look-preview-img" src="" alt="">
     </div>
 
     <div class="section">
@@ -185,6 +201,64 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); scrollToSection(currentSectionIndex() - 1); }
+  });
+
+  const SVG_BASE = '2026-images/2026-p3/1 entrance page-1/svg/';
+  const LOOK_FILES = [
+    { n: 1, svg: '1-01.svg', look: 'LOOK-1 - soil types table.webp' },
+    { n: 2, svg: '2-01.svg', look: 'LOOK-2 - soil types table.webp' },
+    { n: 3, svg: '3-01.svg', look: 'LOOK-3 -soil types table.webp' },
+    { n: 4, svg: '4-01.svg', look: 'LOOK-4 - soil types table.webp' },
+    { n: 5, svg: '5-01.svg', look: 'LOOK-5 -soil types table.webp' },
+    { n: 6, svg: '6-01.svg', look: 'LOOK-6 -soil types table.webp' },
+  ];
+
+  const soilMapSvg = document.getElementById('soil-map-svg');
+  const lookPreview = document.getElementById('look-preview');
+  const lookPreviewImg = document.getElementById('look-preview-img');
+
+  function namespaceClasses(svgText, prefix) {
+    let out = svgText.replace(/\.([\w-]+)(\s*\{)/g, (m, cls, brace) => `.${prefix}-${cls}${brace}`);
+    out = out.replace(/class="([^"]*)"/g, (m, classes) => {
+      const renamed = classes.split(/\s+/).filter(Boolean).map((c) => `${prefix}-${c}`).join(' ');
+      return `class="${renamed}"`;
+    });
+    return out;
+  }
+
+  LOOK_FILES.forEach((cfg) => {
+    fetch(encodeURI(SVG_BASE + cfg.svg))
+      .then((r) => r.text())
+      .then((svgText) => {
+        const prefix = 'svg' + cfg.n;
+        const namespaced = namespaceClasses(svgText, prefix);
+        const parsed = new DOMParser().parseFromString(namespaced, 'image/svg+xml');
+
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.setAttribute('data-look', cfg.n);
+
+        const styleEl = parsed.querySelector('style');
+        if (styleEl) soilMapSvg.appendChild(document.importNode(styleEl, true));
+
+        Array.from(parsed.documentElement.children).forEach((node) => {
+          if (node.tagName.toLowerCase() === 'style') return;
+          group.appendChild(document.importNode(node, true));
+        });
+
+        group.querySelectorAll('path, circle, rect, polygon, polyline, line').forEach((shape) => {
+          shape.classList.add('hover-shape');
+        });
+
+        group.addEventListener('mouseenter', () => {
+          lookPreviewImg.src = encodeURI(SVG_BASE + cfg.look);
+          lookPreview.classList.add('active');
+        });
+        group.addEventListener('mouseleave', () => {
+          lookPreview.classList.remove('active');
+        });
+
+        soilMapSvg.appendChild(group);
+      });
   });
 </script>
 </body>
