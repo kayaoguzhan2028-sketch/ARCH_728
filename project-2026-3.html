@@ -52,11 +52,11 @@
   .soil-map-wrap { position:relative; width:var(--main-w); height:100%; margin:0 auto; }
   .soil-map-wrap > img { width:100%; height:100%; max-height:none; object-fit:contain; display:block; margin:0; cursor:pointer; opacity:1; }
   .soil-map-wrap > svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
-  .soil-map-wrap > svg .hover-shape { pointer-events:visiblePainted; cursor:pointer; }
+  .soil-map-wrap > svg .hover-shape { pointer-events:fill; cursor:pointer; }
 
-  .look-preview { position:fixed; top:6.5rem; right:2rem; z-index:150; width:min(360px, 28vw); opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; pointer-events:none; }
+  .look-preview { position:fixed; top:6.5rem; right:2rem; z-index:150; max-height:60vh; opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; pointer-events:none; }
   .look-preview.active { opacity:1; transform:translateY(0); }
-  .look-preview img { width:100%; display:block; border:1px solid var(--border); background:var(--black); }
+  .look-preview img { display:block; width:auto; height:auto; max-width:100%; max-height:60vh; border:1px solid var(--border); background:var(--black); }
   .section-padded { padding-left:5%; padding-right:5%; }
   .media-row { display:flex; gap:3rem; align-items:flex-start; }
   .media-row > img { flex:0 0 30%; width:30%; max-height:calc(100vh - 52px - 4rem); object-fit:contain; display:block; margin:0; opacity:0.9; }
