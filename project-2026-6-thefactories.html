@@ -20,10 +20,10 @@
   .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
   .nav-links a:hover { opacity:1; }
 
-  .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:45fr 55fr; grid-template-areas:"preview visual" "info visual"; }
+  .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:40fr 60fr; grid-template-areas:"preview visual" "info visual"; }
   .cell { display:flex; align-items:center; justify-content:center; padding:1rem; overflow:hidden; }
-  .cell-preview { grid-area:preview; }
-  .cell-info { grid-area:info; overflow-y:auto; }
+  .cell-preview { grid-area:preview; padding:0; }
+  .cell-info { grid-area:info; overflow-y:auto; padding:0; }
   .cell-visual { grid-area:visual; }
 
   .interactive-image { position:relative; width:min(95%, calc(85vh * 2598 / 2953)); aspect-ratio:2598/2953; }
@@ -31,11 +31,11 @@
   .factory-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease, filter 0.25s ease; }
   .factory-highlight.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,200,80,0.85)) drop-shadow(0 0 28px rgba(245,200,80,0.5)); }
 
-  .preview-panel { width:100%; max-width:320px; opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; }
+  .preview-panel { width:90%; max-width:320px; opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; }
   .preview-panel.active { opacity:1; transform:translateY(0); }
   .preview-panel img { width:100%; display:block; border:1px solid var(--border); }
 
-  .info-panel { max-width:340px; font-size:0.92rem; line-height:1.85; opacity:0.78; text-align:justify; }
+  .info-panel { width:90%; font-size:0.88rem; line-height:1.85; opacity:0.78; text-align:justify; }
   .info-panel .references { margin-top:1.2rem; font-size:0.72rem; line-height:1.6; opacity:0.55; }
   .info-panel .references p { margin-bottom:0.5rem; }
   .info-panel .references p:last-child { margin-bottom:0; }
