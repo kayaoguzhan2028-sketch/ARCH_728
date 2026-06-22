@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
 <title>WaterWays — ARCH 728</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
@@ -59,10 +59,10 @@
 </head>
 <body>
 <nav>
-  <a href="2026.html" class="nav-back">← 2026</a>
+  <a href="../../2026.html" class="nav-back">← 2026</a>
   <div class="page-nav">
-    <a href="project-2026-5-microsection.html" class="page-nav-link">← Microsections</a>
-    <a href="project-2026-5-references.html" class="page-nav-link">References →</a>
+    <a href="2026-5-microsection.html" class="page-nav-link">← Microsections</a>
+    <a href="2026-5-references.html" class="page-nav-link">References →</a>
   </div>
 </nav>
 <div class="wrap">
@@ -73,7 +73,7 @@
     <p>Ankara's waterways, which are mostly covered with soil and concrete, enable contamination, soil and materials to flow into each other and across the city. By mapping these waterways, the hydrological connections near the Grand Çankaya Hotel site are revealed.</p>
 
     <div class="waterways-map">
-      <img src="2026-images/2026-p5/04-WaterWays/city-scale.webp" alt="City-scale waterways map">
+      <img src="../../2026-images/2026-p5/04-WaterWays/city-scale.webp" alt="City-scale waterways map">
       <svg class="waterways-overlay" id="waterways-overlay" viewBox="0 0 5071 3060" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
     <div id="waterways-tooltip"></div>
@@ -81,7 +81,7 @@
     <h2>Site Focus</h2>
 
     <div class="site-focus">
-      <img src="2026-images/2026-p5/04-WaterWays/Site-Scale.webp" alt="Site-scale waterways map">
+      <img src="../../2026-images/2026-p5/04-WaterWays/site-scale.webp" alt="Site-scale waterways map">
       <p>Changing the scale from the city to the site reveals that there are four waterways situated around the Grand Çankaya Hotel: Dikmen Deresi, İncesu Deresi, Sazlık Deresi, and Kavaklıdere. Kavaklıdere is the nearest one, flowing almost tangently to the hotel site.</p>
     </div>
 
@@ -93,7 +93,7 @@
           <span class="triptych-label">Project Site</span>
           <span class="triptych-subtitle">The Grand Çankaya Hotel</span>
         </div>
-        <img src="2026-images/2026-p5/04-WaterWays/otel-ada-parsel.webp" alt="Hotel parcel">
+        <img src="../../2026-images/2026-p5/04-WaterWays/otel-ada-parsel.webp" alt="Hotel parcel">
         <p>The hotel site, in which construction started in 1984, occupies parcel 11 of block 5496 on the corner of Uğur Mumcu Avenue and Kız Kulesi Street, covering approximately 11,313m².</p>
       </div>
       <div class="triptych-item">
@@ -101,7 +101,7 @@
           <span class="triptych-label">Papazın Bağı</span>
           <span class="triptych-subtitle">A first-degree protected natural area.</span>
         </div>
-        <img src="2026-images/2026-p5/04-WaterWays/otel-otopark-ada-parsel.webp" alt="Hotel car park parcel">
+        <img src="../../2026-images/2026-p5/04-WaterWays/otel-otopark-ada-parsel.webp" alt="Hotel car park parcel">
         <p>Initially, a six-story underground car park was planned on an adjacent plot, parcel 21 of block 5464, an 8,170 m² site situated directly above Papazın Bağı.</p>
       </div>
       <div class="triptych-item">
@@ -109,7 +109,7 @@
           <span class="triptych-label">Site Relation</span>
           <span class="triptych-subtitle">The proposed parking lot site posed a direct threat to Papazın Bağı, as well as to the underground water feeding the area.</span>
         </div>
-        <img src="2026-images/2026-p5/04-WaterWays/papazın-bağı.webp" alt="Papazın Bağı">
+        <img src="../../2026-images/2026-p5/04-WaterWays/papazin-bagi.webp" alt="Papazın Bağı">
         <p>The car park's construction was halted by the court in 2005. However, 22 trees had already been illegally cut, and the ongoing hotel construction had already disturbed the area's soil and subsurface water flows.</p>
       </div>
     </div>
@@ -121,31 +121,31 @@
 </div>
 <script>
   const riverNames = [
-    'Ankara Çayı',
-    'Bağlum Deresi',
-    'Cevizlidere',
-    'Dikmen Deresi',
-    'Hatip Çayı',
-    'Kavaklıdere',
-    'Kepir Deresi',
-    'Kurtini Deresi',
-    'Kıyam Deresi',
-    'Macun Deresi',
-    'Sazlık Deresi',
-    'Söğütözü Deresi',
-    'Uğ Deresi',
-    'Çobançeşmesi Deresi',
-    'Çubuk Çayı',
-    'Öveçler Deresi',
-    'İncesu Deresi',
-    'İğdeli Deresi'
+    { file: 'ankara-cayi', label: 'Ankara Çayı' },
+    { file: 'baglum-deresi', label: 'Bağlum Deresi' },
+    { file: 'cevizlidere', label: 'Cevizlidere' },
+    { file: 'dikmen-deresi', label: 'Dikmen Deresi' },
+    { file: 'hatip-cayi', label: 'Hatip Çayı' },
+    { file: 'kavaklidere', label: 'Kavaklıdere' },
+    { file: 'kepir-deresi', label: 'Kepir Deresi' },
+    { file: 'kurtini-deresi', label: 'Kurtini Deresi' },
+    { file: 'kiyam-deresi', label: 'Kıyam Deresi' },
+    { file: 'macun-deresi', label: 'Macun Deresi' },
+    { file: 'sazlik-deresi', label: 'Sazlık Deresi' },
+    { file: 'sogutozu-deresi', label: 'Söğütözü Deresi' },
+    { file: 'ug-deresi', label: 'Uğ Deresi' },
+    { file: 'cobancesmesi-deresi', label: 'Çobançeşmesi Deresi' },
+    { file: 'cubuk-cayi', label: 'Çubuk Çayı' },
+    { file: 'ovecler-deresi', label: 'Öveçler Deresi' },
+    { file: 'incesu-deresi', label: 'İncesu Deresi' },
+    { file: 'igdeli-deresi', label: 'İğdeli Deresi' }
   ];
 
   const waterwaysOverlay = document.getElementById('waterways-overlay');
   const waterwaysTooltip = document.getElementById('waterways-tooltip');
 
-  riverNames.forEach((name) => {
-    fetch('2026-images/2026-p5/04-WaterWays/hover-glow-svg/' + encodeURIComponent(name) + '.svg')
+  riverNames.forEach(({ file, label }) => {
+    fetch('../../2026-images/2026-p5/04-WaterWays/hover-glow-svg/' + file + '.svg')
       .then((res) => res.text())
       .then((svgText) => {
         const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
@@ -153,10 +153,10 @@
         if (!srcPath) return;
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', srcPath.getAttribute('d'));
-        path.setAttribute('data-name', name);
+        path.setAttribute('data-name', label);
         path.classList.add('waterway-path');
         path.addEventListener('mouseenter', () => {
-          waterwaysTooltip.textContent = name;
+          waterwaysTooltip.textContent = label;
           waterwaysTooltip.classList.add('show');
         });
         path.addEventListener('mousemove', (e) => {
