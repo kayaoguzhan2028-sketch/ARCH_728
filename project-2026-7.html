@@ -186,6 +186,8 @@ let genericBuildingClicks = 0;
 mapInner.addEventListener('click', () => {
   if (activeSoilHit && activeSoilHit.id === '02') {
     window.location.href = 'project-2026-7-debris.html';
+  } else if (activeSoilHit && activeSoilHit.id === '07') {
+    window.location.href = 'project-2026-7-nomad-soil.html';
   } else if (activeSoilHit && activeSoilHit.id === '04') {
     genericBuildingClicks++;
     if (genericBuildingClicks >= 5) {
