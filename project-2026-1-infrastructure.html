@@ -29,24 +29,29 @@
   .reference-block p { margin-bottom:0.3rem; }
   .reference-block p:last-child { margin-bottom:0; }
 
-  .img-wrap2 { position:relative; width:min(94%, calc(60vh * 14796 / 9705)); aspect-ratio:14796/9705; }
+  .img-wrap2 { position:relative; width:min(94%, calc(60vh * 2446 / 1887)); aspect-ratio:2446/1887; }
   .img-wrap2 img { width:100%; height:100%; object-fit:contain; display:block; }
   .img-wrap2 svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
   .overlay-zone { fill:var(--accent); opacity:0.2; pointer-events:all; cursor:pointer; transition:opacity 0.3s ease, filter 0.3s ease; }
   .overlay-zone.hover { opacity:0.4; filter:drop-shadow(0 0 26px rgba(245,200,80,0.85)); }
 
-  #trace-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:stretch; justify-items:stretch; gap:2.5rem; width:100%; max-width:70vw; margin:0 auto; scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; padding:1.5rem 2rem; border:1px solid red; }
-  #trace-grid .trace-cell { min-width:0; min-height:0; overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.1rem; text-align:left; border:1px solid red; }
+  #trace-grid { display:grid; grid-template-columns:minmax(0, 35fr) minmax(0, 13fr) minmax(0, 42fr); align-items:stretch; justify-items:stretch; gap:1rem; width:100%; max-width:70vw; margin:0 auto; scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; padding:0 0 1.5rem 0; }
+  #trace-grid .trace-cell { min-width:0; min-height:0; overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:1.1rem; text-align:left; }
+  #trace-grid .trace-cell:nth-child(1) { justify-content:center; }
   #trace-grid .trace-cell:nth-child(2) { align-items:flex-end; }
-  #trace-grid .trace-cell:nth-child(3) { align-items:flex-start; }
-  #trace-img { max-width:100%; max-height:100%; object-fit:contain; display:block; transition:transform 0.4s ease; transform-origin:center; }
+  #trace-grid .trace-cell:nth-child(3) { align-items:flex-end; }
+  #trace-img { width:100%; max-width:100%; display:block; aspect-ratio:1/1; object-fit:fill; transition:aspect-ratio 0.6s ease; }
+  #trace-img.expanded { aspect-ratio:913/4961; }
 
-  .img-wrap3 { position:relative; flex:0 0 auto; width:min(21vw, calc(88vh * 2157 / 3507)); aspect-ratio:2157/3507; max-height:88vh; }
+  .img-wrap3 { position:relative; flex:0 0 auto; width:auto; height:auto; max-width:100%; max-height:100%; aspect-ratio:2157/3507; cursor:pointer; }
   .img-wrap3 img { width:100%; height:100%; object-fit:contain; display:block; }
   .img-wrap3 svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
-  .img-wrap3 svg path, .img-wrap3 svg polygon { fill:var(--accent); opacity:0; pointer-events:all; cursor:pointer; transition:opacity 0.25s ease, filter 0.25s ease; }
-  .img-wrap3 svg path:hover, .img-wrap3 svg polygon:hover,
-  .img-wrap3 svg path.active, .img-wrap3 svg polygon.active { opacity:0.2; filter:drop-shadow(0 0 20px rgba(245,200,80,0.75)); }
+  .img-wrap3 svg polyline, .img-wrap3 svg line { fill:none; stroke:var(--accent); stroke-width:8; vector-effect:non-scaling-stroke; opacity:0.55; pointer-events:stroke; transition:opacity 0.25s ease, filter 0.25s ease; }
+  .img-wrap3.hover svg polyline, .img-wrap3.hover svg line { opacity:0.9; filter:drop-shadow(0 0 14px rgba(245,200,80,0.85)); }
+  .trace-highlight { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .img-wrap3.hover .trace-highlight { opacity:1; }
+  .expand-label { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(10,10,10,0.55); color:var(--white); font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0; transition:opacity 0.2s ease; text-align:center; padding:1rem; pointer-events:none; }
+  .img-wrap3.hover .expand-label { opacity:1; }
 
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .panel-overlay.open { opacity:1; pointer-events:auto; }
@@ -81,7 +86,7 @@
   <section class="section">
     <div class="img-wrap2">
       <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/2026-1-728-InfrastructureSectionMap.webp" loading="lazy" alt="">
-      <svg id="overlay-svg2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2002 1543" preserveAspectRatio="none"></svg>
+      <svg id="overlay-svg2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2446 1887" preserveAspectRatio="none"></svg>
     </div>
   </section>
 
@@ -98,7 +103,9 @@
     <div class="trace-cell">
       <div class="img-wrap3">
         <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
+        <img class="trace-highlight" src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_svgsi-01-01.webp" loading="lazy" alt="">
         <svg id="overlay-svg3" xmlns="http://www.w3.org/2000/svg"></svg>
+        <span class="expand-label">Click For Expansion</span>
       </div>
     </div>
   </section>
@@ -140,22 +147,22 @@
       .then(r => r.text())
       .then(svgText => {
         const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-        const path = document.importNode(parsed.querySelector('path'), true);
-        path.setAttribute('class', 'overlay-zone');
-        path.addEventListener('mouseenter', () => path.classList.add('hover'));
-        path.addEventListener('mouseleave', () => path.classList.remove('hover'));
-        path.addEventListener('click', () => openPanel(cfg.webp));
-        svgEl2.appendChild(path);
+        const shape = document.importNode(parsed.querySelector('rect, path, polygon'), true);
+        shape.setAttribute('class', 'overlay-zone');
+        shape.addEventListener('mouseenter', () => shape.classList.add('hover'));
+        shape.addEventListener('mouseleave', () => shape.classList.remove('hover'));
+        shape.addEventListener('click', () => openPanel(cfg.webp));
+        svgEl2.appendChild(shape);
       });
   });
 
-  const svgEl3   = document.getElementById('overlay-svg3');
-  const traceImg = document.getElementById('trace-img');
-  const TRACE_STEP = 0.06;
-  const TRACE_MAX_STEPS = 6;
-  let traceStep = 0;
+  const svgEl3    = document.getElementById('overlay-svg3');
+  const traceImg  = document.getElementById('trace-img');
+  const traceWrap = document.querySelector('.img-wrap3');
 
-  fetch(encodeURI('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_HighlighStructure-01.svg'))
+  traceWrap.addEventListener('click', () => traceImg.classList.toggle('expanded'));
+
+  fetch(encodeURI('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_svgsi-01-01.svg'))
     .then(r => r.text())
     .then(svgText => {
       const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
@@ -164,17 +171,12 @@
       const vb = source.getAttribute('viewBox');
       if (vb) svgEl3.setAttribute('viewBox', vb);
 
-      source.querySelectorAll('path, polygon').forEach(shape => {
-        const clone = document.importNode(shape, true);
-        clone.addEventListener('click', () => {
-          clone.classList.toggle('active');
-          if (traceStep < TRACE_MAX_STEPS) {
-            traceStep++;
-            traceImg.style.transform = `scale(${1 + traceStep * TRACE_STEP})`;
-          }
-        });
-        svgEl3.appendChild(clone);
+      source.querySelectorAll('polyline, line').forEach(shape => {
+        svgEl3.appendChild(document.importNode(shape, true));
       });
+
+      traceWrap.addEventListener('mouseenter', () => traceWrap.classList.add('hover'));
+      traceWrap.addEventListener('mouseleave', () => traceWrap.classList.remove('hover'));
     });
 </script>
 </body>
