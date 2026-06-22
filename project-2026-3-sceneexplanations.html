@@ -180,9 +180,11 @@
       </div>
     </div>
 
-    <div class="section section-auto">
+    <div class="section section-auto" id="section-4">
       <div class="img-row">
-        <div class="img-arrow" style="visibility:hidden;"></div>
+        <button class="img-arrow" id="se4-prev" aria-label="Previous" data-tooltip="Click Back To After Sift">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
         <div class="caption-block" style="max-width:calc(100% - 120px); margin:0; margin-left:10%; margin-right:7.5%;">
         <h2>The Micro Scene</h2>
         <p>Descending into the subterranean micro-scale, this scene penetrates the intricate metabolism of the soil, exposing the vibrant network of non-human creatures that physically construct and sustain the substrate. This intimate resolution fundamentally dismantles the "Blue Marble" paradigm—which abstracts the planet as a distant, passive, and impersonal resource—and forcefully grounds the project in the reality of "Gaia." Within this framework, the Earth is no longer a peaceful, stand-alone globe, but a fiercely active, composite figure where human and non-human destinies are deeply entangled. Crucially, the diagnostic sifter must recalibrate its logic at this depth. Unlike the synthetic detritus and industrial externalities identified as anthropogenic "errors" in the broader urban context, these subterranean organisms—the worms, larvae, ants, and burrowing mammals—are emphatically not anomalies to be filtered out. They possess an absolute, intrinsic right to exist within the geostrata. In the speculative after-sift condition, these entities are reclassified as indispensable collaborators, functioning as vital "supporters of the sifter." They are the primary biological engines of the earth, perpetually digesting, aerating, and regenerating the terrain. By actively validating their presence rather than attempting to over-engineer their habitat, the scene illustrates that profound terrestrial care requires acknowledging the soil's inherent sovereignty, allowing its native, non-human operators to freely perform the continuous labor of world-making.</p>
@@ -232,6 +234,7 @@
   document.getElementById('se1-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-2'; });
   document.getElementById('se2-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-3'; });
   document.getElementById('se3-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-4'; });
+  document.getElementById('se4-prev').addEventListener('click', () => { window.location.href = 'project-2026-3-aftersift.html#section-5'; });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
