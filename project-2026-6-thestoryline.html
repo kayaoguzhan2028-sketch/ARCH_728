@@ -21,6 +21,7 @@
   .nav-links a:hover { opacity:1; }
 
   .story-stage { position:relative; width:100%; max-width:1600px; margin:0 auto; padding:6rem 1.5rem 2rem; }
+  .story-hint { text-align:center; font-size:0.78rem; font-style:italic; opacity:0.45; margin-top:0.8rem; }
   .interactive-image { position:relative; width:100%; aspect-ratio:6251/1251; }
   .interactive-image img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
   .story-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
@@ -78,6 +79,7 @@
     <div class="hotspot-overlay" data-spot="5" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı5-svg.svg"></div>
     <div class="hotspot-overlay" data-spot="6" data-svg="2026-images/2026-p6/4-The Storyline/THE STORYLINE SVG/2026-6-the storyline-p1-artı6-svg.svg"></div>
   </div>
+  <p class="story-hint">Click on ''+'' s to explore the storyline.</p>
 </div>
 
 <section class="wrap story-block">
@@ -139,12 +141,12 @@
   const modalCaption = document.getElementById('modal-caption');
 
   const storyCaptions = {
-    2: "Whenever we extracted soil, pits were formed. There were ponds in those areas, but they were later filled. The valley became Ankara's main dumping ground for excavation waste. Everyone would bring their waste here. Now the valley has been opened for development. The factories are gone.",
-    3: "The last one was Ceylan Brick Factory (stopped operating at 2020s), and now it has become a ruin as well. We stopped operating in 1996. That's how it is.",
-    4: "When it was a village, almost every family owned a few cows or sheep but it was not a serious activity. People produced milk for themselves and sold any surplus. Gardening was also common.",
-    5: "That was Ceylan Brick Factory. It was active until about three or four years ago. They had invested heavily in the facility. Since it produced more bricks than the other factories, it remained in operation much longer. Apart from that, most of the factories had already closed by around 2000…",
-    6: "We have high expectations. We gave up the factory business. We received development titles in 2016, but not a single nail has been driven into the ground in nearly ten years. That's the situation.",
-    7: "At the moment, a canal is being constructed from the start to Nata Vega. Commercial areas and recreational spaces are planned. They are currently carrying out geotechnical surveys.",
+    2: "\"Whenever we extracted soil, pits were formed. There were ponds in those areas, but they were later filled. The valley became Ankara's main dumping ground for excavation waste. Everyone would bring their waste here. Now the valley has been opened for development. The factories are gone.\"",
+    3: "\"The last one was Ceylan Brick Factory (stopped operating at 2020s), and now it has become a ruin as well. We stopped operating in 1996. That's how it is.\"",
+    4: "\"When it was a village, almost every family owned a few cows or sheep but it was not a serious activity. People produced milk for themselves and sold any surplus. Gardening was also common.\"",
+    5: "\"That was Ceylan Brick Factory. It was active until about three or four years ago. They had invested heavily in the facility. Since it produced more bricks than the other factories, it remained in operation much longer. Apart from that, most of the factories had already closed by around 2000…\"",
+    6: "\"We have high expectations. We gave up the factory business. We received development titles in 2016, but not a single nail has been driven into the ground in nearly ten years. That's the situation.\"",
+    7: "\"At the moment, a canal is being constructed from the start to Nata Vega. Commercial areas and recreational spaces are planned. They are currently carrying out geotechnical surveys.\"",
   };
 
   document.getElementById('modal-close').addEventListener('click', () => {
