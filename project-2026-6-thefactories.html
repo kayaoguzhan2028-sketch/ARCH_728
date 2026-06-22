@@ -85,15 +85,6 @@
     <img class="factory-highlight" data-factory="11" src="2026-images/2026-p6/2-The Factories/2026-6-Factory 11.webp" alt="">
     <div class="hotspot-overlay">
       <svg viewBox="0 0 2598 2953" xmlns="http://www.w3.org/2000/svg">
-        <path data-factory="1" d="M1512,383c-1,.06,21-69,21-69l48-4,53-7,31,5,58-10h25l86,28,15,6,8,10,33,2,10,8,5,9-1,5-3,7s-9.28,8.477-14,8-19,0-19,0l-98,8-29,8-33-6-51-4-112-3S1513,382.94,1512,383Z"/>
-        <circle data-factory="2" cx="2032" cy="358" r="15"/>
-        <circle data-factory="3" cx="1408" cy="437" r="15"/>
-        <path data-factory="4" d="M1144,516l21-44,87-1-1-102,14-5,11,5,5,102,264,5,6,13v5l16,36-3,18-414-11Z"/>
-        <path data-factory="5" d="M1277,603c8.48-.208,524,12,524,12l2-47,150-4-1,103-233-2-27-7-259-3-32-11-53,3-72-1-2-45"/>
-        <path data-factory="6" d="M1394,927l426-42,217,19,8,80H1818l-424-14V927Z"/>
-        <path data-factory="7" d="M1284,1243V1104l151-26,149,17,137,57-16,11,3,55-108,38-154-12-142,8Z"/>
-        <path data-factory="8" d="M565,1413l7-100,235-56,61,15,45-32,105,20s191.73,80.04,191,82,0,36,0,36h-43l-9,8-109-1v7l-28,14-54,12-162,16Z"/>
-        <path data-factory="9" d="M1441,1451l829,48-4-82-28-12-221,4-576,4v38Z"/>
         <path data-factory="10" d="M701,2228l2-57,797-4,6,80Z"/>
         <path data-factory="11" d="M1717,2537l566,22-1-63-11-13-341-4-5-17-121-5-22,12-18-278-19-1,4,284-31-1Z"/>
       </svg>
@@ -131,6 +122,7 @@
   const previewPanel = document.getElementById('preview-panel');
   const previewImg = document.getElementById('preview-img');
 
+  // Factories 10-11: no highlight webp asset yet, keep the hand-drawn SVG hotspots.
   document.querySelectorAll('.hotspot-overlay [data-factory]').forEach((shape) => {
     const id = shape.dataset.factory;
     const highlight = document.querySelector(`.factory-highlight[data-factory="${id}"]`);
@@ -145,6 +137,71 @@
       highlight.classList.remove('active');
       previewPanel.classList.remove('active');
     });
+  });
+
+  // Factories 1-9: hover detection follows the actual highlight image's own pixels,
+  // so the hover zone always matches what lights up exactly (no hand-drawn polygon to drift out of sync).
+  const interactiveImage = document.querySelector('.interactive-image');
+  const pixelHotspots = Array.from(document.querySelectorAll('.factory-highlight[data-factory]'))
+    .filter((img) => Number(img.dataset.factory) >= 1 && Number(img.dataset.factory) <= 9);
+
+  const hitCanvas = document.createElement('canvas');
+  const hitCtx = hitCanvas.getContext('2d', { willReadFrequently: true });
+
+  pixelHotspots.forEach((img) => {
+    const readPixels = () => {
+      hitCanvas.width = img.naturalWidth;
+      hitCanvas.height = img.naturalHeight;
+      hitCtx.clearRect(0, 0, hitCanvas.width, hitCanvas.height);
+      hitCtx.drawImage(img, 0, 0);
+      img._hitData = hitCtx.getImageData(0, 0, hitCanvas.width, hitCanvas.height).data;
+      img._hitW = hitCanvas.width;
+      img._hitH = hitCanvas.height;
+    };
+    if (img.complete && img.naturalWidth) readPixels();
+    else img.addEventListener('load', readPixels);
+  });
+
+  function factoryAt(clientX, clientY) {
+    const rect = interactiveImage.getBoundingClientRect();
+    const xRatio = (clientX - rect.left) / rect.width;
+    const yRatio = (clientY - rect.top) / rect.height;
+    if (xRatio < 0 || yRatio < 0 || xRatio > 1 || yRatio > 1) return null;
+    for (let i = pixelHotspots.length - 1; i >= 0; i--) {
+      const img = pixelHotspots[i];
+      if (!img._hitData) continue;
+      const px = Math.floor(xRatio * img._hitW);
+      const py = Math.floor(yRatio * img._hitH);
+      if (px < 0 || py < 0 || px >= img._hitW || py >= img._hitH) continue;
+      const alpha = img._hitData[(py * img._hitW + px) * 4 + 3];
+      if (alpha > 10) return img;
+    }
+    return null;
+  }
+
+  let activeFactoryImg = null;
+
+  interactiveImage.addEventListener('mousemove', (e) => {
+    const found = factoryAt(e.clientX, e.clientY);
+    if (found !== activeFactoryImg) {
+      if (activeFactoryImg) activeFactoryImg.classList.remove('active');
+      if (found) {
+        found.classList.add('active');
+        previewImg.src = basePath + hoverImages[found.dataset.factory];
+        previewPanel.classList.add('active');
+      } else {
+        previewPanel.classList.remove('active');
+      }
+      activeFactoryImg = found;
+      interactiveImage.style.cursor = found ? 'pointer' : '';
+    }
+  });
+
+  interactiveImage.addEventListener('mouseleave', () => {
+    if (activeFactoryImg) activeFactoryImg.classList.remove('active');
+    activeFactoryImg = null;
+    previewPanel.classList.remove('active');
+    interactiveImage.style.cursor = '';
   });
 </script>
 </body>
