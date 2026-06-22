@@ -1,16 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.6.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 12100.9 9300.8" style="enable-background:new 0 0 12100.9 9300.8;" xml:space="preserve">
-<style type="text/css">
-	.st0{display:none;fill:none;}
-	.st1{fill:none;}
-</style>
-<image style="display:none;overflow:visible;" width="14796" height="9705" xlink:href="E259E76A.png"  transform="matrix(1 0 0 1 -1277.1489 -191.5532)">
-</image>
-<rect x="6066.4" y="11.2" class="st0" width="5978.2" height="1764.8"/>
-<rect x="6066.4" y="1842.3" class="st0" width="5978.2" height="1764.8"/>
-<rect x="6066.4" y="3714.3" class="st1" width="5978.2" height="1793.4"/>
-<rect x="6066.4" y="5601.7" class="st0" width="5978.2" height="1793.4"/>
-<rect x="6066.4" y="7497.1" class="st0" width="5978.2" height="1793.4"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="2002" height="1543" viewBox="0 0 2002 1543">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #000;
+        stroke-width: 1px;
+        fill-rule: evenodd;
+        opacity: 0.01;
+      }
+    </style>
+  </defs>
+  <path id="SECTION3" class="cls-1" d="M1008,620h992V915H1008V620Zm0,0h992V915H1008V620Zm0,0h992V915H1008V620Z"/>
 </svg>

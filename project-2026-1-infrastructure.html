@@ -23,9 +23,9 @@
   .fig { flex:1; min-height:0; width:100%; max-width:1000px; overflow:hidden; }
   .fig img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
 
-  .body-text { max-width:780px; font-size:0.95rem; line-height:1.8; opacity:0.8; flex:0 0 auto; }
+  .body-text { max-width:780px; font-size:0.95rem; line-height:1.8; opacity:0.8; flex:0 0 auto; text-align:justify; }
 
-  .reference-block { max-width:780px; font-size:0.68rem; line-height:1.6; opacity:0.4; flex:0 0 auto; }
+  .reference-block { max-width:780px; font-size:0.68rem; line-height:1.6; opacity:0.4; flex:0 0 auto; text-align:justify; }
   .reference-block p { margin-bottom:0.3rem; }
   .reference-block p:last-child { margin-bottom:0; }
 
@@ -35,10 +35,11 @@
   .overlay-zone { fill:var(--accent); opacity:0.2; pointer-events:all; cursor:pointer; transition:opacity 0.3s ease, filter 0.3s ease; }
   .overlay-zone.hover { opacity:0.4; filter:drop-shadow(0 0 26px rgba(245,200,80,0.85)); }
 
-  .trace-split { flex-direction:row; align-items:flex-end; justify-content:center; gap:3.5rem; text-align:left; }
-  .trace-left { flex:0 1 440px; display:flex; flex-direction:column; gap:1.1rem; }
-  .trace-left img { width:100%; height:auto; display:block; }
-  #trace-img { transition:transform 0.4s ease; transform-origin:center; }
+  #trace-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:stretch; justify-items:stretch; gap:2.5rem; width:100%; max-width:70vw; margin:0 auto; scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; padding:1.5rem 2rem; border:1px solid red; }
+  #trace-grid .trace-cell { min-width:0; min-height:0; overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.1rem; text-align:left; border:1px solid red; }
+  #trace-grid .trace-cell:nth-child(2) { align-items:flex-end; }
+  #trace-grid .trace-cell:nth-child(3) { align-items:flex-start; }
+  #trace-img { max-width:100%; max-height:100%; object-fit:contain; display:block; transition:transform 0.4s ease; transform-origin:center; }
 
   .img-wrap3 { position:relative; flex:0 0 auto; width:min(21vw, calc(88vh * 2157 / 3507)); aspect-ratio:2157/3507; max-height:88vh; }
   .img-wrap3 img { width:100%; height:100%; object-fit:contain; display:block; }
@@ -80,21 +81,25 @@
   <section class="section">
     <div class="img-wrap2">
       <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/2026-1-728-InfrastructureSectionMap.webp" loading="lazy" alt="">
-      <svg id="overlay-svg2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14796 9705"></svg>
+      <svg id="overlay-svg2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2002 1543" preserveAspectRatio="none"></svg>
     </div>
   </section>
 
-  <section class="section trace-split">
-    <div class="trace-left">
+  <section id="trace-grid">
+    <div class="trace-cell">
       <p class="body-text">This layout generates a sequential soil map through the path of the Overland Conveyor. The map shows how the soil changes radically due to the conveyor itself, from the darkness of the mining area to the artificial turquoise color of the ash lake.</p>
       <div class="reference-block">
         <p>(Satellite view are used to create image)</p>
       </div>
+    </div>
+    <div class="trace-cell">
       <img id="trace-img" src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
     </div>
-    <div class="img-wrap3">
-      <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
-      <svg id="overlay-svg3" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="trace-cell">
+      <div class="img-wrap3">
+        <img src="2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
+        <svg id="overlay-svg3" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
     </div>
   </section>
 
@@ -134,28 +139,13 @@
     fetch(encodeURI(BASE_SVG + cfg.svg))
       .then(r => r.text())
       .then(svgText => {
-        const parsed   = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-        const styleTxt = parsed.querySelector('style').textContent;
-        const imageEl  = parsed.querySelector('image');
-
-        const m = imageEl.getAttribute('transform').match(/matrix\(([^)]+)\)/)[1].trim().split(/\s+/).map(Number);
-        const offsetX = m[4], offsetY = m[5];
-
-        const hiddenClass = (styleTxt.match(/\.(\w+)\s*\{[^}]*display:\s*none/) || [])[1];
-        const activeRect  = [...parsed.querySelectorAll('rect')].find(r => r.getAttribute('class') !== hiddenClass);
-
-        const rect = document.createElementNS(svgNS, 'rect');
-        rect.setAttribute('x', parseFloat(activeRect.getAttribute('x')) - offsetX);
-        rect.setAttribute('y', parseFloat(activeRect.getAttribute('y')) - offsetY);
-        rect.setAttribute('width', activeRect.getAttribute('width'));
-        rect.setAttribute('height', activeRect.getAttribute('height'));
-        rect.classList.add('overlay-zone');
-
-        rect.addEventListener('mouseenter', () => rect.classList.add('hover'));
-        rect.addEventListener('mouseleave', () => rect.classList.remove('hover'));
-        rect.addEventListener('click', () => openPanel(cfg.webp));
-
-        svgEl2.appendChild(rect);
+        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const path = document.importNode(parsed.querySelector('path'), true);
+        path.setAttribute('class', 'overlay-zone');
+        path.addEventListener('mouseenter', () => path.classList.add('hover'));
+        path.addEventListener('mouseleave', () => path.classList.remove('hover'));
+        path.addEventListener('click', () => openPanel(cfg.webp));
+        svgEl2.appendChild(path);
       });
   });
 
