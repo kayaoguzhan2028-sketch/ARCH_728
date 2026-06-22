@@ -26,6 +26,12 @@
   .map-layer.active { opacity:1; }
   .map-hotspot { position:absolute; top:0; left:0; width:100%; height:100%; display:block; border:none; pointer-events:none; }
   .map-hotspot path { fill:transparent; pointer-events:all; cursor:pointer; }
+
+  .timeline-lightbox { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.94); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+  .timeline-lightbox.open { opacity:1; pointer-events:auto; }
+  .timeline-lightbox img { max-width:92vw; max-height:92vh; object-fit:contain; display:block; }
+  .timeline-lightbox-close { position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; color:var(--white); background:none; border:1px solid var(--accent); cursor:pointer; opacity:0.7; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; z-index:301; }
+  .timeline-lightbox-close:hover { opacity:1; background:var(--accent); color:var(--black); }
 </style>
 </head>
 <body>
@@ -43,7 +49,7 @@
     <img id="timeline-main" src="2026-images/2026-p7/Timeline/timeline - tam.webp" alt="Timeline">
 
     <img class="map-layer" data-layer="1" src="2026-images/2026-p7/Timeline/1-renkli.webp" alt="">
-    <img class="map-layer" data-layer="2" src="2026-images/2026-p7/Timeline/22renkli.webp" alt="">
+    <img class="map-layer" data-layer="2" src="2026-images/2026-p7/Timeline/2-renkli.webp" alt="">
     <img class="map-layer" data-layer="3" src="2026-images/2026-p7/Timeline/3-renkli.webp" alt="">
     <img class="map-layer" data-layer="4" src="2026-images/2026-p7/Timeline/4-renkli.webp" alt="">
     <img class="map-layer" data-layer="5" src="2026-images/2026-p7/Timeline/5-renkli.webp" alt="">
@@ -105,15 +111,33 @@
   </div>
 </div>
 
+<div class="timeline-lightbox" id="timeline-lightbox">
+  <button class="timeline-lightbox-close" id="timeline-lightbox-close" aria-label="Close">×</button>
+  <img id="timeline-lightbox-img" src="" alt="">
+</div>
+
 <script>
+const timelineLightbox      = document.getElementById('timeline-lightbox');
+const timelineLightboxImg   = document.getElementById('timeline-lightbox-img');
+const timelineLightboxClose = document.getElementById('timeline-lightbox-close');
+const TIMELINE_BASE = '2026-images/2026-p7/Timeline/';
+
 document.querySelectorAll('.map-hotspot').forEach(svg => {
   const id = svg.dataset.layer;
   const layer = document.querySelector(`.map-layer[data-layer="${id}"]`);
   svg.querySelectorAll('path').forEach(path => {
     path.addEventListener('mouseenter', () => layer.classList.add('active'));
     path.addEventListener('mouseleave', () => layer.classList.remove('active'));
+    path.addEventListener('click', () => {
+      timelineLightboxImg.src = TIMELINE_BASE + id + '-lightbox-map.webp';
+      timelineLightbox.classList.add('open');
+    });
   });
 });
+
+timelineLightboxClose.addEventListener('click', () => timelineLightbox.classList.remove('open'));
+timelineLightbox.addEventListener('click', e => { if (e.target === timelineLightbox) timelineLightbox.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') timelineLightbox.classList.remove('open'); });
 </script>
 </body>
 </html>
