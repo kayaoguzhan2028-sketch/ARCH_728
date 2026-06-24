@@ -21,6 +21,12 @@
   .nav-links { display:flex; align-items:center; gap:0.8rem; }
   .nav-link { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.45; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; color:var(--white); text-decoration:none; transition:opacity 0.2s,border-color 0.2s; }
   .nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.5); }
+  .nav-toggle-btn {
+    display:none;
+    width:1.9rem; height:1.9rem; align-items:center; justify-content:center;
+    background:none; border:1px solid rgba(245,242,235,0.2); color:var(--white);
+    font-size:0.75rem; cursor:pointer;
+  }
 
   #map { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:0; background:var(--black); }
   #map.dimmed .leaflet-tile-pane { filter: brightness(0.32) contrast(0.85) saturate(0.5); transition: filter 0.4s; }
@@ -145,7 +151,7 @@
     padding:2.4rem 2.6rem;
   }
   #soil-info-panel h4 { font-size:1.1rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); opacity:0.9; margin-bottom:1.4rem; padding-right:1.5rem; }
-  #soil-info-panel p { font-size:0.95rem; line-height:1.8; opacity:0.85; margin-bottom:1.2rem; }
+  #soil-info-panel p { font-size:0.95rem; line-height:1.8; opacity:0.85; margin-bottom:1.2rem; text-align:justify; }
   #soil-info-panel p:last-child { margin-bottom:0; }
   #soil-info-close {
     position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem;
@@ -160,13 +166,43 @@
   .leaflet-control-attribution a { color:rgba(245,242,235,0.55) !important; }
 
   .map-label { font-family:var(--font); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--white); opacity:0.75; text-shadow:0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7); white-space:nowrap; pointer-events:none; }
+
+  #layer-toggle-btn {
+    display:none;
+    position:fixed; top:62px; right:1rem; z-index:901;
+    width:1.9rem; height:1.9rem; align-items:center; justify-content:center;
+    background:rgba(10,10,10,0.78); border:1px solid var(--border); color:var(--white);
+    font-size:0.75rem; cursor:pointer;
+  }
+
+  @media (max-width:700px) {
+    #layer-toggle-btn { display:flex; }
+    #layer-panel { display:none; max-height:75vh; overflow-y:auto; top:104px; }
+    #layer-panel.open { display:flex; }
+
+    #slider-panel { bottom:1rem; padding:0.6rem 1rem 0.5rem; min-width:0; width:88vw; max-width:320px; gap:0.35rem; }
+    #year-label { font-size:1.05rem; }
+    .slider-ticks span { font-size:0.42rem; }
+    .year-arrow { width:1.5rem; height:1.5rem; }
+
+    .nav-toggle-btn { display:flex; }
+    .nav-links {
+      display:none; position:fixed; top:52px; right:0; z-index:1000;
+      flex-direction:column; align-items:stretch; gap:0.4rem;
+      background:var(--black); border:1px solid var(--border); border-top:none;
+      padding:0.6rem;
+    }
+    .nav-links.open { display:flex; }
+    .nav-link { text-align:center; }
+  }
 </style>
 </head>
 <body>
 
 <nav>
   <a href="project-2026-7.html" class="nav-back">← 2026</a>
-  <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;">In Progress</span>
+  <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;">The Map</span>
+  <button id="nav-toggle-btn" class="nav-toggle-btn" aria-label="Toggle navigation">▸</button>
   <div class="nav-links" lang="en">
     <a href="project-2026-7.html" class="nav-link">Main</a>
     <a href="project-2026-7-timeline.html" class="nav-link">The Timeline</a>
@@ -189,6 +225,7 @@
   </div>
 </div>
 
+<button id="layer-toggle-btn" aria-label="Toggle layers">▸</button>
 <div id="layer-panel" lang="en"></div>
 
 <div id="soil-info-overlay" lang="en">
@@ -220,7 +257,7 @@
   }).addTo(map);
 
   // Çalışma çemberi: tüm çizimler bunun içinde — dashed, en altta, sönük
-  L.circle(CIRCLE_CENTER, {
+  const boundaryCircle = L.circle(CIRCLE_CENTER, {
     radius: CIRCLE_RADIUS,
     color: '#ffffff',
     weight: 1.5,
@@ -298,7 +335,19 @@
     });
   labelsLayer.addTo(map);
 
-  const layerPanel = document.getElementById('layer-panel');
+  const layerPanel     = document.getElementById('layer-panel');
+  const layerToggleBtn = document.getElementById('layer-toggle-btn');
+  layerToggleBtn.addEventListener('click', () => {
+    const open = layerPanel.classList.toggle('open');
+    layerToggleBtn.textContent = open ? '▾' : '▸';
+  });
+
+  const navLinks     = document.querySelector('.nav-links');
+  const navToggleBtn = document.getElementById('nav-toggle-btn');
+  navToggleBtn.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggleBtn.textContent = open ? '▾' : '▸';
+  });
 
   // ── Mapping grubu (kategorik veri katmanları) ────────────────────────────
   const mappingLabel = document.createElement('span');
@@ -378,6 +427,26 @@
     soilBody.innerHTML = paras.map(p => `<p>${p}</p>`).join('');
   }
 
+  // ── Civilized açıkken haritayı dashed çembere tam oturtup kilitle ────────
+  function lockMapToCircle() {
+    map.flyToBounds(boundaryCircle.getBounds(), { animate: true, duration: 0.8 });
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoom.disable();
+    map.boxZoom.disable();
+    if (map.keyboard) map.keyboard.disable();
+  }
+
+  function unlockMapFromCircle() {
+    map.dragging.enable();
+    map.scrollWheelZoom.enable();
+    map.doubleClickZoom.enable();
+    map.touchZoom.enable();
+    map.boxZoom.enable();
+    if (map.keyboard) map.keyboard.enable();
+  }
+
   const animationButtons = [];
 
   ['nomadic','hafriyat_guzergah','vagabond','proletariat','civilized'].forEach(key => {
@@ -394,8 +463,26 @@
     const btn = document.createElement('button');
     btn.className = 'layer-btn'; // animation grubu varsayılan kapalı başlıyor, sadece 2026'da aktif olur
     btn.disabled = true;
+    btn.dataset.key = key;
     btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
-    btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
+    btn.addEventListener('click', () => {
+      const turningOn = !btn.classList.contains('active');
+      if (turningOn) {
+        // animation grubunda tek seferde bir katman açık olabilir; diğerlerini otomatik kapat
+        animationButtons.forEach(other => {
+          if (other !== btn && other.classList.contains('active')) {
+            other.classList.remove('active');
+            LayerManager.toggle(other.dataset.key);
+            if (other.dataset.key === 'civilized') unlockMapFromCircle();
+          }
+        });
+      }
+      const isActive = LayerManager.toggle(key);
+      btn.classList.toggle('active', isActive);
+      if (key === 'civilized') {
+        isActive ? lockMapToCircle() : unlockMapFromCircle();
+      }
+    });
     row.appendChild(btn);
     animationButtons.push(btn);
 
