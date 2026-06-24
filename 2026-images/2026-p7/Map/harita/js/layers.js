@@ -229,6 +229,41 @@ const LayerManager = (function() {
     });
   }
 
+  // Animation grubu (soil taxonomy) — sadece "Abstraction of 2026"da çalışır
+  const ANIMATION_KEYS = ['nomadic', 'hafriyat_guzergah', 'vagabond', 'proletariat', 'civilized'];
+  let _animationsEnabled = false;
+
+  function _showAnimationLayer(key) {
+    if (key === 'proletariat') { ProletariatAnimation.show(); return; }
+    if (key === 'hafriyat_guzergah') { HafriyatAnimation.show(); return; }
+    if (key === 'nomadic') { NomadicAnimation.show(); return; }
+    const l = _layers[key];
+    if (l) l.addTo(_map);
+  }
+
+  function _hideAnimationLayer(key) {
+    if (key === 'proletariat') { ProletariatAnimation.hide(); return; }
+    if (key === 'hafriyat_guzergah') { HafriyatAnimation.hide(); return; }
+    if (key === 'nomadic') { NomadicAnimation.hide(); return; }
+    const l = _layers[key];
+    if (l) _map.removeLayer(l);
+  }
+
+  // Slider "Abstraction of 2026"a gelince true, diğer her yılda false olarak çağrılır.
+  // Kullanıcının açtığı/kapattığı animation katmanlarının niyetini (_visible) bozmadan,
+  // sadece 2026 dışında hepsini görünmez yapar; 2026'ya dönünce eski hallerine döner.
+  function setAnimationsEnabled(enabled) {
+    if (_animationsEnabled === enabled) return;
+    _animationsEnabled = enabled;
+    ANIMATION_KEYS.forEach(key => {
+      if (enabled) {
+        if (_visible[key]) _showAnimationLayer(key);
+      } else {
+        _hideAnimationLayer(key);
+      }
+    });
+  }
+
   // Katman görünürlüğünü toggle et
   function toggle(key) {
     _visible[key] = !_visible[key];
@@ -242,25 +277,13 @@ const LayerManager = (function() {
       return _visible[key];
     }
 
-    // proletariat ve hafriyat_guzergah: birden çok marker yönettiği için kendi show()/hide()'ı var,
-    // tek bir sketchLayer'a sahip değiller (_layers'ta yok)
-    if (key === 'proletariat') {
-      _visible[key] ? ProletariatAnimation.show() : ProletariatAnimation.hide();
+    // Animation grubu: sadece 2026 modundayken gerçek show/hide tetiklenir;
+    // değilse niyet kaydedilir, 2026'ya geçince setAnimationsEnabled bunu uygular.
+    if (ANIMATION_KEYS.includes(key)) {
+      if (_animationsEnabled) {
+        _visible[key] ? _showAnimationLayer(key) : _hideAnimationLayer(key);
+      }
       return _visible[key];
-    }
-    if (key === 'hafriyat_guzergah') {
-      _visible[key] ? HafriyatAnimation.show() : HafriyatAnimation.hide();
-      return _visible[key];
-    }
-    if (key === 'nomadic') {
-      _visible[key] ? NomadicAnimation.show() : NomadicAnimation.hide();
-      return _visible[key];
-    }
-
-    // Statik katmanlar (vagabond, civilized)
-    const l = _layers[key];
-    if (l) {
-      _visible[key] ? l.addTo(_map) : _map.removeLayer(l);
     }
 
     return _visible[key];
@@ -269,6 +292,6 @@ const LayerManager = (function() {
   function getConfig(key) { return CONFIGS[key]; }
   function isVisible(key) { return _visible[key]; }
 
-  return { init, loadStaticLayers, loadYear, clearYearLayers, toggle, getConfig, isVisible, CONFIGS };
+  return { init, loadStaticLayers, loadYear, clearYearLayers, toggle, getConfig, isVisible, setAnimationsEnabled, ANIMATION_KEYS, CONFIGS };
 
 })();

@@ -117,6 +117,8 @@
     opacity:0.6; transition:opacity 0.2s; padding:0; text-align:left; font-family:var(--font);
   }
   .layer-btn.active { opacity:1; }
+  .layer-btn:disabled { opacity:0.2; cursor:default; }
+  .layer-section-sub { font-size:0.85em; letter-spacing:0.1em; opacity:0.7; }
   .layer-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
   .layer-divider { border:none; border-top:1px solid var(--border); margin:0.1rem 0; width:100%; }
   .layer-section-label { font-size:0.54rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.32; }
@@ -329,7 +331,7 @@
 
   const animationLabel = document.createElement('span');
   animationLabel.className = 'layer-section-label';
-  animationLabel.textContent = 'Animation';
+  animationLabel.innerHTML = 'Animation <span class="layer-section-sub">(Move to 2026)</span>';
   layerPanel.appendChild(animationLabel);
 
   // Her soil sayfasından metin çekmek için: hangi seçiciden paragraf alınacak, kaç tane, başlık nereden gelecek.
@@ -376,6 +378,8 @@
     soilBody.innerHTML = paras.map(p => `<p>${p}</p>`).join('');
   }
 
+  const animationButtons = [];
+
   ['nomadic','hafriyat_guzergah','vagabond','proletariat','civilized'].forEach(key => {
     const cfg = LayerManager.getConfig(key);
     const row = document.createElement('div');
@@ -388,10 +392,12 @@
     row.appendChild(infoBtn);
 
     const btn = document.createElement('button');
-    btn.className = 'layer-btn'; // animation grubu varsayılan kapalı başlıyor
+    btn.className = 'layer-btn'; // animation grubu varsayılan kapalı başlıyor, sadece 2026'da aktif olur
+    btn.disabled = true;
     btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
     btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
     row.appendChild(btn);
+    animationButtons.push(btn);
 
     layerPanel.appendChild(row);
   });
@@ -408,14 +414,19 @@
   const nextBtn   = document.getElementById('year-next');
 
   const YEAR_MIN = 2010, YEAR_MAX = 2026;
-  const STEP_COOLDOWN_MS = 1300; // flash/pulse animasyonlarının (1.2s) görünmesine izin ver
+  const STEP_COOLDOWN_MS = 500;
 
   function setYear(y) {
     slider.value = y;
     yearLabel.textContent = y === YEAR_MAX ? 'Abstraction of 2026' : y;
     mapEl.classList.toggle('dimmed', y < YEAR_MAX);
     demolitionCounter.style.display = y >= YEAR_MAX ? 'none' : '';
-    if (y >= YEAR_MAX) {
+
+    const atAbstraction = y >= YEAR_MAX;
+    LayerManager.setAnimationsEnabled(atAbstraction);
+    animationButtons.forEach(btn => { btn.disabled = !atAbstraction; });
+
+    if (atAbstraction) {
       LayerManager.clearYearLayers();
       demolitionCount.textContent = 0;
     } else {
