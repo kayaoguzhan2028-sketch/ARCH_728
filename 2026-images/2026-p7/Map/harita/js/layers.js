@@ -7,7 +7,7 @@ const LayerManager = (function() {
   // Katman konfigürasyonları
   const CONFIGS = {
     buildings: {
-      label:       'Binalar',
+      label:       'Buildings',
       color:       '#f5f2eb',
       fillColor:   '#d4cebc',
       fill:        true,
@@ -17,7 +17,7 @@ const LayerManager = (function() {
       bowing:      0,
     },
     roads: {
-      label:       'Yollar',
+      label:       'Roads',
       color:       '#f5f2eb',
       fill:        false,
       strokeWidth: 1.6,
@@ -25,7 +25,7 @@ const LayerManager = (function() {
       bowing:      0,
     },
     greenspace: {
-      label:       'Yeşil Alan',
+      label:       'Green',
       color:       '#8fd9a8',
       fillColor:   '#5fae80',
       fill:        true,
@@ -35,7 +35,7 @@ const LayerManager = (function() {
       bowing:      0,
     },
     water: {
-      label:       'Su',
+      label:       'Water',
       color:       '#6ec8e0',
       fillColor:   '#3f8fab',
       fill:        true,
@@ -45,7 +45,7 @@ const LayerManager = (function() {
       bowing:      0,
     },
     demolition_zones: {
-      label:       'Yıkım Alanları',
+      label:       'Demolishments',
       color:       '#ff6b5b',
       fillColor:   '#c0392b',
       fill:        true,
@@ -55,7 +55,7 @@ const LayerManager = (function() {
       bowing:      0,
     },
     gecekondu: {
-      label:       'Gecekondu',
+      label:       'Squatter Houses',
       color:       '#d98e4a',
       fillColor:   '#a85c2e',
       fill:        true,
@@ -171,11 +171,13 @@ const LayerManager = (function() {
     if (_visible.civilized) civilizedLayer.addTo(_map);
     _layers.civilized = civilizedLayer;
 
-    // nomadic: vadi'nin kendi 100/50/20 abstraction ızgarası (vadi-abstraction-base)
-    const nomadicGeojson = await _fetchGeoJSON(vagabondPath('vadi-abstraction-base.geojson'));
-    const nomadicLayer   = sketchLayer(nomadicGeojson, CONFIGS.nomadic);
-    if (_visible.nomadic) nomadicLayer.addTo(_map);
-    _layers.nomadic = nomadicLayer;
+    // nomadic: vadi'nin sabit base ızgarası + üzerinde 10 frame'in 1.2s/0.2s crossfade döngüsü
+    const nomadicBase = await _fetchGeoJSON(vagabondPath('vadi-abstraction-base.geojson'));
+    const nomadicFrames = await Promise.all(
+      Array.from({ length: 10 }, (_, i) => _fetchGeoJSON(vagabondPath(`vadi-abstraction-frame-${i}.geojson`)))
+    );
+    NomadicAnimation.load(nomadicBase, nomadicFrames, CONFIGS.nomadic, CONFIGS.nomadic);
+    if (_visible.nomadic) NomadicAnimation.show();
   }
 
   // Slider hızlı kaydırılınca aynı anda birden çok loadYear() çağrısı havada kalabilir;
@@ -248,8 +250,12 @@ const LayerManager = (function() {
       _visible[key] ? HafriyatAnimation.show() : HafriyatAnimation.hide();
       return _visible[key];
     }
+    if (key === 'nomadic') {
+      _visible[key] ? NomadicAnimation.show() : NomadicAnimation.hide();
+      return _visible[key];
+    }
 
-    // Statik katmanlar (vagabond, civilized, nomadic)
+    // Statik katmanlar (vagabond, civilized)
     const l = _layers[key];
     if (l) {
       _visible[key] ? l.addTo(_map) : _map.removeLayer(l);

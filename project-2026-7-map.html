@@ -44,35 +44,29 @@
     0%   { opacity:1; text-shadow:0 0 12px rgba(255,107,91,0.9); }
     100% { opacity:0.85; text-shadow:none; }
   }
-  .demolition-pulse {
-    position:relative; pointer-events:none;
-  }
-  .demolition-pulse::before {
-    content:''; position:absolute; top:50%; left:50%;
-    width:10px; height:10px; margin:-5px 0 0 -5px;
-    border-radius:0; background:rgba(255,107,91,0.9);
+  .demolition-pulse { pointer-events:none; }
+  .demolition-pulse div {
+    width:100%; height:100%;
+    background:rgba(255,107,91,0.9);
     box-shadow:0 0 0 0 rgba(255,107,91,0.7);
     animation: demolition-pulse-ring 1.2s ease-out forwards;
   }
   @keyframes demolition-pulse-ring {
     0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(255,107,91,0.7); }
-    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(255,107,91,0); }
-    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(255,107,91,0); }
+    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 10px rgba(255,107,91,0); }
+    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 10px rgba(255,107,91,0); }
   }
-  .road-pulse {
-    position:relative; pointer-events:none;
-  }
-  .road-pulse::before {
-    content:''; position:absolute; top:50%; left:50%;
-    width:10px; height:10px; margin:-5px 0 0 -5px;
-    border-radius:0; background:rgba(168,224,99,0.9);
+  .road-pulse { pointer-events:none; }
+  .road-pulse div {
+    width:100%; height:100%;
+    background:rgba(168,224,99,0.9);
     box-shadow:0 0 0 0 rgba(168,224,99,0.7);
     animation: road-pulse-ring 1.2s ease-out forwards;
   }
   @keyframes road-pulse-ring {
     0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(168,224,99,0.7); }
-    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(168,224,99,0); }
-    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(168,224,99,0); }
+    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 10px rgba(168,224,99,0); }
+    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 10px rgba(168,224,99,0); }
   }
   .vagabond-canvas { animation: vagabond-pulse 3s ease-in-out infinite; }
   @keyframes vagabond-pulse {
@@ -86,6 +80,8 @@
     55%  { opacity:0.8; }
     100% { opacity:0.5; }
   }
+  .nomadic-frame { opacity:0; transition:opacity 0.2s linear; }
+  .nomadic-frame.visible { opacity:1; }
   .hafriyat-square { pointer-events:none; }
   .hafriyat-square div {
     width:100%; height:100%;
@@ -98,20 +94,17 @@
     background:#d4a843; opacity:0.9;
     box-shadow:0 0 4px rgba(212,168,67,0.6);
   }
-  .building-pulse {
-    position:relative; pointer-events:none;
-  }
-  .building-pulse::before {
-    content:''; position:absolute; top:50%; left:50%;
-    width:10px; height:10px; margin:-5px 0 0 -5px;
-    border-radius:0; background:rgba(255,209,102,0.9);
+  .building-pulse { pointer-events:none; }
+  .building-pulse div {
+    width:100%; height:100%;
+    background:rgba(255,209,102,0.9);
     box-shadow:0 0 0 0 rgba(255,209,102,0.7);
     animation: building-pulse-ring 1.2s ease-out forwards;
   }
   @keyframes building-pulse-ring {
     0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(255,209,102,0.7); }
-    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(255,209,102,0); }
-    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(255,209,102,0); }
+    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 10px rgba(255,209,102,0); }
+    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 10px rgba(255,209,102,0); }
   }
   .slider-row { display:flex; align-items:center; gap:0.7rem; width:100%; }
   .year-arrow {
@@ -230,6 +223,7 @@
 <script src="2026-images/2026-p7/Map/harita/js/sketch.js"></script>
 <script src="2026-images/2026-p7/Map/harita/js/animation.js"></script>
 <script src="2026-images/2026-p7/Map/harita/js/proletariat.js"></script>
+<script src="2026-images/2026-p7/Map/harita/js/nomadic.js"></script>
 <script src="2026-images/2026-p7/Map/harita/js/layers.js"></script>
 
 <script>
@@ -252,7 +246,19 @@
   LayerManager.init(map);
   HafriyatAnimation.init(map);
   ProletariatAnimation.init(map);
+  NomadicAnimation.init(map);
   LayerManager.loadStaticLayers(_origDataPath);
+
+  // ── Pulse boyutu: feature'ın ekrandaki (px) genişliğinin ~1.1x'i ─────────
+  const PULSE_MIN_PX = 6, PULSE_MAX_PX = 60;
+
+  function featurePulseSize(geometry) {
+    const coords = geometry.type === 'LineString' ? geometry.coordinates : geometry.coordinates[0];
+    const pts = coords.map(c => map.latLngToContainerPoint([c[1], c[0]]));
+    const xs  = pts.map(p => p.x), ys = pts.map(p => p.y);
+    const size = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) * 1.1;
+    return Math.max(PULSE_MIN_PX, Math.min(PULSE_MAX_PX, size));
+  }
 
   // ── Yıkım sayacı + "yeni yıkım" flaş efekti ──────────────────────────────
   const demolitionCounter = document.getElementById('demolition-counter');
@@ -269,11 +275,14 @@
     demolitionCounter.classList.remove('flash');
     requestAnimationFrame(() => demolitionCounter.classList.add('flash'));
 
+    if (!LayerManager.isVisible('demolition_zones')) return;
+
     newOnes.forEach(f => {
       const ring = f.geometry.coordinates[0];
       const lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
       const lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
-      const pulse = L.divIcon({ className: 'demolition-pulse', iconSize: [1, 1] });
+      const size  = featurePulseSize(f.geometry);
+      const pulse = L.divIcon({ className: 'demolition-pulse', html: `<div style="width:${size}px;height:${size}px;"></div>`, iconSize: [size, size] });
       const marker = L.marker([lat, lng], { icon: pulse, interactive: false }).addTo(map);
       setTimeout(() => map.removeLayer(marker), 1200);
     });
@@ -288,13 +297,14 @@
     const features = (geojson && geojson.features) || [];
     const currentKeys = new Set(features.map(f => JSON.stringify(f.geometry.coordinates)));
 
-    if (previousRoadsKeys) {
+    if (previousRoadsKeys && LayerManager.isVisible('roads')) {
       features.forEach(f => {
         const key = JSON.stringify(f.geometry.coordinates);
         if (previousRoadsKeys.has(key)) return;
         const coords = f.geometry.coordinates;
         const mid = coords[Math.floor(coords.length / 2)];
-        const pulse = L.divIcon({ className: 'road-pulse', iconSize: [1, 1] });
+        const size  = featurePulseSize(f.geometry);
+        const pulse = L.divIcon({ className: 'road-pulse', html: `<div style="width:${size}px;height:${size}px;"></div>`, iconSize: [size, size] });
         const marker = L.marker([mid[1], mid[0]], { icon: pulse, interactive: false }).addTo(map);
         setTimeout(() => map.removeLayer(marker), 1200);
       });
@@ -310,14 +320,15 @@
     const features = (geojson && geojson.features) || [];
     const currentKeys = new Set(features.map(f => JSON.stringify(f.geometry.coordinates)));
 
-    if (previousBuildingsKeys) {
+    if (previousBuildingsKeys && LayerManager.isVisible('buildings')) {
       features.forEach(f => {
         const key = JSON.stringify(f.geometry.coordinates);
         if (previousBuildingsKeys.has(key)) return;
         const ring = f.geometry.coordinates[0];
         const lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
         const lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
-        const pulse = L.divIcon({ className: 'building-pulse', iconSize: [1, 1] });
+        const size  = featurePulseSize(f.geometry);
+        const pulse = L.divIcon({ className: 'building-pulse', html: `<div style="width:${size}px;height:${size}px;"></div>`, iconSize: [size, size] });
         const marker = L.marker([lat, lng], { icon: pulse, interactive: false }).addTo(map);
         setTimeout(() => map.removeLayer(marker), 1200);
       });
