@@ -15,6 +15,7 @@ const LayerManager = (function() {
       strokeWidth: 1.2,
       roughness:   0.3,
       bowing:      0,
+      extraClass:  'buildings-canvas',
     },
     roads: {
       label:       'Roads',
@@ -23,6 +24,7 @@ const LayerManager = (function() {
       strokeWidth: 1.6,
       roughness:   0.3,
       bowing:      0,
+      extraClass:  'roads-canvas',
     },
     greenspace: {
       label:       'Green',

@@ -10,7 +10,7 @@ const HafriyatAnimation = (function() {
   let _running = false;
   let _visible = false;
 
-  const SIZES_PX = [4, 5, 6]; // 6/8/10m'lik görsel çeşitlilik (sketch ölçeğinde temsili px, küçültülmüş)
+  const SIZES_PX = [8, 10, 12]; // 12/16/20m'lik görsel çeşitlilik (sketch ölçeğinde temsili px)
   const SQUARES_PER_ROUTE = 4;
 
   function _flattenLine(geometry) {

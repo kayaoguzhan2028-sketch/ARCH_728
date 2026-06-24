@@ -56,18 +56,6 @@
     70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 10px rgba(255,107,91,0); }
     100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 10px rgba(255,107,91,0); }
   }
-  .road-pulse { pointer-events:none; }
-  .road-pulse div {
-    width:100%; height:100%;
-    background:rgba(168,224,99,0.9);
-    box-shadow:0 0 0 0 rgba(168,224,99,0.7);
-    animation: road-pulse-ring 1.2s ease-out forwards;
-  }
-  @keyframes road-pulse-ring {
-    0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(168,224,99,0.7); }
-    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 10px rgba(168,224,99,0); }
-    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 10px rgba(168,224,99,0); }
-  }
   .vagabond-canvas { animation: vagabond-pulse 3s ease-in-out infinite; }
   @keyframes vagabond-pulse {
     0%   { opacity:0.3; }
@@ -82,6 +70,7 @@
   }
   .nomadic-frame { opacity:0; transition:opacity 0.2s linear; }
   .nomadic-frame.visible { opacity:1; }
+  .buildings-canvas, .roads-canvas { opacity:0.8; }
   .hafriyat-square { pointer-events:none; }
   .hafriyat-square div {
     width:100%; height:100%;
@@ -93,18 +82,6 @@
     width:100%; height:100%;
     background:#d4a843; opacity:0.9;
     box-shadow:0 0 4px rgba(212,168,67,0.6);
-  }
-  .building-pulse { pointer-events:none; }
-  .building-pulse div {
-    width:100%; height:100%;
-    background:rgba(255,209,102,0.9);
-    box-shadow:0 0 0 0 rgba(255,209,102,0.7);
-    animation: building-pulse-ring 1.2s ease-out forwards;
-  }
-  @keyframes building-pulse-ring {
-    0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(255,209,102,0.7); }
-    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 10px rgba(255,209,102,0); }
-    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 10px rgba(255,209,102,0); }
   }
   .slider-row { display:flex; align-items:center; gap:0.7rem; width:100%; }
   .year-arrow {
@@ -188,7 +165,7 @@
 <nav>
   <a href="project-2026-7.html" class="nav-back">← 2026</a>
   <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;">In Progress</span>
-  <div class="nav-links">
+  <div class="nav-links" lang="en">
     <a href="project-2026-7.html" class="nav-link">Main</a>
     <a href="project-2026-7-timeline.html" class="nav-link">The Timeline</a>
   </div>
@@ -198,7 +175,7 @@
 
 <div id="slider-panel">
   <span id="year-label">2010</span>
-  <span id="demolition-counter"><span class="count">0</span> gecekondu yıkıldı</span>
+  <span id="demolition-counter" lang="en"><span class="count">0</span> squatter houses demolished</span>
   <div class="slider-row">
     <button id="year-prev" class="year-arrow" aria-label="Previous year" disabled>‹</button>
     <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010" tabindex="-1">
@@ -210,9 +187,9 @@
   </div>
 </div>
 
-<div id="layer-panel"></div>
+<div id="layer-panel" lang="en"></div>
 
-<div id="soil-info-overlay">
+<div id="soil-info-overlay" lang="en">
   <button id="soil-info-close" aria-label="Close">×</button>
   <div id="soil-info-panel">
     <h4 id="soil-info-title"></h4>
@@ -238,6 +215,17 @@
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıda bulunanlar © <a href="https://carto.com/attributions">CARTO</a>',
+  }).addTo(map);
+
+  // Çalışma çemberi: tüm çizimler bunun içinde — dashed, en altta, sönük
+  L.circle(CIRCLE_CENTER, {
+    radius: CIRCLE_RADIUS,
+    color: '#ffffff',
+    weight: 1.5,
+    dashArray: '6,8',
+    fill: false,
+    opacity: 0.4,
+    interactive: false,
   }).addTo(map);
 
   // data path'ini harita/data/ olarak override et
@@ -288,59 +276,8 @@
     });
   }
 
-  // ── Yeni açılan yollar için "inşa" flaş efekti ───────────────────────────
-  // Roads tek referans (roads_2025) üzerinden maskelenip yıllara dağıtıldığı için
-  // bir yolun "yeni" olması = önceki yüklenen yılda maskeliyken bu yıl maskeden çıkmış olması.
-  let previousRoadsKeys = null;
-
-  function flashNewRoads(geojson, year) {
-    const features = (geojson && geojson.features) || [];
-    const currentKeys = new Set(features.map(f => JSON.stringify(f.geometry.coordinates)));
-
-    if (previousRoadsKeys && LayerManager.isVisible('roads')) {
-      features.forEach(f => {
-        const key = JSON.stringify(f.geometry.coordinates);
-        if (previousRoadsKeys.has(key)) return;
-        const coords = f.geometry.coordinates;
-        const mid = coords[Math.floor(coords.length / 2)];
-        const size  = featurePulseSize(f.geometry);
-        const pulse = L.divIcon({ className: 'road-pulse', html: `<div style="width:${size}px;height:${size}px;"></div>`, iconSize: [size, size] });
-        const marker = L.marker([mid[1], mid[0]], { icon: pulse, interactive: false }).addTo(map);
-        setTimeout(() => map.removeLayer(marker), 1200);
-      });
-    }
-
-    previousRoadsKeys = currentKeys;
-  }
-
-  // ── Yeni eklenen binalar için "inşa" flaş efekti ─────────────────────────
-  let previousBuildingsKeys = null;
-
-  function flashNewBuildings(geojson, year) {
-    const features = (geojson && geojson.features) || [];
-    const currentKeys = new Set(features.map(f => JSON.stringify(f.geometry.coordinates)));
-
-    if (previousBuildingsKeys && LayerManager.isVisible('buildings')) {
-      features.forEach(f => {
-        const key = JSON.stringify(f.geometry.coordinates);
-        if (previousBuildingsKeys.has(key)) return;
-        const ring = f.geometry.coordinates[0];
-        const lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
-        const lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
-        const size  = featurePulseSize(f.geometry);
-        const pulse = L.divIcon({ className: 'building-pulse', html: `<div style="width:${size}px;height:${size}px;"></div>`, iconSize: [size, size] });
-        const marker = L.marker([lat, lng], { icon: pulse, interactive: false }).addTo(map);
-        setTimeout(() => map.removeLayer(marker), 1200);
-      });
-    }
-
-    previousBuildingsKeys = currentKeys;
-  }
-
-  LayerManager.loadYear(2010, _origDataPath).then(({ demolition, roads, buildings }) => {
+  LayerManager.loadYear(2010, _origDataPath).then(({ demolition }) => {
     flashNewDemolitions(demolition, 2010);
-    flashNewRoads(roads, 2010);
-    flashNewBuildings(buildings, 2010);
   });
 
   // Yer adları katmanı (mahalle/semt isimleri) — statik, tek seferlik veri
@@ -481,13 +418,9 @@
     if (y >= YEAR_MAX) {
       LayerManager.clearYearLayers();
       demolitionCount.textContent = 0;
-      previousRoadsKeys = null;
-      previousBuildingsKeys = null;
     } else {
-      LayerManager.loadYear(y, _origDataPath).then(({ demolition, roads, buildings }) => {
+      LayerManager.loadYear(y, _origDataPath).then(({ demolition }) => {
         flashNewDemolitions(demolition, y);
-        flashNewRoads(roads, y);
-        flashNewBuildings(buildings, y);
       });
     }
   }
