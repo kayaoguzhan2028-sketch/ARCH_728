@@ -72,6 +72,32 @@ const LayerManager = (function() {
       roughness:   0.3,
       bowing:      0,
     },
+    vagabond: {
+      label:       'Vagabond',
+      color:       '#b894d6',
+      fillColor:   '#6b4a8a',
+      fill:        true,
+      fillStyle:   'cross-hatch',
+      strokeWidth: 1.0,
+      roughness:   0.3,
+      bowing:      0,
+      extraClass:  'vagabond-canvas',
+    },
+    proletariat: {
+      label: 'Proletariat',
+      color: '#d4a843',
+    },
+    civilized: {
+      label:       'Civilized',
+      color:       '#ff1a1a',
+      fillColor:   '#ff1a1a',
+      fill:        true,
+      fillStyle:   'solid',
+      strokeWidth: 0.5,
+      roughness:   0.3,
+      bowing:      0,
+      extraClass:  'civilized-canvas',
+    },
   };
 
   // Aktif sketch layer nesneleri (sadece hafriyat_guzergah statik kalıyor)
@@ -89,6 +115,9 @@ const LayerManager = (function() {
     demolition_zones:  true,
     gecekondu:         true,
     hafriyat_guzergah: true,
+    vagabond:          true,
+    proletariat:       true,
+    civilized:         true,
   };
 
   let _dataPath = file => `data/${file}`;
@@ -116,6 +145,23 @@ const LayerManager = (function() {
     _layers.hafriyat_guzergah = layer;
 
     HafriyatAnimation.load(geojson);
+
+    // vagabond verisi data-mine/ klasöründe duruyor (üretilmiş abstraction verisi, data/ ile aynı yıl mantığına girmiyor)
+    const vagabondPath = file => _dataPath(file).replace('/data/', '/data-mine/');
+    const vagabondGeojson = await _fetchGeoJSON(vagabondPath('vadi-vagabond.geojson'));
+    const vagabondLayer   = sketchLayer(vagabondGeojson, CONFIGS.vagabond);
+    if (_visible.vagabond) vagabondLayer.addTo(_map);
+    _layers.vagabond = vagabondLayer;
+
+    // proletariat: hafriyat güzergahının tersine, missing-buildings ızgarasına dönen akış
+    const proletariatGrids = await _fetchGeoJSON(vagabondPath('proletariat-grids.geojson'));
+    ProletariatAnimation.load(geojson, proletariatGrids);
+
+    // civilized: buildings_2025 + roads_2025'in kapladığı her hücre kırmızı, vadi otomatik boş kalıyor
+    const civilizedGeojson = await _fetchGeoJSON(vagabondPath('civilized-grid.geojson'));
+    const civilizedLayer   = sketchLayer(civilizedGeojson, CONFIGS.civilized);
+    if (_visible.civilized) civilizedLayer.addTo(_map);
+    _layers.civilized = civilizedLayer;
   }
 
   // Slider hızlı kaydırılınca aynı anda birden çok loadYear() çağrısı havada kalabilir;
@@ -175,6 +221,12 @@ const LayerManager = (function() {
       if (l) {
         _visible[key] ? l.addTo(_map) : _map.removeLayer(l);
       }
+      return _visible[key];
+    }
+
+    // proletariat: birden çok marker/polygon yönettiği için kendi show()/hide()'ı var
+    if (key === 'proletariat') {
+      _visible[key] ? ProletariatAnimation.show() : ProletariatAnimation.hide();
       return _visible[key];
     }
 

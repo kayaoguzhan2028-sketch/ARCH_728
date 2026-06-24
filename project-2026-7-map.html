@@ -74,6 +74,30 @@
     70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(168,224,99,0); }
     100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(168,224,99,0); }
   }
+  .vagabond-canvas { animation: vagabond-pulse 3s ease-in-out infinite; }
+  @keyframes vagabond-pulse {
+    0%   { opacity:0.3; }
+    50%  { opacity:0.9; }
+    100% { opacity:0.3; }
+  }
+  .civilized-canvas { opacity:0; animation: civilized-pop 2.2s ease-out forwards; }
+  @keyframes civilized-pop {
+    0%   { opacity:0; }
+    55%  { opacity:0.8; }
+    100% { opacity:0.5; }
+  }
+  .hafriyat-square { pointer-events:none; }
+  .hafriyat-square div {
+    width:100%; height:100%;
+    background:#e05c2a; opacity:0.85;
+    box-shadow:0 0 4px rgba(224,92,42,0.6);
+  }
+  .proletariat-square { pointer-events:none; }
+  .proletariat-square div {
+    width:100%; height:100%;
+    background:#d4a843; opacity:0.9;
+    box-shadow:0 0 4px rgba(212,168,67,0.6);
+  }
   .building-pulse {
     position:relative; pointer-events:none;
   }
@@ -149,6 +173,7 @@
 
 <script src="2026-images/2026-p7/Map/harita/js/sketch.js"></script>
 <script src="2026-images/2026-p7/Map/harita/js/animation.js"></script>
+<script src="2026-images/2026-p7/Map/harita/js/proletariat.js"></script>
 <script src="2026-images/2026-p7/Map/harita/js/layers.js"></script>
 
 <script>
@@ -170,6 +195,7 @@
 
   LayerManager.init(map);
   HafriyatAnimation.init(map);
+  ProletariatAnimation.init(map);
   LayerManager.loadStaticLayers(_origDataPath);
 
   // ── Yıkım sayacı + "yeni yıkım" flaş efekti ──────────────────────────────
@@ -267,7 +293,7 @@
   labelsLayer.addTo(map);
 
   const layerPanel = document.getElementById('layer-panel');
-  ['buildings','roads','greenspace','water','demolition_zones','gecekondu','hafriyat_guzergah'].forEach(key => {
+  ['buildings','roads','greenspace','water','demolition_zones','gecekondu','hafriyat_guzergah','vagabond','proletariat','civilized'].forEach(key => {
     const cfg = LayerManager.getConfig(key);
     const btn = document.createElement('button');
     btn.className = 'layer-btn active';

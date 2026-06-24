@@ -1,27 +1,27 @@
-// animation.js — hafriyat_guzergah üzerinde nokta akışı animasyonu
+// animation.js — hafriyat güzergahları üzerinde kamyon (kare) akışı animasyonu
+// Her LineString feature kendi başına bağımsız bir güzergah; her biri üzerinde
+// rastgele boy/hız ile sürekli döngü halinde bir kare ilerler.
 
 const HafriyatAnimation = (function() {
 
-  let _map       = null;
-  let _coords    = [];   // [lat, lng] dizisi — güzergah noktaları
-  let _marker    = null;
-  let _rafId     = null;
-  let _progress  = 0;    // 0.0 – 1.0 arası
-  let _speed     = 0.0003;
-  let _running   = false;
+  let _map     = null;
+  let _routes  = [];   // [{coords:[[lat,lng],...], marker, progress, speed}]
+  let _rafId   = null;
+  let _running = false;
 
-  function _flattenCoords(geojson) {
-    const pts = [];
-    (geojson.features || []).forEach(f => {
-      const g = f.geometry;
-      if (!g) return;
-      if (g.type === 'LineString') {
-        g.coordinates.forEach(c => pts.push([c[1], c[0]]));
-      } else if (g.type === 'MultiLineString') {
-        g.coordinates.forEach(line => line.forEach(c => pts.push([c[1], c[0]])));
-      }
-    });
-    return pts;
+  const SIZES_PX = [5, 7, 9]; // 6/8/10m'lik görsel çeşitlilik (sketch ölçeğinde temsili px)
+
+  function _flattenLine(geometry) {
+    if (!geometry) return [];
+    if (geometry.type === 'LineString') {
+      return geometry.coordinates.map(c => [c[1], c[0]]);
+    }
+    if (geometry.type === 'MultiLineString') {
+      const pts = [];
+      geometry.coordinates.forEach(line => line.forEach(c => pts.push([c[1], c[0]])));
+      return pts;
+    }
+    return [];
   }
 
   function _interpolate(coords, t) {
@@ -39,40 +39,56 @@ const HafriyatAnimation = (function() {
     ];
   }
 
-  function _step() {
-    if (!_running || _coords.length === 0) return;
-    _progress = (_progress + _speed) % 1.0;
-    const pos = _interpolate(_coords, _progress);
-    if (pos && _marker) _marker.setLatLng(pos);
-    _rafId = requestAnimationFrame(_step);
-  }
-
   function init(map) {
     _map = map;
-    _marker = L.circleMarker([0, 0], {
-      radius:      6,
-      color:       '#e05c2a',
-      fillColor:   '#e05c2a',
-      fillOpacity: 0.9,
-      weight:      0,
-    }).addTo(map);
-    _marker.setStyle({ opacity: 0, fillOpacity: 0 });
   }
 
   function load(geojson) {
-    _coords = _flattenCoords(geojson);
-    _progress = 0;
-    if (_coords.length > 0) {
-      _marker.setStyle({ opacity: 1, fillOpacity: 0.9 });
+    _routes.forEach(r => { if (r.marker) _map.removeLayer(r.marker); });
+    _routes = [];
+
+    (geojson.features || []).forEach(f => {
+      const coords = _flattenLine(f.geometry);
+      if (coords.length < 2) return;
+
+      const px = SIZES_PX[Math.floor(Math.random() * SIZES_PX.length)];
+      const marker = L.marker(coords[0], {
+        icon: L.divIcon({
+          className: 'hafriyat-square',
+          html: `<div style="width:${px}px;height:${px}px;"></div>`,
+          iconSize: [px, px],
+        }),
+        interactive: false,
+      });
+
+      _routes.push({
+        coords,
+        marker,
+        progress: Math.random(),                 // rastgele faz: hepsi aynı anda hareket etmesin
+        speed:    0.00035 + Math.random() * 0.0004, // hafif hız çeşitliliği
+      });
+    });
+
+    if (_routes.length > 0) {
+      _routes.forEach(r => r.marker.addTo(_map));
       start();
     } else {
-      _marker.setStyle({ opacity: 0, fillOpacity: 0 });
       stop();
     }
   }
 
+  function _step() {
+    if (!_running) return;
+    _routes.forEach(r => {
+      r.progress = (r.progress + r.speed) % 1.0;
+      const pos = _interpolate(r.coords, r.progress);
+      if (pos) r.marker.setLatLng(pos);
+    });
+    _rafId = requestAnimationFrame(_step);
+  }
+
   function start() {
-    if (_running) return;
+    if (_running || _routes.length === 0) return;
     _running = true;
     _step();
   }
@@ -82,8 +98,6 @@ const HafriyatAnimation = (function() {
     if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
   }
 
-  function setSpeed(s) { _speed = s; }
-
-  return { init, load, start, stop, setSpeed };
+  return { init, load, start, stop };
 
 })();

@@ -17,7 +17,7 @@ const SketchLayer = L.Layer.extend({
 
   onAdd: function(map) {
     this._map    = map;
-    this._canvas = L.DomUtil.create('canvas', 'sketch-canvas');
+    this._canvas = L.DomUtil.create('canvas', 'sketch-canvas' + (this._opts.extraClass ? ' ' + this._opts.extraClass : ''));
     Object.assign(this._canvas.style, {
       position:       'absolute',
       pointerEvents:  'none',
