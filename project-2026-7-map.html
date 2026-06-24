@@ -91,9 +91,9 @@
 
 <div id="layer-panel"></div>
 
-<script src="harita/js/sketch.js"></script>
-<script src="harita/js/animation.js"></script>
-<script src="harita/js/layers.js"></script>
+<script src="2026-images/2026-p7/Map/harita/js/sketch.js"></script>
+<script src="2026-images/2026-p7/Map/harita/js/animation.js"></script>
+<script src="2026-images/2026-p7/Map/harita/js/layers.js"></script>
 
 <script>
   const CIRCLE_CENTER = L.latLng(39.8572724, 32.8407268);
@@ -110,7 +110,7 @@
   }).addTo(map);
 
   // data path'ini harita/data/ olarak override et
-  const _origDataPath = p => `harita/data/${p}`;
+  const _origDataPath = p => `2026-images/2026-p7/Map/harita/data/${p}`;
 
   LayerManager.init(map);
   HafriyatAnimation.init(map);
@@ -134,7 +134,7 @@
   labelsLayer.addTo(map);
 
   const layerPanel = document.getElementById('layer-panel');
-  ['buildings','roads','greenspace','water','demolition_zones','hafriyat_guzergah'].forEach(key => {
+  ['buildings','roads','greenspace','water','demolition_zones','gecekondu','hafriyat_guzergah'].forEach(key => {
     const cfg = LayerManager.getConfig(key);
     const btn = document.createElement('button');
     btn.className = 'layer-btn active';

@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Bu binalar eksik galiba..kml</name>
+	<StyleMap id="msn_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-pushpin</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_ylw-pushpin">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<BalloonStyle>
+		</BalloonStyle>
+		<LineStyle>
+			<color>ff0055ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>ff0000ff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sn_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<BalloonStyle>
+		</BalloonStyle>
+		<LineStyle>
+			<color>ff0055ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>ff0000ff</color>
+		</PolyStyle>
+	</Style>
+	<Folder>
+		<name>Bu binalar eksik galiba.</name>
+		<open>1</open>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84344788452842,39.85847727644236,0 32.84362488316343,39.8592186328788,0 32.84332678099164,39.85925317434458,0 32.84313240647961,39.85857426514588,0 32.84344788452842,39.85847727644236,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84451646539555,39.85973970391652,0 32.84449417360587,39.85964798399223,0 32.84446836055086,39.85955692000929,0 32.84510614225795,39.85947250783411,0 32.84515772914943,39.85966517879773,0 32.84451646539555,39.85973970391652,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84301173080846,39.85973526632174,0 32.84295295866187,39.85946641984783,0 32.84324662896011,39.85941592378745,0 32.84330799132935,39.85970598032447,0 32.84301173080846,39.85973526632174,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84420773780064,39.86037530046526,0 32.84417941069982,39.86014224679705,0 32.84451300579084,39.8601196807956,0 32.84455780215688,39.86032849709697,0 32.84420773780064,39.86037530046526,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84367207043036,39.86076242896745,0 32.84363888360967,39.8606165008153,0 32.84398278753763,39.86056593111395,0 32.8440200890594,39.86071614235989,0 32.84367207043036,39.86076242896745,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84277185810178,39.86026892422586,0 32.84271869859083,39.86003931972106,0 32.84305958785025,39.86001777399888,0 32.84311414762502,39.86023828035397,0 32.84277185810178,39.86026892422586,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84276742799268,39.86047591872616,0 32.84300710664177,39.86039908723359,0 32.84315077822396,39.86058053641583,0 32.84291020069205,39.8606657739878,0 32.84276742799268,39.86047591872616,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84319936098399,39.86081284800271,0 32.8432386382933,39.86064873140452,0 32.84354596302902,39.86067568879055,0 32.84349624316617,39.86085766118671,0 32.84319936098399,39.86081284800271,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84176203683118,39.85785240310774,0 32.84199006860126,39.85803677875573,0 32.84173652174747,39.85825593441771,0 32.84143806045567,39.85806668211696,0 32.84176203683118,39.85785240310774,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84132810452859,39.85731941220397,0 32.84160104647853,39.85754143944632,0 32.84134813165421,39.85774867708731,0 32.84102840922399,39.85753512917546,0 32.84132810452859,39.85731941220397,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84079099590161,39.85697820539736,0 32.84103010214719,39.85715783452495,0 32.84080087631985,39.85730784123014,0 32.84056148437895,39.85712191343209,0 32.84079099590161,39.85697820539736,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84130210568715,39.85499052238266,0 32.84118118272487,39.85472811627969,0 32.84143222945041,39.85467809553506,0 32.84152580693687,39.85495552885474,0 32.84130210568715,39.85499052238266,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84055290895877,39.8558585886104,0 32.84067584471994,39.855637462333,0 32.84115049229717,39.85573693438052,0 32.84103538745993,39.85595437983986,0 32.84055290895877,39.8558585886104,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84093402448039,39.85623193343245,0 32.84114959194497,39.85608489793869,0 32.8415294722834,39.85644799726604,0 32.84131848080771,39.85659300181956,0 32.84093402448039,39.85623193343245,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84167964524466,39.85677291898787,0 32.84164471865694,39.85651999516703,0 32.84194757438647,39.85648620494958,0 32.84196812296723,39.85673468428728,0 32.84167964524466,39.85677291898787,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84200480629245,39.85641402979483,0 32.84213206292638,39.85602110879277,0 32.84236523904192,39.85604600251688,0 32.84223524730145,39.85644795132124,0 32.84200480629245,39.85641402979483,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84228350520829,39.85532370240265,0 32.84257757336155,39.85551659006942,0 32.84227696881741,39.85578654738088,0 32.84199870733143,39.85561429484058,0 32.84228350520829,39.85532370240265,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84411951624344,39.8561450608928,0 32.84399091731957,39.85617080255873,0 32.84393979633612,39.85629786529262,0 32.84401532698496,39.85644408591519,0 32.84428711458253,39.8564755468816,0 32.84427039120988,39.85662042039645,0 32.8439517422464,39.85661464683479,0 32.84376444719356,39.85647531882395,0 32.84375420924411,39.85622815128991,0 32.84384335283228,39.85605743423191,0 32.84407134330198,39.85596199466539,0 32.84431679773025,39.8559615820858,0 32.84427719693431,39.85616415344896,0 32.84418475915018,39.85615770295833,0 32.84411951624344,39.8561450608928,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.8443252942503,39.85580093988911,0 32.84419271052084,39.85582332096921,0 32.84401008280059,39.85583165087092,0 32.84386229644862,39.85585045590869,0 32.84377404301907,39.85582142601337,0 32.84373782808458,39.8557491949751,0 32.84374436134044,39.85569265008596,0 32.84380702526157,39.8556331352677,0 32.843927809457,39.85559889534814,0 32.84394778155331,39.85559927896988,0 32.84396211701397,39.85559507199309,0 32.84408298677323,39.85556671418277,0 32.84411631426852,39.85556754345801,0 32.84431806205301,39.85556220470798,0 32.84447504912314,39.85556390765213,0 32.84449993256936,39.85556412904516,0 32.84459894187884,39.85556479821637,0 32.84462949099439,39.85556951894917,0 32.84465418859084,39.8555696798671,0 32.84466616356449,39.85557426209694,0 32.8447691863704,39.85560211862545,0 32.84480549455835,39.85561604378538,0 32.84481168729114,39.85561609300668,0 32.84485440942375,39.85563015999151,0 32.8448669394868,39.85563032939621,0 32.84496970746284,39.85568607324343,0 32.84498787278569,39.85569537471014,0 32.8450287882314,39.85574604241522,0 32.84503407500638,39.8557644231179,0 32.8450544378957,39.85584730573095,0 32.84506636601335,39.85586599732477,0 32.84510167871815,39.85594551934693,0 32.84511402626562,39.85596436068393,0 32.84512020001097,39.85597378044471,0 32.84515109045439,39.8560538157728,0 32.84515706326642,39.85608200406293,0 32.84515669855344,39.85616197282388,0 32.84515663465272,39.85616667457245,0 32.84515605363075,39.85624198612382,0 32.84512922405276,39.85629863528123,0 32.84510923446514,39.85631291734859,0 32.84504219848901,39.85637030270867,0 32.84502891819506,39.85637993619757,0 32.84496259240402,39.85642819076158,0 32.84493699943874,39.85649989711379,0 32.84493870189481,39.85657581088528,0 32.84493883865536,39.85658054023659,0 32.84495888873406,39.85662297420188,0 32.84496537129087,39.85662764248593,0 32.84499788793784,39.85666515321537,0 32.84499825131581,39.85672679404361,0 32.84499826396617,39.85673154125257,0 32.84497968884975,39.85676484895711,0 32.84490491583197,39.85676502402599,0 32.84482340425959,39.85673685843607,0 32.84475313747049,39.8567090238059,0 32.84472724455494,39.85669507528642,0 32.84469479539853,39.85668119316031,0 32.84468841424628,39.85668124289275,0 32.8446201543384,39.85663507962095,0 32.84460555926447,39.85661643173003,0 32.84456292319734,39.85650436336937,0 32.84462294217688,39.85641996013033,0 32.84485327138979,39.85626139906176,0 32.84486001998491,39.85625658383548,0 32.84487400057681,39.85620856874993,0 32.84488107557838,39.85618459977047,0 32.84488120036414,39.85617501178165,0 32.84488248790444,39.85611277559817,0 32.84488291548325,39.85609365614572,0 32.84483389802533,39.85597887060675,0 32.84482196384109,39.85595983346568,0 32.84469039808454,39.85583213389649,0 32.84453188051819,39.85577099396111,0 32.84443646223131,39.8557608148563,0 32.8443252942503,39.85580093988911,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.83901923462687,39.85914642461989,0 32.8396174341264,39.85955537501744,0 32.83946987245044,39.85983532350488,0 32.83915476208711,39.85980927535552,0 32.83915978028791,39.85957354317799,0 32.83880061257072,39.85932618287144,0 32.83901923462687,39.85914642461989,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.83993081580138,39.85981192897481,0 32.84020006291622,39.86020488928581,0 32.83998827972105,39.86050264220906,0 32.83969801035842,39.86032668152595,0 32.83985420271093,39.8601635082522,0 32.83969358197508,39.85995067062137,0 32.83993081580138,39.85981192897481,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84029541123131,39.86067719912705,0 32.84054593679606,39.86057268365784,0 32.84078416226568,39.86104891775229,0 32.84054908662388,39.86133281373247,0 32.84027516340913,39.8612012370797,0 32.84046836384928,39.86098558798539,0 32.84029541123131,39.86067719912705,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84100803994157,39.86185859536084,0 32.84082268215861,39.86150415419843,0 32.84100918992514,39.86142915123845,0 32.84126812847624,39.86188096796987,0 32.84101247026005,39.86214973829912,0 32.84077202453815,39.86199611635362,0 32.84100803994157,39.86185859536084,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.8391433963839,39.8606002996024,0 32.8394409769522,39.86062999847341,0 32.83938022363233,39.86098521093134,0 32.83959707984693,39.8611179038449,0 32.83946865242712,39.86125829167625,0 32.83909253759069,39.8609912860265,0 32.8391433963839,39.8606002996024,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.83581886850816,39.85856382742413,0 32.83545132132813,39.85784948831342,0 32.83582268252211,39.85773614276142,0 32.8361869288109,39.85846644419007,0 32.83581886850816,39.85856382742413,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84714431728003,39.86771468194963,0 32.84725120674661,39.86758769119156,0 32.84753825346326,39.86728506221952,0 32.84775237521411,39.86735618153853,0 32.84744082797514,39.86787688392231,0 32.84714431728003,39.86771468194963,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.8485739063842,39.86719006316806,0 32.84868500961583,39.86741999907393,0 32.84831494314609,39.86748872280005,0 32.84819170476271,39.86726292259022,0 32.8485739063842,39.86719006316806,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84455297468126,39.8617608526596,0 32.84489657607574,39.86207254878838,0 32.84462924319678,39.86221103440332,0 32.8443246201786,39.86187436507998,0 32.84455297468126,39.8617608526596,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.84497100904419,39.86155634602623,0 32.84497160024976,39.86133209159349,0 32.84544234724532,39.8613246719818,0 32.84544675509822,39.86156801642726,0 32.84497100904419,39.86155634602623,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.85108236751004,39.87218486031454,0 32.85098820713142,39.87178792132114,0 32.85143768769923,39.87173454179251,0 32.85145802796129,39.87215599161064,0 32.85108236751004,39.87218486031454,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.85033362086571,39.87132223377342,0 32.85090958661925,39.87126346776462,0 32.85095925867499,39.87152705825348,0 32.85040844161499,39.8715866495255,0 32.85033362086571,39.87132223377342,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.85012103398466,39.87086879431628,0 32.85044248813557,39.87084307432998,0 32.85048259804437,39.87111366043057,0 32.85013871274798,39.87111305251462,0 32.85012103398466,39.87086879431628,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.85011246772211,39.87041675208908,0 32.85044453490433,39.87042122589881,0 32.85045087369482,39.87069944122635,0 32.85012963542469,39.8706940786054,0 32.85011246772211,39.87041675208908,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.85068912162776,39.87066982526732,0 32.85072508538278,39.87044837093968,0 32.85109232617925,39.87047457433574,0 32.85104947798933,39.8706990745323,0 32.85068912162776,39.87066982526732,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Adsız Çokgen</name>
+			<styleUrl>#msn_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							32.85139729742798,39.87064270751101,0 32.85142036222241,39.87044045790347,0 32.85170253221049,39.87042902441949,0 32.85169969463094,39.87065095222931,0 32.85168458981556,39.87065098496991,0 32.85139729742798,39.87064270751101,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<atom:link rel="app" href="https://www.google.com/earth/about/versions/#earth-pro" title="Google Earth Pro 7.3.7.1155"></atom:link>
+	</Folder>
+</Document>
+</kml>
