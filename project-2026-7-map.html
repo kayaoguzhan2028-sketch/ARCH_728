@@ -34,6 +34,61 @@
     min-width:320px;
   }
   #year-label { font-size:1.4rem; letter-spacing:0.08em; color:var(--white); opacity:0.9; }
+  #demolition-counter {
+    font-size:0.62rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:#ff6b5b; opacity:0.85; transition:opacity 0.2s;
+  }
+  #demolition-counter .count { font-size:0.8rem; letter-spacing:0; font-weight:600; }
+  #demolition-counter.flash { animation: demolition-flash 0.9s ease-out; }
+  @keyframes demolition-flash {
+    0%   { opacity:1; text-shadow:0 0 12px rgba(255,107,91,0.9); }
+    100% { opacity:0.85; text-shadow:none; }
+  }
+  .demolition-pulse {
+    position:relative; pointer-events:none;
+  }
+  .demolition-pulse::before {
+    content:''; position:absolute; top:50%; left:50%;
+    width:14px; height:14px; margin:-7px 0 0 -7px;
+    border-radius:50%; background:rgba(255,107,91,0.9);
+    box-shadow:0 0 0 0 rgba(255,107,91,0.7);
+    animation: demolition-pulse-ring 1.2s ease-out forwards;
+  }
+  @keyframes demolition-pulse-ring {
+    0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(255,107,91,0.7); }
+    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(255,107,91,0); }
+    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(255,107,91,0); }
+  }
+  .road-pulse {
+    position:relative; pointer-events:none;
+  }
+  .road-pulse::before {
+    content:''; position:absolute; top:50%; left:50%;
+    width:14px; height:14px; margin:-7px 0 0 -7px;
+    border-radius:50%; background:rgba(168,224,99,0.9);
+    box-shadow:0 0 0 0 rgba(168,224,99,0.7);
+    animation: road-pulse-ring 1.2s ease-out forwards;
+  }
+  @keyframes road-pulse-ring {
+    0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(168,224,99,0.7); }
+    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(168,224,99,0); }
+    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(168,224,99,0); }
+  }
+  .building-pulse {
+    position:relative; pointer-events:none;
+  }
+  .building-pulse::before {
+    content:''; position:absolute; top:50%; left:50%;
+    width:14px; height:14px; margin:-7px 0 0 -7px;
+    border-radius:50%; background:rgba(255,209,102,0.9);
+    box-shadow:0 0 0 0 rgba(255,209,102,0.7);
+    animation: building-pulse-ring 1.2s ease-out forwards;
+  }
+  @keyframes building-pulse-ring {
+    0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(255,209,102,0.7); }
+    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(255,209,102,0); }
+    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(255,209,102,0); }
+  }
   #year-slider {
     width:100%; cursor:pointer; appearance:none; height:2px;
     background:rgba(245,242,235,0.2); outline:none;
@@ -82,6 +137,7 @@
 
 <div id="slider-panel">
   <span id="year-label">2010</span>
+  <span id="demolition-counter"><span class="count">0</span> gecekondu yıkıldı</span>
   <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010">
   <div class="slider-ticks">
     <span>2010</span><span>2012</span><span>2014</span><span>2016</span>
@@ -115,7 +171,84 @@
   LayerManager.init(map);
   HafriyatAnimation.init(map);
   LayerManager.loadStaticLayers(_origDataPath);
-  LayerManager.loadYear(2010, _origDataPath);
+
+  // ── Yıkım sayacı + "yeni yıkım" flaş efekti ──────────────────────────────
+  const demolitionCounter = document.getElementById('demolition-counter');
+  const demolitionCount   = demolitionCounter.querySelector('.count');
+
+  function flashNewDemolitions(geojson, year) {
+    const features = (geojson && geojson.features) || [];
+    demolitionCount.textContent = features.length;
+
+    const isNew = f => f.properties && f.properties.year_demolished === year;
+    const newOnes = features.filter(isNew);
+    if (!newOnes.length) return;
+
+    demolitionCounter.classList.remove('flash');
+    requestAnimationFrame(() => demolitionCounter.classList.add('flash'));
+
+    newOnes.forEach(f => {
+      const ring = f.geometry.coordinates[0];
+      const lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
+      const lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
+      const pulse = L.divIcon({ className: 'demolition-pulse', iconSize: [1, 1] });
+      const marker = L.marker([lat, lng], { icon: pulse, interactive: false }).addTo(map);
+      setTimeout(() => map.removeLayer(marker), 1200);
+    });
+  }
+
+  // ── Yeni açılan yollar için "inşa" flaş efekti ───────────────────────────
+  // Roads tek referans (roads_2025) üzerinden maskelenip yıllara dağıtıldığı için
+  // bir yolun "yeni" olması = önceki yüklenen yılda maskeliyken bu yıl maskeden çıkmış olması.
+  let previousRoadsKeys = null;
+
+  function flashNewRoads(geojson, year) {
+    const features = (geojson && geojson.features) || [];
+    const currentKeys = new Set(features.map(f => JSON.stringify(f.geometry.coordinates)));
+
+    if (previousRoadsKeys) {
+      features.forEach(f => {
+        const key = JSON.stringify(f.geometry.coordinates);
+        if (previousRoadsKeys.has(key)) return;
+        const coords = f.geometry.coordinates;
+        const mid = coords[Math.floor(coords.length / 2)];
+        const pulse = L.divIcon({ className: 'road-pulse', iconSize: [1, 1] });
+        const marker = L.marker([mid[1], mid[0]], { icon: pulse, interactive: false }).addTo(map);
+        setTimeout(() => map.removeLayer(marker), 1200);
+      });
+    }
+
+    previousRoadsKeys = currentKeys;
+  }
+
+  // ── Yeni eklenen binalar için "inşa" flaş efekti ─────────────────────────
+  let previousBuildingsKeys = null;
+
+  function flashNewBuildings(geojson, year) {
+    const features = (geojson && geojson.features) || [];
+    const currentKeys = new Set(features.map(f => JSON.stringify(f.geometry.coordinates)));
+
+    if (previousBuildingsKeys) {
+      features.forEach(f => {
+        const key = JSON.stringify(f.geometry.coordinates);
+        if (previousBuildingsKeys.has(key)) return;
+        const ring = f.geometry.coordinates[0];
+        const lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
+        const lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
+        const pulse = L.divIcon({ className: 'building-pulse', iconSize: [1, 1] });
+        const marker = L.marker([lat, lng], { icon: pulse, interactive: false }).addTo(map);
+        setTimeout(() => map.removeLayer(marker), 1200);
+      });
+    }
+
+    previousBuildingsKeys = currentKeys;
+  }
+
+  LayerManager.loadYear(2010, _origDataPath).then(({ demolition, roads, buildings }) => {
+    flashNewDemolitions(demolition, 2010);
+    flashNewRoads(roads, 2010);
+    flashNewBuildings(buildings, 2010);
+  });
 
   // Yer adları katmanı (mahalle/semt isimleri) — statik, tek seferlik veri
   const labelsLayer = L.layerGroup();
@@ -168,8 +301,15 @@
     mapEl.classList.toggle('dimmed', y < 2026);
     if (y >= 2026) {
       LayerManager.clearYearLayers();
+      demolitionCount.textContent = 0;
+      previousRoadsKeys = null;
+      previousBuildingsKeys = null;
     } else {
-      LayerManager.loadYear(y, _origDataPath);
+      LayerManager.loadYear(y, _origDataPath).then(({ demolition, roads, buildings }) => {
+        flashNewDemolitions(demolition, y);
+        flashNewRoads(roads, y);
+        flashNewBuildings(buildings, y);
+      });
     }
   });
 </script>

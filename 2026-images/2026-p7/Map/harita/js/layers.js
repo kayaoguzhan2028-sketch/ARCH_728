@@ -146,6 +146,12 @@ const LayerManager = (function() {
       _yearLayers[key] = sketchLayer(datas[i], CONFIGS[key]);
       if (_visible[key]) _yearLayers[key].addTo(_map);
     });
+
+    return {
+      demolition: datas[YEAR_KEYS.indexOf('demolition_zones')],
+      roads:      datas[YEAR_KEYS.indexOf('roads')],
+      buildings:  datas[YEAR_KEYS.indexOf('buildings')],
+    };
   }
 
   // Canlı OSM görünümüne dön: sketch katmanlarını kaldır, sadece taban harita kalsın
