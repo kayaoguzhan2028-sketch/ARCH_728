@@ -93,12 +93,12 @@
   .year-arrow:hover:not(:disabled) { opacity:1; border-color:rgba(245,242,235,0.6); }
   .year-arrow:disabled { opacity:0.2; cursor:default; }
   #year-slider {
-    flex:1; width:100%; cursor:default; appearance:none; height:2px;
-    background:rgba(245,242,235,0.2); outline:none; pointer-events:none;
+    flex:1; width:100%; cursor:pointer; appearance:none; height:2px;
+    background:rgba(245,242,235,0.2); outline:none;
   }
   #year-slider::-webkit-slider-thumb {
     appearance:none; width:14px; height:14px;
-    border-radius:50%; background:var(--white); cursor:default;
+    border-radius:50%; background:var(--white); cursor:pointer;
   }
   .slider-ticks {
     display:flex; justify-content:space-between; width:100%;
@@ -180,7 +180,7 @@
   <span id="demolition-counter" lang="en"><span class="count">0</span> squatter houses demolished</span>
   <div class="slider-row">
     <button id="year-prev" class="year-arrow" aria-label="Previous year" disabled>‹</button>
-    <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010" tabindex="-1">
+    <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010">
     <button id="year-next" class="year-arrow" aria-label="Next year">›</button>
   </div>
   <div class="slider-ticks">
@@ -306,6 +306,15 @@
   mappingLabel.textContent = 'Mapping';
   layerPanel.appendChild(mappingLabel);
 
+  ['buildings','gecekondu','roads','greenspace','water','demolition_zones'].forEach(key => {
+    const cfg = LayerManager.getConfig(key);
+    const btn = document.createElement('button');
+    btn.className = LayerManager.isVisible(key) ? 'layer-btn active' : 'layer-btn';
+    btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
+    btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
+    layerPanel.appendChild(btn);
+  });
+
   let labelsVisible = true;
   const labelsBtn = document.createElement('button');
   labelsBtn.className = 'layer-btn active';
@@ -316,15 +325,6 @@
     if (labelsVisible) labelsLayer.addTo(map); else map.removeLayer(labelsLayer);
   });
   layerPanel.appendChild(labelsBtn);
-
-  ['buildings','roads','greenspace','water','demolition_zones','gecekondu'].forEach(key => {
-    const cfg = LayerManager.getConfig(key);
-    const btn = document.createElement('button');
-    btn.className = 'layer-btn active';
-    btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
-    btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
-    layerPanel.appendChild(btn);
-  });
 
   // ── Animation grubu (soil taxonomy) ──────────────────────────────────────
   layerPanel.appendChild(Object.assign(document.createElement('hr'), { className: 'layer-divider' }));
@@ -414,13 +414,19 @@
   const nextBtn   = document.getElementById('year-next');
 
   const YEAR_MIN = 2010, YEAR_MAX = 2026;
-  const STEP_COOLDOWN_MS = 500;
+
+  function refreshArrowState() {
+    const y = parseInt(slider.value);
+    prevBtn.disabled = y <= YEAR_MIN;
+    nextBtn.disabled = y >= YEAR_MAX;
+  }
 
   function setYear(y) {
     slider.value = y;
     yearLabel.textContent = y === YEAR_MAX ? 'Abstraction of 2026' : y;
     mapEl.classList.toggle('dimmed', y < YEAR_MAX);
     demolitionCounter.style.display = y >= YEAR_MAX ? 'none' : '';
+    refreshArrowState();
 
     const atAbstraction = y >= YEAR_MAX;
     LayerManager.setAnimationsEnabled(atAbstraction);
@@ -436,23 +442,15 @@
     }
   }
 
-  function refreshArrowState() {
-    const y = parseInt(slider.value);
-    prevBtn.disabled = y <= YEAR_MIN;
-    nextBtn.disabled = y >= YEAR_MAX;
-  }
-
   function stepYear(delta) {
     const next = parseInt(slider.value) + delta;
     if (next < YEAR_MIN || next > YEAR_MAX) return;
     setYear(next);
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
-    setTimeout(refreshArrowState, STEP_COOLDOWN_MS);
   }
 
   prevBtn.addEventListener('click', () => stepYear(-1));
   nextBtn.addEventListener('click', () => stepYear(1));
+  slider.addEventListener('input', () => setYear(parseInt(slider.value)));
 </script>
 
 </body>

@@ -124,7 +124,7 @@ const LayerManager = (function() {
     roads:             true,
     greenspace:        true,
     water:             true,
-    demolition_zones:  true,
+    demolition_zones:  false,
     gecekondu:         true,
     hafriyat_guzergah: false,
     vagabond:          false,
