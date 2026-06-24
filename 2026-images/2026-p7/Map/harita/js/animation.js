@@ -1,6 +1,6 @@
 // animation.js — hafriyat güzergahları üzerinde kamyon (kare) akışı animasyonu
 // Her LineString feature kendi başına bağımsız bir güzergah; her biri üzerinde
-// rastgele boy/hız ile sürekli döngü halinde bir kare ilerler.
+// rastgele boy/hız ile sürekli döngü halinde, birden çok kare ilerler.
 
 const HafriyatAnimation = (function() {
 
@@ -8,8 +8,10 @@ const HafriyatAnimation = (function() {
   let _routes  = [];   // [{coords:[[lat,lng],...], marker, progress, speed}]
   let _rafId   = null;
   let _running = false;
+  let _visible = false;
 
-  const SIZES_PX = [5, 7, 9]; // 6/8/10m'lik görsel çeşitlilik (sketch ölçeğinde temsili px)
+  const SIZES_PX = [4, 5, 6]; // 6/8/10m'lik görsel çeşitlilik (sketch ölçeğinde temsili px, küçültülmüş)
+  const SQUARES_PER_ROUTE = 4;
 
   function _flattenLine(geometry) {
     if (!geometry) return [];
@@ -51,25 +53,27 @@ const HafriyatAnimation = (function() {
       const coords = _flattenLine(f.geometry);
       if (coords.length < 2) return;
 
-      const px = SIZES_PX[Math.floor(Math.random() * SIZES_PX.length)];
-      const marker = L.marker(coords[0], {
-        icon: L.divIcon({
-          className: 'hafriyat-square',
-          html: `<div style="width:${px}px;height:${px}px;"></div>`,
-          iconSize: [px, px],
-        }),
-        interactive: false,
-      });
+      for (let n = 0; n < SQUARES_PER_ROUTE; n++) {
+        const px = SIZES_PX[Math.floor(Math.random() * SIZES_PX.length)];
+        const marker = L.marker(coords[0], {
+          icon: L.divIcon({
+            className: 'hafriyat-square',
+            html: `<div style="width:${px}px;height:${px}px;"></div>`,
+            iconSize: [px, px],
+          }),
+          interactive: false,
+        });
 
-      _routes.push({
-        coords,
-        marker,
-        progress: Math.random(),                 // rastgele faz: hepsi aynı anda hareket etmesin
-        speed:    0.00035 + Math.random() * 0.0004, // hafif hız çeşitliliği
-      });
+        _routes.push({
+          coords,
+          marker,
+          progress: Math.random(),                   // rastgele faz: hepsi aynı anda hareket etmesin
+          speed:    0.00035 + Math.random() * 0.0004, // hafif hız çeşitliliği
+        });
+      }
     });
 
-    if (_routes.length > 0) {
+    if (_visible) {
       _routes.forEach(r => r.marker.addTo(_map));
       start();
     } else {
@@ -98,6 +102,18 @@ const HafriyatAnimation = (function() {
     if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
   }
 
-  return { init, load, start, stop };
+  function show() {
+    _visible = true;
+    _routes.forEach(r => r.marker.addTo(_map));
+    start();
+  }
+
+  function hide() {
+    _visible = false;
+    _routes.forEach(r => _map.removeLayer(r.marker));
+    stop();
+  }
+
+  return { init, load, start, stop, show, hide };
 
 })();

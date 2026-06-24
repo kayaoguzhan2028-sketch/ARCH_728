@@ -65,10 +65,20 @@ const LayerManager = (function() {
       bowing:      0,
     },
     hafriyat_guzergah: {
-      label:       'Hafriyat Güzergahı',
+      label:       'Barbarian',
       color:       '#ffb347',
       fill:        false,
       strokeWidth: 2.0,
+      roughness:   0.3,
+      bowing:      0,
+    },
+    nomadic: {
+      label:       'Nomadic',
+      color:       '#c9a876',
+      fillColor:   '#8a6d3f',
+      fill:        true,
+      fillStyle:   'hachure',
+      strokeWidth: 1.0,
       roughness:   0.3,
       bowing:      0,
     },
@@ -114,10 +124,11 @@ const LayerManager = (function() {
     water:             true,
     demolition_zones:  true,
     gecekondu:         true,
-    hafriyat_guzergah: true,
-    vagabond:          true,
-    proletariat:       true,
-    civilized:         true,
+    hafriyat_guzergah: false,
+    vagabond:          false,
+    proletariat:       false,
+    civilized:         false,
+    nomadic:           false,
   };
 
   let _dataPath = file => `data/${file}`;
@@ -139,11 +150,8 @@ const LayerManager = (function() {
   // Statik katmanları yükle (sadece hafriyat_guzergah — yıl bazlı OSM verisi yok)
   async function loadStaticLayers(dataPathFn) {
     if (dataPathFn) _dataPath = dataPathFn;
+    // hafriyat_guzergah: çizgi kendisi gösterilmiyor, yalnızca üzerindeki kareler (HafriyatAnimation) görünür
     const geojson = await _fetchGeoJSON(_dataPath('hafriyat_guzergah.geojson'));
-    const layer   = sketchLayer(geojson, CONFIGS.hafriyat_guzergah);
-    if (_visible.hafriyat_guzergah) layer.addTo(_map);
-    _layers.hafriyat_guzergah = layer;
-
     HafriyatAnimation.load(geojson);
 
     // vagabond verisi data-mine/ klasöründe duruyor (üretilmiş abstraction verisi, data/ ile aynı yıl mantığına girmiyor)
@@ -162,6 +170,12 @@ const LayerManager = (function() {
     const civilizedLayer   = sketchLayer(civilizedGeojson, CONFIGS.civilized);
     if (_visible.civilized) civilizedLayer.addTo(_map);
     _layers.civilized = civilizedLayer;
+
+    // nomadic: vadi'nin kendi 100/50/20 abstraction ızgarası (vadi-abstraction-base)
+    const nomadicGeojson = await _fetchGeoJSON(vagabondPath('vadi-abstraction-base.geojson'));
+    const nomadicLayer   = sketchLayer(nomadicGeojson, CONFIGS.nomadic);
+    if (_visible.nomadic) nomadicLayer.addTo(_map);
+    _layers.nomadic = nomadicLayer;
   }
 
   // Slider hızlı kaydırılınca aynı anda birden çok loadYear() çağrısı havada kalabilir;
@@ -224,19 +238,21 @@ const LayerManager = (function() {
       return _visible[key];
     }
 
-    // proletariat: birden çok marker/polygon yönettiği için kendi show()/hide()'ı var
+    // proletariat ve hafriyat_guzergah: birden çok marker yönettiği için kendi show()/hide()'ı var,
+    // tek bir sketchLayer'a sahip değiller (_layers'ta yok)
     if (key === 'proletariat') {
       _visible[key] ? ProletariatAnimation.show() : ProletariatAnimation.hide();
       return _visible[key];
     }
+    if (key === 'hafriyat_guzergah') {
+      _visible[key] ? HafriyatAnimation.show() : HafriyatAnimation.hide();
+      return _visible[key];
+    }
 
-    // Statik katmanlar (hafriyat_guzergah)
+    // Statik katmanlar (vagabond, civilized, nomadic)
     const l = _layers[key];
     if (l) {
       _visible[key] ? l.addTo(_map) : _map.removeLayer(l);
-    }
-    if (key === 'hafriyat_guzergah') {
-      _visible[key] ? HafriyatAnimation.start() : HafriyatAnimation.stop();
     }
 
     return _visible[key];

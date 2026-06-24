@@ -9,10 +9,11 @@ const ProletariatAnimation = (function() {
   let _grids   = {};   // routeIndex -> {polygons:[L.polygon], opacity:number}
   let _rafId   = null;
   let _running = false;
-  let _visible = true;
+  let _visible = false;
 
-  const SIZES_PX = [5, 7, 9];
+  const SIZES_PX = [4, 5, 6];
   const COLOR = '#d4a843';
+  const SQUARES_PER_ROUTE = 4;
 
   function _flattenLine(geometry) {
     if (!geometry || geometry.type !== 'LineString') return [];
@@ -57,25 +58,27 @@ const ProletariatAnimation = (function() {
       const coords = _flattenLine(f.geometry).slice().reverse(); // hafriyatın tersi yöne
       if (coords.length < 2) return;
 
-      const px = SIZES_PX[Math.floor(Math.random() * SIZES_PX.length)];
-      const marker = L.marker(coords[0], {
-        icon: L.divIcon({
-          className: 'proletariat-square',
-          html: `<div style="width:${px}px;height:${px}px;"></div>`,
-          iconSize: [px, px],
-        }),
-        interactive: false,
-      });
-      if (_visible) marker.addTo(_map);
+      for (let n = 0; n < SQUARES_PER_ROUTE; n++) {
+        const px = SIZES_PX[Math.floor(Math.random() * SIZES_PX.length)];
+        const marker = L.marker(coords[0], {
+          icon: L.divIcon({
+            className: 'proletariat-square',
+            html: `<div style="width:${px}px;height:${px}px;"></div>`,
+            iconSize: [px, px],
+          }),
+          interactive: false,
+        });
+        if (_visible) marker.addTo(_map);
 
-      _routes.push({
-        coords, marker, routeIndex: ri,
-        progress: Math.random(),
-        speed:    0.00035 + Math.random() * 0.0004,
-      });
+        _routes.push({
+          coords, marker, routeIndex: ri,
+          progress: Math.random(),
+          speed:    0.00035 + Math.random() * 0.0004,
+        });
+      }
     });
 
-    if (_routes.length > 0) start(); else stop();
+    if (_routes.length > 0 && _visible) start(); else stop();
   }
 
   function _onArrive(routeIndex) {

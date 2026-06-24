@@ -49,8 +49,8 @@
   }
   .demolition-pulse::before {
     content:''; position:absolute; top:50%; left:50%;
-    width:14px; height:14px; margin:-7px 0 0 -7px;
-    border-radius:50%; background:rgba(255,107,91,0.9);
+    width:10px; height:10px; margin:-5px 0 0 -5px;
+    border-radius:0; background:rgba(255,107,91,0.9);
     box-shadow:0 0 0 0 rgba(255,107,91,0.7);
     animation: demolition-pulse-ring 1.2s ease-out forwards;
   }
@@ -64,8 +64,8 @@
   }
   .road-pulse::before {
     content:''; position:absolute; top:50%; left:50%;
-    width:14px; height:14px; margin:-7px 0 0 -7px;
-    border-radius:50%; background:rgba(168,224,99,0.9);
+    width:10px; height:10px; margin:-5px 0 0 -5px;
+    border-radius:0; background:rgba(168,224,99,0.9);
     box-shadow:0 0 0 0 rgba(168,224,99,0.7);
     animation: road-pulse-ring 1.2s ease-out forwards;
   }
@@ -103,8 +103,8 @@
   }
   .building-pulse::before {
     content:''; position:absolute; top:50%; left:50%;
-    width:14px; height:14px; margin:-7px 0 0 -7px;
-    border-radius:50%; background:rgba(255,209,102,0.9);
+    width:10px; height:10px; margin:-5px 0 0 -5px;
+    border-radius:0; background:rgba(255,209,102,0.9);
     box-shadow:0 0 0 0 rgba(255,209,102,0.7);
     animation: building-pulse-ring 1.2s ease-out forwards;
   }
@@ -113,13 +113,22 @@
     70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 16px rgba(255,209,102,0); }
     100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 16px rgba(255,209,102,0); }
   }
+  .slider-row { display:flex; align-items:center; gap:0.7rem; width:100%; }
+  .year-arrow {
+    flex-shrink:0; width:1.7rem; height:1.7rem; display:flex; align-items:center; justify-content:center;
+    background:none; border:1px solid rgba(245,242,235,0.3); color:var(--white);
+    font-family:var(--font); font-size:1rem; line-height:1; cursor:pointer; opacity:0.8;
+    transition:opacity 0.2s, border-color 0.2s;
+  }
+  .year-arrow:hover:not(:disabled) { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .year-arrow:disabled { opacity:0.2; cursor:default; }
   #year-slider {
-    width:100%; cursor:pointer; appearance:none; height:2px;
-    background:rgba(245,242,235,0.2); outline:none;
+    flex:1; width:100%; cursor:default; appearance:none; height:2px;
+    background:rgba(245,242,235,0.2); outline:none; pointer-events:none;
   }
   #year-slider::-webkit-slider-thumb {
     appearance:none; width:14px; height:14px;
-    border-radius:50%; background:var(--white); cursor:pointer;
+    border-radius:50%; background:var(--white); cursor:default;
   }
   .slider-ticks {
     display:flex; justify-content:space-between; width:100%;
@@ -139,6 +148,41 @@
   }
   .layer-btn.active { opacity:1; }
   .layer-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+  .layer-divider { border:none; border-top:1px solid var(--border); margin:0.1rem 0; width:100%; }
+  .layer-section-label { font-size:0.54rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.32; }
+  .layer-row { display:flex; align-items:center; gap:0.45rem; }
+  .layer-info-btn {
+    width:14px; height:14px; border-radius:50%; flex-shrink:0;
+    border:1px solid rgba(245,242,235,0.35); background:none; color:var(--white);
+    font-size:0.55rem; line-height:1; font-family:var(--font); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0.5; transition:opacity 0.2s, border-color 0.2s;
+  }
+  .layer-info-btn:hover { opacity:1; border-color:rgba(245,242,235,0.7); }
+
+  #soil-info-overlay {
+    position:fixed; inset:0; z-index:1100;
+    background:rgba(10,10,10,0.92);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity 0.25s ease;
+  }
+  #soil-info-overlay.open { opacity:1; pointer-events:auto; }
+  #soil-info-panel {
+    position:relative; width:min(640px, 88vw); max-height:80vh; overflow-y:auto;
+    background:#0a0a0a; border:1px solid var(--border);
+    padding:2.4rem 2.6rem;
+  }
+  #soil-info-panel h4 { font-size:1.1rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); opacity:0.9; margin-bottom:1.4rem; padding-right:1.5rem; }
+  #soil-info-panel p { font-size:0.95rem; line-height:1.8; opacity:0.85; margin-bottom:1.2rem; }
+  #soil-info-panel p:last-child { margin-bottom:0; }
+  #soil-info-close {
+    position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem;
+    display:flex; align-items:center; justify-content:center;
+    background:none; border:1px solid var(--accent); color:var(--white);
+    opacity:0.7; cursor:pointer; font-size:1.4rem; line-height:1; font-family:var(--font);
+    transition:opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+  #soil-info-close:hover { opacity:1; background:var(--accent); color:var(--black); }
 
   .leaflet-control-attribution { font-size:0.55rem !important; background:rgba(10,10,10,0.6) !important; color:rgba(245,242,235,0.4) !important; }
   .leaflet-control-attribution a { color:rgba(245,242,235,0.55) !important; }
@@ -162,7 +206,11 @@
 <div id="slider-panel">
   <span id="year-label">2010</span>
   <span id="demolition-counter"><span class="count">0</span> gecekondu yıkıldı</span>
-  <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010">
+  <div class="slider-row">
+    <button id="year-prev" class="year-arrow" aria-label="Previous year" disabled>‹</button>
+    <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010" tabindex="-1">
+    <button id="year-next" class="year-arrow" aria-label="Next year">›</button>
+  </div>
   <div class="slider-ticks">
     <span>2010</span><span>2012</span><span>2014</span><span>2016</span>
     <span>2018</span><span>2020</span><span>2022</span><span>2024</span><span>2026</span>
@@ -170,6 +218,14 @@
 </div>
 
 <div id="layer-panel"></div>
+
+<div id="soil-info-overlay">
+  <button id="soil-info-close" aria-label="Close">×</button>
+  <div id="soil-info-panel">
+    <h4 id="soil-info-title"></h4>
+    <div id="soil-info-body"></div>
+  </div>
+</div>
 
 <script src="2026-images/2026-p7/Map/harita/js/sketch.js"></script>
 <script src="2026-images/2026-p7/Map/harita/js/animation.js"></script>
@@ -293,7 +349,25 @@
   labelsLayer.addTo(map);
 
   const layerPanel = document.getElementById('layer-panel');
-  ['buildings','roads','greenspace','water','demolition_zones','gecekondu','hafriyat_guzergah','vagabond','proletariat','civilized'].forEach(key => {
+
+  // ── Mapping grubu (kategorik veri katmanları) ────────────────────────────
+  const mappingLabel = document.createElement('span');
+  mappingLabel.className = 'layer-section-label';
+  mappingLabel.textContent = 'Mapping';
+  layerPanel.appendChild(mappingLabel);
+
+  let labelsVisible = true;
+  const labelsBtn = document.createElement('button');
+  labelsBtn.className = 'layer-btn active';
+  labelsBtn.innerHTML = '<span class="layer-dot" style="background:#f5f2eb"></span>Labels';
+  labelsBtn.addEventListener('click', () => {
+    labelsVisible = !labelsVisible;
+    labelsBtn.classList.toggle('active', labelsVisible);
+    if (labelsVisible) labelsLayer.addTo(map); else map.removeLayer(labelsLayer);
+  });
+  layerPanel.appendChild(labelsBtn);
+
+  ['buildings','roads','greenspace','water','demolition_zones','gecekondu'].forEach(key => {
     const cfg = LayerManager.getConfig(key);
     const btn = document.createElement('button');
     btn.className = 'layer-btn active';
@@ -302,16 +376,77 @@
     layerPanel.appendChild(btn);
   });
 
-  let labelsVisible = true;
-  const labelsBtn = document.createElement('button');
-  labelsBtn.className = 'layer-btn active';
-  labelsBtn.innerHTML = '<span class="layer-dot" style="background:#f5f2eb"></span>Yer Adları';
-  labelsBtn.addEventListener('click', () => {
-    labelsVisible = !labelsVisible;
-    labelsBtn.classList.toggle('active', labelsVisible);
-    if (labelsVisible) labelsLayer.addTo(map); else map.removeLayer(labelsLayer);
+  // ── Animation grubu (soil taxonomy) ──────────────────────────────────────
+  layerPanel.appendChild(Object.assign(document.createElement('hr'), { className: 'layer-divider' }));
+
+  const animationLabel = document.createElement('span');
+  animationLabel.className = 'layer-section-label';
+  animationLabel.textContent = 'Animation';
+  layerPanel.appendChild(animationLabel);
+
+  // Her soil sayfasından metin çekmek için: hangi seçiciden paragraf alınacak, kaç tane, başlık nereden gelecek.
+  const SOIL_INFO = {
+    nomadic:           { url: 'project-2026-7-nomad-soil.html',       selector: '.columns p' },
+    hafriyat_guzergah: { url: 'project-2026-7-debris.html',           selector: '#sec-block .body p', limit: 2, titleOverride: 'Barbarian Soil' },
+    vagabond:          { url: 'project-2026-7-vagabond-soil.html',    selector: '.columns p' },
+    proletariat:       { url: 'project-2026-7-proletariat-soil.html', selector: '.columns p' },
+    civilized:         { url: 'project-2026-7-civilized-soil.html',   selector: '.columns p' },
+  };
+
+  const soilOverlay = document.getElementById('soil-info-overlay');
+  const soilTitle = document.getElementById('soil-info-title');
+  const soilBody  = document.getElementById('soil-info-body');
+  document.getElementById('soil-info-close').addEventListener('click', () => soilOverlay.classList.remove('open'));
+  soilOverlay.addEventListener('click', e => { if (e.target === soilOverlay) soilOverlay.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') soilOverlay.classList.remove('open'); });
+
+  const soilCache = {};
+  async function showSoilInfo(key) {
+    const info = SOIL_INFO[key];
+    if (!info) return;
+
+    soilOverlay.classList.add('open');
+    soilTitle.textContent = LayerManager.getConfig(key).label;
+    soilBody.innerHTML = '<p style="opacity:0.5;">...</p>';
+
+    if (!soilCache[key]) {
+      try {
+        const res  = await fetch(info.url);
+        const html = await res.text();
+        const doc  = new DOMParser().parseFromString(html, 'text/html');
+        let paras  = Array.from(doc.querySelectorAll(info.selector)).map(p => p.textContent.trim());
+        if (info.limit) paras = paras.slice(0, info.limit);
+        const title = info.titleOverride || (doc.querySelector('.masthead')?.textContent.trim()) || '';
+        soilCache[key] = { title, paras };
+      } catch (e) {
+        soilCache[key] = { title: '', paras: ['Metin yüklenemedi.'] };
+      }
+    }
+
+    const { title, paras } = soilCache[key];
+    soilTitle.textContent = title || LayerManager.getConfig(key).label;
+    soilBody.innerHTML = paras.map(p => `<p>${p}</p>`).join('');
+  }
+
+  ['nomadic','hafriyat_guzergah','vagabond','proletariat','civilized'].forEach(key => {
+    const cfg = LayerManager.getConfig(key);
+    const row = document.createElement('div');
+    row.className = 'layer-row';
+
+    const infoBtn = document.createElement('button');
+    infoBtn.className = 'layer-info-btn';
+    infoBtn.textContent = 'i';
+    infoBtn.addEventListener('click', () => showSoilInfo(key));
+    row.appendChild(infoBtn);
+
+    const btn = document.createElement('button');
+    btn.className = 'layer-btn'; // animation grubu varsayılan kapalı başlıyor
+    btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
+    btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
+    row.appendChild(btn);
+
+    layerPanel.appendChild(row);
   });
-  layerPanel.appendChild(labelsBtn);
 
   map.on('moveend', function() {
     if (map.getCenter().distanceTo(CIRCLE_CENTER) > CIRCLE_RADIUS) {
@@ -321,11 +456,18 @@
 
   const slider    = document.getElementById('year-slider');
   const yearLabel = document.getElementById('year-label');
-  slider.addEventListener('input', () => {
-    const y = parseInt(slider.value);
-    yearLabel.textContent = y === 2026 ? '2026 (canlı)' : y;
-    mapEl.classList.toggle('dimmed', y < 2026);
-    if (y >= 2026) {
+  const prevBtn   = document.getElementById('year-prev');
+  const nextBtn   = document.getElementById('year-next');
+
+  const YEAR_MIN = 2010, YEAR_MAX = 2026;
+  const STEP_COOLDOWN_MS = 1300; // flash/pulse animasyonlarının (1.2s) görünmesine izin ver
+
+  function setYear(y) {
+    slider.value = y;
+    yearLabel.textContent = y === YEAR_MAX ? 'Abstraction of 2026' : y;
+    mapEl.classList.toggle('dimmed', y < YEAR_MAX);
+    demolitionCounter.style.display = y >= YEAR_MAX ? 'none' : '';
+    if (y >= YEAR_MAX) {
       LayerManager.clearYearLayers();
       demolitionCount.textContent = 0;
       previousRoadsKeys = null;
@@ -337,7 +479,25 @@
         flashNewBuildings(buildings, y);
       });
     }
-  });
+  }
+
+  function refreshArrowState() {
+    const y = parseInt(slider.value);
+    prevBtn.disabled = y <= YEAR_MIN;
+    nextBtn.disabled = y >= YEAR_MAX;
+  }
+
+  function stepYear(delta) {
+    const next = parseInt(slider.value) + delta;
+    if (next < YEAR_MIN || next > YEAR_MAX) return;
+    setYear(next);
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    setTimeout(refreshArrowState, STEP_COOLDOWN_MS);
+  }
+
+  prevBtn.addEventListener('click', () => stepYear(-1));
+  nextBtn.addEventListener('click', () => stepYear(1));
 </script>
 
 </body>
