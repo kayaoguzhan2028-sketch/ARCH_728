@@ -1,0 +1,386 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-4 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-center { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; opacity:0.55; white-space:nowrap; }
+
+  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
+  .info-btn:hover { opacity:1; }
+  .info-btn.open { opacity:1; }
+
+  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:380px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
+  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  #research-panel { position:fixed; top:52px; right:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-left:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
+  #research-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  #research-panel p { font-size:0.95rem; line-height:1.7; opacity:0.85; text-align:justify; }
+  .info-nav { list-style:none; font-size:0.92rem; line-height:1.9; }
+  .info-nav a { color:var(--white); text-decoration:none; opacity:0.75; transition:opacity 0.2s; }
+  .info-nav a:hover { opacity:1; text-decoration:underline; }
+  .accordion-toggle { display:block; width:100%; text-align:left; background:none; border:none; color:var(--white); font-family:var(--font); font-size:0.92rem; line-height:1.9; opacity:0.75; cursor:pointer; padding:0; transition:opacity 0.2s; }
+  .accordion-toggle:hover { opacity:1; }
+  .accordion-content { list-style:none; padding-left:1.2rem; max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+  .accordion-content.open { max-height:20rem; }
+
+  .wrap { margin:0; padding:52px 0 0; }
+  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
+  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
+  .body img { max-width:100%; margin:2.5rem 0; opacity:1; filter:brightness(1) contrast(1); }
+  .triangle-up { display:flex; justify-content:center; margin:1rem 0 1rem -40%; }
+  .triangle-up a { display:block; line-height:0; position:relative; }
+  .triangle-up svg { width:19.5px; height:19.5px; display:block; transition:opacity 0.2s; animation:trianglePulse 2.6s ease-in-out infinite; transform-origin:center; }
+  .triangle-up svg polygon { animation:triangleColorRing 12s linear infinite; }
+  @keyframes trianglePulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
+  @keyframes triangleColorRing { 0% { fill:#8e44ad; } 33% { fill:#ff8c1a; } 66% { fill:#ffffff; } 100% { fill:#8e44ad; } }
+  .triangle-up a:hover svg { opacity:0.6; }
+  .triangle-up a[data-tooltip]::after { content:attr(data-tooltip); position:absolute; bottom:140%; left:50%; transform:translateX(-50%); background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; }
+  .triangle-up a[data-tooltip]:hover::after { opacity:1; }
+  .grid3x3 { position:relative; display:grid; grid-template-columns:7fr 11fr 7fr; grid-template-rows:36.5% 24% 39.5%; height:calc(100vh - 52px); gap:0; margin:0; }
+  .grid3x3 .grid-cell { display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .grid3x3 .grid-cell.info-cell { --gif-w:85%; align-items:flex-start; justify-content:flex-start; flex-direction:column; padding:0.3rem; }
+  .grid3x3 .grid-cell.info-cell .cell-title { width:100%; text-align:right; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; margin-bottom:0; }
+  .grid3x3 .grid-cell.info-cell img, .grid3x3 .grid-cell.info-cell video { width:var(--gif-w); height:auto; object-fit:cover; object-position:bottom; margin:0; align-self:flex-end; transition:filter 0.2s, outline-color 0.2s; }
+  .grid3x3 .grid-cell.info-cell img.gif-highlight, .grid3x3 .grid-cell.info-cell video.gif-highlight { outline:2px solid var(--accent); outline-offset:-2px; filter:brightness(1.3) contrast(1.05); }
+  .grid3x3 .grid-cell.info-cell p { width:var(--gif-w); align-self:flex-end; text-align:justify; text-align-last:right; font-size:0.65rem; line-height:1.55; opacity:0.82; margin:0 0 0.7rem; padding-left:5%; }
+  .grid3x3 .grid-cell.info-cell p:last-child { margin-bottom:0; }
+  .grid3x3 .grid-cell.info-cell p span, .izohips-text p span { display:block; line-height:1; }
+  .grid3x3 .grid-cell.label-overlay { position:relative; }
+  .grid3x3 .grid-cell.label-overlay .cell-title { position:absolute; top:1rem; right:1rem; text-align:right; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; z-index:20; margin:0; }
+  .grid3x3 .grid-cell img, .grid3x3 .grid-cell video { width:100%; height:100%; object-fit:cover; margin:0; opacity:1; filter:brightness(1) contrast(1); }
+  .grid3x3 .grid-cell.full-img { grid-row:span 2; position:relative; }
+  .grid3x3 .grid-cell.full-img img { width:96%; height:100%; object-fit:contain; }
+  .hotspot-overlay { position:absolute; top:0; bottom:0; left:2%; right:2%; overflow:visible; z-index:5; }
+  .hotspot-overlay a { cursor:pointer; }
+  .hotspot-overlay .hotspot { fill:#fff; opacity:0.01; stroke:#000; stroke-width:1px; fill-rule:evenodd; transition:opacity 0.2s; }
+  .hotspot-overlay a:hover .hotspot { opacity:0.16; }
+  #hotspot-tooltip { position:fixed; background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:1500; transform:translate(-50%,-140%); }
+  #hotspot-tooltip.show { opacity:1; }
+  .hotspot-overlay foreignObject { overflow:visible; }
+  .hero-text-wrap { display:flex; flex-direction:column; align-items:flex-end; width:100%; height:100%; overflow:visible; }
+  .hero-text-wrap.anchor-top { justify-content:flex-start; }
+  .hero-text-wrap.anchor-bottom { justify-content:flex-end; }
+  .hero-text { font-family:var(--font); color:var(--white); font-size:13pt; line-height:1.35; text-align:justify; text-align-last:right; pointer-events:none; white-space:nowrap; }
+  .hero-text p { margin:0 0 4px; }
+  .hero-text p:last-child { margin-bottom:0; }
+  .grid3x3 .grid-cell.video-cell { flex-direction:column; }
+  .izohips-row { display:flex; align-items:center; justify-content:center; gap:0; width:100%; padding-right:20%; }
+  .izohips-text { flex:0 1 auto; max-width:50%; min-width:0; text-align:right; }
+  .izohips-text p { display:flex; flex-direction:column; gap:0.7rem; margin:0 0 0.8rem; opacity:0.85; }
+  .izohips-text p:last-child { margin-bottom:0; }
+  .izohips-img-col { width:35%; flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
+  .izohips-img-col video { margin-top:20%; }
+  .grid3x3 .grid-cell.video-cell video, .grid3x3 .grid-cell.video-cell img { width:100%; height:auto; object-fit:contain; margin:0; }
+  @media (max-width:640px) {
+    .grid3x3 { grid-template-columns:1fr; height:auto; }
+  }
+
+  .video-lightbox-trigger { cursor:pointer; }
+  .video-lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.92); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
+  .video-lightbox.active { display:flex; }
+  .video-lightbox-content { display:flex; flex-direction:column; align-items:center; gap:1.5rem; max-width:90vw; max-height:90vh; overflow-y:auto; }
+  .video-lightbox video, .video-lightbox img { max-width:100%; max-height:50vh; object-fit:contain; display:none; }
+  .video-lightbox video.active, .video-lightbox img.active { display:block; }
+  #video-lightbox-title { align-self:flex-end; max-width:700px; font-size:1.2rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.9; text-align:right; }
+  #video-lightbox-title:empty { display:none; }
+  #video-lightbox-text { max-width:700px; }
+  #video-lightbox-text:empty { display:none; }
+  #video-lightbox-text p { font-size:1.1rem; line-height:1.6; opacity:0.85; margin:0 0 0.8rem; }
+  #video-lightbox-text p:last-child { margin-bottom:0; }
+  .video-lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:#f5f2eb; font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); z-index:1001; }
+  .video-lightbox-close:hover { opacity:0.7; }
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex;align-items:center;">
+    <a href="../../2026.html" class="nav-back">← 2026</a>
+    <button class="info-btn" id="info-toggle">Project Navigation</button>
+  </div>
+  <span class="nav-center">DISPLACED VOLUME OF BILKENT AREA / 2007 AND 2023 TIMELAPSE</span>
+  <button class="info-btn" id="research-toggle">Research Question</button>
+</nav>
+
+<div id="research-panel">
+  <p>How does the mobility of urban soil reconfigure new ecological conditions and generate unexpected habitats? In the case of partial observation (Beytepe Pond, Bilkent City Hospital and arboretum) do the emergent plant formations prove the erasure of the steppe, or do they reveal the soil’s capacity to retain and rearticulate its own ecological archive in a new location?</p>
+</div>
+
+<div id="info-panel">
+  <ul class="info-nav">
+    <li>_index</li>
+    <li><a href="2026-4.html">_0.entry</a></li>
+    <li><a href="2026-4-proposal&amp;methodology.html">_1.proposal &amp; methodology</a></li>
+    <li><a href="2026-4-aerial-assessment.html">_2.aerial assessment</a></li>
+    <li>
+      <button class="accordion-toggle" data-target="acc-sections">_3.sections</button>
+      <ul class="accordion-content" id="acc-sections">
+        <li><a href="2026-4-sections1.html">_3.1.hospital section 2007-2023</a></li>
+        <li><a href="2026-4-sections2.html">_3.2.6002.street section 1 2007-2023</a></li>
+        <li><a href="2026-4-sections3.html">_3.3.beytepe pond section 2007-2023</a></li>
+        <li><a href="2026-4-sections4.html">_3.4.arboretum section 2007-2023</a></li>
+        <li><a href="2026-4-sections5.html">_3.5.6002.street section 2</a></li>
+        <li><a href="2026-4-sections6.html">_3.6.6002.street section 3</a></li>
+      </ul>
+    </li>
+    <li>
+      <button class="accordion-toggle" data-target="acc-complementary">_4.complementary information</button>
+      <ul class="accordion-content" id="acc-complementary">
+        <li><a href="2026-4-species-inventory.html">_4.1.species inventory</a></li>
+        <li><a href="2026-4-habitat-strata.html">_4.2.habitat strata</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="wrap">
+  <div class="body">
+    <section class="grid3x3">
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -1 : BİLKENT HOSPITAL</div>
+        <video id="vid-s1" class="video-lightbox-trigger" style="aspect-ratio:2.338;" autoplay loop muted playsinline><source src="../../2026-images/2026-p4/gif/section_1_full_color_invert.mp4" type="video/mp4"></video>
+        <p>The first context is what we call the sterilized. This refers to Bilkent City Hospital and its immediate surroundings. It is a highly controlled, concrete and organized environment.<br><span style="font-size:1.2rem; font-weight:bold; line-height:1.2;">2.024.470 m³</span>soil has been excavated for Hospital Building and roads.</p>
+      </div>
+      <div class="grid-cell video-cell">
+        <div class="izohips-row">
+          <div class="izohips-text">
+            <p>
+              <span style="font-size:0.5rem;">SOIL METABOLISM IS THE CENTER OF THE INVESTIGATION.</span>
+              <span style="font-size:0.88rem; font-weight:bold;">SOIL DOES NOT SIMPLY<br>REMAIN IN PLACE...</span>
+            </p>
+          </div>
+          <div class="izohips-img-col">
+            <video class="video-lightbox-trigger" autoplay loop muted playsinline><source src="../../2026-images/2026-p4/gif/plan view izohips.mp4" type="video/mp4"></video>
+            <div class="triangle-up">
+              <a href="2026-4-aerial-assessment.html" aria-label="Aerial assessment" data-tooltip="Click To See Aerial Assessment">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,0 100,100 0,100" fill="#f5f2eb"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -4 : ARBORETUM</div>
+        <video id="vid-s4" class="video-lightbox-trigger" style="aspect-ratio:2.105;" autoplay loop muted playsinline><source src="../../2026-images/2026-p4/gif/section_4.mp4" type="video/mp4"></video>
+        <p>The third context is the incomplete: The arboretum and the Botanical Park surroundings. There is observed uncontrolled growth, reed formations, spontaneous vegetation, and unexpected encounters between steppe ecologies and transported landscape. This became a particularly critical site for us.</p>
+      </div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -2 : 6002. ST/1</div>
+        <video id="vid-s2" class="video-lightbox-trigger" style="aspect-ratio:2.105;" autoplay loop muted playsinline><source src="../../2026-images/2026-p4/gif/section_2.mp4" type="video/mp4"></video>
+      </div>
+      <div class="grid-cell full-img">
+        <img id="ana-sayfa-img" src="../../2026-images/2026-p4/webp/0.entry/ANA SAYFA  image.webp" alt="Ana Sayfa">
+        <svg class="hotspot-overlay" viewBox="0 0 784 551" preserveAspectRatio="xMidYMid meet">
+          <a href="2026-4-sections1.html" data-highlight="vid-s1" data-section="1" aria-label="Section 3.1"><path class="hotspot" d="M101,292l2,14,151-40-3-9Z"/></a>
+          <a href="2026-4-sections2.html" data-highlight="vid-s2" data-section="2" aria-label="Section 3.2"><path class="hotspot" d="M312,237v7l3,4,92-24-4-9Z"/></a>
+          <a href="2026-4-sections3.html" data-highlight="vid-s3" data-section="3" aria-label="Section 3.3"><path class="hotspot" d="M696,132L579,158l-1,6,5,6,2-3,116-26v-4Z"/></a>
+          <a href="2026-4-sections4.html" data-highlight="vid-s4" data-section="4" aria-label="Section 3.4"><path class="hotspot" d="M452,416l-71,70v11l11,7,70-75v-7Z"/></a>
+          <a href="2026-4-sections5.html" data-highlight="vid-s5" data-section="5" aria-label="Section 3.5"><path class="hotspot" d="M494,283l-58,49v10l10,5,56-56v-3Z"/></a>
+          <a href="2026-4-sections6.html" data-highlight="vid-s6" data-section="6" aria-label="Section 3.6"><path class="hotspot" d="M409,275v7L530,394l9-6,1-10L420,272Z"/></a>
+          <foreignObject x="-83" y="328" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-top">
+              <div class="hero-text">
+                <p>It is excavated.</p>
+                <p>Steril.</p>
+              </div>
+            </div>
+          </foreignObject>
+          <foreignObject x="-49" y="61" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-bottom">
+              <div class="hero-text">
+                <p>It is redistributed.</p>
+              </div>
+            </div>
+          </foreignObject>
+          <foreignObject x="543" y="-51" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-bottom">
+              <div class="hero-text">
+                <p>Refurbished.</p>
+                <p>It interacts with water.</p>
+              </div>
+            </div>
+          </foreignObject>
+          <foreignObject x="123" y="493" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-top">
+              <div class="hero-text">
+                <p>Incomplete.</p>
+                <p>It enables new forms of vegetation.</p>
+              </div>
+            </div>
+          </foreignObject>
+          <foreignObject x="514" y="373" width="200" height="90">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="hero-text-wrap anchor-bottom">
+              <div class="hero-text">
+                <p>It is transported.</p>
+              </div>
+            </div>
+          </foreignObject>
+        </svg>
+        <div id="hotspot-tooltip"></div>
+      </div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -5 : 6002. ST/2</div>
+        <video id="vid-s5" class="video-lightbox-trigger" style="aspect-ratio:2.105;" autoplay loop muted playsinline><source src="../../2026-images/2026-p4/gif/section_5.mp4" type="video/mp4"></video>
+      </div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -3 : BEYTEPE POND</div>
+        <video id="vid-s3" class="video-lightbox-trigger" style="aspect-ratio:2.105;" autoplay loop muted playsinline><source src="../../2026-images/2026-p4/gif/section-3.mp4" type="video/mp4"></video>
+        <p>The second context is the refurbished, which particularly refers to Beytepe Pond and unfinished surrounding areas. Here is a designed landscape. Species are selected, labeled, and intentionally organized. However, within a dispersion from this environment, we observed unexpected growth patterns and discontinuities that appear to emerge alongside displaced soil such as reeds, land snails, and dead nettle.</p>
+      </div>
+      <div class="grid-cell info-cell">
+        <div class="cell-title">SECTION -6 : 6002. ST/6</div>
+        <video id="vid-s6" class="video-lightbox-trigger" style="aspect-ratio:2.106;" autoplay loop muted playsinline><source src="../../2026-images/2026-p4/gif/section_6.mp4" type="video/mp4"></video>
+      </div>
+    </section>
+  </div>
+</div>
+<div class="video-lightbox" id="video-lightbox">
+  <button class="video-lightbox-close" id="video-lightbox-close">×</button>
+  <div class="video-lightbox-content">
+    <div id="video-lightbox-title"></div>
+    <video id="video-lightbox-player" autoplay loop muted playsinline></video>
+    <img id="video-lightbox-image" alt="">
+    <div id="video-lightbox-text"></div>
+  </div>
+</div>
+<script>
+  const infoBtn = document.getElementById('info-toggle');
+  const infoPanel = document.getElementById('info-panel');
+  infoBtn.addEventListener('click', () => {
+    const open = infoPanel.classList.toggle('open');
+    infoBtn.classList.toggle('open', open);
+  });
+
+  const researchBtn = document.getElementById('research-toggle');
+  const researchPanel = document.getElementById('research-panel');
+  researchBtn.addEventListener('click', () => {
+    const open = researchPanel.classList.toggle('open');
+    researchBtn.classList.toggle('open', open);
+  });
+
+  document.querySelectorAll('.accordion-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.target).classList.toggle('open');
+    });
+  });
+
+  const hotspotTooltip = document.getElementById('hotspot-tooltip');
+  document.querySelectorAll('.hotspot-overlay a').forEach((a) => {
+    const target = document.getElementById(a.dataset.highlight);
+    a.addEventListener('mouseenter', () => {
+      if (target) target.classList.add('gif-highlight');
+      hotspotTooltip.textContent = 'Click To See Section ' + a.dataset.section;
+      hotspotTooltip.classList.add('show');
+    });
+    a.addEventListener('mousemove', (e) => {
+      hotspotTooltip.style.left = e.clientX + 'px';
+      hotspotTooltip.style.top = e.clientY + 'px';
+    });
+    a.addEventListener('mouseleave', () => {
+      if (target) target.classList.remove('gif-highlight');
+      hotspotTooltip.classList.remove('show');
+    });
+  });
+
+  const videoLightbox = document.getElementById('video-lightbox');
+  const videoLightboxPlayer = document.getElementById('video-lightbox-player');
+  const videoLightboxImage = document.getElementById('video-lightbox-image');
+  const videoLightboxTitle = document.getElementById('video-lightbox-title');
+  const videoLightboxText = document.getElementById('video-lightbox-text');
+
+  function closeVideoLightbox() {
+    videoLightbox.classList.remove('active');
+    videoLightboxPlayer.pause();
+    videoLightboxPlayer.classList.remove('active');
+    videoLightboxImage.classList.remove('active');
+    videoLightboxTitle.innerHTML = '';
+    videoLightboxText.innerHTML = '';
+  }
+
+  document.querySelectorAll('.video-lightbox-trigger').forEach((v) => {
+    v.addEventListener('click', () => {
+      if (v.tagName === 'IMG') {
+        videoLightboxPlayer.pause();
+        videoLightboxPlayer.classList.remove('active');
+        videoLightboxImage.src = v.src;
+        videoLightboxImage.classList.add('active');
+      } else {
+        videoLightboxImage.classList.remove('active');
+        videoLightboxPlayer.querySelectorAll('source').forEach((s) => s.remove());
+        const source = document.createElement('source');
+        source.src = v.querySelector('source').src;
+        source.type = 'video/mp4';
+        videoLightboxPlayer.appendChild(source);
+        videoLightboxPlayer.load();
+        videoLightboxPlayer.play();
+        videoLightboxPlayer.classList.add('active');
+      }
+
+      videoLightboxTitle.innerHTML = '';
+      videoLightboxText.innerHTML = '';
+      const cell = v.closest('.grid-cell');
+      if (cell) {
+        const title = cell.querySelector('.cell-title');
+        if (title) videoLightboxTitle.appendChild(title.cloneNode(true));
+        cell.querySelectorAll('p').forEach((p) => videoLightboxText.appendChild(p.cloneNode(true)));
+      }
+
+      videoLightbox.classList.add('active');
+    });
+  });
+
+  document.getElementById('video-lightbox-close').addEventListener('click', closeVideoLightbox);
+  videoLightbox.addEventListener('click', (e) => {
+    if (e.target === videoLightbox) closeVideoLightbox();
+  });
+
+  function syncHotspotOverlay() {
+    const anaImg = document.getElementById('ana-sayfa-img');
+    const overlay = document.querySelector('.hotspot-overlay');
+    if (!anaImg || !overlay || !anaImg.naturalWidth) return;
+    const cell = anaImg.closest('.grid-cell.full-img');
+    const cellRect = cell.getBoundingClientRect();
+    const imgRect = anaImg.getBoundingClientRect();
+    const naturalRatio = anaImg.naturalWidth / anaImg.naturalHeight;
+    const boxRatio = imgRect.width / imgRect.height;
+    let contentW, contentH;
+    if (naturalRatio > boxRatio) {
+      contentW = imgRect.width;
+      contentH = imgRect.width / naturalRatio;
+    } else {
+      contentH = imgRect.height;
+      contentW = imgRect.height * naturalRatio;
+    }
+    const offsetX = imgRect.left - cellRect.left + (imgRect.width - contentW) / 2;
+    const offsetY = imgRect.top - cellRect.top + (imgRect.height - contentH) / 2;
+    overlay.style.left = offsetX + 'px';
+    overlay.style.top = offsetY + 'px';
+    overlay.style.right = 'auto';
+    overlay.style.bottom = 'auto';
+    overlay.style.width = contentW + 'px';
+    overlay.style.height = contentH + 'px';
+  }
+
+  const anaSayfaImg = document.getElementById('ana-sayfa-img');
+  if (anaSayfaImg.complete) syncHotspotOverlay();
+  anaSayfaImg.addEventListener('load', syncHotspotOverlay);
+  window.addEventListener('resize', syncHotspotOverlay);
+</script>
+</body>
+</html>

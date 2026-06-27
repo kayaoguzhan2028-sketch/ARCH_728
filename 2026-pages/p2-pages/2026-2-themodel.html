@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>The Model — Hıdırlık Tepe — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black:#0a0a0a; --white:#f5f2eb; --accent:#c9b8a8;
+    --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif;
+    --legend-w:240px; --nav-h:52px;
+  }
+  html, body { background: var(--black); color: var(--white); font-family: var(--font); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: var(--nav-h);
+    border-bottom: 1px solid var(--border); background: var(--black);
+  }
+  .nav-back { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
+  .nav-back:hover { opacity: 1; }
+  .nav-title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.55; pointer-events: none; }
+  .nav-links { display: flex; gap: 1.6rem; align-items: center; }
+  .nav-link { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--white); text-decoration: none; opacity: 0.35; transition: opacity 0.2s; }
+  .nav-link:hover { opacity: 1; }
+
+  /* LEGEND */
+  .legend-panel {
+    position: fixed; top: var(--nav-h); left: 0; bottom: 0; width: var(--legend-w);
+    display: flex; flex-direction: column;
+    z-index: 10;
+  }
+  .legend-heading {
+    flex-shrink: 0;
+    padding: 1.8rem 2rem 0.6rem 2.8rem;
+    font-size: 0.95rem; font-style: italic; line-height: 1.4;
+    color: var(--accent); opacity: 0.85;
+  }
+  .legend {
+    flex: 1; min-height: 0;
+    overflow-y: auto; padding: 0 0 2rem 2.8rem;
+  }
+  .legend::-webkit-scrollbar { width: 3px; }
+  .legend::-webkit-scrollbar-thumb { background: rgba(245,242,235,0.08); }
+
+  .below-section {
+    position: relative;
+    z-index: 20;
+    background: var(--black);
+    margin-top: 100vh;
+    padding: 5rem 4rem 6rem;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .below-section p {
+    font-size: 1.05rem;
+    line-height: 1.95;
+    opacity: 0.72;
+    font-family: var(--font);
+  }
+  .below-section .credit {
+    font-style: italic;
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .legend-title {
+    font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--white); opacity: 0.18; margin-bottom: 1.6rem;
+  }
+
+  /* GROUP */
+  .legend-group { margin-bottom: 0.2rem; }
+
+  .group-header {
+    display: flex; align-items: center; gap: 0.5rem;
+    cursor: pointer; padding: 0.5rem 0 0.25rem;
+    user-select: none;
+  }
+  .group-toggle {
+    font-size: 0.72rem; line-height: 1; width: 10px; flex-shrink: 0;
+    color: var(--white); opacity: 0.3; transition: opacity 0.2s;
+    font-family: monospace; text-align: center;
+  }
+  .group-header:hover .group-toggle { opacity: 0.7; }
+  .group-name {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white); opacity: 0.35;
+  }
+
+  /* ITEMS */
+  .group-items {
+    display: flex; flex-direction: column; gap: 0;
+    padding-left: 0.1rem;
+    overflow: hidden;
+    max-height: 500px;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+    opacity: 1;
+  }
+  .group-items.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
+
+  .layer-btn {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: none; border: none; cursor: pointer;
+    padding: 0.2rem 0 0.2rem 1.2rem; width: 100%; text-align: left;
+    transition: opacity 0.15s;
+  }
+  .layer-btn .swatch {
+    width: 16px; height: 10px; flex-shrink: 0;
+    border: none; transition: opacity 0.2s;
+  }
+  .layer-btn .lbl {
+    font-family: var(--font); font-size: 0.68rem; letter-spacing: 0.08em;
+    color: var(--white); opacity: 0.7; transition: opacity 0.2s; white-space: nowrap;
+  }
+  .layer-btn.off .swatch { opacity: 0.15; }
+  .layer-btn.off .lbl { opacity: 0.2; }
+  .layer-btn:not(.off):hover .lbl { opacity: 1; }
+
+  /* standalone render row */
+  .standalone-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-top: 0.5rem; padding: 0.5rem 0 0.25rem;
+  }
+  .standalone-row .group-toggle { opacity: 0.3; }
+  .standalone-row.off .group-toggle { opacity: 0.15; }
+  .standalone-row .swatch { width: 16px; height: 10px; flex-shrink: 0; margin-left: 1.2rem; }
+  .standalone-row .lbl { font-family: var(--font); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--white); opacity: 0.7; }
+  .standalone-row.off .swatch { opacity: 0.15; }
+  .standalone-row.off .lbl { opacity: 0.2; }
+  .standalone-row { cursor: pointer; user-select: none; }
+
+  /* CANVAS */
+  .canvas {
+    position: fixed;
+    top: var(--nav-h); left: var(--legend-w); right: 0; bottom: 0;
+    overflow: hidden;
+  }
+  .canvas-inner {
+    position: relative; width: 100%; height: 100%;
+  }
+  .canvas-inner img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: contain; display: block;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .canvas-inner img.hidden { opacity: 0; pointer-events: none; }
+
+  /* HOTSPOTS */
+  .hit-layer {
+    position: absolute;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .hit-layer svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .hotspot-path {
+    fill: rgba(245,242,235,0);
+    stroke: rgba(245,242,235,0);
+    stroke-width: 50px;
+    pointer-events: all;
+    cursor: pointer;
+    transition: fill 0.2s ease, stroke 0.2s ease;
+  }
+  .hotspot-path:hover {
+    fill: rgba(245,242,235,0.18);
+    stroke: rgba(245,242,235,0.6);
+  }
+
+  /* HOVER PREVIEW */
+  .hover-preview {
+    position: fixed;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 30;
+    background: var(--black);
+    border: 1px solid rgba(245,242,235,0.25);
+    transition: opacity 0.2s ease;
+  }
+  .hover-preview.visible { opacity: 1; }
+  .hover-preview img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="2026-2.html" class="nav-back">← Hıdırlık Tepe</a>
+  <span class="nav-title">The Model</span>
+  <div class="nav-links">
+    <a href="2026-2-thesection.html" class="nav-link">The Section</a>
+    <a href="2026-2-thetimeline.html" class="nav-link">The Timeline</a>
+  </div>
+</nav>
+
+<div class="legend-panel">
+  <div class="legend-heading">Make your own Hıdırlık Hill!</div>
+  <div class="legend" id="legend">
+    <div class="legend-title">legend</div>
+  </div>
+</div>
+
+<div class="canvas">
+  <div class="canvas-inner" id="canvas"></div>
+</div>
+
+<div class="below-section">
+  <p>This model does not represent Hıdırlık Hill as it is, or as it was. It holds all of its states at once. Built from point cloud data, archival maps, aerial photographs, and spatial reconstructions, it renders the hill as a stratigraphic accumulation. Settlements that were erased, settlements that remain, construction that is still underway, rocky formations carved into and built over, and infrastructure threaded through soil that has been cut and recompacted are all visible. Each layer can be isolated and examined on its own, or read against the others, because it is precisely in the collision between layers that the hill's political history becomes legible. Use the legend to toggle individual strata on and off.</p>
+</div>
+
+<script>
+  const BASE = '2026-images/2026-p2/themodel/';
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  const GROUPS = [
+    {
+      name: 'slums',
+      items: [
+        { file: '03-model-exisitngslum.webp',   label: 'existing slums',          color: '#0033ff' },
+        { file: '04-model-slumlaststage.webp',  label: 'erased slums | last stage', color: '#ff00bb' },
+        { file: '05-model-slum3rdstage.webp',   label: 'erased slums | 3rd stage',  color: '#cc55cc' },
+        { file: '06-model-slum2ndstage.webp',   label: 'erased slums | 2nd stage',  color: '#dd99dd' },
+        { file: '07-model-slum1ststage.webp',   label: 'erased slums | 1st stage',  color: '#eebbee' },
+      ]
+    },
+    {
+      name: 'recreation project',
+      items: [
+        { file: '02-model-toki-foundatıon.webp', label: 'toki foundations (in progress)', color: '#ffee00' },
+        { file: '12-model-monument-tower.webp',  label: 'monument tower (in progress)',   color: '#ccff33' },
+        { file: '01-model-toki.webp',            label: 'toki blocks (future project)',   color: '#aabb55' },
+        { file: '11-model-monument.webp',        label: 'monument base (future project)', color: '#eeff99' },
+      ]
+    },
+    {
+      name: 'historical',
+      items: [
+        { file: '16-model-tomb.webp', label: 'tomb (demolished)', color: '#bb44ff' },
+      ]
+    },
+    {
+      name: 'greenary',
+      items: [
+        { file: '15-model-plannedtree.webp',  label: 'planted for the project', color: '#006633' },
+        { file: '13-model-existingtree.webp', label: 'existing trees',          color: '#44aa33' },
+        { file: '14-model-removedtree.webp',  label: 'erased trees',            color: '#99bb44' },
+      ]
+    },
+    {
+      name: 'infrastructure',
+      items: [
+        { file: '08-model-electrictower.webp', label: 'electric tower', color: '#ff8822' },
+        { file: '09-model-lightpole.webp',     label: 'lighting pole',  color: '#ff8822' },
+        { file: '10-model-funiküler.webp',     label: 'funicular (future project)', color: '#ff8822' },
+      ]
+    },
+    {
+      name: 'topography',
+      items: [
+        { file: '21-model-erasedsoil.webp',         label: 'erased soil',               color: '#1e1e1e' },
+        { file: '17-model-rockyformations.webp',     label: 'rocky formations',          color: '#444444' },
+        { file: '20-model-path.webp',                label: 'path',                      color: '#808080' },
+        { file: '19-model-concrete-retaining.webp',  label: 'concrete retaining walls',  color: '#aaaaaa' },
+        { file: '18-model-stoneretaining.webp',      label: 'stone retaining walls',     color: '#c8b8b0' },
+        { file: '22-model-anagorsel-poıntcloud.webp',label: 'point cloud topography',   color: '#0a0a0a', border: '1px solid rgba(255,255,255,0.25)' },
+        { file: '23-model-meshtopo.webp',             label: 'mesh topography',          color: '#111111', border: '1px solid rgba(255,255,255,0.2)' },
+      ]
+    },
+  ];
+
+  const STANDALONE = { file: '24-model-anagörsel-renderered.webp', label: 'render view', color: '#f5f2eb' };
+
+  const legend = document.getElementById('legend');
+  const canvas = document.getElementById('canvas');
+
+  const imgMap = {};
+
+  function makeImg(file, startHidden = true) {
+    const img = document.createElement('img');
+    if (startHidden) {
+      img.dataset.src = BASE + file;
+      img.classList.add('hidden');
+    } else {
+      img.src = BASE + file;
+    }
+    img.alt = file;
+    imgMap[file] = img;
+    canvas.appendChild(img);
+    return img;
+  }
+
+  // Pre-create all images sorted by filename number descending (24→1)
+  // so DOM order puts 24 at bottom and 01 at top of the visual stack
+  const allItems = GROUPS.flatMap(g => g.items).concat([STANDALONE]);
+  allItems.sort((a, b) => parseInt(b.file) - parseInt(a.file));
+  allItems.forEach(item => makeImg(item.file, item.file !== STANDALONE.file));
+
+  // --- Hover hotspots (transparent overlays) ---
+  const HOTSPOTS = [
+    { svg: 'Dikdörtgen1.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_02.webp', link: '2026-2-thesection.html#dikey-2' },
+    { svg: 'Dikdörtgen2.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_01.webp', link: '2026-2-thesection.html#dikey-1' },
+    { svg: 'Dikdörtgen3.svg', preview: '2026-images/2026-p2/thesection/dikey-kesit_03.webp', link: '2026-2-thesection.html#dikey-3' },
+  ];
+
+  const hitLayer = document.createElement('div');
+  hitLayer.className = 'hit-layer';
+  const hitSvg = document.createElementNS(svgNS, 'svg');
+  hitSvg.setAttribute('viewBox', '0 0 8910 6300');
+  hitLayer.appendChild(hitSvg);
+  canvas.appendChild(hitLayer);
+
+  HOTSPOTS.forEach(cfg => {
+    fetch(BASE + cfg.svg)
+      .then(r => {
+        if (!r.ok) throw new Error(`fetch ${cfg.svg} → ${r.status}`);
+        return r.text();
+      })
+      .then(svgText => {
+        const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const srcPath = parsed.querySelector('path');
+        if (!srcPath) {
+          console.warn('Hotspot: <path> not found in', cfg.svg, parsed);
+          return;
+        }
+
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', srcPath.getAttribute('d'));
+        path.classList.add('hotspot-path');
+        hitSvg.appendChild(path);
+
+        // Hover preview frame, shown at the preview image's native
+        // resolution (no upscaling), centered on the hotspot but
+        // clamped so it always stays fully within the viewport.
+        const bbox = path.getBBox();
+        const cxFrac = (bbox.x + bbox.width  / 2) / 8910;
+        const cyFrac = (bbox.y + bbox.height / 2) / 6300;
+
+        const preview = document.createElement('div');
+        preview.className = 'hover-preview';
+
+        const previewImg = document.createElement('img');
+        previewImg.alt = '';
+        previewImg.src = cfg.preview;
+        preview.appendChild(previewImg);
+        document.body.appendChild(preview);
+
+        function positionPreview() {
+          const rect = hitLayer.getBoundingClientRect();
+          const cx = rect.left + cxFrac * rect.width;
+          const cy = rect.top  + cyFrac * rect.height;
+          const w = previewImg.naturalWidth  * 0.75;
+          const h = previewImg.naturalHeight * 0.75;
+          const margin = 8;
+          let left = cx - w / 2;
+          let top  = cy - h / 2;
+          left = Math.min(Math.max(left, margin), window.innerWidth  - w - margin);
+          top  = Math.min(Math.max(top,  margin), window.innerHeight - h - margin);
+          preview.style.left   = left + 'px';
+          preview.style.top    = top  + 'px';
+          preview.style.width  = w + 'px';
+          preview.style.height = h + 'px';
+        }
+
+        path.addEventListener('mouseenter', () => {
+          positionPreview();
+          preview.classList.add('visible');
+        });
+        path.addEventListener('mouseleave', () => preview.classList.remove('visible'));
+        path.addEventListener('click', () => { window.location.href = cfg.link; });
+
+        console.log('Hotspot loaded:', cfg.svg, '→', cfg.preview);
+      })
+      .catch(err => console.error('Hotspot fetch failed:', cfg.svg, err));
+  });
+
+  // Fit the hit layer to match object-fit:contain letterboxing
+  const refImg = imgMap[STANDALONE.file];
+  function fitHitLayer() {
+    const cw = canvas.clientWidth, ch = canvas.clientHeight;
+    const iw = refImg.naturalWidth  || 8910;
+    const ih = refImg.naturalHeight || 6300;
+    const imageAR = iw / ih, boxAR = cw / ch;
+    let w, h, l, t;
+    if (imageAR > boxAR) { w = cw; h = cw / imageAR; l = 0; t = (ch - h) / 2; }
+    else                 { h = ch; w = ch * imageAR; t = 0; l = (cw - w) / 2; }
+    hitLayer.style.left   = l + 'px';
+    hitLayer.style.top    = t + 'px';
+    hitLayer.style.width  = w + 'px';
+    hitLayer.style.height = h + 'px';
+  }
+  refImg.addEventListener('load', fitHitLayer);
+  if (refImg.complete && refImg.naturalWidth) fitHitLayer();
+  window.addEventListener('resize', fitHitLayer);
+  new ResizeObserver(fitHitLayer).observe(canvas);
+
+  function setLayerVisible(file, visible) {
+    const img = imgMap[file];
+    if (!img) return;
+    if (visible && img.dataset.src) {
+      img.src = img.dataset.src;      // first toggle-on triggers actual load
+      delete img.dataset.src;
+    }
+    img.classList.toggle('hidden', !visible);
+  }
+
+  // Build groups
+  GROUPS.forEach(group => {
+    let expanded = true;
+
+    const groupEl = document.createElement('div');
+    groupEl.className = 'legend-group';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'group-header';
+
+    const toggle = document.createElement('span');
+    toggle.className = 'group-toggle';
+    toggle.textContent = '−';
+
+    const nameEl = document.createElement('span');
+    nameEl.className = 'group-name';
+    nameEl.textContent = group.name;
+
+    header.appendChild(toggle);
+    header.appendChild(nameEl);
+    groupEl.appendChild(header);
+
+    // Items container — starts expanded
+    const itemsEl = document.createElement('div');
+    itemsEl.className = 'group-items';
+    groupEl.appendChild(itemsEl);
+
+    group.items.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'layer-btn off';
+      btn.dataset.file = item.file;
+
+      const swatch = document.createElement('span');
+      swatch.className = 'swatch';
+      swatch.style.background = item.color;
+      if (item.border) swatch.style.border = item.border;
+
+      const lbl = document.createElement('span');
+      lbl.className = 'lbl';
+      lbl.textContent = item.label;
+
+      btn.appendChild(swatch);
+      btn.appendChild(lbl);
+      itemsEl.appendChild(btn);
+
+      btn.addEventListener('click', () => {
+        const isOff = btn.classList.contains('off');
+        btn.classList.toggle('off', !isOff);
+        setLayerVisible(item.file, isOff);
+      });
+    });
+
+    // Group toggle
+    header.addEventListener('click', () => {
+      expanded = !expanded;
+      toggle.textContent = expanded ? '−' : '+';
+      itemsEl.classList.toggle('collapsed', !expanded);
+
+      group.items.forEach(item => {
+        const btn = itemsEl.querySelector(`[data-file="${item.file}"]`);
+        const isOff = btn && btn.classList.contains('off');
+        if (!isOff) setLayerVisible(item.file, expanded);
+      });
+    });
+
+    legend.appendChild(groupEl);
+  });
+
+  // Standalone render view row — visible on load
+  let renderVisible = true;
+
+  const standaloneRow = document.createElement('div');
+  standaloneRow.className = 'standalone-row';
+
+  const stToggle = document.createElement('span');
+  stToggle.className = 'group-toggle';
+  stToggle.textContent = '−';
+
+  const stSwatch = document.createElement('span');
+  stSwatch.className = 'swatch';
+  stSwatch.style.background = STANDALONE.color;
+  stSwatch.style.border = '1px solid rgba(245,242,235,0.25)';
+
+  const stLbl = document.createElement('span');
+  stLbl.className = 'lbl';
+  stLbl.textContent = STANDALONE.label;
+
+  standaloneRow.appendChild(stToggle);
+  standaloneRow.appendChild(stSwatch);
+  standaloneRow.appendChild(stLbl);
+  legend.appendChild(standaloneRow);
+
+  standaloneRow.addEventListener('click', () => {
+    renderVisible = !renderVisible;
+    stToggle.textContent = renderVisible ? '−' : '+';
+    standaloneRow.classList.toggle('off', !renderVisible);
+    setLayerVisible(STANDALONE.file, renderVisible);
+  });
+</script>
+</body>
+</html>

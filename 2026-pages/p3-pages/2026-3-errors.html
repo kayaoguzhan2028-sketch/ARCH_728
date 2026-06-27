@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-3 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --errors-img-w: min(100%, (100vh - 52px - 4rem) * 1.35); }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+
+  .wrap { max-width:1600px; margin:0 auto; padding:52px 2rem 6rem; }
+  .sub-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem 1.6rem; margin:1.5rem 0; }
+  .sub-nav a { font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.6em 1.3em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
+  .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .sub-nav a.active { opacity:1; border-color:rgba(245,242,235,0.45); }
+  nav .sub-nav { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); margin:0; gap:0.4rem 0.8rem; flex-wrap:nowrap; }
+  nav .sub-nav a { padding:0.42em 0.85em; font-size:0.6rem; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
+  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+  .body ul { margin:0 0 1.6rem 1.2rem; }
+  .body li { margin-bottom:0.9rem; }
+  .body li:last-child { margin-bottom:0; }
+  .protocol-lead { font-weight:500; letter-spacing:0.06em; text-transform:uppercase; font-size:0.95rem; margin:2.5rem 0 1rem; opacity:0.9; }
+
+  .section { scroll-margin-top:52px; min-height:calc(100vh - 52px); height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+  .section.section-top { justify-content:flex-start; padding-top:1.5rem; }
+  .section.section-auto { height:auto; overflow:visible; }
+  .section > img { max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0 auto; }
+  .img-text-col { display:flex; flex-direction:column; gap:0.2rem; }
+  .img-text-col > img { flex:0 0 auto; max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0 auto; cursor:pointer; }
+  .img-text-col .caption-block { flex:0 0 auto; max-width:900px; margin:0 auto; font-size:1.1rem; line-height:1.6; opacity:0.78; }
+  img.img-fixed-w { width:var(--errors-img-w); max-width:100%; height:auto; max-height:none; display:block; margin:0 auto; }
+  .img-text-col .caption-block h2 { font-size:1rem; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 0.7rem; }
+  .img-text-col .caption-block p { margin-bottom:0.7rem; }
+  .img-text-col .caption-block p:last-child { margin-bottom:0; }
+  .ground-centered { text-align:center; }
+  .ground-centered ul { list-style-position:inside; padding-left:0; }
+  .page-link-btn { display:inline-block; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.7em 1.6em; opacity:0.55; margin-top:2rem; transition:opacity 0.2s,border-color 0.2s; }
+  .page-link-btn:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .section-center { align-items:center; }
+  .section-center .page-link-btn { margin-top:0; }
+  .scroll-nav { position:fixed; right:2rem; z-index:150; width:44px; height:44px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.5; transition:opacity 0.2s,background 0.2s; }
+  .scroll-nav:hover { opacity:1; background:rgba(245,242,235,0.14); }
+  .scroll-nav-up { top:6.5rem; }
+  .scroll-nav-down { bottom:2.5rem; }
+  @media (max-width:600px) {
+    .scroll-nav { width:38px; height:38px; right:1.2rem; }
+    .scroll-nav-up { top:4.5rem; }
+    .scroll-nav-down { bottom:1.5rem; }
+  }
+
+  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
+  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="../../2026.html" class="nav-back">← 2026</a>
+  <div class="sub-nav">
+    <a href="2026-3-projectinfo.html">Info</a>
+    <a href="2026-3.html">Entrance</a>
+    <a href="2026-3-errors.html" class="active">Errors</a>
+    <a href="2026-3-soilscenesifters.html">Sifters</a>
+    <a href="2026-3-siftingwhatdetectingerrors.html">Sifting What?</a>
+    <a href="2026-3-aftersift.html">After Sift</a>
+    <a href="2026-3-sceneexplanations.html">Scene Explanations</a>
+  </div>
+</nav>
+<button class="scroll-nav scroll-nav-up" id="scroll-up" aria-label="Previous section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<button class="scroll-nav scroll-nav-down" id="scroll-down" aria-label="Next section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div class="wrap">
+  <div class="body">
+
+    <div class="section section-top">
+      <img id="errors-1" class="img-fixed-w" src="../../2026-images/2026-p3/2 errors on ankara soil page-2/errors-2.1.webp" alt="Errors on Ankara Soil 2.1" style="cursor:pointer;">
+    </div>
+
+    <div class="section section-auto">
+      <div class="img-text-col">
+        <img id="errors-2" class="img-fixed-w" src="../../2026-images/2026-p3/2 errors on ankara soil page-2/errors-2.2.webp" alt="Errors on Ankara Soil 2.2">
+        <div class="caption-block">
+          <p>When the city ignores this matrix, the earth retaliates. The act of sifting exposes the severe consequences of design erasure, reframing structural failures not as engineering defects, but as physical messages of the Earth's resistance. Our research focuses on systemic management failures across specific geotechnical realities:</p>
+          <p><strong>The "Ankara Clay" Hazard:</strong> In southwestern districts, including our own METU Campus, developers build lightweight structures with shallow foundations (0.2–0.5m) directly on expansive clay with a 2-meter active zone. This negligence causes severe 45-degree cracks, as the soil's internal swelling pressure easily exceeds the weight of the buildings above it.</p>
+          <p><strong>The Erosion Crisis:</strong> Utilizing the ICONA model, we identified nearly 124,300 hectares at high erosion risk, resulting in an annual loss of approximately 625,229 tons of soil.</p>
+          <p><strong>Hydrological Disruption:</strong> Flat, concrete topographies block natural drainage, creating self-destructive moisture traps that constantly activate the clay.</p>
+          <p>To resolve this, we mandate a total transition from imposing a grid to cultivating a substrate. Our Strategic Ground Protocol enforces deep perimeter drainage, suspended structural slabs, and an end to unsustainable "demolition-and-rebuild" cycles.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <img src="../../2026-images/2026-p3/2 errors on ankara soil page-2/error transition section-2.3.1.webp" alt="Error transition section">
+    </div>
+
+    <div class="section section-auto">
+      <div class="img-text-col">
+        <div class="caption-block">
+          <p>How do we practically apply this diagnostic framework? We establish a mandatory "soil literacy requirement". For existing buildings on error zones, we propose retrofitting deep subsurface drainage and underpinning foundations rather than tearing them down. For new constructions, a 2-meter soil coring test must be completed before any permit is issued. Building on Ankara Clay explicitly requires expansion joints every 10 to 12 meters, while construction on high-erosion slopes or rich agricultural soils is strictly prohibited.</p>
+
+          <div class="ground-centered">
+            <h2>Matters of Concern: Ankara's Geological Crisis</h2>
+            <ul>
+              <li><strong>The Erosion Crisis:</strong> Based on ICONA analysis, approximately 124,300 hectares within Ankara's metropolitan territory face high to very high erosion risks. The city suffers an annual soil loss of 625,229 tons (averaging 5.03 tons per hectare each year), heavily impacting expanding districts like Southern Yenimahalle, Keçiören, Western Mamak, Northern Çankaya, Etimesgut, and Eastern Sincan.</li>
+              <li><strong>Structural Negligence:</strong> In booming areas like Çukurambar and Karakuşunlar, lightweight structures are built on shallow foundations only 0.2 to 0.5 meters deep. Because the volatile "Ankara Clay" remains highly active down to depths of 2 meters, these foundations experience massive swelling pressures. This negligence results in severe 45-degree structural cracks, warped door frames, and buckling floor slabs.</li>
+              <li><strong>Hydrological Disruption:</strong> The flat, concrete urban fabric blocks natural drainage. Rainwater gets trapped directly beneath building foundations, constantly activating the clay's swelling pressure. The city has essentially transformed into a giant, self-destructive moisture trap.</li>
+            </ul>
+
+            <p class="protocol-lead">The Strategic Ground Protocol</p>
+            <p>To address these crises, the project establishes a straightforward, non-negotiable framework for future development:</p>
+            <ul>
+              <li><strong>For Existing Urban Fabric:</strong> Stop the unsustainable "demolition-and-rebuild" cycles. Instead, install perimeter drainage (1–1.5m deep), regrade terrain away from structures, and deepen shallow foundations below 2 meters. Areas facing extreme, unfixable structural deformation must undergo a process of planned abandonment and be returned to nature as ecological regeneration zones.</li>
+              <li><strong>For New Construction:</strong> Mandatory 2-meter soil coring and clay suitability tests are strictly required before any planning approval. Building permits must be automatically denied in high-erosion zones. In active clay areas, foundations must exceed 2 meters, use suspended structural slabs, and incorporate expansion joints every 10–12 meters to allow the architecture to move safely with the earth.</li>
+            </ul>
+          </div>
+          <div style="text-align:right; margin-top:2rem;">
+            <a href="2026-3-soilscenesifters.html" class="page-link-btn" style="margin-top:0;">Continue to Soil Scene Sifters →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <dl class="meta">
+    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+  </dl>
+</div>
+<script>
+  const sections = document.querySelectorAll('.body .section');
+  const sectionOffset = 52;
+
+  function currentSectionIndex() {
+    let idx = 0;
+    sections.forEach((sec, i) => {
+      if (sec.getBoundingClientRect().top <= sectionOffset + 1) idx = i;
+    });
+    return idx;
+  }
+
+  function scrollToSection(index) {
+    const clamped = Math.max(0, Math.min(sections.length - 1, index));
+    if (clamped === 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      sections[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
+  document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
+
+  document.getElementById('errors-1').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
+  document.getElementById('errors-2').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); scrollToSection(currentSectionIndex() - 1); }
+  });
+</script>
+</body>
+</html>

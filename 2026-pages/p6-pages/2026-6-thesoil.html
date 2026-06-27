@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-6 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-links { display:flex; align-items:center; gap:1.8rem; }
+  .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
+  .nav-links a:hover { opacity:1; }
+
+  .wrap { padding-top:52px; }
+  .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem; padding:2rem; text-align:center; }
+  .section img { max-height:55vh; max-width:90%; object-fit:contain; display:block; opacity:0.9; }
+  .section p { max-width:680px; font-size:1.05rem; line-height:1.9; opacity:0.8; }
+  p.interaction-hint { font-size:0.78rem; letter-spacing:0.04em; font-style:italic; opacity:0.5; margin-top:-2rem; }
+
+  .interactive-image { position:relative; width:min(90%, calc(55vh * 546 / 653)); aspect-ratio:546/653; }
+  .section .interactive-image img { position:absolute; inset:0; width:100%; height:100%; max-width:none; max-height:none; object-fit:contain; display:block; opacity:0.9; }
+  .hotspot-overlay { position:absolute; inset:0; }
+  .hotspot-overlay svg { width:100%; height:100%; display:block; }
+  .hotspot-overlay path { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease, filter 0.25s ease; }
+  .hotspot-overlay path:hover, .hotspot-overlay path.active { opacity:0.5; filter:drop-shadow(0 0 8px rgba(245,220,140,0.9)) drop-shadow(0 0 18px rgba(245,200,80,0.7)); }
+
+  .scroll-nav { position:fixed; right:2rem; z-index:150; width:44px; height:44px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.5; transition:opacity 0.2s,background 0.2s; }
+  .scroll-nav:hover { opacity:1; background:rgba(245,242,235,0.14); }
+  .scroll-nav-up { top:6.5rem; }
+  .scroll-nav-down { bottom:2.5rem; }
+  @media (max-width:600px) {
+    .scroll-nav { width:38px; height:38px; right:1.2rem; }
+    .scroll-nav-up { top:4.5rem; }
+    .scroll-nav-down { bottom:1.5rem; }
+  }
+
+  .modal-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.96); display:none; align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal-close { position:absolute; top:1.5rem; right:1.5rem; width:42px; height:42px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); font-size:1.5rem; line-height:1; font-family:var(--font); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.6; transition:opacity 0.2s,background 0.2s; }
+  .modal-close:hover { opacity:1; background:rgba(245,242,235,0.14); }
+  .modal-content { display:flex; align-items:center; gap:3rem; max-width:1100px; width:90%; height:80vh; }
+  .modal-tabs { display:flex; flex-direction:column; gap:1rem; flex-shrink:0; }
+  .modal-tab { background:none; border:1px solid var(--border); color:var(--white); font-family:var(--font); font-size:1rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.7em 1.4em; cursor:pointer; opacity:0.55; text-align:left; transition:opacity 0.2s,border-color 0.2s,color 0.2s; }
+  .modal-tab:hover { opacity:0.85; }
+  .modal-tab.active { opacity:1; border-color:var(--accent); color:var(--accent); }
+  .modal-image { flex:1; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:1.2rem; overflow-y:auto; padding:0.5rem; }
+  .modal-image img { max-width:100%; max-height:48vh; object-fit:contain; display:block; flex-shrink:0; }
+  #modal-legend-img { max-width:80%; }
+  .modal-caption { max-width:560px; font-size:0.9rem; line-height:1.8; opacity:0.78; text-align:center; }
+  .modal-caption.hidden, .modal-image img.hidden { display:none; }
+  @media (max-width:720px) {
+    .modal-content { flex-direction:column; gap:1.5rem; }
+    .modal-tabs { flex-direction:row; flex-wrap:wrap; justify-content:center; }
+  }
+
+  .continue-btn { font-size:0.85rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid var(--border); padding:0.9em 2.2em; opacity:0.7; transition:opacity 0.2s,border-color 0.2s; }
+  .continue-btn:hover { opacity:1; border-color:var(--accent); }
+</style>
+</head>
+<body>
+<nav>
+  <a href="../../2026.html" class="nav-back">← 2026</a>
+  <span class="nav-title">Imrahor Valley</span>
+  <div class="nav-links">
+    <a href="2026-6.html">← Main Page</a>
+    <a href="2026-6-thefactories.html">The Factory →</a>
+  </div>
+</nav>
+<button class="scroll-nav scroll-nav-up" id="scroll-up" aria-label="Previous section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<button class="scroll-nav scroll-nav-down" id="scroll-down" aria-label="Next section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div class="modal-overlay" id="soil-modal">
+  <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+  <div class="modal-content">
+    <div class="modal-tabs">
+      <button class="modal-tab" data-img="2026-images/2026-p6/1-The Soil/2026-6-the soil-4.webp">2026</button>
+      <button class="modal-tab" data-img="2026-images/2026-p6/1-The Soil/2026-6-the soil-5.webp">1990-2000s</button>
+      <button class="modal-tab" data-img="2026-images/2026-p6/1-The Soil/2026-6-the soil-6.webp">1960-1970s</button>
+      <button class="modal-tab" data-img="2026-images/2026-p6/1-The Soil/2026-6-the soil-7.webp">1930s</button>
+    </div>
+    <div class="modal-image">
+      <img id="modal-img" src="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-3.webp" alt="">
+      <p id="modal-caption" class="modal-caption">Once stripped of its rich, alluvial top layer by brick factories, the soil is now being forced into an ongoing, toxic transformation. What was once a vital ecological resource has become a chaotic repository for foreign components: fragments of brick, concrete, ceramic, steel, metal, plastic, glass, wood and animal bone. This continuous influx of synthetic and organic debris deeply disrupts the soil's natural structure. Stripped of its metabolic richness, the soil is trapped in a loop of constant degradation.</p>
+      <img id="modal-legend-img" class="hidden" src="" alt="">
+      <p id="modal-legend-caption" class="modal-caption hidden"></p>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+
+  <div class="section">
+    <img src="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-1.webp" alt="The Soil — 1">
+    <p>Once characterized by its rich clay, silt, and natural organic matter, the soil is currently trapped in an ongoing, toxic transformation. What began as a historical extraction of its fertile layers has mutated into a continuous cycle of contamination, deeply fracturing the soil's natural stratification and transforming a living ecosystem into a synthetic residue.</p>
+  </div>
+
+  <div class="section">
+    <div class="interactive-image">
+      <img src="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-2-1-01.webp" alt="The Soil — 2">
+      <div class="hotspot-overlay" data-svg="2026-images/2026-p6/1-The Soil/THE SOIL SVG/2026-6-the-soil-2-zones-all.svg"></div>
+    </div>
+    <p class="interaction-hint">Click on the icons to see the tranformation of soil.</p>
+    <p>These interventions change the soil's components. A mix of brick fragments, steel, and other industrial wastes overwhelms the natural minerals, making nutrients unreachable for plants. At the same time, this waste crushes the soil and cuts off oxygen, causing microorganisms to suffocate and rot. Without air, the water trapped within these layers stops supporting life and absorbs heavy metals leaking from plastics and industrial waste. Therefore, degradation of the soil is a continuous process. Driven by these intersecting chemical reactions, the soil is actively losing its vital biochemical cycling capabilities and richness, progressively transforming from a dynamic, living ecosystem into a residue.</p>
+  </div>
+
+  <div class="section">
+    <a href="2026-6-thefactories.html" class="continue-btn">Continue to the Factories</a>
+  </div>
+
+</div>
+<script>
+  const sections = document.querySelectorAll('.wrap .section');
+  const sectionOffset = 52;
+
+  function currentSectionIndex() {
+    let idx = 0;
+    sections.forEach((sec, i) => {
+      if (sec.getBoundingClientRect().top <= sectionOffset + 1) idx = i;
+    });
+    return idx;
+  }
+
+  function scrollToSection(index) {
+    const clamped = Math.max(0, Math.min(sections.length - 1, index));
+    if (clamped === 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      sections[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
+  document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); scrollToSection(currentSectionIndex() - 1); }
+  });
+
+  const SOIL_BASE = '2026-images/2026-p6/1-The Soil/';
+  const SOIL3_IMG = SOIL_BASE + '2026-6-the soil-3.webp';
+  const SOIL3_CAPTION = "Once stripped of its rich, alluvial top layer by brick factories, the soil is now being forced into an ongoing, toxic transformation. What was once a vital ecological resource has become a chaotic repository for foreign components: fragments of brick, concrete, ceramic, steel, metal, plastic, glass, wood and animal bone. This continuous influx of synthetic and organic debris deeply disrupts the soil's natural structure. Stripped of its metabolic richness, the soil is trapped in a loop of constant degradation.";
+
+  const LEGEND_IMG = SOIL_BASE + '2026-6-the soil-legend.webp';
+  const LEGEND_CAPTION = "The legend displays symbols representing the shifting ratio of the soil's mineral and metal balance. This geometric flow illustrates the increasing contamination of the soil, visibly tracking its transformation from a natural circle into a rigid hexagon.";
+
+  const modalContent = {
+    [SOIL_BASE + '2026-6-the soil-4.webp']: {
+      caption: "In the present state, the soil is highly alkaline and heterogeneous, having completely lost its rich, alluvial top layer. Artificial components such as brick, concrete, ceramic, steel, metal, plastic, and glass now dominate the matrix, pushing the soil's metal accumulation and mineral disruption to its absolute maximum. Despite the increase in livestock farming waste, the vegetation and microorganism populations have declined. The current transformation solidifies the soil as a contaminated industrial residue.",
+      legendImg: LEGEND_IMG,
+      legendCaption: LEGEND_CAPTION,
+    },
+    [SOIL_BASE + '2026-6-the soil-6.webp']: {
+      caption: "In the 1960s and 1970s, the highly rich alluvial top layer of the soil began to decrease. Although the soil's biodiversity remained high, it sustained its first major damage from expanding brick factories, introducing an initial accumulation of metals and foreign minerals into the soil itself. During this period, the once homogeneous formation of soil began to fracture, and the soil started to be primarily viewed as a raw resource for industrial exploitation.",
+      legendImg: LEGEND_IMG,
+      legendCaption: LEGEND_CAPTION,
+    },
+    [SOIL_BASE + '2026-6-the soil-5.webp']: {
+      caption: "During the 1990s and 2000s, the soil was steadily depleted of its alluvial top layer while beginning to absorb new waste from livestock farms, also impacting its underground organisms. As artificial components like brick, concrete, metal, and plastic multiplied, the concentration of synthetic metals and mineral imbalance accelerated significantly. The soil reached a critical turning point where it began to be perceived more as a toxic residue than a living resource.",
+      legendImg: LEGEND_IMG,
+      legendCaption: LEGEND_CAPTION,
+    },
+    [SOIL_BASE + '2026-6-the soil-7.webp']: {
+      caption: "In the 1930s, the soil was mostly homogeneous and exceptionally rich in its alluvial top layer, maintaining a natural mineral balance with metal contamination remaining at a minimum. The vegetation and microorganism populations were at their peak, directly sustaining local farming and livestock. The soil remains the undisturbed primary source of life.",
+      legendImg: LEGEND_IMG,
+      legendCaption: LEGEND_CAPTION,
+    },
+  };
+
+  function showModalImage(src) {
+    modalImg.src = src;
+    const data = modalContent[src];
+    const caption = data ? data.caption : (src === SOIL3_IMG ? SOIL3_CAPTION : '');
+
+    if (caption) {
+      modalCaption.textContent = caption;
+      modalCaption.classList.remove('hidden');
+    } else {
+      modalCaption.classList.add('hidden');
+    }
+
+    if (data && data.legendImg) {
+      modalLegendImg.src = data.legendImg;
+      modalLegendImg.classList.remove('hidden');
+      modalLegendCaption.textContent = data.legendCaption;
+      modalLegendCaption.classList.remove('hidden');
+    } else {
+      modalLegendImg.classList.add('hidden');
+      modalLegendCaption.classList.add('hidden');
+    }
+  }
+
+  document.querySelectorAll('.hotspot-overlay').forEach((el) => {
+    fetch(el.dataset.svg)
+      .then((res) => res.text())
+      .then((svg) => {
+        el.innerHTML = svg;
+        el.querySelectorAll('path').forEach((path, i) => {
+          path.removeAttribute('class');
+          path.dataset.zone = i + 1;
+          path.addEventListener('click', () => {
+            path.classList.toggle('active');
+            modalTabs.forEach((t) => t.classList.remove('active'));
+            showModalImage(SOIL3_IMG);
+            soilModal.classList.add('open');
+          });
+        });
+      });
+  });
+
+  const soilModal = document.getElementById('soil-modal');
+  const modalImg = document.getElementById('modal-img');
+  const modalCaption = document.getElementById('modal-caption');
+  const modalLegendImg = document.getElementById('modal-legend-img');
+  const modalLegendCaption = document.getElementById('modal-legend-caption');
+  const modalTabs = document.querySelectorAll('.modal-tab');
+
+  document.getElementById('modal-close').addEventListener('click', () => {
+    soilModal.classList.remove('open');
+  });
+
+  modalTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      modalTabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+      showModalImage(tab.dataset.img);
+    });
+  });
+</script>
+</body>
+</html>

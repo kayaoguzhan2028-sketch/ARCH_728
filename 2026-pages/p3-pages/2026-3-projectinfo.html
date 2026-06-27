@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-3 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .key-icon { width:50px; height:50px; display:block; margin-right:-2.5rem; }
+  .key-icon img { width:100%; height:100%; object-fit:contain; display:block; opacity:0.85; transition:opacity 0.2s; transform:scaleX(-1); }
+  .key-icon:hover img { opacity:1; }
+
+  .wrap { max-width:620px; margin:0 auto; padding:calc(52px + 3rem) 2rem 6rem; }
+  .sub-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem 1.6rem; margin:1.5rem 0 2rem; }
+  .sub-nav a { font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.6em 1.3em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
+  .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .sub-nav a.active { opacity:1; border-color:rgba(245,242,235,0.45); }
+  nav .sub-nav { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); margin:0; gap:0.4rem 0.8rem; flex-wrap:nowrap; }
+  nav .sub-nav a { padding:0.42em 0.85em; font-size:0.6rem; }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3rem; line-height:1.6; }
+  .intro-images { display:flex; gap:1.5rem; margin-bottom:3.5rem; }
+  .intro-images img { flex:1; width:50%; display:block; margin:0; opacity:0.9; }
+  .info-meta { display:flex; flex-wrap:wrap; gap:2.5rem; margin-bottom:3.5rem; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body h3 { font-size:1.05rem; font-weight:400; font-style:italic; margin:1.8rem 0 0.8rem; opacity:0.95; }
+  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
+  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+  .body .reference { font-size:0.74rem; line-height:1.7; opacity:0.45; margin-bottom:0.5rem; text-align:left; }
+  .body .reference:last-child { margin-bottom:0; }
+  .bottom-link { margin-top:4rem; text-align:right; }
+  .page-link-btn { display:inline-block; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.7em 1.6em; opacity:0.55; transition:opacity 0.2s,border-color 0.2s; }
+  .page-link-btn:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
+  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="../../2026.html" class="nav-back">← 2026</a>
+  <div class="sub-nav">
+    <a href="2026-3-projectinfo.html" class="active">Info</a>
+    <a href="2026-3.html">Entrance</a>
+    <a href="2026-3-errors.html">Errors</a>
+    <a href="2026-3-soilscenesifters.html">Sifters</a>
+    <a href="2026-3-siftingwhatdetectingerrors.html">Sifting What?</a>
+    <a href="2026-3-aftersift.html">After Sift</a>
+    <a href="2026-3-sceneexplanations.html">Scene Explanations</a>
+  </div>
+  <a href="2026-3.html" class="key-icon">
+    <img src="../../2026-images/2026-p3/0-project brief page/sifting the soil key image-1.0.webp" alt="Sifting the Soil Key">
+  </a>
+</nav>
+<div class="wrap">
+  <div class="intro-images">
+    <img src="../../2026-images/2026-p3/0-project brief page/info-red matrix-0.2.webp" alt="Info red matrix">
+    <img src="../../2026-images/2026-p3/0-project brief page/info-green matrix-0.1.webp" alt="Info green matrix">
+  </div>
+
+  <h1>SIFTING ANKARA SOIL</h1>
+  <p class="subtitle">A Multi-Sensory Soil Inventory</p>
+
+  <dl class="info-meta">
+    <div class="meta-item"><dt>Project Team</dt><dd>Sude Songur, Daria Świech, Marta Winnicka</dd></div>
+    <div class="meta-item"><dt>Location</dt><dd>Ankara, Türkiye</dd></div>
+  </dl>
+
+  <div class="body">
+    <h2>Abstract</h2>
+    <p>"Sifting Ankara Soil" is a multi-sensory soil inventory that directly challenges the detached paradigm of modern, top-down urban planning. Traditionally, urbanism operates under an absolute illusion of mastery, treating the living ground as a flat, passive, and inert surface upon which rigid concrete forms are forcefully imposed. This project shifts our perspective away from a distant, abstracted view of the planet toward an entangled, deeply interconnected worldview (Gaia), recognizing the Earth as an active agent that continuously negotiates with and resists human intervention. By analyzing Ankara’s deep geological layers, active clay behaviors, and systemic environmental failures, the project transforms the geological map from a list of technical engineering constraints into a living design compass.</p>
+
+    <h2>I. Conceptual Premise: The Metaphor of Sifting</h2>
+    <p>"Sifting Ankara Soil" initiates a critical architectural discourse through the metaphor of "sifting" the earth. The project systematically dismantles the geographic abstraction of Ankara, analyzing its diverse soil ground types not as passive topography, but as distinct, active "territories". By overlaying a conceptual grid across the city, we "sift" the urban fabric to render these hidden geological realities visible. This process dictates how each ground must be cared for, planned, and built upon according to its unique material agency.</p>
+    <p>Fundamentally, the project shifts the architectural perspective from the "Blue Marble"—which views the Earth as an objective, peaceful, and stand-alone resource—to "Gaia". In this framework, the Earth is recognized as an active, composite figure where humans and non-humans are deeply entangled, serving as an active agent in our common geostory.</p>
+
+    <h2>II. Reading the Earth’s Resistance: The Geotechnical Reality</h2>
+    <p>The act of sifting exposes the severe consequences of modern urbanism's "design erasure," which traditionally abstracts the materialities of urban networks and ignores environmental externalities. We approach structural failures in Ankara not as engineering defects, but as physical messages—moments where the Earth speaks back and resists bureaucratic city planning.</p>
+    <p>Our ground-truthing relies on precise environmental and geotechnical data:</p>
+    <p><strong>The "Ankara Clay" Hazard:</strong> Expansive, smectite-rich clay in southwestern districts (e.g., Çukurambar, METU Campus) possesses a highly volatile "shallow active zone" up to 2 meters deep. Because developers rely on shallow foundations, the soil retaliates against lightweight structures, causing massive shifting pressures, cracked walls, and warped frames.</p>
+    <p><strong>Severe Erosion and Instability:</strong> Utilizing the ICONA model, the project identifies nearly 124,300 hectares at high to very high erosion risk. Fragile tuffs and sandstones in Yenimahalle, Keçiören, and Sincan, combined with inappropriate land use, result in the loss of approximately 625,229 tons of soil annually, triggering landslides and structural shifting.</p>
+
+    <h2>Matters of Concern: Ankara's Geological Crisis</h2>
+    <p>Our multi-sensory inventory reveals a city expanding directly against the physical capacities of its living substrate:</p>
+    <p><strong>The Erosion Crisis:</strong> Based on ICONA analysis, approximately 124,300 hectares within Ankara's metropolitan territory face high to very high erosion risks. The city suffers an annual soil loss of 625,229 tons (averaging 5.03 tons per hectare each year), heavily impacting expanding districts like Southern Yenimahalle, Keçiören, Western Mamak, Northern Çankaya, Etimesgut, and Eastern Sincan.</p>
+    <p><strong>Structural Negligence:</strong> In booming areas like Çukurambar and Karakuşunlar, lightweight structures are built on shallow foundations only 0.2 to 0.5 meters deep. Because the volatile "Ankara Clay" remains highly active down to depths of 2 meters, these foundations experience massive swelling pressures. This negligence results in severe 45-degree structural cracks, warped door frames, and buckling floor slabs.</p>
+    <p><strong>Hydrological Disruption:</strong> The flat, concrete urban fabric blocks natural drainage. Rainwater gets trapped directly beneath building foundations, constantly activating the clay's swelling pressure. The city has essentially transformed into a giant, self-destructive moisture trap.</p>
+
+    <h2>The Strategic Ground Protocol</h2>
+    <p>To address these crises, the project establishes a straightforward, non-negotiable framework for future development:</p>
+    <p><strong>For Existing Urban Fabric:</strong> Stop the unsustainable "demolition-and-rebuild" cycles. Instead, install perimeter drainage (1–1.5m deep), regrade terrain away from structures, and deepen shallow foundations below 2 meters. Areas facing extreme, unfixable structural deformation must undergo a process of planned abandonment and be returned to nature as ecological regeneration zones.</p>
+    <p><strong>For New Construction:</strong> Mandatory 2-meter soil coring and clay suitability tests are strictly required before any planning approval. Building permits must be automatically denied in high-erosion zones. In active clay areas, foundations must exceed 2 meters, use suspended structural slabs, and incorporate expansion joints every 10–12 meters to allow the architecture to move safely with the earth.</p>
+
+    <h2>III. Sifted Soil Grounds: The Matrix of Potential and Error</h2>
+    <p>Through the sifting process, we categorize the urban substrate into specific geological territories, determining what gets sifted and what remains unsifted based on structural and ecological viability.</p>
+    <p><strong>Undifferentiated Volcanics &amp; Pelagic Limestone:</strong> Act as reliable, monolithic bedrocks offering exceptional foundation strength.</p>
+    <p><strong>Clastics, Carbonates &amp; Quaternary Soils:</strong> Present high fertility but carry significant hazards like slip planes, landslides, and low bearing capacity, requiring deep pile foundations.</p>
+    <p><strong>Basic/Ultrabasic Rocks &amp; Schist Formations:</strong> Offer premium construction material but introduce errors such as "serpentine syndrome" (toxicity) and unpredictable bearing capacity.</p>
+
+    <h2>IV. The Scaleless Process: Intervening in Abandoned Scenes</h2>
+    <p>Moving from the macro-urban scale to a scaleless, granular perspective, the project zooms into specific "scenes"—neglected, atrophied, or waste-filled terrains within and around the city. To intervene, we deploy dynamic "sifters"—speculative architectural agents whose density and flexibility transform according to the landscape they inhabit.</p>
+    <p>This intervention is rooted in Bruno Latour’s concept of Living with Frankenstein. Rather than erasing our industrial and technological creations (landfills, mine pits, oil spills), we accept them as legitimate elements of urban design worthy of attention and respect. The sifter evaluates these scenes through a critical matrix of dualities to determine the required care:</p>
+    <p><em>Care or Not-Care? In Attention or Abandoned? Internal or External? Love or Hate? Worthy or Un-Worthy? Opportunity or Threat? Wanted or Unwanted? Potential or Error? Not-Sifted or Sifted?</em></p>
+    <p>These diagnostic questions map across multi-dimensional matrices, evaluating layers from "waste contamination" to "environment &amp; nature," and from "trash" and "residues" to "humans &amp; non-humans".</p>
+
+    <h2>V. Speculative Futures: New Mythologies of the Earth</h2>
+    <p>Ecological crises are often reduced to objective "matters of fact" that propose green technocapitalism as the sole remedy. "Sifting Ankara Soil" reclaims these crises as "matters of concern," synthesizing scientific data with sensible experience.</p>
+    <p>Inspired by Design Earth’s Trash Peaks—which reimagines urban waste flows through projects like the Plastisphere, Janus Incinerator, and Leachate Cenotaph—our final outputs are "After-Sift" collages and axonometric projections. These architectural drawings act as primary devices to make absent things visible, rendering infinite dimensions and planetary scales. By transforming marginalized externalities into a new mythology of the Earth, the project provides sensible stories and 'what if' scenarios that envision new paradigms for living on a damaged, yet fiercely communicative, planet.</p>
+
+    <h2>VI. After Sift Scenes</h2>
+    <h3>The Monument Scene</h3>
+    <p>In this specific scene, the transition from the analytical "sifter" phase to the speculative "after-sift" condition vividly demonstrates the application of our diagnostic framework. Initially, the gridded hillside reveals a substrate overwhelmed by uncared-for externalities: scattered refuse, toxic leaks, and construction debris, all crowned by an abandoned concrete monument that symbolizes the failures of geographic abstraction. Through the sifting process, these detected "errors" are reclaimed as matters of concern. Drawing directly from Design Earth’s Trash Peaks, the passive concrete structure at the summit is replaced by an active, speculative architectural apparatus—a new monument dedicated to collecting, processing, and metabolizing the landscape’s historical waste. Purged of its unmanaged toxicities, the slope is radically remediated into a hybridized ecosystem where the technosphere and the biosphere deeply entangle. In the spirit of Latour's "Living with Frankenstein," machines are not expelled but are integrated to actively care for the environment; autonomous agricultural drones nurture the terrain alongside thriving, non-human inhabitants. Ultimately, this after-sift scene transcends the dichotomy of nature versus machine, evolving into a resilient agricultural landscape that allows the inherent metabolism of the soil to function, breathe, and flourish within a newly constructed ecology of care.</p>
+
+    <h3>The Sifterman Scene</h3>
+    <p>Shifting from the macro-territorial to the intimate human scale, this scene reconfigures the sifting apparatus into a localized, less rigid analytical grid. At this tactile resolution, the initial sifter acts as a forensic diagnostic, detecting the fragmented detritus of industrial modernity—scattered plastics, synthetic residues, and discarded machine parts—and classifying them as immediate anthropogenic "errors" disrupting the substrate. In the speculative "after-sift" condition, the remediation of these localized externalities catalyzes the emergence of a new architectural subjectivity: the "Sifterman" persona. Moving decisively beyond the passive, detached observation of the modernist flâneur—who merely navigated the abstracted, paved surfaces of the city as a spectator—the Sifterman embodies an active, deeply entangled stewardship. By stepping barefoot onto the remediated, nutrient-rich earth, equipped simultaneously with the instruments of cultivation and the tools of empirical measurement, this persona learns to live with and care for the ground. This human-scale intervention transforms the act of sifting from a purely analytical framework into a lived practice of terrestrial care, allowing the human agent to actively participate in, and benefit from, the recovered metabolism of the soil.</p>
+
+    <h3>The Dump Scene</h3>
+    <p>Confronting an alienated, hostile terrain initially devoid of human presence, the diagnostic sifting apparatus deploys a highly complex grid to identify monumental industrial detritus—such as impenetrable tangles of wire, machine fragments, and concrete rubble—as profound spatial "errors." The speculative "after-sift" condition radically reconfigures this wasteland by metabolizing its accumulated neglect into a new ecological synthesis. The dense, unmovable bundles of debris are conceptually transmuted into provocative vegetative formations, while the distant, oppressive mountains of refuse are boldly reimagined as speculative forests. To functionally anchor this hybridized ecosystem, a "Trash Peak" (drawing from Design Earth’s spatial lexicon) is surgically inserted onto the barren slope; it operates as an active architectural agent that manages the technosphere and orchestrates continuous terrestrial care. Simultaneously, the integration of a "Georama of Trash" in the deep background projects this localized remediation onto the broader urban scale, illustrating the city-wide potential of this metabolic infrastructure. In this fully realized scene, the rigid dichotomies between the natural and the artificial dissolve entirely. Robotic appendages, human stewards, and resilient flora dynamically coexist and adapt, epitomizing the ethos of "Living with Frankenstein" within a meticulously curated, multi-scalar landscape.</p>
+
+    <h3>The Micro Scene</h3>
+    <p>Descending into the subterranean micro-scale, this scene penetrates the intricate metabolism of the soil, exposing the vibrant network of non-human creatures that physically construct and sustain the substrate. This intimate resolution fundamentally dismantles the "Blue Marble" paradigm—which abstracts the planet as a distant, passive, and impersonal resource—and forcefully grounds the project in the reality of "Gaia." Within this framework, the Earth is no longer a peaceful, stand-alone globe, but a fiercely active, composite figure where human and non-human destinies are deeply entangled. Crucially, the diagnostic sifter must recalibrate its logic at this depth. Unlike the synthetic detritus and industrial externalities identified as anthropogenic "errors" in the broader urban context, these subterranean organisms—the worms, larvae, ants, and burrowing mammals—are emphatically not anomalies to be filtered out. They possess an absolute, intrinsic right to exist within the geostrata. In the speculative after-sift condition, these entities are reclassified as indispensable collaborators, functioning as vital "supporters of the sifter." They are the primary biological engines of the earth, perpetually digesting, aerating, and regenerating the terrain. By actively validating their presence rather than attempting to over-engineer their habitat, the scene illustrates that profound terrestrial care requires acknowledging the soil’s inherent sovereignty, allowing its native, non-human operators to freely perform the continuous labor of world-making.</p>
+
+    <h2>References</h2>
+    <p class="reference">Design Earth (Rania Ghosn + El Hadi Jazairy). Geostories: Another Architecture for the Environment.</p>
+    <p class="reference">Ratti, Carlo, Claudel, Matthew. Open Source Architecture, 132-192. London: Thames and Hudson, New York: Actar Publishers, 2018.</p>
+    <p class="reference">Erguler, Z. A., &amp; Ulusay, R. (2003). Engineering characteristics and environmental impacts of the expansive Ankara Clay, and swelling maps for SW and central parts of the Ankara (Turkey) metropolitan area. Environmental Geology, 44, 979–992. https://doi.org/10.1007/s00254-003-0841-y.</p>
+    <p class="reference">Yıldız, N. E., &amp; Kahveci, B. (2024). ICONA modeli kullanılarak toprak erozyonu riskinin tahmin edilmesi: Ankara ili örneği [Estimation of soil erosion risk using ICONA model: The case of Ankara]. Journal of Anatolian Environmental and Animal Sciences, 9(4), 822–831. https://doi.org/10.35229/jaes.1591959.</p>
+  </div>
+
+  <div class="bottom-link">
+    <a href="2026-3-inspo.html" class="page-link-btn">See more for inspiration →</a>
+  </div>
+
+  <dl class="meta">
+    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+  </dl>
+</div>
+</body>
+</html>

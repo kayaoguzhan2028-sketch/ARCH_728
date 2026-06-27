@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-3 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --main-w: min(100%, calc((100vh - 52px - 4rem) * 1.41418)); }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  #intro-splash { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--black); color:var(--white); display:flex; align-items:center; justify-content:center; text-align:center; z-index:1000; transition:opacity 0.9s ease, visibility 0.9s; }
+  #intro-splash span { font-size:clamp(1.6rem,4.5vw,2.8rem); letter-spacing:0.1em; text-transform:uppercase; font-weight:400; }
+  #intro-splash.hide { opacity:0; visibility:hidden; pointer-events:none; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .key-icon { width:50px; height:50px; display:block; margin-right:-2.5rem; }
+  .key-icon img { width:100%; height:100%; object-fit:contain; display:block; opacity:0.85; transition:opacity 0.2s; transform:scaleX(-1); }
+  .key-icon:hover img { opacity:1; }
+
+  .wrap { max-width:1600px; margin:0 auto; padding:52px 2rem 6rem; }
+  .sub-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem 1.6rem; margin:1.5rem 0 2rem; }
+  .sub-nav a { font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.6em 1.3em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
+  .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .sub-nav a.active { opacity:1; border-color:rgba(245,242,235,0.45); }
+  nav .sub-nav { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); margin:0; gap:0.4rem 0.8rem; flex-wrap:nowrap; }
+  nav .sub-nav a { padding:0.42em 0.85em; font-size:0.6rem; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
+  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+
+  .sift-define { font-style:italic; text-align:center; max-width:700px; margin:2rem auto 1.2rem; font-size:1.5rem; line-height:1.7; opacity:0.85; }
+  .aftersift-grid { display:flex; gap:1.5rem; margin:0 auto; width:var(--main-w); flex:1 1 auto; min-height:0; transform:scale(0.65); transform-origin:center top; }
+  .aftersift-col { flex:1; display:flex; flex-direction:column; gap:1.5rem; min-height:0; min-width:0; }
+  .aftersift-cell { flex:1; min-height:0; min-width:0; }
+  .aftersift-cell img { width:100%; height:100%; object-fit:contain; object-position:top; display:block; margin:0; opacity:0.9; }
+  .aftersift-cell img.align-tr { object-position:top right; }
+  .aftersift-cell img.align-br { object-position:bottom right; }
+  .aftersift-cell img.align-b { object-fit:cover; object-position:bottom; }
+  .aftersift-cell.placeholder { border:1px dashed var(--border); opacity:0.35; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; display:flex; align-items:center; justify-content:center; text-align:center; min-height:120px; }
+
+  .section { scroll-margin-top:52px; min-height:calc(100vh - 52px); height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+  .section > img { max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0 auto; }
+  .section-full > img { width:var(--main-w); height:100%; max-height:none; object-fit:contain; margin:0 auto; cursor:pointer; opacity:1; }
+
+  .soil-map-wrap { position:relative; width:var(--main-w); height:100%; margin:0 auto; }
+  .soil-map-wrap > img { width:100%; height:100%; max-height:none; object-fit:contain; display:block; margin:0; cursor:pointer; opacity:1; }
+  .soil-map-wrap > svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .soil-map-wrap > svg .hover-shape { pointer-events:fill; cursor:pointer; }
+
+  .look-preview { position:fixed; top:6.5rem; right:2rem; z-index:150; max-height:75vh; opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; pointer-events:none; }
+  .look-preview.active { opacity:1; transform:translateY(0); }
+  .look-preview img { display:block; width:auto; height:auto; max-width:100%; max-height:75vh; border:1px solid var(--border); background:var(--black); }
+  .section-padded { padding-left:5%; padding-right:5%; }
+  .media-row { display:flex; gap:3rem; align-items:flex-start; }
+  .media-row > img { flex:0 0 30%; width:30%; max-height:calc(100vh - 52px - 4rem); object-fit:contain; display:block; margin:0; opacity:0.9; }
+  .media-row .media-text { flex:1; min-width:0; }
+  .media-row .media-text p { text-align:justify; }
+  .media-row .media-text h2 { margin:1rem 0 0.7rem; font-weight:600; text-align:center; }
+  .media-row .media-text h2 + p { text-align:center; }
+  .section4-text { max-width:850px; margin:0 auto; font-size:0.95rem; line-height:1.55; }
+  .section4-text.lg { font-size:1.1rem; line-height:1.6; }
+  .section4-text h2 { text-align:center; font-size:1.15rem; font-weight:600; letter-spacing:0.04em; margin:1rem 0; }
+  .section4-text p { margin-bottom:0.5rem; }
+  .section4-text p:last-child { margin-bottom:0; }
+  .page-link-btn { display:inline-block; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.7em 1.6em; opacity:0.55; margin-top:2rem; transition:opacity 0.2s,border-color 0.2s; }
+  .page-link-btn:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .section-center { align-items:center; }
+  .section-center .page-link-btn { margin-top:0; }
+  .scroll-nav { position:fixed; right:2rem; z-index:150; width:44px; height:44px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.5; transition:opacity 0.2s,background 0.2s; }
+  .scroll-nav:hover { opacity:1; background:rgba(245,242,235,0.14); }
+  .scroll-nav-up { top:6.5rem; }
+  .scroll-nav-down { bottom:2.5rem; }
+  @media (max-width:600px) {
+    .scroll-nav { width:38px; height:38px; right:1.2rem; }
+    .scroll-nav-up { top:4.5rem; }
+    .scroll-nav-down { bottom:1.5rem; }
+  }
+
+  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
+  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+</style>
+</head>
+<body>
+<div id="intro-splash"><span>Sifting Ankara Soil</span></div>
+<nav>
+  <a href="../../2026.html" class="nav-back">← 2026</a>
+  <div class="sub-nav">
+    <a href="2026-3-projectinfo.html">Info</a>
+    <a href="2026-3.html" class="active">Entrance</a>
+    <a href="2026-3-errors.html">Errors</a>
+    <a href="2026-3-soilscenesifters.html">Sifters</a>
+    <a href="2026-3-siftingwhatdetectingerrors.html">Sifting What?</a>
+    <a href="2026-3-aftersift.html">After Sift</a>
+    <a href="2026-3-sceneexplanations.html">Scene Explanations</a>
+  </div>
+  <a href="2026-3-projectinfo.html" class="key-icon">
+    <img src="../../2026-images/2026-p3/0-project brief page/sifting the soil key image-1.0.webp" alt="Sifting the Soil Key">
+  </a>
+</nav>
+<button class="scroll-nav scroll-nav-up" id="scroll-up" aria-label="Previous section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<button class="scroll-nav scroll-nav-down" id="scroll-down" aria-label="Next section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div class="wrap">
+  <div class="body">
+
+    <div class="section">
+      <p class="sift-define">sift verb [T] (EXAMINE)<br>to make a close examination of all the parts of something in order to find something or to separate what is useful from what is not</p>
+      <div class="aftersift-grid">
+        <div class="aftersift-col">
+          <div class="aftersift-cell"><img class="align-b" src="../../2026-images/2026-p3/5 after sift page-5/after sift-5.3.webp" alt="After sift 5.3"></div>
+        </div>
+        <div class="aftersift-col">
+          <div class="aftersift-cell"><img class="align-tr" src="../../2026-images/2026-p3/0-project brief page/sifting the soil key image-1.0.webp" alt="Sifting the Soil Key"></div>
+          <div class="aftersift-cell"><img class="align-br" src="../../2026-images/2026-p3/5 after sift page-5/after sift-5.1.webp" alt="After sift 5.1"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section4-text lg">
+        <p><strong>"SIFTING ANKARA SOIL"</strong> introduces a multi-sensory soil inventory that directly challenges the detached paradigm of modern, top-down urban planning. Traditionally, urbanism operates under an absolute illusion of mastery, treating the living ground as a flat, passive, and inert surface upon which rigid concrete forms are forcefully imposed. This project shifts our perspective away from a distant, abstracted view of the planet toward an entangled, deeply interconnected worldview—Gaia—recognizing the Earth as an active agent that continuously negotiates with and resists human intervention. By analyzing Ankara's deep geological layers, active clay behaviors, and systemic environmental failures, we aim to transform the geological map from a list of technical engineering constraints into a living design compass. And futher, as an interscalar approach and scaleless thinking we aim to transform the hidden scenes which are also parts and signs of these failures. Which are neglected in our everyday lives due to its already consequences with its messy, ugly, misused scenes.</p>
+        <h2>The Metaphor of Sifting</h2>
+        <p>We initiate this critical architectural discourse through the metaphor of "sifting" the earth. We systematically dismantle the geographic abstraction of Ankara, analyzing its diverse soil grounds not as passive topography, but as distinct, active "grounds to sift". By overlaying a conceptual grid across the city, we literally and conceptually "sift" the urban fabric to render hidden geological realities visible. This process dictates how each ground must be cared for based on its unique material agency, reinforcing our transition from the detached "Blue Marble" perspective to the entangled "Gaia" framework.</p>
+        <p>To ground our methodology, our theoretical framework draws heavily upon <strong>Design Earth's Geostories</strong> and <strong>Bruno Latour's Living with Frankenstein</strong>. We challenge "Design Erasure"—the way modern urbanism abstracts the materialities of urban networks and ignores environmental externalities like pollution. Rather than running away from industrial creations, we must accept landfills, mine pits, and oil rigs as legitimate elements of urban design worthy of our care. Furthermore, we reject reducing ecological crises to objective "matters of fact," reclaiming them instead as "matters of concern" that require sensible storytelling and speculative drawing to make the absent visible.</p>
+      </div>
+    </div>
+
+    <div class="section section-full">
+      <div class="soil-map-wrap" id="soil-map-wrap">
+        <img id="soil-map" src="../../2026-images/2026-p3/1 entrance page-1/key image-soil grounds-1.1.webp" alt="Key image — soil grounds">
+        <svg id="soil-map-svg" viewBox="0 0 2383.9 1683.8" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+
+    <div class="look-preview" id="look-preview">
+      <img id="look-preview-img" src="" alt="">
+    </div>
+
+    <div class="section">
+      <img src="../../2026-images/2026-p3/1 entrance page-1/soil types table-1.3.webp" alt="Soil types table">
+    </div>
+
+    <div class="section section-padded">
+      <div class="media-row">
+        <img src="../../2026-images/2026-p3/1 entrance page-1/soil types image-1.2.webp" alt="Soil types image">
+        <div class="media-text">
+          <p>Through this sifting process, we sift the urban substrate into specific soil grounds to determine structural and ecological viability. We evaluate their potential and error to dictate appropriate levels of care.</p>
+          <p>By running these grounds through diagnostic questions—such as "Care or Not-Care?" and "Internal or External?"—we formulate a framework for how the ground must be internalized and managed.</p>
+          <h2>FROM BLUE MARBLE TO GAIA: ENTERING THE GEOLOGICAL CONTINUUM</h2>
+          <p>For decades, modern architecture has treated the Earth as a "Blue Marble" - a passive, stand-alone resource and an abstract territory to be subdivided by administrative convenience. This entrance invites you to see the ground as "Gaia": an active, composite agent where human infrastructure and non-human materialities are deeply, sometimes violently, entangled. We reject the clean "matters of fact" presented by green technocapitalism. Instead, we expose the messy "matters of concern" that define our landscape, laying bare the contested geographies buried right beneath our feet.</p>
+          <div style="text-align:right; margin-top:11rem;">
+            <a href="2026-3-errors.html" class="page-link-btn" style="margin-top:0;">View the Errors on Ankara Soil →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <dl class="meta">
+    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+  </dl>
+</div>
+<script>
+  setTimeout(() => { document.getElementById('intro-splash').classList.add('hide'); }, 1400);
+
+  const sections = document.querySelectorAll('.body .section');
+  const sectionOffset = 52;
+
+  function currentSectionIndex() {
+    let idx = 0;
+    sections.forEach((sec, i) => {
+      if (sec.getBoundingClientRect().top <= sectionOffset + 1) idx = i;
+    });
+    return idx;
+  }
+
+  function scrollToSection(index) {
+    const clamped = Math.max(0, Math.min(sections.length - 1, index));
+    if (clamped === 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      sections[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
+  document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
+
+  document.getElementById('soil-map').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); scrollToSection(currentSectionIndex() - 1); }
+  });
+
+  const SVG_BASE = '2026-images/2026-p3/1 entrance page-1/svg/';
+  const LOOK_FILES = [
+    { n: 1, svg: '1-01.svg', look: 'LOOK-1 - soil types table.webp' },
+    { n: 2, svg: '2-01.svg', look: 'LOOK-2 - soil types table.webp' },
+    { n: 3, svg: '3-01.svg', look: 'LOOK-3 -soil types table.webp' },
+    { n: 4, svg: '4-01.svg', look: 'LOOK-4 - soil types table.webp' },
+    { n: 5, svg: '5-01.svg', look: 'LOOK-5 -soil types table.webp' },
+    { n: 6, svg: '6-01.svg', look: 'LOOK-6 -soil types table.webp' },
+  ];
+
+  const soilMapSvg = document.getElementById('soil-map-svg');
+  const lookPreview = document.getElementById('look-preview');
+  const lookPreviewImg = document.getElementById('look-preview-img');
+
+  function namespaceClasses(svgText, prefix) {
+    let out = svgText.replace(/\.([\w-]+)(\s*\{)/g, (m, cls, brace) => `.${prefix}-${cls}${brace}`);
+    out = out.replace(/class="([^"]*)"/g, (m, classes) => {
+      const renamed = classes.split(/\s+/).filter(Boolean).map((c) => `${prefix}-${c}`).join(' ');
+      return `class="${renamed}"`;
+    });
+    return out;
+  }
+
+  LOOK_FILES.forEach((cfg) => {
+    fetch(encodeURI(SVG_BASE + cfg.svg))
+      .then((r) => r.text())
+      .then((svgText) => {
+        const prefix = 'svg' + cfg.n;
+        const namespaced = namespaceClasses(svgText, prefix);
+        const parsed = new DOMParser().parseFromString(namespaced, 'image/svg+xml');
+
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.setAttribute('data-look', cfg.n);
+
+        const styleEl = parsed.querySelector('style');
+        if (styleEl) soilMapSvg.appendChild(document.importNode(styleEl, true));
+
+        Array.from(parsed.documentElement.children).forEach((node) => {
+          if (node.tagName.toLowerCase() === 'style') return;
+          group.appendChild(document.importNode(node, true));
+        });
+
+        group.querySelectorAll('path, circle, rect, polygon, polyline, line').forEach((shape) => {
+          shape.classList.add('hover-shape');
+        });
+
+        group.addEventListener('mouseenter', () => {
+          lookPreviewImg.src = encodeURI(SVG_BASE + cfg.look);
+          lookPreview.classList.add('active');
+        });
+        group.addEventListener('mouseleave', () => {
+          lookPreview.classList.remove('active');
+        });
+
+        soilMapSvg.appendChild(group);
+      });
+  });
+</script>
+</body>
+</html>

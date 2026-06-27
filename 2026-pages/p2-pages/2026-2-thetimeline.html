@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>The Timeline — Hıdırlık Tepe — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html, body { background: var(--black); color: var(--white); font-family: var(--font); height: 100%; overflow: hidden; }
+
+  /* NAV */
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+  .nav-links { display:flex; gap:1.6rem; align-items:center; }
+  .nav-link { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.35; transition:opacity 0.2s; }
+  .nav-link:hover { opacity:1; }
+
+  /* CENTURY LIST */
+  .century-list {
+    position:fixed; top:52px; left:0; bottom:0; width:160px;
+    display:flex; flex-direction:column; align-items:flex-start;
+    justify-content:center; gap:0.65rem;
+    padding:0 0 4rem 3.2rem; z-index:10;
+  }
+  .century-btn {
+    background:none; border:none; color:var(--white); font-family:var(--font);
+    font-size:1rem; letter-spacing:0.18em; text-transform:uppercase;
+    text-align:left; cursor:pointer; opacity:0.25; transition:opacity 0.2s; padding:0.1rem 0;
+  }
+  .century-btn:hover { opacity:0.65; }
+  .century-btn.active { opacity:1; }
+
+  /* VIEWER — single scrollable column, padding-right mirrors century list width */
+  .viewer {
+    position:fixed; top:52px; left:160px; right:0; bottom:0;
+    overflow-y:auto;
+    padding-right:160px;
+  }
+  .viewer::-webkit-scrollbar { width:4px; }
+  .viewer::-webkit-scrollbar-thumb { background:rgba(245,242,235,0.1); }
+
+  /* EMPTY STATE */
+  .empty-wrap {
+    height:100%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .empty-msg { font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.18; }
+
+  /* IMAGE FRAME — fixed pixel rectangle */
+  .image-frame {
+    position:relative;
+    width:100%;
+    height:420px;
+    flex-shrink:0;
+  }
+
+  /* img fills the entire frame — arrows are guaranteed to land on the image */
+  .frame-img {
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:contain;
+    display:block;
+    opacity:0.9; cursor:zoom-in;
+    transition:opacity 0.2s;
+  }
+  .frame-img:hover { opacity:1; }
+
+  /* ARROWS — absolutely on top of the image */
+  .arrow {
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(10,10,10,0.35); border:none; cursor:pointer;
+    opacity:0.7; transition:opacity 0.2s;
+    padding:0.75rem 0.9rem; z-index:2; user-select:none;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:2px;
+  }
+  .arrow:hover { opacity:1; background:rgba(10,10,10,0.6); }
+  .arrow:disabled { opacity:0.12; cursor:default; }
+  .arrow-prev { left:1.2rem; }
+  .arrow-next { right:1.2rem; }
+
+  /* DOTS */
+  .dots-strip {
+    display:flex; flex-wrap:wrap; gap:0.42rem;
+    justify-content:center; align-items:center;
+    padding:0.75rem 2rem;
+  }
+  .dot {
+    width:5px; height:5px; border-radius:50%;
+    background:transparent; border:1px solid rgba(245,242,235,0.28);
+    cursor:pointer; flex-shrink:0;
+    transition:background 0.2s, border-color 0.2s;
+  }
+  .dot.active { background:var(--white); border-color:var(--white); }
+  .dot:hover:not(.active) { border-color:rgba(245,242,235,0.65); }
+
+  /* TEXT — centered, aligned with image */
+  .text-block {
+    padding:1.6rem 2rem 5rem;
+    max-width:780px;
+    margin:0 auto;
+    text-align:center;
+  }
+  .img-name {
+    display:block;
+    font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase;
+    opacity:0.5; margin-bottom:1.2rem;
+  }
+  .img-caption {
+    font-size:1.2rem; line-height:1.9; opacity:0.8;
+    margin-bottom:1.4rem;
+  }
+  .img-ref {
+    font-size:0.78rem; letter-spacing:0.04em; opacity:0.45;
+    text-decoration:none; color:var(--white);
+    display:inline-flex; align-items:baseline; gap:0.35em;
+    transition:opacity 0.2s; word-break:break-all;
+  }
+  .img-ref:hover { opacity:0.85; }
+  .img-ref::before { content:'↗'; font-size:0.75em; flex-shrink:0; }
+
+  /* LIGHTBOX */
+  #lightbox { position:fixed; inset:0; z-index:200; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s; }
+  #lightbox.open { opacity:1; pointer-events:auto; }
+  #lightbox-inner { position:relative; display:inline-flex; }
+  #lightbox-inner img { max-width:92vw; max-height:92vh; object-fit:contain; display:block; }
+  #lightbox-close { position:absolute; top:0.6rem; right:0.6rem; background:rgba(10,10,10,0.55); border:none; color:var(--white); font-size:0.85rem; width:1.8rem; height:1.8rem; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.6; transition:opacity 0.2s; font-family:var(--font); }
+  #lightbox-close:hover { opacity:1; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="2026-2.html" class="nav-back">← Hıdırlık Tepe</a>
+  <span class="nav-title">The Timeline</span>
+  <div class="nav-links">
+    <a href="2026-2-thesection.html" class="nav-link">The Section</a>
+    <a href="2026-2-themodel.html" class="nav-link">The Model</a>
+  </div>
+</nav>
+
+<div class="century-list">
+  <button class="century-btn" data-key="1400s">1400's</button>
+  <button class="century-btn" data-key="1500s">1500's</button>
+  <button class="century-btn" data-key="1700s">1700's</button>
+  <button class="century-btn" data-key="1800s">1800's</button>
+  <button class="century-btn" data-key="1900s">1900's</button>
+  <button class="century-btn" data-key="2000s">2000's</button>
+  <button class="century-btn" data-key="2010s">2010's</button>
+  <button class="century-btn" data-key="2020s">2020's</button>
+</div>
+
+<div id="lightbox">
+  <div id="lightbox-inner">
+    <img id="lightbox-img" src="" alt="">
+    <button id="lightbox-close">✕</button>
+  </div>
+</div>
+
+<div class="viewer" id="viewer">
+  <div class="empty-wrap" id="empty-wrap">
+    <span class="empty-msg">Select a century</span>
+  </div>
+</div>
+
+<script>
+  const BASE = '2026-images/2026-p2/thetimeline/';
+
+  const IMAGES = {
+    '1400s': [
+      { file:'timeline-1400s-01-1402.webp',
+        caption:'Engraved map titled "Bataille D\'Angora : le 20 Juillet 1402 (19 Silhidsche 804)" by J.J. Hellert, engraved by Charles Schreiber, and published in 1844.',
+        link:'https://www.davidrumsey.com/luna/servlet/detail/RUMSEY~8~1~318016~90086883:Planche-XXVI--Bataille-D-Angora#' },
+    ],
+    '1500s': [
+      { file:'timeline-1500s-01.webp', caption:'', link:'https://pdf.journalagent.com/jas/pdfs/JAS_2_1_11_21.pdf' },
+    ],
+    '1700s': [
+      { file:'timeline-1700s-01.webp',      caption:'', link:'' },
+      { file:'timeline-1700s-02.webp',      caption:'', link:'' },
+      { file:'timeline-1700s-03-1714.webp', caption:'', link:'https://pdf.journalagent.com/jas/pdfs/JAS_2_1_11_21.pdf' },
+      { file:'timeline-1700s-04-1717.webp', caption:'', link:'' },
+      { file:'timeline-1700s-05-1727.webp', caption:'Ankara gravure at the beginning of 18th century, drawn by P. De Tournefort.', link:'https://open.metu.edu.tr/handle/11511/19786' },
+    ],
+    '1800s': [
+      { file:'timeline-1800s-01-1839.webp', caption:'1839 Von Vincke Map of Ankara.', link:'' },
+      { file:'timeline-1800s-02-1889.webp', caption:'A late 19th-century (c. 1889) Ottoman postcard sent to Selahaddin Arif in Ankara.', link:'https://archives.saltresearch.org/handle/123456789/101262' },
+      { file:'timeline-1800s-03.webp',      caption:'Hıdırlık Hill and Tomb, rumored to belong to the Arab poet Imru\' al-Qais.', link:'https://www.facebook.com/ankaramanzarasi/posts/h%C4%B1d%C4%B1rl%C4%B1ktepe-ve-h%C4%B1d%C4%B1rl%C4%B1k-t%C3%BCrbesi-halk-aras%C4%B1nda-h%C4%B1z%C4%B1r-t%C3%BCrbesi-ya-da-timurlenk-taht/227903638115389/' },
+      { file:'timeline-1800s-04.webp',      caption:'Hıdırlık Tomb, rumored to belong to the Arab poet Imru\' al-Qais.', link:'' },
+    ],
+    '1900s': [
+      { file:'timeline-1900s-01-1924.webp', caption:'1924 Şehremaneti Map.', link:'https://open.metu.edu.tr/handle/11511/19786' },
+      { file:'timeline-1900s-02-1926.webp', caption:'1926 dated Ankara Map.', link:'https://dspace.yildiz.edu.tr/xmlui/handle/1/6004?show=full' },
+      { file:'timeline-1900s-03-1928.webp', caption:'1928 dated Ankara Map.', link:'' },
+      { file:'timeline-1900s-04.webp',      caption:'The map of 1930s is redrawn after the cadastral plans with 1/500 scale by assembling 94 drawings into one by Elif Mıhçıoğlu Bilgi.', link:'https://open.metu.edu.tr/handle/11511/19786' },
+      { file:'timeline-1900s-05-1932.webp', caption:'Jansen\'s Late Preliminary Development Plan for Ankara in 1932.', link:'' },
+      { file:'timeline-1900s-06-1932.webp', caption:'Jansen\'s Early Implementation Plan for Ankara in 1932 (1/12.500).', link:'' },
+      { file:'timeline-1900s-07-1933.webp', caption:'1933 dated Ankara Map (Scale: 1/30.000).', link:'' },
+      { file:'timeline-1900s-08-1937.webp', caption:'1937–38 dated Ankara Map (Scale: 1/15.000).', link:'' },
+      { file:'timeline-1900s-09-1942.webp', caption:'Geological map of Turkey (Scale 1:800,000).', link:'https://archives.saltresearch.org/handle/123456789/121026' },
+      { file:'timeline-1900s-10-1944.webp', caption:'1944 dated Ankara Map showing Old City and the New City (Scale: 1/8000).', link:'https://open.metu.edu.tr/handle/11511/19786' },
+      { file:'timeline-1900s-11-1944.webp', caption:'View of Youth Park, and Hıdırlık Hill at the back.', link:'https://archives.saltresearch.org/handle/123456789/123838' },
+      { file:'timeline-1900s-12-1944.webp', caption:'General view of 19 May Stadium and Ankara, and Hıdırlık Hill at the back.', link:'https://archives.saltresearch.org/handle/123456789/114072' },
+      { file:'timeline-1900s-13-1952.webp', caption:'Altındağ shanty settlement area stretching from Bentderesi to Hıdırlık Hill. The quarry seen in the photo is one of andesite quarries that are in use until the 1950s.', link:'https://libdigitalcollections.ku.edu.tr/digital/collection/FKA/id/880/rec/1' },
+      { file:'timeline-1900s-14.webp',      caption:'Altındağ and early slums.', link:'https://libdigitalcollections.ku.edu.tr/digital/collection/FKA/id/2609/rec/4' },
+      { file:'timeline-1900s-15-1976.webp', caption:'Turan Erol, Altındağ\'dan.', link:'' },
+      { file:'timeline-1900s-16-1984.webp', caption:'1984 dated Ankara Map.', link:'https://dspace.yildiz.edu.tr/xmlui/handle/1/6004?show=full' },
+      { file:'timeline-1900s-17-1984.webp', caption:'Hıdırlıktepe Slum Area Master Development Plan (Scale: 1/5000).', link:'' },
+      { file:'timeline-1900s-18-1984.webp', caption:'Accessibility Map of Hıdırlıktepe Slum Area (Scale: 1/5000).', link:'' },
+      { file:'timeline-1900s-19.webp',      caption:'View of Youth Park, and Hıdırlık Hill at the back.', link:'https://archives.saltresearch.org/handle/123456789/100517' },
+    ],
+    '2000s': [
+      { file:'timeline-2000s-01.webp',      caption:'Generalized Stratigraphic Section of Ankara and Its Surroundings.', link:'https://s.ankara.bel.tr/files/9313/4726/7119/4-dogal-yapi.pdf' },
+      { file:'timeline-2000s-02-2002.webp', caption:'Aerial view of the area from 2002.', link:'' },
+      { file:'timeline-2000s-03-2007.webp', caption:'Aerial view of the area from 2007.', link:'' },
+      { file:'timeline-2000s-04-2009.webp', caption:'Aerial view of the area from 2009.', link:'' },
+      { file:'timeline-2000s-05-2012.webp', caption:'Aerial view of the area from 2012.', link:'' },
+      { file:'timeline-2000s-06-2016.webp', caption:'Aerial view of the area from 2016.', link:'' },
+      { file:'timeline-2000s-07-2017.webp', caption:'Aerial view of the area from 2017.', link:'' },
+      { file:'timeline-2000s-08-2019.webp', caption:'Aerial view of the area from 2019.', link:'' },
+      { file:'timeline-2000s-09-2023.webp', caption:'Aerial view of the area from 2023.', link:'' },
+      { file:'timeline-2000s-10-2026.webp', caption:'Aerial view of the area from 2026.', link:'' },
+    ],
+    '2010s': [
+      { file:'timeline-2010s-01-2016.webp', caption:'Demolition of the Slums in Hıdırlık Tepe', link:'https://www.ankara.bel.tr/haberler/hidirliktepe-de-200-gecekondu-yikildi-9304' },
+      { file:'timeline-2010s-02-2016.webp', caption:'Demolition of the Slums in Hıdırlık Tepe', link:'https://www.ankara.bel.tr/haberler/hidirliktepe-de-200-gecekondu-yikildi-9304' },
+      { file:'timeline-2010s-03-2016.webp', caption:'Demolition of the Slums in Hıdırlık Tepe', link:'https://www.ankara.bel.tr/haberler/hidirliktepe-de-200-gecekondu-yikildi-9304' },
+      { file:'timeline-2010s-04-2016.webp', caption:'Demolition of the Slums in Hıdırlık Tepe', link:'https://www.ankara.bel.tr/haberler/hidirliktepe-de-200-gecekondu-yikildi-9304' },
+      { file:'timeline-2010s-05-2016.webp', caption:'Demolition of the Slums in Hıdırlık Tepe', link:'https://www.ankara.bel.tr/haberler/hidirliktepe-de-200-gecekondu-yikildi-9304' },
+      { file:'timeline-2010s-06-2016.webp', caption:'Demolition of the Slums in Hıdırlık Tepe', link:'https://www.ankara.bel.tr/haberler/hidirliktepe-de-200-gecekondu-yikildi-9304' },
+      { file:'timeline-2010s-07-2016.webp', caption:'Demolition of the Slums in Hıdırlık Tepe', link:'https://www.ankara.bel.tr/haberler/hidirliktepe-de-200-gecekondu-yikildi-9304' },
+    ],
+    '2020s': [
+      { file:'timeline-2020s-01-2023.webp', caption:'Hıdırlıktepe Recreation Area and Monument of Gratitude.', link:'https://www.ankara.bel.tr/haberler/ankara-buyuksehir-den-100-yillara-armagan-proje-hidirliktepe-rekreasyon-alani-ve-sukran-aniti-nin-yapimi-basladi-16670' },
+      { file:'timeline-2020s-02-2023.webp', caption:'', link:'' },
+      { file:'timeline-2020s-03-2023.webp', caption:'', link:'' },
+      { file:'timeline-2020s-04-2023.webp', caption:'Monument of Gratitude by 2x1 Architects.', link:'https://www.2x1architects.com/portfolio-item/hidirliktepe/' },
+      { file:'timeline-2020s-05-2025.webp', caption:'Current condition of the Hıdırlıktepe and construction of Monument of Gratitude.', link:'https://www.uretenankara.com/hidirliktepe-rekreasyon-alani-projesi-calismalar-durdu/14130/' },
+      { file:'timeline-2020s-06-2025.webp', caption:'', link:'' },
+    ],
+  };
+
+  // Lightbox
+  const lightbox    = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  document.getElementById('lightbox-close').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+
+  const viewer = document.getElementById('viewer');
+
+  let items   = [];
+  let current = 0;
+
+  // DOM refs built once per century load
+  let frameImg, arrowPrev, arrowNext, dotsStrip, imgName, imgCaption, imgRef;
+
+  function nameFromFile(f) { return f.replace('.webp', ''); }
+
+  function buildViewer() {
+    viewer.innerHTML = '';
+
+    // image frame
+    const frame = document.createElement('div');
+    frame.className = 'image-frame';
+
+    arrowPrev = document.createElement('button');
+    arrowPrev.className = 'arrow arrow-prev';
+    arrowPrev.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`;
+
+    frameImg = document.createElement('img');
+    frameImg.className = 'frame-img';
+    frameImg.addEventListener('click', () => {
+      lightboxImg.src = frameImg.src;
+      lightboxImg.alt = frameImg.alt;
+      lightbox.classList.add('open');
+    });
+
+    arrowNext = document.createElement('button');
+    arrowNext.className = 'arrow arrow-next';
+    arrowNext.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+
+    frame.appendChild(arrowPrev);
+    frame.appendChild(frameImg);
+    frame.appendChild(arrowNext);
+    viewer.appendChild(frame);
+
+    // dots
+    dotsStrip = document.createElement('div');
+    dotsStrip.className = 'dots-strip';
+    viewer.appendChild(dotsStrip);
+
+    // text block
+    const textBlock = document.createElement('div');
+    textBlock.className = 'text-block';
+
+    imgName = document.createElement('span');
+    imgName.className = 'img-name';
+
+    imgCaption = document.createElement('p');
+    imgCaption.className = 'img-caption';
+
+    imgRef = document.createElement('a');
+    imgRef.className = 'img-ref';
+    imgRef.target = '_blank';
+    imgRef.rel = 'noopener';
+
+    textBlock.appendChild(imgName);
+    textBlock.appendChild(imgCaption);
+    textBlock.appendChild(imgRef);
+    viewer.appendChild(textBlock);
+
+    arrowPrev.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+    arrowNext.addEventListener('click', () => { if (current < items.length - 1) goTo(current + 1); });
+  }
+
+  function renderDots() {
+    dotsStrip.innerHTML = '';
+    items.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'dot' + (i === current ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsStrip.appendChild(dot);
+    });
+  }
+
+  const preloadCache = {};
+  function preload(file) {
+    if (!preloadCache[file]) {
+      const img = new Image();
+      img.src = BASE + file;
+      preloadCache[file] = img;
+    }
+  }
+
+  function goTo(index) {
+    current = index;
+    const item = items[current];
+
+    frameImg.src = BASE + item.file;
+    frameImg.alt = nameFromFile(item.file);
+
+    // silently preload next image so navigation feels instant
+    if (items[current + 1]) preload(items[current + 1].file);
+
+    imgName.textContent = nameFromFile(item.file);
+    imgCaption.textContent = item.caption || '';
+    imgCaption.style.display = item.caption ? 'block' : 'none';
+
+    if (item.link) {
+      imgRef.href = item.link;
+      imgRef.textContent = item.link;
+      imgRef.style.display = 'inline-flex';
+    } else {
+      imgRef.style.display = 'none';
+    }
+
+    arrowPrev.disabled = current === 0;
+    arrowNext.disabled = current === items.length - 1;
+    renderDots();
+    viewer.scrollTop = 0;
+  }
+
+  function loadCentury(key) {
+    items = IMAGES[key] || [];
+    current = 0;
+
+    if (!items.length) {
+      viewer.innerHTML = '<div class="empty-wrap"><span class="empty-msg">No images yet</span></div>';
+      return;
+    }
+
+    buildViewer();
+    goTo(0);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (lightbox.classList.contains('open')) {
+      if (e.key === 'Escape') lightbox.classList.remove('open');
+      return;
+    }
+    if (!items.length) return;
+    if (e.key === 'ArrowLeft'  && current > 0)               goTo(current - 1);
+    if (e.key === 'ArrowRight' && current < items.length - 1) goTo(current + 1);
+  });
+
+  document.querySelectorAll('.century-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.century-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadCentury(btn.dataset.key);
+    });
+  });
+
+  // Auto-open century from URL hash (e.g. #2020s)
+  const hashKey = location.hash.replace('#', '');
+  if (hashKey && IMAGES[hashKey]) {
+    const targetBtn = document.querySelector(`.century-btn[data-key="${hashKey}"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+    loadCentury(hashKey);
+  }
+</script>
+</body>
+</html>

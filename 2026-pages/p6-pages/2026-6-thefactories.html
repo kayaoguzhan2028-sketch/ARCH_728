@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-6 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; height:100%; overflow:hidden; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-links { display:flex; align-items:center; gap:1.8rem; }
+  .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
+  .nav-links a:hover { opacity:1; }
+
+  .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:40fr 60fr; grid-template-areas:"preview visual" "info visual"; }
+  .cell { display:flex; align-items:center; justify-content:center; padding:1rem; overflow:hidden; }
+  .cell-preview { grid-area:preview; padding:0; }
+  .cell-info { grid-area:info; overflow-y:auto; padding:0; }
+  .cell-visual { grid-area:visual; }
+
+  .interactive-image { position:relative; width:min(95%, calc(85vh * 2598 / 2953)); aspect-ratio:2598/2953; }
+  .interactive-image img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
+  .factory-highlight { opacity:0; pointer-events:none; transition:opacity 0.25s ease, filter 0.25s ease; }
+  .factory-highlight.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,200,80,0.85)) drop-shadow(0 0 28px rgba(245,200,80,0.5)); }
+
+  .preview-panel { width:90%; max-width:320px; opacity:0; transform:translateY(-6px); transition:opacity 0.25s ease, transform 0.25s ease; }
+  .preview-panel.active { opacity:1; transform:translateY(0); }
+  .preview-panel img { width:100%; display:block; border:1px solid var(--border); }
+
+  .info-panel { width:90%; font-size:0.88rem; line-height:1.85; opacity:0.78; text-align:justify; }
+  .info-panel .references { margin-top:1.2rem; font-size:0.72rem; line-height:1.6; opacity:0.55; }
+  .info-panel .references p { margin-bottom:0.5rem; }
+  .info-panel .references p:last-child { margin-bottom:0; }
+
+  @media (max-width:720px) {
+    html,body { overflow:auto; }
+    .stage { position:static; grid-template-columns:1fr; grid-template-rows:auto; grid-template-areas:"visual" "preview" "info"; padding:6rem 1rem 3rem; gap:1.5rem; }
+    .info-panel { font-size:0.85rem; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="../../2026.html" class="nav-back">← 2026</a>
+  <span class="nav-title">Imrahor Valley</span>
+  <div class="nav-links">
+    <a href="2026-6-thesoil.html">← The Soil</a>
+    <a href="2026-6-thetimeline.html">The Timeline →</a>
+  </div>
+</nav>
+
+<div class="stage">
+  <div class="cell cell-preview">
+    <div class="preview-panel" id="preview-panel">
+      <img id="preview-img" src="" alt="">
+    </div>
+  </div>
+
+  <div class="cell cell-visual">
+  <div class="interactive-image">
+    <img src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory Main Visual.webp" alt="The Factories — Main Visual">
+    <img class="factory-highlight" data-factory="1" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory1-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="2" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory2-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="3" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory3-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="4" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory4-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="5" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory5-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="6" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory6-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="7" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory7-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="8" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory8-webp.webp" alt="">
+    <img class="factory-highlight" data-factory="9" src="../../2026-images/2026-p6/2-The Factories/2026-6-Factory9-webp.webp" alt="">
+  </div>
+  </div>
+
+  <div class="cell cell-info">
+    <div class="info-panel">
+      <p>From the 1930s onwards, İmrahor's clay-rich soils supported a thriving brick industry. While early production in the 1930s relied on traditional methods, brick production expanded significantly between 1965 and 1976 with the establishment of 17 factories¹. By the early 1970s, the valley contained approximately 25 brick kilns² and had become one of Ankara's major brick-producing areas, supplying materials for the city's rapid growth. Although most factories closed by the early 2000s and the last remaining factory ceased operation in early 2020s, the traces of production remain visible in the landscape through abandoned structures, pits, and bricks embedded in the soil. In the visual, we see the factories that we can locate today.</p>
+      <div class="references">
+        <p>¹ Interview with Former Factory Co-owner, 2026.</p>
+        <p>² Sınacı Özfındık, F. (2019). Changing Characteristics of a Significant Part of the Urban Fringe in Ankara: İmrahor Valley. <em>Ankara Araştırmaları Dergisi</em>, 7(2), 343-353. https://doi.org/10.5505/jas.2019.21548.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const basePath = '2026-images/2026-p6/2-The Factories/';
+  const hoverImages = {
+    1: '2026-6-Factory 1in üzerine gelince.webp',
+    2: '2026-6-Factory 2nin üzerine gelince.webp',
+    3: '2026-6-Factory 3ün üzerine gelince.webp',
+    4: '2026-6-Factory 4ün üzerine gelince.webp',
+    5: '2026-6-Factory 5in üzerine gelince.webp',
+    6: '2026-6-Factory 6nın üzerine gelince.webp',
+    7: '2026-6-Factory 7nin üzerine gelince.webp',
+    8: '2026-6-Factory 8in üzerine gelince.webp',
+    9: '2026-6-Factory 9un üzerine gelince.webp',
+  };
+
+  const previewPanel = document.getElementById('preview-panel');
+  const previewImg = document.getElementById('preview-img');
+
+  // Factories 1-9: hover detection follows the actual highlight image's own pixels,
+  // so the hover zone always matches what lights up exactly (no hand-drawn polygon to drift out of sync).
+  const interactiveImage = document.querySelector('.interactive-image');
+  const pixelHotspots = Array.from(document.querySelectorAll('.factory-highlight[data-factory]'))
+    .filter((img) => Number(img.dataset.factory) >= 1 && Number(img.dataset.factory) <= 9);
+
+  const hitCanvas = document.createElement('canvas');
+  const hitCtx = hitCanvas.getContext('2d', { willReadFrequently: true });
+
+  pixelHotspots.forEach((img) => {
+    const readPixels = () => {
+      hitCanvas.width = img.naturalWidth;
+      hitCanvas.height = img.naturalHeight;
+      hitCtx.clearRect(0, 0, hitCanvas.width, hitCanvas.height);
+      hitCtx.drawImage(img, 0, 0);
+      img._hitData = hitCtx.getImageData(0, 0, hitCanvas.width, hitCanvas.height).data;
+      img._hitW = hitCanvas.width;
+      img._hitH = hitCanvas.height;
+    };
+    if (img.complete && img.naturalWidth) readPixels();
+    else img.addEventListener('load', readPixels);
+  });
+
+  function factoryAt(clientX, clientY) {
+    const rect = interactiveImage.getBoundingClientRect();
+    const xRatio = (clientX - rect.left) / rect.width;
+    const yRatio = (clientY - rect.top) / rect.height;
+    if (xRatio < 0 || yRatio < 0 || xRatio > 1 || yRatio > 1) return null;
+    for (let i = pixelHotspots.length - 1; i >= 0; i--) {
+      const img = pixelHotspots[i];
+      if (!img._hitData) continue;
+      const px = Math.floor(xRatio * img._hitW);
+      const py = Math.floor(yRatio * img._hitH);
+      if (px < 0 || py < 0 || px >= img._hitW || py >= img._hitH) continue;
+      const alpha = img._hitData[(py * img._hitW + px) * 4 + 3];
+      if (alpha > 10) return img;
+    }
+    return null;
+  }
+
+  let activeFactoryImg = null;
+
+  interactiveImage.addEventListener('mousemove', (e) => {
+    const found = factoryAt(e.clientX, e.clientY);
+    if (found !== activeFactoryImg) {
+      if (activeFactoryImg) activeFactoryImg.classList.remove('active');
+      if (found) {
+        found.classList.add('active');
+        previewImg.src = basePath + hoverImages[found.dataset.factory];
+        previewPanel.classList.add('active');
+      } else {
+        previewPanel.classList.remove('active');
+      }
+      activeFactoryImg = found;
+      interactiveImage.style.cursor = found ? 'pointer' : '';
+    }
+  });
+
+  interactiveImage.addEventListener('mouseleave', () => {
+    if (activeFactoryImg) activeFactoryImg.classList.remove('active');
+    activeFactoryImg = null;
+    previewPanel.classList.remove('active');
+    interactiveImage.style.cursor = '';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-4 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-center { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; opacity:0.55; white-space:nowrap; }
+  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
+  .info-btn:hover { opacity:1; }
+  .info-btn.open { opacity:1; }
+
+  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:380px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
+  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  .info-nav { list-style:none; font-size:0.92rem; line-height:1.9; }
+  .info-nav a { color:var(--white); text-decoration:none; opacity:0.75; transition:opacity 0.2s; }
+  .info-nav a:hover { opacity:1; text-decoration:underline; }
+  .accordion-toggle { display:block; width:100%; text-align:left; background:none; border:none; color:var(--white); font-family:var(--font); font-size:0.92rem; line-height:1.9; opacity:0.75; cursor:pointer; padding:0; transition:opacity 0.2s; }
+  .accordion-toggle:hover { opacity:1; }
+  .accordion-content { list-style:none; padding-left:1.2rem; max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+  .accordion-content.open { max-height:20rem; }
+
+  .wrap { max-width:1000px; margin:0 auto; padding:8rem 2rem 6rem; }
+  .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
+  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
+  .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
+  .ana-sayfa-hero { margin:0 0 3rem; }
+  .ana-sayfa-hero img { width:65%; display:block; margin:0 auto; opacity:0.9; }
+  .aerial-grid { display:grid; grid-template-columns:1fr 1fr; grid-auto-rows:auto; gap:1rem; margin:0 0 2.5rem; }
+  .aerial-map { margin:2.5rem 0 0; }
+  .aerial-item { display:flex; align-items:flex-start; gap:0.6rem; }
+  .aerial-item img { flex:1; min-width:0; width:100%; height:auto; display:block; margin:0; opacity:0.88; }
+  .aerial-map .aerial-item img { width:55%; flex:none; margin:0 auto; }
+  .aerial-map .aerial-caption.bottom { width:55%; margin:0.5rem auto 0; }
+  .aerial-caption { display:flex; align-items:center; justify-content:center; font-size:1.1rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); writing-mode:vertical-rl; transform:rotate(180deg); white-space:nowrap; flex-shrink:0; }
+  .aerial-caption.left { order:-1; }
+  .aerial-item.full { flex-direction:column; align-items:flex-start; }
+  .aerial-caption.bottom { writing-mode:horizontal-tb; transform:none; justify-content:flex-start; }
+  @media (max-width:640px) {
+    .aerial-grid { grid-template-columns:1fr; }
+  }
+  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
+  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex;align-items:center;">
+    <a href="../../2026.html" class="nav-back">← 2026</a>
+    <button class="info-btn" id="info-toggle">Project Info</button>
+  </div>
+  <span class="nav-center">Aerial Assessment</span>
+</nav>
+
+<div id="info-panel">
+  <ul class="info-nav">
+    <li>_index</li>
+    <li><a href="2026-4.html">_0.entry</a></li>
+    <li><a href="2026-4-proposal&amp;methodology.html">_1.proposal &amp; methodology</a></li>
+    <li><a href="2026-4-aerial-assessment.html">_2.aerial assessment</a></li>
+    <li>
+      <button class="accordion-toggle" data-target="acc-sections">_3.sections</button>
+      <ul class="accordion-content" id="acc-sections">
+        <li><a href="2026-4-sections1.html">_3.1.hospital section 2007-2023</a></li>
+        <li><a href="2026-4-sections2.html">_3.2.6002.street section 1 2007-2023</a></li>
+        <li><a href="2026-4-sections3.html">_3.3.beytepe pond section 2007-2023</a></li>
+        <li><a href="2026-4-sections4.html">_3.4.arboretum section 2007-2023</a></li>
+        <li><a href="2026-4-sections5.html">_3.5.6002.street section 2</a></li>
+        <li><a href="2026-4-sections6.html">_3.6.6002.street section 3</a></li>
+      </ul>
+    </li>
+    <li>
+      <button class="accordion-toggle" data-target="acc-complementary">_4.complementary information</button>
+      <ul class="accordion-content" id="acc-complementary">
+        <li><a href="2026-4-species-inventory.html">_4.1.species inventory</a></li>
+        <li><a href="2026-4-habitat-strata.html">_4.2.habitat strata</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="wrap">
+  <div class="body">
+    <section class="ana-sayfa-hero">
+      <img src="../../2026-images/2026-p4/webp/0.entry/ANA SAYFA  image.webp" alt="Ana Sayfa">
+    </section>
+    <section class="aerial-grid">
+      <figure class="aerial-item">
+        <img src="../../2026-images/2026-p4/webp/2.aerial assessment/2.1.2007 - 2023 Superposed Izohips.webp" alt="2007-2023 Superposed Izohips">
+        <figcaption class="aerial-caption left">2.1.2007 - 2023 Superposed Izohips</figcaption>
+      </figure>
+      <figure class="aerial-item">
+        <img src="../../2026-images/2026-p4/webp/2.aerial assessment/2.2.2007 - 2023 Superposed Izohips 3D view with section lines.webp" alt="2007-2023 Superposed Izohips 3D view with section lines">
+        <figcaption class="aerial-caption right">2.2.2007-2023-Superposed-Izohips<br>3D-view-with-section-lines</figcaption>
+      </figure>
+      <figure class="aerial-item">
+        <img src="../../2026-images/2026-p4/webp/2.aerial assessment/2.3.2007 Superposed Izohips 3D view.webp" alt="2007 Superposed Izohips 3D view">
+        <figcaption class="aerial-caption left">2.3.2007-Superposed-Izohips-<br>3D-view</figcaption>
+      </figure>
+      <figure class="aerial-item">
+        <img src="../../2026-images/2026-p4/webp/2.aerial assessment/2.4.2023 izohips 3D view.webp" alt="2023 Izohips 3D view">
+        <figcaption class="aerial-caption right">2.4.2023-izohips-3D-view</figcaption>
+      </figure>
+      <figure class="aerial-item">
+        <img src="../../2026-images/2026-p4/webp/2.aerial assessment/2.5.2007 - 2023 Superposed Izohips 3D view.webp" alt="2007-2023 Superposed Izohips 3D view">
+        <figcaption class="aerial-caption left">2.5.2007-2023-Superposed-Izohips-<br>3D-view</figcaption>
+      </figure>
+      <figure class="aerial-item">
+        <img src="../../2026-images/2026-p4/webp/2.aerial assessment/2.6.2007 - 2023 Superposed Izohips 3D view fractured from section lines.webp" alt="2007-2023 Superposed Izohips 3D view fractured from section lines">
+        <figcaption class="aerial-caption right">2.6.2007-2023-Superposed-Izohips<br>3D-view-fractured-from-section-lines</figcaption>
+      </figure>
+    </section>
+    <section class="aerial-map">
+      <figure class="aerial-item full">
+        <img src="../../2026-images/2026-p4/webp/2.aerial assessment/mp-webp.webp" alt="Section lines on real time map">
+        <figcaption class="aerial-caption bottom">2.7.Section lines on real time map</figcaption>
+      </figure>
+    </section>
+  </div>
+  <dl class="meta">
+    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+  </dl>
+</div>
+<script>
+  const infoBtn = document.getElementById('info-toggle');
+  const infoPanel = document.getElementById('info-panel');
+  infoBtn.addEventListener('click', () => {
+    const open = infoPanel.classList.toggle('open');
+    infoBtn.classList.toggle('open', open);
+  });
+
+  document.querySelectorAll('.accordion-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.target).classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>if (location.hash) document.documentElement.classList.add('hash-nav');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Project 2026-3 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --img-w: calc(0.9 * min(1200px, (100vh - 52px - 4rem) * 1.518)); }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+  html.hash-nav body { visibility:hidden; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+
+  .wrap { max-width:1600px; margin:0 auto; padding:52px 2rem 6rem; }
+  .sub-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem 1.6rem; margin:1.5rem 0 2rem; }
+  .sub-nav a { font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.6em 1.3em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
+  .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .sub-nav a.active { opacity:1; border-color:rgba(245,242,235,0.45); }
+  nav .sub-nav { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); margin:0; gap:0.4rem 0.8rem; flex-wrap:nowrap; }
+  nav .sub-nav a { padding:0.42em 0.85em; font-size:0.6rem; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
+
+  .section { scroll-margin-top:52px; min-height:calc(100vh - 52px); height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+  .section.section-auto { height:auto; overflow:visible; padding:4rem 0; }
+  .caption-block { max-width:900px; margin:0 auto; font-size:1.05rem; line-height:1.7; opacity:0.82; }
+  .section-auto .caption-block { max-width:calc(100% - 120px); }
+  .caption-block h2 { font-size:1rem; font-weight:700; font-style:italic; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 0.8rem; }
+  .caption-block p { margin-bottom:1rem; }
+  .caption-block p:last-child { margin-bottom:0; }
+  .page-link-btn { display:inline-block; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.7em 1.6em; opacity:0.55; margin-top:2rem; transition:opacity 0.2s,border-color 0.2s; }
+  .page-link-btn:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .img-row { display:flex; align-items:center; justify-content:space-between; }
+  .img-row > img { flex:0 0 auto; height:auto; display:block; max-width:calc(100% - 120px); }
+  .img-row > img.img-common { width:var(--img-w); }
+  .img-row > img.img-portrait { width:auto; height:calc((100vh - 52px - 4rem) * 0.9); max-width:none; }
+  .img-text-pair { display:flex; flex-direction:row-reverse; align-items:flex-start; justify-content:center; gap:3rem; flex:1 1 auto; min-width:0; max-width:calc(100% - 120px); }
+  .inspo-img-col { flex:0 1 480px; width:480px; max-width:45%; display:flex; flex-direction:column; gap:0.6rem; }
+  .inspo-img-col img { width:100%; height:auto; display:block; }
+  .inspo-caption { font-size:0.66rem; line-height:1.55; letter-spacing:0.02em; opacity:0.38; text-align:right; }
+  .img-text-pair .text-col { flex:1 1 380px; min-width:0; max-width:460px; font-size:1.05rem; line-height:1.7; opacity:0.82; }
+  .img-text-pair .text-col h2 { font-size:1rem; font-weight:700; font-style:italic; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 0.8rem; }
+  .img-text-pair .text-col p { margin-bottom:1rem; }
+  .img-text-pair .text-col p:last-child { margin-bottom:0; }
+  .img-arrow { flex:0 0 auto; width:44px; height:44px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.5; transition:opacity 0.2s,background 0.2s; }
+  .img-arrow:hover { opacity:1; background:rgba(245,242,235,0.14); }
+  .img-arrow.disabled { opacity:0.12; cursor:default; pointer-events:none; }
+  .img-arrow { position:relative; }
+  .img-arrow[data-tooltip]::after { content:attr(data-tooltip); position:absolute; bottom:120%; background:var(--black); color:var(--white); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; }
+  .img-row > .img-arrow:first-child[data-tooltip]::after { left:0; }
+  .img-row > .img-arrow:last-child[data-tooltip]::after { right:0; }
+  .img-arrow[data-tooltip]:hover::after { opacity:1; }
+  .placeholder-box { flex:0 0 auto; width:var(--img-w); max-width:calc(100% - 120px); height:calc(var(--img-w) / 1.518); border:1px dashed var(--border); opacity:0.35; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; display:flex; align-items:center; justify-content:center; text-align:center; }
+  .scroll-nav { position:fixed; right:2rem; z-index:150; width:44px; height:44px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.5; transition:opacity 0.2s,background 0.2s; }
+  .scroll-nav:hover { opacity:1; background:rgba(245,242,235,0.14); }
+  .scroll-nav-up { top:6.5rem; }
+  .scroll-nav-down { bottom:2.5rem; }
+  @media (max-width:600px) {
+    .scroll-nav { width:38px; height:38px; right:1.2rem; }
+    .scroll-nav-up { top:4.5rem; }
+    .scroll-nav-down { bottom:1.5rem; }
+    .img-arrow { width:38px; height:38px; }
+    .img-row > img { max-width:calc(100% - 100px); }
+    .placeholder-box { max-width:calc(100% - 100px); }
+    .img-text-pair { flex-direction:column; gap:1.5rem; max-width:calc(100% - 100px); }
+    .inspo-img-col { width:100%; max-width:320px; }
+  }
+
+  .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
+  .meta-item dd { font-size:0.88rem; opacity:0.65; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="../../2026.html" class="nav-back">← 2026</a>
+  <div class="sub-nav">
+    <a href="2026-3-projectinfo.html">Info</a>
+    <a href="2026-3.html">Entrance</a>
+    <a href="2026-3-errors.html">Errors</a>
+    <a href="2026-3-soilscenesifters.html">Sifters</a>
+    <a href="2026-3-siftingwhatdetectingerrors.html">Sifting What?</a>
+    <a href="2026-3-aftersift.html">After Sift</a>
+    <a href="2026-3-sceneexplanations.html" class="active">Scene Explanations</a>
+  </div>
+</nav>
+<button class="scroll-nav scroll-nav-up" id="scroll-up" aria-label="Previous section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<button class="scroll-nav scroll-nav-down" id="scroll-down" aria-label="Next section">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div class="wrap">
+  <div class="body">
+
+    <div class="section" id="section-1">
+      <div class="img-row">
+        <button class="img-arrow" id="se1-prev" aria-label="Previous" data-tooltip="Click Back To After Sift">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="img-text-pair">
+          <div class="inspo-img-col">
+            <img src="../../2026-images/2026-p3/6 scene explanations page-6/inspo-1.webp" alt="Scene Explanations 1">
+            <div class="inspo-caption">
+              <strong>Trash Peaks</strong><br>
+              Seoul Biennale, 2017<br>
+              Project Team:<br>
+              El Hadi Jazairy + Rania Ghosn<br>
+              Reid Fellenbaum, Victor Lee, Monica Britt Hutton, Beth Savrann
+            </div>
+          </div>
+          <div class="text-col">
+            <h2>The Monument Scene</h2>
+            <p>In this specific scene, the transition from the analytical "sifter" phase to the speculative "after-sift" condition vividly demonstrates the application of our diagnostic framework. Initially, the gridded hillside reveals a substrate overwhelmed by uncared-for externalities: scattered refuse, toxic leaks, and construction debris, all crowned by an abandoned concrete monument that symbolizes the failures of geographic abstraction. Through the sifting process, these detected "errors" are reclaimed as matters of concern. Drawing directly from Design Earth's Trash Peaks, the passive concrete structure at the summit is replaced by an active, speculative architectural apparatus—a new monument dedicated to collecting, processing, and metabolizing the landscape's historical waste. Purged of its unmanaged toxicities, the slope is radically remediated into a hybridized ecosystem where the technosphere and the biosphere deeply entangle. In the spirit of Latour's "Living with Frankenstein," machines are not expelled but are integrated to actively care for the environment; autonomous agricultural drones nurture the terrain alongside thriving, non-human inhabitants. Ultimately, this after-sift scene transcends the dichotomy of nature versus machine, evolving into a resilient agricultural landscape that allows the inherent metabolism of the soil to function, breathe, and flourish within a newly constructed ecology of care.</p>
+          </div>
+        </div>
+        <button class="img-arrow disabled" id="se1-next" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="section" id="section-2">
+      <div class="img-row">
+        <button class="img-arrow" id="se2-prev" aria-label="Previous" data-tooltip="Click Back To After Sift">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="img-text-pair">
+          <div class="inspo-img-col">
+            <img src="../../2026-images/2026-p3/6 scene explanations page-6/inspo-2.webp" alt="Scene Explanations 2">
+            <div class="inspo-caption">
+              <strong>Trash Peaks</strong><br>
+              Seoul Biennale, 2017<br>
+              Project Team:<br>
+              El Hadi Jazairy + Rania Ghosn<br>
+              Reid Fellenbaum, Victor Lee, Monica Britt Hutton, Beth Savrann
+            </div>
+          </div>
+          <div class="text-col">
+            <h2>The Dump Scene</h2>
+            <p>Confronting an alienated, hostile terrain initially devoid of human presence, the diagnostic sifting apparatus deploys a highly complex grid to identify monumental industrial detritus—such as impenetrable tangles of wire, machine fragments, and concrete rubble—as profound spatial "errors." The speculative "after-sift" condition radically reconfigures this wasteland by metabolizing its accumulated neglect into a new ecological synthesis. The dense, unmovable bundles of debris are conceptually transmuted into provocative vegetative formations, while the distant, oppressive mountains of refuse are boldly reimagined as speculative forests. To functionally anchor this hybridized ecosystem, a "Trash Peak" (drawing from Design Earth's spatial lexicon) is surgically inserted onto the barren slope; it operates as an active architectural agent that manages the technosphere and orchestrates continuous terrestrial care. Simultaneously, the integration of a "Georama of Trash" in the deep background projects this localized remediation onto the broader urban scale, illustrating the city-wide potential of this metabolic infrastructure. In this fully realized scene, the rigid dichotomies between the natural and the artificial dissolve entirely. Robotic appendages, human stewards, and resilient flora dynamically coexist and adapt, epitomizing the ethos of "Living with Frankenstein" within a meticulously curated, multi-scalar landscape.</p>
+          </div>
+        </div>
+        <button class="img-arrow disabled" id="se2-next" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="section" id="section-3">
+      <div class="img-row">
+        <button class="img-arrow" id="se3-prev" aria-label="Previous" data-tooltip="Click Back To After Sift">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="img-text-pair">
+          <div class="inspo-img-col">
+            <img src="../../2026-images/2026-p3/6 scene explanations page-6/inspo-3.webp" alt="Scene Explanations 3">
+            <div class="inspo-caption">
+              <strong>Georama of Trash</strong><br>
+              Lisbon Architecture Triennale, The World in Our Eyes, 2016<br>
+              Project Team:<br>
+              El Hadi Jazairy + Rania Ghosn<br>
+              Jia Weng, Ya Suo, Sheung Chui Carol Nung
+            </div>
+          </div>
+          <div class="text-col">
+            <h2>The Sifterman Scene</h2>
+            <p>Shifting from the macro-territorial to the intimate human scale, this scene reconfigures the sifting apparatus into a localized, less rigid analytical grid. At this tactile resolution, the initial sifter acts as a forensic diagnostic, detecting the fragmented detritus of industrial modernity—scattered plastics, synthetic residues, and discarded machine parts—and classifying them as immediate anthropogenic "errors" disrupting the substrate. In the speculative "after-sift" condition, the remediation of these localized externalities catalyzes the emergence of a new architectural subjectivity: the "Sifterman" persona. Moving decisively beyond the passive, detached observation of the modernist flâneur—who merely navigated the abstracted, paved surfaces of the city as a spectator—the Sifterman embodies an active, deeply entangled stewardship. By stepping barefoot onto the remediated, nutrient-rich earth, equipped simultaneously with the instruments of cultivation and the tools of empirical measurement, this persona learns to live with and care for the ground. This human-scale intervention transforms the act of sifting from a purely analytical framework into a lived practice of terrestrial care, allowing the human agent to actively participate in, and benefit from, the recovered metabolism of the soil.</p>
+          </div>
+        </div>
+        <button class="img-arrow disabled" id="se3-next" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="section section-auto" id="section-4">
+      <div class="img-row">
+        <button class="img-arrow" id="se4-prev" aria-label="Previous" data-tooltip="Click Back To After Sift">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="caption-block" style="max-width:calc(100% - 120px); margin:0; margin-left:10%; margin-right:7.5%;">
+        <h2>The Micro Scene</h2>
+        <p>Descending into the subterranean micro-scale, this scene penetrates the intricate metabolism of the soil, exposing the vibrant network of non-human creatures that physically construct and sustain the substrate. This intimate resolution fundamentally dismantles the "Blue Marble" paradigm—which abstracts the planet as a distant, passive, and impersonal resource—and forcefully grounds the project in the reality of "Gaia." Within this framework, the Earth is no longer a peaceful, stand-alone globe, but a fiercely active, composite figure where human and non-human destinies are deeply entangled. Crucially, the diagnostic sifter must recalibrate its logic at this depth. Unlike the synthetic detritus and industrial externalities identified as anthropogenic "errors" in the broader urban context, these subterranean organisms—the worms, larvae, ants, and burrowing mammals—are emphatically not anomalies to be filtered out. They possess an absolute, intrinsic right to exist within the geostrata. In the speculative after-sift condition, these entities are reclassified as indispensable collaborators, functioning as vital "supporters of the sifter." They are the primary biological engines of the earth, perpetually digesting, aerating, and regenerating the terrain. By actively validating their presence rather than attempting to over-engineer their habitat, the scene illustrates that profound terrestrial care requires acknowledging the soil's inherent sovereignty, allowing its native, non-human operators to freely perform the continuous labor of world-making.</p>
+        <div style="text-align:right; margin-top:2rem;">
+          <a href="2026-3.html" class="page-link-btn" style="margin-top:0;">Continue to Entrance →</a>
+        </div>
+        </div>
+        <div class="img-arrow" style="visibility:hidden;"></div>
+      </div>
+    </div>
+
+  </div>
+  <dl class="meta">
+    <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
+  </dl>
+</div>
+<script>
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+  }
+  document.documentElement.classList.remove('hash-nav');
+
+  const sections = document.querySelectorAll('.body .section');
+  const sectionOffset = 52;
+
+  function currentSectionIndex() {
+    let idx = 0;
+    sections.forEach((sec, i) => {
+      if (sec.getBoundingClientRect().top <= sectionOffset + 1) idx = i;
+    });
+    return idx;
+  }
+
+  function scrollToSection(index) {
+    const clamped = Math.max(0, Math.min(sections.length - 1, index));
+    if (clamped === 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      sections[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
+  document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
+
+  document.getElementById('se1-prev').addEventListener('click', () => { window.location.href = '2026-3-aftersift.html#section-2'; });
+  document.getElementById('se2-prev').addEventListener('click', () => { window.location.href = '2026-3-aftersift.html#section-3'; });
+  document.getElementById('se3-prev').addEventListener('click', () => { window.location.href = '2026-3-aftersift.html#section-4'; });
+  document.getElementById('se4-prev').addEventListener('click', () => { window.location.href = '2026-3-aftersift.html#section-5'; });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); scrollToSection(currentSectionIndex() - 1); }
+  });
+</script>
+</body>
+</html>
