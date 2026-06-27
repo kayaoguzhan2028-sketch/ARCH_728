@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/06Başkent.webp">
+<title>Map — ARCH 728</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html, body { width: 100%; height: 100%; background: var(--black); color: var(--white); font-family: var(--font); }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-links { display:flex; align-items:center; gap:0.8rem; }
+  .nav-link { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.45; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; color:var(--white); text-decoration:none; transition:opacity 0.2s,border-color 0.2s; }
+  .nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.5); }
+  .nav-toggle-btn {
+    display:none;
+    width:1.9rem; height:1.9rem; align-items:center; justify-content:center;
+    background:none; border:1px solid rgba(245,242,235,0.2); color:var(--white);
+    font-size:0.75rem; cursor:pointer;
+  }
+
+  #map { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:0; background:var(--black); }
+  #map.dimmed .leaflet-tile-pane { filter: brightness(0.32) contrast(0.85) saturate(0.5); transition: filter 0.4s; }
+  #map .leaflet-tile-pane { transition: filter 0.4s; }
+
+  #slider-panel {
+    position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
+    z-index:900; background:rgba(10,10,10,0.78); border:1px solid var(--border);
+    padding:0.9rem 1.6rem 0.8rem;
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    min-width:320px;
+  }
+  #year-label { font-size:1.4rem; letter-spacing:0.08em; color:var(--white); opacity:0.9; }
+  #demolition-counter {
+    font-size:0.62rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:#ff6b5b; opacity:0.85; transition:opacity 0.2s;
+  }
+  #demolition-counter .count { font-size:0.8rem; letter-spacing:0; font-weight:600; }
+  #demolition-counter.flash { animation: demolition-flash 0.9s ease-out; }
+  @keyframes demolition-flash {
+    0%   { opacity:1; text-shadow:0 0 12px rgba(255,107,91,0.9); }
+    100% { opacity:0.85; text-shadow:none; }
+  }
+  .demolition-pulse { pointer-events:none; }
+  .demolition-pulse div {
+    width:100%; height:100%;
+    background:rgba(255,107,91,0.9);
+    box-shadow:0 0 0 0 rgba(255,107,91,0.7);
+    animation: demolition-pulse-ring 1.2s ease-out forwards;
+  }
+  @keyframes demolition-pulse-ring {
+    0%   { transform:scale(0.4); opacity:1; box-shadow:0 0 0 0 rgba(255,107,91,0.7); }
+    70%  { transform:scale(1.6); opacity:0.6; box-shadow:0 0 0 10px rgba(255,107,91,0); }
+    100% { transform:scale(2.2); opacity:0; box-shadow:0 0 0 10px rgba(255,107,91,0); }
+  }
+  .vagabond-canvas { animation: vagabond-pulse 3s ease-in-out infinite; }
+  @keyframes vagabond-pulse {
+    0%   { opacity:0.3; }
+    50%  { opacity:0.9; }
+    100% { opacity:0.3; }
+  }
+  .civilized-canvas { opacity:0; animation: civilized-pop 2.2s ease-out forwards; }
+  @keyframes civilized-pop {
+    0%   { opacity:0; }
+    55%  { opacity:0.8; }
+    100% { opacity:0.5; }
+  }
+  .nomadic-frame { opacity:0; transition:opacity 0.2s linear; }
+  .nomadic-frame.visible { opacity:1; }
+  .buildings-canvas, .roads-canvas { opacity:0.8; }
+  .hafriyat-square { pointer-events:none; }
+  .hafriyat-square div {
+    width:100%; height:100%;
+    background:#e05c2a; opacity:0.85;
+    box-shadow:0 0 4px rgba(224,92,42,0.6);
+  }
+  .proletariat-square { pointer-events:none; }
+  .proletariat-square div {
+    width:100%; height:100%;
+    background:#d4a843; opacity:0.9;
+    box-shadow:0 0 4px rgba(212,168,67,0.6);
+  }
+  .slider-row { display:flex; align-items:center; gap:0.7rem; width:100%; }
+  .year-arrow {
+    flex-shrink:0; width:1.7rem; height:1.7rem; display:flex; align-items:center; justify-content:center;
+    background:none; border:1px solid rgba(245,242,235,0.3); color:var(--white);
+    font-family:var(--font); font-size:1rem; line-height:1; cursor:pointer; opacity:0.8;
+    transition:opacity 0.2s, border-color 0.2s;
+  }
+  .year-arrow:hover:not(:disabled) { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .year-arrow:disabled { opacity:0.2; cursor:default; }
+  #year-slider {
+    flex:1; width:100%; cursor:pointer; appearance:none; height:2px;
+    background:rgba(245,242,235,0.2); outline:none;
+  }
+  #year-slider::-webkit-slider-thumb {
+    appearance:none; width:14px; height:14px;
+    border-radius:50%; background:var(--white); cursor:pointer;
+  }
+  .slider-ticks {
+    display:flex; justify-content:space-between; width:100%;
+    font-size:0.52rem; letter-spacing:0.1em; color:var(--white); opacity:0.3; user-select:none;
+  }
+
+  #layer-panel {
+    position:fixed; top:62px; right:1rem; z-index:900;
+    background:rgba(10,10,10,0.78); border:1px solid var(--border);
+    padding:0.8rem 1rem; display:flex; flex-direction:column; gap:0.5rem; min-width:170px;
+  }
+  .layer-btn {
+    display:flex; align-items:center; gap:0.6rem;
+    font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--white); background:none; border:none; cursor:pointer;
+    opacity:0.6; transition:opacity 0.2s; padding:0; text-align:left; font-family:var(--font);
+  }
+  .layer-btn.active { opacity:1; }
+  .layer-btn:disabled { opacity:0.2; cursor:default; }
+  .layer-section-sub { font-size:0.85em; letter-spacing:0.1em; opacity:0.7; }
+  .layer-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+  .layer-divider { border:none; border-top:1px solid var(--border); margin:0.1rem 0; width:100%; }
+  .layer-section-label { font-size:0.54rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.32; }
+  .layer-row { display:flex; align-items:center; gap:0.45rem; }
+  .layer-info-btn {
+    width:14px; height:14px; border-radius:50%; flex-shrink:0;
+    border:1px solid rgba(245,242,235,0.35); background:none; color:var(--white);
+    font-size:0.55rem; line-height:1; font-family:var(--font); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0.5; transition:opacity 0.2s, border-color 0.2s;
+  }
+  .layer-info-btn:hover { opacity:1; border-color:rgba(245,242,235,0.7); }
+
+  #soil-info-overlay {
+    position:fixed; inset:0; z-index:1100;
+    background:rgba(10,10,10,0.92);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity 0.25s ease;
+  }
+  #soil-info-overlay.open { opacity:1; pointer-events:auto; }
+  #soil-info-panel {
+    position:relative; width:min(640px, 88vw); max-height:80vh; overflow-y:auto;
+    background:#0a0a0a; border:1px solid var(--border);
+    padding:2.4rem 2.6rem;
+  }
+  #soil-info-panel h4 { font-size:1.1rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); opacity:0.9; margin-bottom:1.4rem; padding-right:1.5rem; }
+  #soil-info-panel p { font-size:0.95rem; line-height:1.8; opacity:0.85; margin-bottom:1.2rem; text-align:justify; }
+  #soil-info-panel p:last-child { margin-bottom:0; }
+  #soil-info-close {
+    position:fixed; top:1.2rem; right:1.5rem; width:2.2rem; height:2.2rem;
+    display:flex; align-items:center; justify-content:center;
+    background:none; border:1px solid var(--accent); color:var(--white);
+    opacity:0.7; cursor:pointer; font-size:1.4rem; line-height:1; font-family:var(--font);
+    transition:opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+  #soil-info-close:hover { opacity:1; background:var(--accent); color:var(--black); }
+
+  .leaflet-control-attribution { font-size:0.55rem !important; background:rgba(10,10,10,0.6) !important; color:rgba(245,242,235,0.4) !important; }
+  .leaflet-control-attribution a { color:rgba(245,242,235,0.55) !important; }
+
+  .map-label { font-family:var(--font); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--white); opacity:0.75; text-shadow:0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7); white-space:nowrap; pointer-events:none; }
+
+  #layer-toggle-btn {
+    display:none;
+    position:fixed; top:62px; right:1rem; z-index:901;
+    width:1.9rem; height:1.9rem; align-items:center; justify-content:center;
+    background:rgba(10,10,10,0.78); border:1px solid var(--border); color:var(--white);
+    font-size:0.75rem; cursor:pointer;
+  }
+
+  @media (max-width:700px) {
+    #layer-toggle-btn { display:flex; }
+    #layer-panel { display:none; max-height:75vh; overflow-y:auto; top:104px; }
+    #layer-panel.open { display:flex; }
+
+    #slider-panel { bottom:1rem; padding:0.6rem 1rem 0.5rem; min-width:0; width:88vw; max-width:320px; gap:0.35rem; }
+    #year-label { font-size:1.05rem; }
+    .slider-ticks span { font-size:0.42rem; }
+    .year-arrow { width:1.5rem; height:1.5rem; }
+
+    .nav-toggle-btn { display:flex; }
+    .nav-links {
+      display:none; position:fixed; top:52px; right:0; z-index:1000;
+      flex-direction:column; align-items:stretch; gap:0.4rem;
+      background:var(--black); border:1px solid var(--border); border-top:none;
+      padding:0.6rem;
+    }
+    .nav-links.open { display:flex; }
+    .nav-link { text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="2026-7.html" class="nav-back">← 2026</a>
+  <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;">The Map</span>
+  <button id="nav-toggle-btn" class="nav-toggle-btn" aria-label="Toggle navigation">▸</button>
+  <div class="nav-links" lang="en">
+    <a href="2026-7.html" class="nav-link">Main</a>
+    <a href="2026-7-timeline.html" class="nav-link">The Timeline</a>
+  </div>
+</nav>
+
+<div id="map"></div>
+
+<div id="slider-panel">
+  <span id="year-label">2010</span>
+  <span id="demolition-counter" lang="en"><span class="count">0</span> squatter houses demolished</span>
+  <div class="slider-row">
+    <button id="year-prev" class="year-arrow" aria-label="Previous year" disabled>‹</button>
+    <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010">
+    <button id="year-next" class="year-arrow" aria-label="Next year">›</button>
+  </div>
+  <div class="slider-ticks">
+    <span>2010</span><span>2012</span><span>2014</span><span>2016</span>
+    <span>2018</span><span>2020</span><span>2022</span><span>2024</span><span>2026</span>
+  </div>
+</div>
+
+<button id="layer-toggle-btn" aria-label="Toggle layers">▸</button>
+<div id="layer-panel" lang="en"></div>
+
+<div id="soil-info-overlay" lang="en">
+  <button id="soil-info-close" aria-label="Close">×</button>
+  <div id="soil-info-panel">
+    <h4 id="soil-info-title"></h4>
+    <div id="soil-info-body"></div>
+  </div>
+</div>
+
+<script src="../../2026-images/2026-p7/Map/harita/js/sketch.js"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/animation.js"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/proletariat.js"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/nomadic.js"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js-optimized/layers.js"></script>
+
+<script>
+  const CIRCLE_CENTER = L.latLng(39.8572724, 32.8407268);
+  const CIRCLE_RADIUS = 2000; // metre
+
+  const mapEl = document.getElementById('map');
+  mapEl.classList.add('dimmed');
+
+  const map = L.map('map', { center: CIRCLE_CENTER, zoom: 15 });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıda bulunanlar © <a href="https://carto.com/attributions">CARTO</a>',
+  }).addTo(map);
+
+  // Çalışma çemberi: tüm çizimler bunun içinde — dashed, en altta, sönük
+  const boundaryCircle = L.circle(CIRCLE_CENTER, {
+    radius: CIRCLE_RADIUS,
+    color: '#ffffff',
+    weight: 1.5,
+    dashArray: '6,8',
+    fill: false,
+    opacity: 0.4,
+    interactive: false,
+  }).addTo(map);
+
+  // data path'ini harita/data-optimized/ olarak override et
+  const _origDataPath = p => `../../2026-images/2026-p7/Map/harita/data-optimized/${p}`;
+
+  LayerManager.init(map);
+  HafriyatAnimation.init(map);
+  ProletariatAnimation.init(map);
+  NomadicAnimation.init(map);
+  LayerManager.loadStaticLayers(_origDataPath);
+
+  // ── Pulse boyutu: feature'ın ekrandaki (px) genişliğinin ~1.1x'i ─────────
+  const PULSE_MIN_PX = 6, PULSE_MAX_PX = 60;
+
+  function featurePulseSize(geometry) {
+    const coords = geometry.type === 'LineString' ? geometry.coordinates : geometry.coordinates[0];
+    const pts = coords.map(c => map.latLngToContainerPoint([c[1], c[0]]));
+    const xs  = pts.map(p => p.x), ys = pts.map(p => p.y);
+    const size = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) * 1.1;
+    return Math.max(PULSE_MIN_PX, Math.min(PULSE_MAX_PX, size));
+  }
+
+  // ── Yıkım sayacı + "yeni yıkım" flaş efekti ──────────────────────────────
+  const demolitionCounter = document.getElementById('demolition-counter');
+  const demolitionCount   = demolitionCounter.querySelector('.count');
+
+  function flashNewDemolitions(geojson, year) {
+    const features = (geojson && geojson.features) || [];
+    demolitionCount.textContent = features.length;
+
+    const isNew = f => f.properties && f.properties.year_demolished === year;
+    const newOnes = features.filter(isNew);
+    if (!newOnes.length) return;
+
+    demolitionCounter.classList.remove('flash');
+    requestAnimationFrame(() => demolitionCounter.classList.add('flash'));
+
+    if (!LayerManager.isVisible('demolition_zones')) return;
+
+    newOnes.forEach(f => {
+      const ring = f.geometry.coordinates[0];
+      const lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
+      const lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
+      const size  = featurePulseSize(f.geometry);
+      const pulse = L.divIcon({ className: 'demolition-pulse', html: `<div style="width:${size}px;height:${size}px;"></div>`, iconSize: [size, size] });
+      const marker = L.marker([lat, lng], { icon: pulse, interactive: false }).addTo(map);
+      setTimeout(() => map.removeLayer(marker), 1200);
+    });
+  }
+
+  LayerManager.loadYear(2010, _origDataPath).then(({ demolition }) => {
+    flashNewDemolitions(demolition, 2010);
+  });
+
+  // Yer adları katmanı (mahalle/semt isimleri) — statik, tek seferlik veri
+  const labelsLayer = L.layerGroup();
+  fetch(_origDataPath('labels.geojson'), { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : { features: [] })
+    .catch(() => ({ features: [] }))
+    .then(geojson => {
+      (geojson.features || []).forEach(f => {
+        const [lng, lat] = f.geometry.coordinates;
+        L.marker([lat, lng], {
+          icon: L.divIcon({ className: 'map-label', html: f.properties.name, iconSize: null }),
+          interactive: false,
+        }).addTo(labelsLayer);
+      });
+    });
+  labelsLayer.addTo(map);
+
+  const layerPanel     = document.getElementById('layer-panel');
+  const layerToggleBtn = document.getElementById('layer-toggle-btn');
+  layerToggleBtn.addEventListener('click', () => {
+    const open = layerPanel.classList.toggle('open');
+    layerToggleBtn.textContent = open ? '▾' : '▸';
+  });
+
+  const navLinks     = document.querySelector('.nav-links');
+  const navToggleBtn = document.getElementById('nav-toggle-btn');
+  navToggleBtn.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggleBtn.textContent = open ? '▾' : '▸';
+  });
+
+  // ── Mapping grubu (kategorik veri katmanları) ────────────────────────────
+  const mappingLabel = document.createElement('span');
+  mappingLabel.className = 'layer-section-label';
+  mappingLabel.textContent = 'Mapping';
+  layerPanel.appendChild(mappingLabel);
+
+  ['buildings','gecekondu','roads','greenspace','water','demolition_zones'].forEach(key => {
+    const cfg = LayerManager.getConfig(key);
+    const btn = document.createElement('button');
+    btn.className = LayerManager.isVisible(key) ? 'layer-btn active' : 'layer-btn';
+    btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
+    btn.addEventListener('click', () => btn.classList.toggle('active', LayerManager.toggle(key)));
+    layerPanel.appendChild(btn);
+  });
+
+  let labelsVisible = true;
+  const labelsBtn = document.createElement('button');
+  labelsBtn.className = 'layer-btn active';
+  labelsBtn.innerHTML = '<span class="layer-dot" style="background:#f5f2eb"></span>Labels';
+  labelsBtn.addEventListener('click', () => {
+    labelsVisible = !labelsVisible;
+    labelsBtn.classList.toggle('active', labelsVisible);
+    if (labelsVisible) labelsLayer.addTo(map); else map.removeLayer(labelsLayer);
+  });
+  layerPanel.appendChild(labelsBtn);
+
+  // ── Animation grubu (soil taxonomy) ──────────────────────────────────────
+  layerPanel.appendChild(Object.assign(document.createElement('hr'), { className: 'layer-divider' }));
+
+  const animationLabel = document.createElement('span');
+  animationLabel.className = 'layer-section-label';
+  animationLabel.innerHTML = 'Animation <span class="layer-section-sub">(Move to 2026)</span>';
+  layerPanel.appendChild(animationLabel);
+
+  // Her soil sayfasından metin çekmek için: hangi seçiciden paragraf alınacak, kaç tane, başlık nereden gelecek.
+  const SOIL_INFO = {
+    nomadic:           { url: '2026-7-nomad-soil.html',       selector: '.columns p' },
+    hafriyat_guzergah: { url: '2026-7-debris.html',           selector: '#sec-block .body p', limit: 2, titleOverride: 'Barbarian Soil' },
+    vagabond:          { url: '2026-7-vagabond-soil.html',    selector: '.columns p' },
+    proletariat:       { url: '2026-7-proletariat-soil.html', selector: '.columns p' },
+    civilized:         { url: '2026-7-civilized-soil.html',   selector: '.columns p' },
+  };
+
+  const soilOverlay = document.getElementById('soil-info-overlay');
+  const soilTitle = document.getElementById('soil-info-title');
+  const soilBody  = document.getElementById('soil-info-body');
+  document.getElementById('soil-info-close').addEventListener('click', () => soilOverlay.classList.remove('open'));
+  soilOverlay.addEventListener('click', e => { if (e.target === soilOverlay) soilOverlay.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') soilOverlay.classList.remove('open'); });
+
+  const soilCache = {};
+  async function showSoilInfo(key) {
+    const info = SOIL_INFO[key];
+    if (!info) return;
+
+    soilOverlay.classList.add('open');
+    soilTitle.textContent = LayerManager.getConfig(key).label;
+    soilBody.innerHTML = '<p style="opacity:0.5;">...</p>';
+
+    if (!soilCache[key]) {
+      try {
+        const res  = await fetch(info.url);
+        const html = await res.text();
+        const doc  = new DOMParser().parseFromString(html, 'text/html');
+        let paras  = Array.from(doc.querySelectorAll(info.selector)).map(p => p.textContent.trim());
+        if (info.limit) paras = paras.slice(0, info.limit);
+        const title = info.titleOverride || (doc.querySelector('.masthead')?.textContent.trim()) || '';
+        soilCache[key] = { title, paras };
+      } catch (e) {
+        soilCache[key] = { title: '', paras: ['Metin yüklenemedi.'] };
+      }
+    }
+
+    const { title, paras } = soilCache[key];
+    soilTitle.textContent = title || LayerManager.getConfig(key).label;
+    soilBody.innerHTML = paras.map(p => `<p>${p}</p>`).join('');
+  }
+
+  // ── Civilized açıkken haritayı dashed çembere tam oturtup kilitle ────────
+  function lockMapToCircle() {
+    map.flyToBounds(boundaryCircle.getBounds(), { animate: true, duration: 0.8 });
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoom.disable();
+    map.boxZoom.disable();
+    if (map.keyboard) map.keyboard.disable();
+  }
+
+  function unlockMapFromCircle() {
+    map.dragging.enable();
+    map.scrollWheelZoom.enable();
+    map.doubleClickZoom.enable();
+    map.touchZoom.enable();
+    map.boxZoom.enable();
+    if (map.keyboard) map.keyboard.enable();
+  }
+
+  const animationButtons = [];
+
+  ['nomadic','hafriyat_guzergah','vagabond','proletariat','civilized'].forEach(key => {
+    const cfg = LayerManager.getConfig(key);
+    const row = document.createElement('div');
+    row.className = 'layer-row';
+
+    const infoBtn = document.createElement('button');
+    infoBtn.className = 'layer-info-btn';
+    infoBtn.textContent = 'i';
+    infoBtn.addEventListener('click', () => showSoilInfo(key));
+    row.appendChild(infoBtn);
+
+    const btn = document.createElement('button');
+    btn.className = 'layer-btn'; // animation grubu varsayılan kapalı başlıyor, sadece 2026'da aktif olur
+    btn.disabled = true;
+    btn.dataset.key = key;
+    btn.innerHTML = `<span class="layer-dot" style="background:${cfg.color}"></span>${cfg.label}`;
+    btn.addEventListener('click', () => {
+      const turningOn = !btn.classList.contains('active');
+      if (turningOn) {
+        // animation grubunda tek seferde bir katman açık olabilir; diğerlerini otomatik kapat
+        animationButtons.forEach(other => {
+          if (other !== btn && other.classList.contains('active')) {
+            other.classList.remove('active');
+            LayerManager.toggle(other.dataset.key);
+            if (other.dataset.key === 'civilized') unlockMapFromCircle();
+          }
+        });
+      }
+      const isActive = LayerManager.toggle(key);
+      btn.classList.toggle('active', isActive);
+      if (key === 'civilized') {
+        isActive ? lockMapToCircle() : unlockMapFromCircle();
+      }
+    });
+    row.appendChild(btn);
+    animationButtons.push(btn);
+
+    layerPanel.appendChild(row);
+  });
+
+  map.on('moveend', function() {
+    if (map.getCenter().distanceTo(CIRCLE_CENTER) > CIRCLE_RADIUS) {
+      map.flyTo(CIRCLE_CENTER, 15, { duration: 0.8 });
+    }
+  });
+
+  const slider    = document.getElementById('year-slider');
+  const yearLabel = document.getElementById('year-label');
+  const prevBtn   = document.getElementById('year-prev');
+  const nextBtn   = document.getElementById('year-next');
+
+  const YEAR_MIN = 2010, YEAR_MAX = 2026;
+
+  function refreshArrowState() {
+    const y = parseInt(slider.value);
+    prevBtn.disabled = y <= YEAR_MIN;
+    nextBtn.disabled = y >= YEAR_MAX;
+  }
+
+  function setYear(y) {
+    slider.value = y;
+    yearLabel.textContent = y === YEAR_MAX ? 'Abstraction of 2026' : y;
+    mapEl.classList.toggle('dimmed', y < YEAR_MAX);
+    demolitionCounter.style.display = y >= YEAR_MAX ? 'none' : '';
+    refreshArrowState();
+
+    const atAbstraction = y >= YEAR_MAX;
+    LayerManager.setAnimationsEnabled(atAbstraction);
+    animationButtons.forEach(btn => { btn.disabled = !atAbstraction; });
+
+    if (atAbstraction) {
+      LayerManager.clearYearLayers();
+      demolitionCount.textContent = 0;
+    } else {
+      LayerManager.loadYear(y, _origDataPath).then(({ demolition }) => {
+        flashNewDemolitions(demolition, y);
+      });
+    }
+  }
+
+  function stepYear(delta) {
+    const next = parseInt(slider.value) + delta;
+    if (next < YEAR_MIN || next > YEAR_MAX) return;
+    setYear(next);
+  }
+
+  prevBtn.addEventListener('click', () => stepYear(-1));
+  nextBtn.addEventListener('click', () => stepYear(1));
+  slider.addEventListener('input', () => setYear(parseInt(slider.value)));
+</script>
+
+</body>
+</html>
