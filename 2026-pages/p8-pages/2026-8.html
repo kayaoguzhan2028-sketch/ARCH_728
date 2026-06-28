@@ -484,25 +484,10 @@
     loader.src = src;
   }
 
-  const hotspotModalData = [
-    { img: '2026-images/2026-p8/Görsel10.webp', text: '' },
-    { img: '2026-images/2026-p8/Görsel12.webp', text: '' },
-    { img: '2026-images/2026-p8/Görsel11.webp', text: '' }
-  ];
-
   const imageModal = document.getElementById('image-modal');
   const imageModalImg = document.getElementById('image-modal-img');
   const imageModalText = document.getElementById('image-modal-text');
   const imageModalImg2 = document.getElementById('image-modal-img2');
-
-  function openImageModal(index) {
-    swapImageSrc(imageModalImg, hotspotModalData[index].img);
-    const text = hotspotModalData[index].text;
-    imageModalText.textContent = text;
-    imageModalText.style.display = text ? '' : 'none';
-    imageModalImg2.style.display = 'none';
-    imageModal.classList.add('active');
-  }
 
   function openAlanModal(topSrc, html, bottomSrc) {
     swapImageSrc(imageModalImg, topSrc);
@@ -516,10 +501,6 @@
   function closeImageModal() {
     imageModal.classList.remove('active');
   }
-
-  document.querySelectorAll('.hotspot-group').forEach((group, i) => {
-    group.addEventListener('click', () => openImageModal(i));
-  });
 
   document.getElementById('image-modal-close').addEventListener('click', closeImageModal);
   imageModal.addEventListener('click', (e) => {
@@ -574,8 +555,8 @@
   }
 
   const overlaySvg4 = document.getElementById('overlay-svg4');
-  const BASE_SVG4   = '2026-images/2026-p8/3/svg/';
-  const BASE_IMG4   = '2026-images/2026-p8/3/';
+  const BASE_SVG4   = '../../2026-images/2026-p8/3/svg/';
+  const BASE_IMG4   = '../../2026-images/2026-p8/3/';
 
   const FILES4 = [
     { svg:'Geological Studies.svg', webp:'geologicalstudies.webp' },
@@ -610,10 +591,10 @@
   });
 
   const overlaySvg9 = document.getElementById('overlay-svg9');
-  const BASE_SVG9_ALAN = '2026-images/2026-p8/5/svg/alan/';
-  const BASE_SVG9_LINES = '2026-images/2026-p8/5/svg/çizgiler/';
+  const BASE_SVG9_ALAN = '../../2026-images/2026-p8/5/svg/alan/';
+  const BASE_SVG9_LINES = '../../2026-images/2026-p8/5/svg/çizgiler/';
 
-  const BASE_IMG9 = '2026-images/2026-p8/5/';
+  const BASE_IMG9 = '../../2026-images/2026-p8/5/';
   const FILES9_ALAN = [
     { svg:'ALAN1.svg', top:'1.1.webp', bottom:'1.2.webp', html:'This highlighted section captures the fundamental metabolic rift that occurs as the landscape transitions out of the Arkhe. As the ground is sealed, the space is fractured. In the unbothered Arkhe, the natural colluvium layer is fully porous, allowing for maximum <strong>biological and hydrological exchange</strong>. However, as the timeline moves forward, this permeability experiences gradual decline. The imposition of the Tekton specifically the deep excavation and concrete seals the earth. The open bio-infrastructure is choked, and the <strong>natural flows are restricted</strong>. Conversely, differentiation steadily rises. In its original state, the valley functioned as a relatively contiguous, unbroken ecological system. But as human intervention takes hold, it actively produces geographical inequalities. The landscape is segmented into specific, engineered zones: the submerged reservoir, the dry downstream riverbed, the sealed concrete spillways, and the promenades. As we move toward Entropy, this differentiation continues to create varying, localized micro-ecologies across the site.' },
     { svg:'ALAN2.svg', top:'2.1.webp', bottom:'2.2.webp', html:'Spanning from the height of the Tekton phase through the absolute completion of Entropy, this zone illustrates eventual synthesis between the accumulation of human architecture and the visibility of the earth\'s <strong>metabolic labor</strong>. At the height of the dam\'s operational hegemony, Stratification is actively occurring as an architectural and social imposition as well as part of pedogenesis. The relentless, subterranean labor of the soil and the forced accumulation of sediment are completely masked by the tektonic structre. As the Tekton reaches its material limits and Entropy sets in, the architecture fractures, visibility starts rising up. The internal, hidden layers of the dam, the trapped soil, and the hidden pedogenesis, are violently exposed to the observer. The landscape\'s suppressed metabolism breaks the surface. By the end of the entropic cycle, <strong>the dam has been assimilated by the earth</strong> becoming just another layer within the site\'s ongoing Stratification. What was once a symbol of human mastery is now fully visible as a  layer of soil and thriving bio-infrastructure, ready to serve as the foundation for the next Arkhe.' },
@@ -686,7 +667,7 @@
 
   function loadCemberOverlay(overlayEl, baseFolder) {
     CEMBER_FILES.forEach(f => {
-      fetch(encodeURI('2026-images/2026-p8/6/svg/' + baseFolder + '/' + f))
+      fetch(encodeURI('../../2026-images/2026-p8/6/svg/' + baseFolder + '/' + f))
         .then(r => r.text())
         .then(svgText => {
           const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
@@ -744,7 +725,7 @@
   `;
 
   const overlaySvg13 = document.getElementById('overlay-svg13');
-  const BASE_SVG13 = '2026-images/2026-p8/8/svg/';
+  const BASE_SVG13 = '../../2026-images/2026-p8/8/svg/';
   const FILES13 = [
     { svg:'BETON-KIRMIZI RENK.svg', html:BETON_MODAL_HTML },
     { svg:'SU-KIRMIZI RENK.svg', html:SU_MODAL_HTML },
@@ -762,9 +743,6 @@
         overlaySvg13.appendChild(path);
       });
   });
-
-  // Preload every panel/modal image so it's already cached before a hotspot is clicked.
-  hotspotModalData.map(d => d.img).forEach(src => { new Image().src = src; });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }
