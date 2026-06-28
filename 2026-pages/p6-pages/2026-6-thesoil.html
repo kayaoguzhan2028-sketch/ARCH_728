@@ -85,13 +85,13 @@
   <button class="modal-close" id="modal-close" aria-label="Close">×</button>
   <div class="modal-content">
     <div class="modal-tabs">
-      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-4.webp">2026</button>
-      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-5.webp">1990-2000s</button>
-      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-6.webp">1960-1970s</button>
-      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-7.webp">1930s</button>
+      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-the-soil/soil-4.webp">2026</button>
+      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-the-soil/soil-5.webp">1990-2000s</button>
+      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-the-soil/soil-6.webp">1960-1970s</button>
+      <button class="modal-tab" data-img="../../2026-images/2026-p6/1-the-soil/soil-7.webp">1930s</button>
     </div>
     <div class="modal-image">
-      <img id="modal-img" src="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-3.webp" alt="">
+      <img id="modal-img" src="../../2026-images/2026-p6/1-the-soil/soil-3.webp" alt="">
       <p id="modal-caption" class="modal-caption">Once stripped of its rich, alluvial top layer by brick factories, the soil is now being forced into an ongoing, toxic transformation. What was once a vital ecological resource has become a chaotic repository for foreign components: fragments of brick, concrete, ceramic, steel, metal, plastic, glass, wood and animal bone. This continuous influx of synthetic and organic debris deeply disrupts the soil's natural structure. Stripped of its metabolic richness, the soil is trapped in a loop of constant degradation.</p>
       <img id="modal-legend-img" class="hidden" src="" alt="">
       <p id="modal-legend-caption" class="modal-caption hidden"></p>
@@ -101,14 +101,14 @@
 <div class="wrap">
 
   <div class="section">
-    <img src="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-1.webp" alt="The Soil — 1">
+    <img src="../../2026-images/2026-p6/1-the-soil/soil-1.webp" alt="The Soil — 1">
     <p>Once characterized by its rich clay, silt, and natural organic matter, the soil is currently trapped in an ongoing, toxic transformation. What began as a historical extraction of its fertile layers has mutated into a continuous cycle of contamination, deeply fracturing the soil's natural stratification and transforming a living ecosystem into a synthetic residue.</p>
   </div>
 
   <div class="section">
     <div class="interactive-image">
-      <img src="../../2026-images/2026-p6/1-The Soil/2026-6-the soil-2-1-01.webp" alt="The Soil — 2">
-      <div class="hotspot-overlay" data-svg="../../2026-images/2026-p6/1-The Soil/THE SOIL SVG/2026-6-the-soil-2-zones-all.svg"></div>
+      <img src="../../2026-images/2026-p6/1-the-soil/soil-2.webp" alt="The Soil — 2">
+      <div class="hotspot-overlay" data-svg="../../2026-images/2026-p6/1-the-soil/SVG/soil-2-zones-all.svg"></div>
     </div>
     <p class="interaction-hint">Click on the icons to see the tranformation of soil.</p>
     <p>These interventions change the soil's components. A mix of brick fragments, steel, and other industrial wastes overwhelms the natural minerals, making nutrients unreachable for plants. At the same time, this waste crushes the soil and cuts off oxygen, causing microorganisms to suffocate and rot. Without air, the water trapped within these layers stops supporting life and absorbs heavy metals leaking from plastics and industrial waste. Therefore, degradation of the soil is a continuous process. Driven by these intersecting chemical reactions, the soil is actively losing its vital biochemical cycling capabilities and richness, progressively transforming from a dynamic, living ecosystem into a residue.</p>
@@ -148,30 +148,30 @@
     else if (e.key === 'ArrowUp') { e.preventDefault(); scrollToSection(currentSectionIndex() - 1); }
   });
 
-  const SOIL_BASE = '../../2026-images/2026-p6/1-The Soil/';
-  const SOIL3_IMG = SOIL_BASE + '2026-6-the soil-3.webp';
+  const SOIL_BASE = '../../2026-images/2026-p6/1-the-soil/';
+  const SOIL3_IMG = SOIL_BASE + 'soil-3.webp';
   const SOIL3_CAPTION = "Once stripped of its rich, alluvial top layer by brick factories, the soil is now being forced into an ongoing, toxic transformation. What was once a vital ecological resource has become a chaotic repository for foreign components: fragments of brick, concrete, ceramic, steel, metal, plastic, glass, wood and animal bone. This continuous influx of synthetic and organic debris deeply disrupts the soil's natural structure. Stripped of its metabolic richness, the soil is trapped in a loop of constant degradation.";
 
-  const LEGEND_IMG = SOIL_BASE + '2026-6-the soil-legend.webp';
+  const LEGEND_IMG = SOIL_BASE + 'soil-legend.webp';
   const LEGEND_CAPTION = "The legend displays symbols representing the shifting ratio of the soil's mineral and metal balance. This geometric flow illustrates the increasing contamination of the soil, visibly tracking its transformation from a natural circle into a rigid hexagon.";
 
   const modalContent = {
-    [SOIL_BASE + '2026-6-the soil-4.webp']: {
+    [SOIL_BASE + 'soil-4.webp']: {
       caption: "In the present state, the soil is highly alkaline and heterogeneous, having completely lost its rich, alluvial top layer. Artificial components such as brick, concrete, ceramic, steel, metal, plastic, and glass now dominate the matrix, pushing the soil's metal accumulation and mineral disruption to its absolute maximum. Despite the increase in livestock farming waste, the vegetation and microorganism populations have declined. The current transformation solidifies the soil as a contaminated industrial residue.",
       legendImg: LEGEND_IMG,
       legendCaption: LEGEND_CAPTION,
     },
-    [SOIL_BASE + '2026-6-the soil-6.webp']: {
+    [SOIL_BASE + 'soil-6.webp']: {
       caption: "In the 1960s and 1970s, the highly rich alluvial top layer of the soil began to decrease. Although the soil's biodiversity remained high, it sustained its first major damage from expanding brick factories, introducing an initial accumulation of metals and foreign minerals into the soil itself. During this period, the once homogeneous formation of soil began to fracture, and the soil started to be primarily viewed as a raw resource for industrial exploitation.",
       legendImg: LEGEND_IMG,
       legendCaption: LEGEND_CAPTION,
     },
-    [SOIL_BASE + '2026-6-the soil-5.webp']: {
+    [SOIL_BASE + 'soil-5.webp']: {
       caption: "During the 1990s and 2000s, the soil was steadily depleted of its alluvial top layer while beginning to absorb new waste from livestock farms, also impacting its underground organisms. As artificial components like brick, concrete, metal, and plastic multiplied, the concentration of synthetic metals and mineral imbalance accelerated significantly. The soil reached a critical turning point where it began to be perceived more as a toxic residue than a living resource.",
       legendImg: LEGEND_IMG,
       legendCaption: LEGEND_CAPTION,
     },
-    [SOIL_BASE + '2026-6-the soil-7.webp']: {
+    [SOIL_BASE + 'soil-7.webp']: {
       caption: "In the 1930s, the soil was mostly homogeneous and exceptionally rich in its alluvial top layer, maintaining a natural mineral balance with metal contamination remaining at a minimum. The vegetation and microorganism populations were at their peak, directly sustaining local farming and livestock. The soil remains the undisturbed primary source of life.",
       legendImg: LEGEND_IMG,
       legendCaption: LEGEND_CAPTION,
