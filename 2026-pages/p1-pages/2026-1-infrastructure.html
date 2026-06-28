@@ -71,7 +71,7 @@
 
   <section class="section">
     <figure class="fig">
-      <img src="../../2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/2026-1-728-INFRASTURE-SECTION2.webp" loading="lazy" alt="">
+      <img src="../../2026-images/2026-p1/3-infrastructure/calisma-2/infrastructure-section-2.webp" loading="lazy" alt="">
     </figure>
 
     <p class="body-text">This image shows the ash transport infrastructure which is established on land by the 7.5 km long Overland Conveyor that locates from Çayırhan mine to the ash lake. While the structure linearly occupies the landscape, it turns the nodes where it anchors to the ground into transfer points that leak toxic substances and heavy metals into soil and diverses soil layers synthetically. The cross sections from the map illustrates the enormous scale of the conveyor on a spatial level through rendering artificial layering under ground. At the end, both the sections and map display the leakage of the structure of the ash and slag conveyor to the soil.</p>
@@ -86,7 +86,7 @@
 
   <section class="section">
     <div class="img-wrap2">
-      <img src="../../2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/2026-1-728-InfrastructureSectionMap.webp" loading="lazy" alt="">
+      <img src="../../2026-images/2026-p1/3-infrastructure/calisma-2/infrastructure-section-map.webp" loading="lazy" alt="">
       <svg id="overlay-svg2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2446 1887" preserveAspectRatio="none"></svg>
     </div>
   </section>
@@ -99,12 +99,12 @@
       </div>
     </div>
     <div class="trace-cell">
-      <img id="trace-img" src="../../2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp" loading="lazy" alt="">
+      <img id="trace-img" src="../../2026-images/2026-p1/3-infrastructure/calisma-1/trace-of-conveyor.webp" loading="lazy" alt="">
     </div>
     <div class="trace-cell">
       <div class="img-wrap3">
-        <img src="../../2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-728-TraceofConveyor_KeyMap.webp" loading="lazy" alt="">
-        <img class="trace-highlight" src="../../2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_svgsi-01-01.webp" loading="lazy" alt="">
+        <img src="../../2026-images/2026-p1/3-infrastructure/calisma-1/trace-of-conveyor-keymap.webp" loading="lazy" alt="">
+        <img class="trace-highlight" src="../../2026-images/2026-p1/3-infrastructure/calisma-1/SVG/trace-of-conveyor-keymap-svg.webp" loading="lazy" alt="">
         <svg id="overlay-svg3" xmlns="http://www.w3.org/2000/svg"></svg>
         <span class="expand-label">Click For Expansion</span>
       </div>
@@ -121,8 +121,8 @@
 <script>
   const svgEl2   = document.getElementById('overlay-svg2');
   const svgNS    = 'http://www.w3.org/2000/svg';
-  const BASE_SVG = '2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/SVG/';
-  const BASE_IMG = '2026-images/2026-p1/3-infrastructure/ÇALIŞMA_2/';
+  const BASE_SVG = '../../2026-images/2026-p1/3-infrastructure/calisma-2/SVG/';
+  const BASE_IMG = '../../2026-images/2026-p1/3-infrastructure/calisma-2/';
 
   const panelOverlay = document.getElementById('panel-overlay');
   const panelImg     = document.getElementById('panel-img');
@@ -142,11 +142,11 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') panelOverlay.classList.remove('open'); });
 
   const FILES = [
-    { svg:'2026-1-728-InfrastructureSection1.svg', webp:'2026-1-728-INFRASTURE-SECTION1.webp' },
-    { svg:'2026-1-728-InfrastructureSection2.svg', webp:'2026-1-728-INFRASTURE-SECTION2.webp' },
-    { svg:'2026-1-728-InfrastructureSection3.svg', webp:'2026-1-728-INFRASTURE-SECTION3.webp' },
-    { svg:'2026-1-728-InfrastructureSection4.svg', webp:'2026-1-728-INFRASTURE-SECTION4.webp' },
-    { svg:'2026-1-728-InfrastructureSection5.svg', webp:'2026-1-728-INFRASTURE-SECTION5.webp' },
+    { svg:'infrastructure-section-1.svg', webp:'infrastructure-section-1.webp' },
+    { svg:'infrastructure-section-2.svg', webp:'infrastructure-section-2.webp' },
+    { svg:'infrastructure-section-3.svg', webp:'infrastructure-section-3.webp' },
+    { svg:'infrastructure-section-4.svg', webp:'infrastructure-section-4.webp' },
+    { svg:'infrastructure-section-5.svg', webp:'infrastructure-section-5.webp' },
   ];
 
   FILES.forEach(cfg => {
@@ -170,7 +170,7 @@
 
   traceWrap.addEventListener('click', () => {
     if (traceImg.classList.contains('expanded')) {
-      openPanelRotated('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/2026-1-TraceofConveyor.webp');
+      openPanelRotated('../../2026-images/2026-p1/3-infrastructure/calisma-1/trace-of-conveyor.webp');
     } else {
       traceImg.classList.add('expanded');
     }
@@ -182,7 +182,7 @@
     expandLbl.style.top  = e.clientY + 'px';
   });
 
-  fetch(encodeURI('2026-images/2026-p1/3-infrastructure/ÇALIŞMA_1/SVG/2026-1-728-TraceofConveyor_KeyMap_svgsi-01-01.svg'))
+  fetch(encodeURI('../../2026-images/2026-p1/3-infrastructure/calisma-1/SVG/trace-of-conveyor-keymap-svg.svg'))
     .then(r => r.text())
     .then(svgText => {
       const parsed = new DOMParser().parseFromString(svgText, 'image/svg+xml');
