@@ -1183,19 +1183,53 @@
     });
 
     // Hover a group's own cells → dim every other group, and only animate
-    // (video/interval/iframe) that one group while it's hovered.
-    grid.addEventListener('mouseover', (e) => {
-      const cell = e.target.closest('.rhythm-cell');
-      if (!cell) return;
-      const g = cell.dataset.group;
+    // (video/interval/iframe) that one group while it's hovered. A click
+    // pins the same effect open so it survives the mouse leaving; clicking
+    // the group's own name label instead navigates to that project's page.
+    let pinnedGroup = null;
+
+    function applyDimmed(g) {
       grid.querySelectorAll('.rhythm-cell').forEach(c => {
         c.classList.toggle('dimmed', c.dataset.group !== g);
       });
-      setActiveGroup(g);
+    }
+    function clearDimmed() {
+      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.remove('dimmed'));
+    }
+
+    grid.addEventListener('mouseover', (e) => {
+      const cell = e.target.closest('.rhythm-cell');
+      if (!cell) return;
+      applyDimmed(cell.dataset.group);
+      setActiveGroup(cell.dataset.group);
     });
     grid.addEventListener('mouseleave', () => {
-      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.remove('dimmed'));
-      setActiveGroup(null);
+      if (pinnedGroup !== null) {
+        applyDimmed(pinnedGroup);
+        setActiveGroup(pinnedGroup);
+      } else {
+        clearDimmed();
+        setActiveGroup(null);
+      }
+    });
+    grid.addEventListener('click', (e) => {
+      const label = e.target.closest('.rhythm-group-label');
+      if (label) {
+        const g = label.closest('.rhythm-cell').dataset.group;
+        window.location.href = LIBRARY_PROJECTS[Number(g)].url;
+        return;
+      }
+      const cell = e.target.closest('.rhythm-cell');
+      if (!cell) return;
+      const g = cell.dataset.group;
+      pinnedGroup = (pinnedGroup === g) ? null : g;
+      if (pinnedGroup !== null) {
+        applyDimmed(pinnedGroup);
+        setActiveGroup(pinnedGroup);
+      } else {
+        clearDimmed();
+        setActiveGroup(null);
+      }
     });
   })();
 </script>
