@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/webp" href="must-images/favicon/06Başkent.webp">
+<link rel="icon" type="image/webp" href="must-images/favicon/Mimfak.webp">
 <title>Atlas — Explore</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -62,14 +62,6 @@
   .lens-node.label-left  .lens-node-label { right: calc(100% + 10px); top: 50%; transform: translateY(-50%); }
   .lens-node.label-top    .lens-node-label { left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); }
   .lens-node.label-bottom .lens-node-label { left: 50%; top: calc(100% + 10px); transform: translateX(-50%); }
-
-  #view-year { align-items: center; justify-content: center; overflow: hidden; }
-  .year-video-grid { position: absolute; inset: 0; }
-  .year-video { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.55; }
-
-  #dive-in-btn { position: absolute; right: 25%; top: 50%; transform: translateY(-50%); z-index: 10; font-family: 'EB Garamond', serif; font-size: 0.82rem; font-style: italic; letter-spacing: 0.14em; color: var(--white); text-decoration: none; border: 1px solid rgba(245,242,235,0.35); padding: 0.28em 0.75em; opacity: 0.55; transition: opacity 0.35s; animation: dive-pulse 2.4s ease-out infinite; }
-  #dive-in-btn:hover { opacity: 1; animation-play-state: paused; }
-  @keyframes dive-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(245,242,235,0.4); } 50% { box-shadow: 0 0 0 12px rgba(245,242,235,0); } }
 
   #view-content { position: absolute; inset: 0; overflow: hidden; cursor: default; }
   .shape { position: absolute; cursor: pointer; transition: transform 0.35s ease, opacity 0.4s ease, filter 0.4s ease; will-change: transform; }
@@ -137,7 +129,6 @@
   </div>
   <ul class="view-tabs">
     <li><button class="active" data-view="map">By Map</button></li>
-    <li><button data-view="year">By Year</button></li>
     <li><button data-view="content">By Content</button></li>
   </ul>
   <button id="map-theme-btn">bright</button>
@@ -164,14 +155,6 @@
         <p class="map-panel-text" id="map-panel-text"></p>
       </div>
     </div>
-  </div>
-
-  <!-- BY YEAR -->
-  <div class="view" id="view-year">
-    <div class="year-video-grid">
-      <video class="year-video" src="must-images/by-year/2026-STG.mp4" autoplay loop muted playsinline></video>
-    </div>
-    <a href="2026.html" id="dive-in-btn" class="visible">dive in</a>
   </div>
 
   <!-- BY CONTENT -->
@@ -581,7 +564,6 @@
     { num: '06', label: 'Imrahor Valley',              url: '2026-pages/p6-pages/2026-6.html' },
     { num: '07', label: 'İlker Mahallesi',             url: '2026-pages/p7-pages/2026-7.html' },
     { num: '08', label: 'ÇUBUK I Dam',                 url: '2026-pages/p8-pages/2026-8.html' },
-    { num: '09', label: 'The Ground',                  url: '2026-pages/p9-pages/2026-9.html' },
   ];
 
   const libraryOverlay = document.getElementById('library-overlay');
