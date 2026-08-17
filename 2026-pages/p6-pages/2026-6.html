@@ -8,22 +8,23 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --orange:#d97a3f; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
   html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .wrap { max-width:1200px; margin:0 auto; padding:8rem 2rem 6rem; }
-  .main-img { width:100%; display:block; margin-bottom:3rem; }
-  .sub-nav { display:flex; gap:1.4rem; justify-content:center; flex-wrap:wrap; margin-bottom:3.5rem; }
-  .sub-nav a { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.65em 1.6em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
-  .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  h1 { font-size:clamp(2rem,4vw,3rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:1rem; color:var(--orange); text-align:center; }
+  .main-img { width:100%; display:block; margin-bottom:1.5rem; }
+  .author-line { font-size:0.78rem; letter-spacing:0.12em; opacity:0.45; text-align:center; margin-bottom:3rem; }
   .section + .section { margin-top:1rem; padding-top:3rem; border-top:1px solid var(--border); }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body { font-size:1.1rem; line-height:1.95; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
@@ -38,19 +39,19 @@
 <body>
 <nav>
   <a href="../../explore.html" class="nav-back">← Back</a>
-  <span class="nav-title">Imrahor Valley</span>
-  <span class="nav-tag">Field Report</span>
+  <div class="nav-center-links">
+    <a href="2026-6.html" class="active">Intro</a>
+    <a href="2026-6-thefactories.html">The Factories</a>
+    <a href="2026-6-thesoil.html">The Soil</a>
+    <a href="2026-6-thetimeline.html">The Timeline</a>
+    <a href="2026-6-thestoryline.html">The Storyline</a>
+  </div>
 </nav>
 <div class="wrap">
   <section class="section">
+    <h1>Imrahor Valley</h1>
     <img class="main-img" src="../../2026-images/2026-p6/0-main-page/main-page.webp" alt="Project 2026-6">
-
-    <div class="sub-nav">
-      <a href="2026-6-thefactories.html">The Factories</a>
-      <a href="2026-6-thesoil.html">The Soil</a>
-      <a href="2026-6-thetimeline.html">The Timeline</a>
-      <a href="2026-6-thestoryline.html">The Storyline</a>
-    </div>
+    <p class="author-line">Elif Ceyhan, Hatice Köksal, İnci Ergün, İpek Deniz Alpdoğan Kaya</p>
   </section>
 
   <section class="section">

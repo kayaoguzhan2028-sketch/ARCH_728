@@ -14,11 +14,10 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .nav-links { display:flex; align-items:center; gap:1.8rem; }
-  .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
-  .nav-links a:hover { opacity:1; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .stage { position:fixed; inset:0; padding-top:52px; display:flex; align-items:center; justify-content:center; padding:6rem 2rem 2rem; }
   .interactive-image { position:relative; width:min(94%, calc(88vh * 1920 / 1080)); aspect-ratio:1920/1080; }
@@ -63,9 +62,9 @@
   .modal-gallery-arrow.next { right:0.5rem; }
   .modal-gallery-counter { font-size:0.78rem; letter-spacing:0.1em; opacity:0.45; }
   .modal-slide h2 { font-size:1.3rem; font-weight:400; letter-spacing:0.06em; color:var(--accent); }
-  .modal-slide p { max-width:620px; font-size:0.95rem; line-height:1.85; opacity:0.82; text-align:center; white-space:pre-line; }
+  .modal-slide p { max-width:620px; font-size:1.1rem; line-height:1.85; text-align:center; white-space:pre-line; }
   .modal-slide .modal-links { display:flex; flex-direction:column; gap:0.4rem; align-items:center; }
-  .modal-slide .modal-links a { font-size:0.82rem; color:var(--accent); opacity:0.75; text-decoration:none; word-break:break-all; }
+  .modal-slide .modal-links a { font-size:1rem; color:var(--accent); opacity:0.8; text-decoration:none; word-break:break-all; }
   .modal-slide .modal-links a:hover { opacity:1; text-decoration:underline; }
 
   @media (max-width:720px) {
@@ -78,10 +77,12 @@
 <body>
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <span class="nav-title">Imrahor Valley</span>
-  <div class="nav-links">
-    <a href="2026-6-thefactories.html">← The Factory</a>
-    <a href="2026-6-thestoryline.html">The Storyline →</a>
+  <div class="nav-center-links">
+    <a href="2026-6.html">Intro</a>
+    <a href="2026-6-thefactories.html">The Factories</a>
+    <a href="2026-6-thesoil.html">The Soil</a>
+    <a href="2026-6-thetimeline.html" class="active">The Timeline</a>
+    <a href="2026-6-thestoryline.html">The Storyline</a>
   </div>
 </nav>
 

@@ -14,11 +14,10 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .nav-links { display:flex; align-items:center; gap:1.8rem; }
-  .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
-  .nav-links a:hover { opacity:1; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .stage { position:fixed; inset:0; padding-top:52px; display:grid; grid-template-columns:1fr 1.4fr; grid-template-rows:40fr 60fr; grid-template-areas:"preview visual" "info visual"; }
   .cell { display:flex; align-items:center; justify-content:center; padding:1rem; overflow:hidden; }
@@ -35,8 +34,8 @@
   .preview-panel.active { opacity:1; transform:translateY(0); }
   .preview-panel img { width:100%; display:block; border:1px solid var(--border); }
 
-  .info-panel { width:90%; font-size:0.88rem; line-height:1.85; opacity:0.78; text-align:justify; }
-  .info-panel .references { margin-top:1.2rem; font-size:0.72rem; line-height:1.6; opacity:0.55; }
+  .info-panel { width:90%; font-size:1.1rem; line-height:1.85; text-align:justify; }
+  .info-panel .references { margin-top:1.2rem; font-size:1rem; line-height:1.6; opacity:0.8; }
   .info-panel .references p { margin-bottom:0.5rem; }
   .info-panel .references p:last-child { margin-bottom:0; }
 
@@ -50,10 +49,12 @@
 <body>
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <span class="nav-title">Imrahor Valley</span>
-  <div class="nav-links">
-    <a href="2026-6-thesoil.html">← The Soil</a>
-    <a href="2026-6-thetimeline.html">The Timeline →</a>
+  <div class="nav-center-links">
+    <a href="2026-6.html">Intro</a>
+    <a href="2026-6-thefactories.html" class="active">The Factories</a>
+    <a href="2026-6-thesoil.html">The Soil</a>
+    <a href="2026-6-thetimeline.html">The Timeline</a>
+    <a href="2026-6-thestoryline.html">The Storyline</a>
   </div>
 </nav>
 

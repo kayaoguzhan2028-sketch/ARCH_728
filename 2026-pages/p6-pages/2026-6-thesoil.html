@@ -14,16 +14,15 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .nav-links { display:flex; align-items:center; gap:1.8rem; }
-  .nav-links a { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; display:flex; align-items:center; gap:0.5em; }
-  .nav-links a:hover { opacity:1; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .wrap { padding-top:52px; }
   .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem; padding:2rem; text-align:center; }
   .section img { max-height:55vh; max-width:90%; object-fit:contain; display:block; opacity:0.9; }
-  .section p { max-width:680px; font-size:1.05rem; line-height:1.9; opacity:0.8; }
+  .section p { max-width:680px; font-size:1.1rem; line-height:1.9; }
   p.interaction-hint { font-size:0.78rem; letter-spacing:0.04em; font-style:italic; opacity:0.5; margin-top:-2rem; }
 
   .interactive-image { position:relative; width:min(90%, calc(55vh * 546 / 653)); aspect-ratio:546/653; }
@@ -55,7 +54,7 @@
   .modal-image { flex:1; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:1.2rem; overflow-y:auto; padding:0.5rem; }
   .modal-image img { max-width:100%; max-height:48vh; object-fit:contain; display:block; flex-shrink:0; }
   #modal-legend-img { max-width:80%; }
-  .modal-caption { max-width:560px; font-size:0.9rem; line-height:1.8; opacity:0.78; text-align:center; }
+  .modal-caption { max-width:560px; font-size:1.1rem; line-height:1.8; text-align:center; }
   .modal-caption.hidden, .modal-image img.hidden { display:none; }
   @media (max-width:720px) {
     .modal-content { flex-direction:column; gap:1.5rem; }
@@ -69,10 +68,12 @@
 <body>
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <span class="nav-title">Imrahor Valley</span>
-  <div class="nav-links">
-    <a href="2026-6.html">← Main Page</a>
-    <a href="2026-6-thefactories.html">The Factory →</a>
+  <div class="nav-center-links">
+    <a href="2026-6.html">Intro</a>
+    <a href="2026-6-thefactories.html">The Factories</a>
+    <a href="2026-6-thesoil.html" class="active">The Soil</a>
+    <a href="2026-6-thetimeline.html">The Timeline</a>
+    <a href="2026-6-thestoryline.html">The Storyline</a>
   </div>
 </nav>
 <button class="scroll-nav scroll-nav-up" id="scroll-up" aria-label="Previous section">
