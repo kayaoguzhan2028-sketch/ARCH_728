@@ -19,8 +19,8 @@
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
   .nav-link.active { opacity:1; border-bottom-color:var(--white); }
-  .nav-dropdown { position:relative; }
-  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.7rem 0.9rem; margin-top:0.85rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.9rem 0.9rem 0.7rem; margin-top:0; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
   .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
@@ -31,9 +31,9 @@
   .fig { flex:1; min-height:0; width:100%; max-width:1100px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .fig img { width:100%; height:100%; object-fit:contain; display:block; }
 
-  .body-text { max-width:780px; font-size:0.92rem; line-height:1.7; opacity:0.8; flex:0 0 auto; text-align:justify; }
+  .body-text { max-width:780px; font-size:1.1rem; line-height:1.7; flex:0 0 auto; text-align:justify; }
 
-  .reference-block { max-width:780px; font-size:0.66rem; line-height:1.55; opacity:0.4; flex:0 0 auto; text-align:justify; }
+  .reference-block { max-width:780px; font-size:1.1rem; line-height:1.55; flex:0 0 auto; text-align:justify; }
   .reference-block h2 { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; font-weight:400; margin-bottom:0.35rem; }
   .reference-block p { margin-bottom:0.2rem; }
   .reference-block p:last-child { margin-bottom:0; }

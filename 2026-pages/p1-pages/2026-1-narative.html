@@ -19,8 +19,8 @@
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
   .nav-link.active { opacity:1; border-bottom-color:var(--white); }
-  .nav-dropdown { position:relative; }
-  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.7rem 0.9rem; margin-top:0.85rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.9rem 0.9rem 0.7rem; margin-top:0; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
   .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
@@ -33,7 +33,7 @@
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
-  .references-heading, .references-list { color:var(--mid); opacity:0.55; }
+  .references-list { font-size:1.1rem; }
   .references-list a { color:var(--mid); }
   .body ol { padding-left:1.4rem; }
   .body ol li { margin-bottom:1rem; }
@@ -42,7 +42,7 @@
   .narrative-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin:3rem 0; }
   .narrative-item img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
   .narrative-item h3 { font-size:0.85rem; font-weight:600; letter-spacing:0.1em; margin:1.2rem 0 0.6rem; }
-  .narrative-item p { font-size:0.92rem; line-height:1.7; margin:0; text-align:justify; }
+  .narrative-item p { font-size:1.1rem; line-height:1.7; margin:0; text-align:justify; }
 
   @media (max-width: 720px) {
     .narrative-row { grid-template-columns:1fr; }
@@ -68,7 +68,6 @@
     <a href="2026-1-microclimatichange.html" class="nav-link">Climate Change</a>
     <a href="2026-1-bird.html" class="nav-link">Bird Migration</a>
   </div>
-  <span class="nav-tag">Field Report</span>
 </nav>
 <div class="img-stage">
   <img src="../../2026-images/2026-p1/4-power-plant/factory-final.webp" alt="Çayırhan Ash Lake" fetchpriority="high">

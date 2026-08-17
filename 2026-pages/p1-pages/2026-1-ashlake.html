@@ -19,8 +19,8 @@
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
   .nav-link.active { opacity:1; border-bottom-color:var(--white); }
-  .nav-dropdown { position:relative; }
-  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.7rem 0.9rem; margin-top:0.85rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.9rem 0.9rem 0.7rem; margin-top:0; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
   .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
@@ -30,9 +30,9 @@
   .sec:last-child { margin-bottom:0; }
   .fig img { width:100%; height:auto; display:block; margin:0; }
 
-  .body-text { font-size:0.95rem; line-height:1.8; opacity:0.8; margin-bottom:1.5rem; text-align:justify; }
+  .body-text { font-size:1.1rem; line-height:1.8; margin-bottom:1.5rem; text-align:justify; }
 
-  .reference-block { font-size:0.68rem; line-height:1.6; opacity:0.4; text-align:justify; }
+  .reference-block { font-size:1.1rem; line-height:1.6; text-align:justify; }
   .reference-block p { margin-bottom:0.3rem; }
   .reference-block p:last-child { margin-bottom:0; }
 </style>

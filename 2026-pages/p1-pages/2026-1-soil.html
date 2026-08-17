@@ -19,26 +19,23 @@
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
   .nav-link.active { opacity:1; border-bottom-color:var(--white); }
-  .nav-dropdown { position:relative; }
-  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.7rem 0.9rem; margin-top:0.85rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.9rem 0.9rem 0.7rem; margin-top:0; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
   .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
 
-  .wrap { padding-top:52px; }
-  .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.2rem; padding:1.5rem 2rem; text-align:center; }
+  .wrap { max-width:700px; margin:0 auto; padding:6.5rem 2rem 6rem; }
+  .sec { margin-bottom:4rem; }
+  .sec:last-child { margin-bottom:0; }
+  .fig img { width:100%; height:auto; display:block; margin:0; }
 
-  .fig { flex:1; min-height:0; overflow:hidden; }
-  .fig img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+  .body-text { font-size:1.1rem; line-height:1.8; margin-bottom:1.5rem; text-align:justify; }
 
-  .body-text { max-width:780px; font-size:0.95rem; line-height:1.8; opacity:0.8; flex:0 0 auto; }
-
-  .section-split { flex-direction:row; align-items:center; justify-content:center; gap:3rem; text-align:left; }
-  .soil-text { flex:0 1 25%; max-height:100%; overflow-y:auto; }
-  .soil-text p { margin-bottom:1.2rem; font-size:0.95rem; line-height:1.75; opacity:0.8; text-align:justify; }
-  .soil-text h2 { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.5; font-weight:400; margin:1.6rem 0 0.6rem; }
-  .soil-text .reference { font-size:0.74rem; line-height:1.7; opacity:0.45; margin-bottom:0.5rem; }
-  .soil-text .reference:last-child { margin-bottom:0; }
+  .reference-block { font-size:1.1rem; line-height:1.6; text-align:justify; }
+  .reference-block h2 { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; font-weight:400; margin-bottom:0.6rem; }
+  .reference-block p { margin-bottom:0.3rem; }
+  .reference-block p:last-child { margin-bottom:0; }
 </style>
 </head>
 <body>
@@ -63,22 +60,25 @@
 </nav>
 <div class="wrap">
 
-  <section class="section section-split">
-    <div class="soil-text">
-      <p>The diagram explains the vertical leaching mechanism and mobilite hierarchy of fly ash, heavy metals, and isotopic components originating from coal fired thermal power plant waste areas within the soil profile. While creating this diagram, instead of geologic age of the soil, the capacity of substances to dissolve in water and adhere to soil were taken as essential. There are 4 main different layers according to depth. The graphic language follows a morphological gradient evolving from rigid and crystalline structures at the surface to dissolved amorphous and liquid phases deeper down.</p>
-      <h2>References</h2>
-      <p class="reference">Agrawal, P., Mittal, A., Prakash, R., Kumar, M., Singh, T. B., & Tripathi, S. K. (2010). Assessment of contamination of soil due to heavy metals around coal fired thermal power plants at Singrauli region of India. Bulletin of Environmental Contamination and Toxicology, 85(2), 219-223.</p>
-      <p class="reference">Mandal, A., & Sengupta, D. (2006). An assessment of soil contamination due to heavy metals around a coal-fired thermal power plant in India. Environmental Geology, 51(3), 409-420.</p>
-      <p class="reference">Murtic, S., Jurkovic, J., Basic, E., & Hekic, E. (2019). Assessment of wild plants for phytoremediation of heavy metals in soils surrounding the thermal power station.</p>
-      <p class="reference">Özkul, C. (2016). Heavy metal contamination in soils around the Tunçbilek thermal power plant (Kütahya, Turkey). Environmental monitoring and assessment, 188(5), 284.</p>
-      <p class="reference">Papp, Z., Dezső, Z., & Daroczy, S. (2002). Significant radioactive contamination of soil around a coal-fired thermal power plant. Journal of Environmental Radioactivity, 59(2), 191-205.</p>
-      <p class="reference">Paul, K. T., Satpathy, S. K., Manna, I., Chakraborty, K. K., & Nando, G. B. (2007). Preparation and characterization of nano structured materials from fly ash: a waste from thermal power stations, by high energy ball milling. Nanoscale Research Letters, 2(8), 397.</p>
-      <p class="reference">Pędziwiatr, A., Potysz, A., Kaczmarczyk, I., Sulej, J., Kwasowski, W., & Uzarowicz, Ł. (2025). Combined approach using soil and fly ash analysis to understand the environmental consequences of coal combustion in thermal power stations in the city. Water, Air, & Soil Pollution, 236(3), 146.</p>
-    </div>
+  <div class="sec">
     <figure class="fig">
       <img src="../../2026-images/2026-p1/6-soil/soil.webp" loading="lazy" alt="">
     </figure>
-  </section>
+  </div>
+
+  <div class="sec">
+    <p class="body-text">The diagram explains the vertical leaching mechanism and mobilite hierarchy of fly ash, heavy metals, and isotopic components originating from coal fired thermal power plant waste areas within the soil profile. While creating this diagram, instead of geologic age of the soil, the capacity of substances to dissolve in water and adhere to soil were taken as essential. There are 4 main different layers according to depth. The graphic language follows a morphological gradient evolving from rigid and crystalline structures at the surface to dissolved amorphous and liquid phases deeper down.</p>
+    <div class="reference-block">
+      <h2>References</h2>
+      <p>Agrawal, P., Mittal, A., Prakash, R., Kumar, M., Singh, T. B., & Tripathi, S. K. (2010). Assessment of contamination of soil due to heavy metals around coal fired thermal power plants at Singrauli region of India. Bulletin of Environmental Contamination and Toxicology, 85(2), 219-223.</p>
+      <p>Mandal, A., & Sengupta, D. (2006). An assessment of soil contamination due to heavy metals around a coal-fired thermal power plant in India. Environmental Geology, 51(3), 409-420.</p>
+      <p>Murtic, S., Jurkovic, J., Basic, E., & Hekic, E. (2019). Assessment of wild plants for phytoremediation of heavy metals in soils surrounding the thermal power station.</p>
+      <p>Özkul, C. (2016). Heavy metal contamination in soils around the Tunçbilek thermal power plant (Kütahya, Turkey). Environmental monitoring and assessment, 188(5), 284.</p>
+      <p>Papp, Z., Dezső, Z., & Daroczy, S. (2002). Significant radioactive contamination of soil around a coal-fired thermal power plant. Journal of Environmental Radioactivity, 59(2), 191-205.</p>
+      <p>Paul, K. T., Satpathy, S. K., Manna, I., Chakraborty, K. K., & Nando, G. B. (2007). Preparation and characterization of nano structured materials from fly ash: a waste from thermal power stations, by high energy ball milling. Nanoscale Research Letters, 2(8), 397.</p>
+      <p>Pędziwiatr, A., Potysz, A., Kaczmarczyk, I., Sulej, J., Kwasowski, W., & Uzarowicz, Ł. (2025). Combined approach using soil and fly ash analysis to understand the environmental consequences of coal combustion in thermal power stations in the city. Water, Air, & Soil Pollution, 236(3), 146.</p>
+    </div>
+  </div>
 
 </div>
 </body>
