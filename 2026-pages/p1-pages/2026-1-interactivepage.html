@@ -16,7 +16,15 @@
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
 
-  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.5; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; align-items:center; gap:1.3rem; }
+  .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-link:hover, .nav-link.linked-hover { opacity:1; }
+  .nav-link.active { opacity:1; border-bottom-color:var(--white); }
+  .nav-dropdown { position:relative; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.7rem 0.9rem; margin-top:0.85rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
+  .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
 
   .wrap { padding-top:52px; }
   .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.6rem; padding:1.5rem 2rem; text-align:center; }
@@ -83,7 +91,22 @@
 
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <span class="nav-title">Interactive Page</span>
+  <div class="nav-center-links">
+    <a href="2026-1.html" class="nav-link">Intro</a>
+    <a href="2026-1-interactivepage.html" class="nav-link active">Interactive Page</a>
+    <div class="nav-dropdown">
+      <a href="2026-1-powerplant.html" class="nav-link" data-key="fabrika">Power Plant</a>
+      <div class="nav-dropdown-menu">
+        <a href="2026-1-narative.html">The Narratives</a>
+        <a href="2026-1-powerplantkey.html">The Interaction</a>
+      </div>
+    </div>
+    <a href="2026-1-infrastructure.html" class="nav-link" data-key="yapi">Infrastructure</a>
+    <a href="2026-1-soil.html" class="nav-link" data-key="toprak">The Soil</a>
+    <a href="2026-1-ashlake.html" class="nav-link" data-key="golet">Ash Lake</a>
+    <a href="2026-1-microclimatichange.html" class="nav-link" data-key="microclimate">Climate Change</a>
+    <a href="2026-1-bird.html" class="nav-link" data-key="kus">Bird Migration</a>
+  </div>
 </nav>
 
 <div class="wrap">
@@ -95,15 +118,6 @@
     </div>
 
     <p class="body-text">This interactive panorama maps the visible and invisible manifestations of industrial violence across the Çayırhan landscape. By charting critical vectors such as rhizomatic seepage, boundary permeability, and deviated avian paths, the image exposes how a localized infrastructure expands into a regional toxic assemblage. Each layer annotated upon this landscape represents a distinct threshold of contamination, inviting further spatial decryption. Explore the highlighted operations to unravel the deep-seated ecological and material conditions of the ash lake.</p>
-
-    <div class="btn-row">
-      <a href="2026-1-powerplant.html" data-key="fabrika">Power Plant</a>
-      <a href="2026-1-infrastructure.html" data-key="yapi">Infrastructure</a>
-      <a href="2026-1-soil.html" data-key="toprak">The Soil</a>
-      <a href="2026-1-ashlake.html" data-key="golet">Ash Lake</a>
-      <a href="2026-1-microclimatichange.html" data-key="microclimate">Climate Change</a>
-      <a href="2026-1-bird.html" data-key="kus">Bird Migration</a>
-    </div>
   </section>
 
   <section class="section section-split">
@@ -207,7 +221,7 @@
           if (node.nodeType === 1) g.appendChild(document.importNode(node, true));
         });
 
-        const linkedBtn = document.querySelector('.btn-row a[data-key="' + cfg.id + '"]');
+        const linkedBtn = document.querySelector('.nav-center-links a[data-key="' + cfg.id + '"]');
 
         g.querySelectorAll('polygon, path, rect, circle, ellipse, polyline').forEach(shape => {
           shape.setAttribute('pointer-events', 'all');
@@ -268,7 +282,7 @@
       });
   });
 
-  document.querySelectorAll('.btn-row a[data-key]').forEach(btn => {
+  document.querySelectorAll('.nav-center-links a[data-key]').forEach(btn => {
     const key = btn.dataset.key;
     btn.addEventListener('mouseenter', () => {
       const g = document.getElementById('overlay-' + key);

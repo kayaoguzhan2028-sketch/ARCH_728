@@ -15,7 +15,15 @@
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .nav-title { position:absolute; left:50%; transform:translateX(-50%); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.55; pointer-events:none; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; align-items:center; gap:1.3rem; }
+  .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-link:hover, .nav-link.linked-hover { opacity:1; }
+  .nav-link.active { opacity:1; border-bottom-color:var(--white); }
+  .nav-dropdown { position:relative; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.7rem 0.9rem; margin-top:0.85rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
+  .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
 
   .img-stage { position:relative; width:80%; margin:0 auto; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
   .img-stage > img { width:100%; height:100%; object-fit:contain; display:block; filter:brightness(1) contrast(1); }
@@ -46,7 +54,22 @@
 <body>
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <span class="nav-title">Çayırhan Ash Lake</span>
+  <div class="nav-center-links">
+    <a href="2026-1.html" class="nav-link">Intro</a>
+    <a href="2026-1-interactivepage.html" class="nav-link">Interactive Page</a>
+    <div class="nav-dropdown">
+      <a href="2026-1-powerplant.html" class="nav-link active">Power Plant</a>
+      <div class="nav-dropdown-menu">
+        <a href="2026-1-narative.html">The Narratives</a>
+        <a href="2026-1-powerplantkey.html">The Interaction</a>
+      </div>
+    </div>
+    <a href="2026-1-infrastructure.html" class="nav-link">Infrastructure</a>
+    <a href="2026-1-soil.html" class="nav-link">The Soil</a>
+    <a href="2026-1-ashlake.html" class="nav-link">Ash Lake</a>
+    <a href="2026-1-microclimatichange.html" class="nav-link">Climate Change</a>
+    <a href="2026-1-bird.html" class="nav-link">Bird Migration</a>
+  </div>
 </nav>
 <div class="img-stage">
   <img src="../../2026-images/2026-p1/4-power-plant/factory-final.webp" alt="Çayırhan Ash Lake" fetchpriority="high">
