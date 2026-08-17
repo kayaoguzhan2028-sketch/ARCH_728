@@ -70,7 +70,8 @@
 
   .rhythm-grid { display: grid; grid-template-columns: repeat(7, 1fr); align-items: start; gap: 34px 14px; }
   .rhythm-group-label { position: absolute; left: 0; bottom: 100%; margin-bottom: 0.5rem; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.9; white-space: nowrap; cursor: pointer; transition: opacity 0.2s ease; }
-  .rhythm-cell.group-active .rhythm-group-label { opacity: 1; }
+  .rhythm-cell.group-active .rhythm-group-label { opacity: 1; animation: labelColorCycle 3s ease-in-out infinite; }
+  @keyframes labelColorCycle { 0%, 100% { color: #ff8a3d; } 33.33% { color: #4aa3ff; } 66.66% { color: var(--white); } }
   .rhythm-group-label::before { content: '→'; display: inline-block; margin-right: 0.45em; opacity: 0; transform: translateX(4px); transition: opacity 0.2s ease, transform 0.2s ease; }
   .rhythm-cell.group-active .rhythm-group-label::before { opacity: 0.8; transform: translateX(0); }
   .rhythm-cell { background: rgba(245,242,235,0.035); border: 1px solid var(--border); position: relative; overflow: visible; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, opacity 0.25s ease; }
@@ -96,10 +97,13 @@
   .layer-img.on { opacity: 1; }
   .cell-zone-overlay svg { width: 100%; height: 100%; display: block; }
   .cell-zone-shape { fill: var(--accent); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, filter 0.25s ease; }
-  .cell-zone-shape.cell-zone-active { opacity: 0.5; filter: drop-shadow(0 0 8px rgba(245,220,140,0.9)) drop-shadow(0 0 18px rgba(245,200,80,0.7)); }
+  .cell-zone-shape.cell-zone-active { opacity: 0.8; filter: drop-shadow(0 0 10px rgba(245,220,140,1)) drop-shadow(0 0 24px rgba(245,200,80,0.9)); }
   .slide-after-img { object-fit: cover; clip-path: inset(0 100% 0 0); animation: slideReveal 4s ease-in-out infinite alternate; animation-play-state: paused; }
   .rhythm-cell.group-active .slide-after-img { animation-play-state: running; }
   @keyframes slideReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .pulse-hotspot { fill: none; stroke: #f5dc8c; stroke-width: 26; opacity: 0; pointer-events: none; transform-box: fill-box; transform-origin: center; }
+  .rhythm-cell.group-active .pulse-hotspot { animation: pulseHotspot 1.8s ease-out infinite; }
+  @keyframes pulseHotspot { 0% { transform: scale(0.7); opacity: 1; } 100% { transform: scale(2.4); opacity: 0; } }
   .cell-placeholder { display: block; width: 100%; aspect-ratio: 1 / 1; }
   .rhythm-cell:hover { background: rgba(245,242,235,0.08); border-color: rgba(245,242,235,0.28); }
   .rhythm-cell.dimmed { opacity: 0.28; }
@@ -195,7 +199,7 @@
   <!-- BY CONTENT -->
   <div class="view" id="view-content">
     <div class="rhythm-wrap">
-      <h2 class="rhythm-heading">Soil</h2>
+      <h2 class="rhythm-heading">Reflections on Landscape - Soil</h2>
       <div class="rhythm-grid" id="rhythm-grid"></div>
     </div>
   </div>
@@ -682,22 +686,22 @@
           { type: 'effect', bg: '2026-images/2026-p2/thesection/section-kolajkesit-01.webp', bgDim: true,
             base: '2026-images/2026-p2/thesection/',
             frames: [ 'section-kolajkesit-slice1.webp', 'section-kolajkesit-slice2.webp', 'section-kolajkesit-slice3.webp', 'section-kolajkesit-slice4.webp' ] },
-          { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-01-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-01-a.webp' },
+          { type: 'slide', shorten: 0.58, before: '2026-images/2026-p2/conditions/condition-oncesi-01-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-01-a.webp' },
           { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-02.webp',   after: '2026-images/2026-p2/conditions/condition-sonrasi-02.webp' },
-          { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-03-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-03-a.webp' },
+          { type: 'slide', shorten: 0.55, before: '2026-images/2026-p2/conditions/condition-oncesi-03-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-03-a.webp' },
         ] },
       { name: 'Grid', count: 5, items: [
           { type: 'img', src: '2026-images/2026-p3/1-entrance-page-1/key-image-soil-grounds-1.1.webp' },
           { type: 'img', src: '2026-images/2026-p3/2-errors-on-ankara-soil-page-2/error-transition-section-2.3.1.webp' },
-          { type: 'cycle', interval: 3000, delay: 0, frames: [
+          { type: 'cycle', interval: 2000, delay: 0, frames: [
               '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.1.webp',
               '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.1.webp',
               '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.1.webp' ] },
-          { type: 'cycle', interval: 3000, delay: 500, frames: [
+          { type: 'cycle', interval: 2000, delay: 500, frames: [
               '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.2.webp',
               '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.2.webp',
               '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.2.webp' ] },
-          { type: 'cycle', interval: 3000, delay: 1000, frames: [
+          { type: 'cycle', interval: 2000, delay: 1000, frames: [
               '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.3.webp',
               '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.3.webp',
               '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.3.webp' ] },
@@ -708,12 +712,18 @@
           { type: 'img', src: '2026-images/2026-p4/webp/4-2-habitat-strata/4-2-habitat-strata.webp' },
         ] },
       { name: 'The Grand Çankaya Hotel', count: 4, items: [
-          { type: 'img', src: '2026-images/2026-p5/01-Home/main-image.webp' },
-          { type: 'cycle', interval: 3000, delay: 0, frames: [
+          { type: 'img', shorten: 0.85, src: '2026-images/2026-p5/01-Home/main-image.webp' },
+          { type: 'cycle', interval: 2000, delay: 0, frames: [
               '2026-images/2026-p5/02-Timeline/current-up.webp',
               '2026-images/2026-p5/02-Timeline/stage-1-up.webp',
               '2026-images/2026-p5/02-Timeline/stage-2-up.webp' ] },
-          { type: 'img', src: '2026-images/2026-p5/03-MicroSections/base-microsection.webp' },
+          { type: 'pulse', src: '2026-images/2026-p5/03-MicroSections/base-microsection.webp', viewBox: '0 0 3781 1993',
+            dots: [
+              { cx: 398.2,   cy: 1171.17, r: 37.76 },
+              { cx: 709.9,   cy: 1167.66, r: 37.76 },
+              { cx: 1253.24, cy: 1438.78, r: 37.76 },
+              { cx: 1588.35, cy: 1386.7,  r: 37.76 },
+            ] },
           { type: 'img', src: '2026-images/2026-p5/04-WaterWays/city-scale.webp' },
         ] },
       { name: 'Imrahor Valley', count: 4, items: [
@@ -730,7 +740,7 @@
               '2026-images/2026-p6/3-the-timeline/timeline-90lar.webp','2026-images/2026-p6/3-the-timeline/timeline-2020ler.webp' ] },
         ] },
       { name: 'Ilker Neighbourhood', count: 3, items: [
-          { type: 'cycle', interval: 2000, bg: '2026-images/2026-p7/opening-page/axon-all/01-trailmap-son.webp', frames: [
+          { type: 'cycle', interval: 1500, bg: '2026-images/2026-p7/opening-page/axon-all/01-trailmap-son.webp', frames: [
               '2026-images/2026-p7/opening-page/axon-all/07-nomadicearthmap.webp',
               '2026-images/2026-p7/opening-page/axon-all/02-barbarianmap.webp',
               '2026-images/2026-p7/opening-page/axon-all/03-proletarianmap.webp',
@@ -900,8 +910,26 @@
       }
     }
 
-    // Plain static image, no page/iframe involved at all.
-    function mountImage(cell, src) {
+    // Plain static image, no page/iframe involved at all. Optional `shorten`
+    // (e.g. 0.8) crops the natural height down to that fraction, for rhythm.
+    function mountImage(cell, src, shorten) {
+      if (shorten) {
+        const media = document.createElement('div');
+        media.className = 'cell-media';
+        const img = document.createElement('img');
+        img.className = 'cell-img';
+        img.src = src;
+        img.loading = 'lazy';
+        img.alt = '';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.addEventListener('load', () => {
+          media.style.aspectRatio = img.naturalWidth + ' / ' + (img.naturalHeight * shorten);
+        });
+        media.appendChild(img);
+        cell.appendChild(media);
+        return;
+      }
       const img = document.createElement('img');
       img.className = 'cell-img';
       img.src = src;
@@ -925,6 +953,38 @@
         wrap.appendChild(img);
       });
       cell.appendChild(wrap);
+    }
+
+    // Static base image with live pulsing hotspot rings on top (matches the
+    // source page's own SVG hotspot markers) — pure CSS animation, gated by
+    // .group-active so it only pulses while this cell's group is hovered/pinned.
+    function mountPulse(cell, cfg) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const img = document.createElement('img');
+      img.className = 'cell-img';
+      img.src = cfg.src;
+      img.loading = 'lazy';
+      img.alt = '';
+      media.appendChild(img);
+
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', cfg.viewBox);
+      svg.setAttribute('preserveAspectRatio', 'none');
+      cfg.dots.forEach((d, i) => {
+        const c = document.createElementNS(svgNS, 'circle');
+        c.setAttribute('class', 'pulse-hotspot');
+        c.setAttribute('cx', d.cx);
+        c.setAttribute('cy', d.cy);
+        c.setAttribute('r', d.r);
+        c.style.animationDelay = (i * 0.5) + 's';
+        svg.appendChild(c);
+      });
+      media.appendChild(svg);
+
+      cell.appendChild(media);
     }
 
     // Looping muted video (used where the page's own visual is a video, not a still).
@@ -1049,24 +1109,38 @@
       bg.alt = '';
       media.appendChild(bg);
 
-      const svgWrap = document.createElement('div');
-      svgWrap.className = 'cell-zone-overlay';
-      media.appendChild(svgWrap);
+      // Loaded via <object>, not fetch() — fetch() of a local file is blocked
+      // by the browser when this page is opened as file://, which silently
+      // left `paths` empty forever and the highlight never showing at all.
+      // <object> uses normal resource loading, so it works under file:// too.
+      const svgObj = document.createElement('object');
+      svgObj.className = 'cell-zone-overlay';
+      svgObj.type = 'image/svg+xml';
+      svgObj.data = cfg.svg;
+      media.appendChild(svgObj);
       cell.appendChild(media);
 
       let paths = [];
       let current = -1;
       let intervalId = null;
 
-      fetch(cfg.svg)
-        .then((res) => res.text())
-        .then((svgText) => {
-          svgWrap.innerHTML = svgText;
-          const svgEl = svgWrap.querySelector('svg');
-          if (svgEl) { svgEl.removeAttribute('width'); svgEl.removeAttribute('height'); }
-          paths = Array.from(svgWrap.querySelectorAll('path, circle, rect, polygon, ellipse'));
-          paths.forEach((p) => { p.removeAttribute('class'); p.classList.add('cell-zone-shape'); });
-        });
+      svgObj.addEventListener('load', () => {
+        const doc = svgObj.contentDocument;
+        const svgEl = doc && doc.querySelector('svg');
+        if (!svgEl) return;
+        svgEl.removeAttribute('width');
+        svgEl.removeAttribute('height');
+        // The <object>'s document is isolated from the parent page's
+        // stylesheet (and its CSS custom properties), so the highlight
+        // styling has to be injected directly into it.
+        const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
+        style.textContent = 'svg{width:100%;height:100%;display:block;}' +
+          '.cell-zone-shape{fill:#c9b8a8;opacity:0;pointer-events:none;transition:opacity .25s ease,filter .25s ease;}' +
+          '.cell-zone-shape.cell-zone-active{opacity:.8;filter:drop-shadow(0 0 10px rgba(245,220,140,1)) drop-shadow(0 0 24px rgba(245,200,80,.9));}';
+        svgEl.appendChild(style);
+        paths = Array.from(svgEl.querySelectorAll('path, circle, rect, polygon, ellipse'));
+        paths.forEach((p) => { p.removeAttribute('class'); p.setAttribute('class', 'cell-zone-shape'); });
+      });
 
       function tick() {
         if (!paths.length) return;
@@ -1132,6 +1206,16 @@
       before.src = cfg.before;
       before.loading = 'lazy';
       before.alt = '';
+      // cfg.shorten (e.g. 0.7) crops the natural height down to that
+      // fraction — only used to break up rows where neighboring slide
+      // cells would otherwise land on the exact same natural height.
+      if (cfg.shorten) {
+        before.style.height = '100%';
+        before.style.objectFit = 'cover';
+        before.addEventListener('load', () => {
+          media.style.aspectRatio = before.naturalWidth + ' / ' + (before.naturalHeight * cfg.shorten);
+        });
+      }
       media.appendChild(before);
 
       const after = document.createElement('img');
@@ -1168,8 +1252,9 @@
         const item = group.items && group.items[i];
         const pageUrl = group.pages && group.pages[i];
         if (item) {
-          if (item.type === 'img') mountImage(cell, item.src);
+          if (item.type === 'img') mountImage(cell, item.src, item.shorten);
           else if (item.type === 'stack') mountImageStack(cell, item);
+          else if (item.type === 'pulse') mountPulse(cell, item);
           else if (item.type === 'video') mountVideo(cell, item.src, groupKey);
           else if (item.type === 'effect') mountEffect(cell, item, groupKey);
           else if (item.type === 'layers') mountLayers(cell, item, groupKey);
@@ -1192,11 +1277,8 @@
     });
 
     // Hover a group's own cells → dim every other group, and only animate
-    // (video/interval/iframe) that one group while it's hovered. A click
-    // pins the same effect open so it survives the mouse leaving; clicking
-    // the group's own name label instead navigates to that project's page.
-    let pinnedGroup = null;
-
+    // (video/interval/iframe) that one group while it's hovered. Clicking
+    // anywhere in a group (name or any cell) navigates to that project's page.
     function applyDimmed(g) {
       grid.querySelectorAll('.rhythm-cell').forEach(c => {
         c.classList.toggle('dimmed', c.dataset.group !== g);
@@ -1206,12 +1288,11 @@
       grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.remove('dimmed'));
     }
 
-    // Called from the tab switcher when leaving this view — a hovered or
-    // pinned group's timers (effect/cycle/zones intervals, the map's
-    // click-cycle timer) would otherwise keep running invisibly behind
-    // "By Map" and jank things up once you switch back.
+    // Called from the tab switcher when leaving this view — a hovered
+    // group's timers (effect/cycle/zones intervals, the map's click-cycle
+    // timer) would otherwise keep running invisibly behind "By Map" and
+    // jank things up once you switch back.
     window._resetContentView = function () {
-      pinnedGroup = null;
       clearDimmed();
       setActiveGroup(null);
     };
@@ -1223,32 +1304,14 @@
       setActiveGroup(cell.dataset.group);
     });
     grid.addEventListener('mouseleave', () => {
-      if (pinnedGroup !== null) {
-        applyDimmed(pinnedGroup);
-        setActiveGroup(pinnedGroup);
-      } else {
-        clearDimmed();
-        setActiveGroup(null);
-      }
+      clearDimmed();
+      setActiveGroup(null);
     });
     grid.addEventListener('click', (e) => {
-      const label = e.target.closest('.rhythm-group-label');
-      if (label) {
-        const g = label.closest('.rhythm-cell').dataset.group;
-        window.location.href = LIBRARY_PROJECTS[Number(g)].url;
-        return;
-      }
       const cell = e.target.closest('.rhythm-cell');
       if (!cell) return;
       const g = cell.dataset.group;
-      pinnedGroup = (pinnedGroup === g) ? null : g;
-      if (pinnedGroup !== null) {
-        applyDimmed(pinnedGroup);
-        setActiveGroup(pinnedGroup);
-      } else {
-        clearDimmed();
-        setActiveGroup(null);
-      }
+      window.location.href = LIBRARY_PROJECTS[Number(g)].url;
     });
   })();
 </script>

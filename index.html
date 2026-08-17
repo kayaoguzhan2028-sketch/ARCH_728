@@ -6,7 +6,7 @@
 <link rel="icon" type="image/webp" href="must-images/favicon/Mimfak.webp">
 <title>ARCH 728</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Newsreader&family=Source+Serif+4&family=Literata&family=Spectral&family=IBM+Plex+Serif&family=Charis+SIL&family=Libertinus+Serif&family=Alegreya&family=Inter&family=IBM+Plex+Sans&family=Source+Sans+3&family=Libre+Franklin&family=Archivo&family=Public+Sans&family=Atkinson+Hyperlegible&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
   html,body { width:100%; background:var(--black); color:var(--white); font-family:var(--font); }
@@ -53,9 +53,38 @@
     .credits { padding:3rem 1.4rem 2rem; gap:2rem 1.4rem; }
     footer { padding:1.8rem 1.4rem; }
   }
+  /* TEMPORARY — font picker for review, remove #font-picker block + script + this rule when done */
+  #font-picker { position:fixed; top:0; left:0; right:0; z-index:2000; display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:0.55rem 1rem; background:rgba(10,10,10,0.94); border-bottom:1px solid var(--border); font-family:Georgia,serif; }
+  #font-picker label { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); opacity:0.55; }
+  #font-picker select { background:var(--black); color:var(--white); border:1px solid rgba(245,242,235,0.3); padding:0.3rem 0.6rem; font-size:0.82rem; font-family:Georgia,serif; cursor:pointer; }
 </style>
 </head>
 <body>
+<div id="font-picker">
+  <label for="font-select">Font</label>
+  <select id="font-select">
+    <option value="'EB Garamond',Georgia,serif" selected>EB Garamond (mevcut)</option>
+    <optgroup label="Serif">
+      <option value="'Newsreader',Georgia,serif">Newsreader</option>
+      <option value="'Source Serif 4',Georgia,serif">Source Serif 4</option>
+      <option value="'Literata',Georgia,serif">Literata</option>
+      <option value="'Spectral',Georgia,serif">Spectral</option>
+      <option value="'IBM Plex Serif',Georgia,serif">IBM Plex Serif</option>
+      <option value="'Charis SIL',Georgia,serif">Charis SIL</option>
+      <option value="'Libertinus Serif',Georgia,serif">Libertinus Serif</option>
+      <option value="'Alegreya',Georgia,serif">Alegreya</option>
+    </optgroup>
+    <optgroup label="Sans">
+      <option value="'Inter',Arial,sans-serif">Inter</option>
+      <option value="'IBM Plex Sans',Arial,sans-serif">IBM Plex Sans</option>
+      <option value="'Source Sans 3',Arial,sans-serif">Source Sans 3</option>
+      <option value="'Libre Franklin',Arial,sans-serif">Libre Franklin</option>
+      <option value="'Archivo',Arial,sans-serif">Archivo</option>
+      <option value="'Public Sans',Arial,sans-serif">Public Sans</option>
+      <option value="'Atkinson Hyperlegible',Arial,sans-serif">Atkinson Hyperlegible</option>
+    </optgroup>
+  </select>
+</div>
 <div class="hero-screen">
   <div class="hero-content">
     <h1 class="hero-title">Reflections on Landscape</h1>
@@ -108,6 +137,10 @@
 <script>
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') window.location.href = 'explore.html';
+  });
+  // TEMPORARY — remove with the #font-picker block above when review is done
+  document.getElementById('font-select').addEventListener('change', function(e) {
+    document.documentElement.style.setProperty('--font', e.target.value);
   });
 </script>
 </body>
