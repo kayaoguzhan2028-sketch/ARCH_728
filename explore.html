@@ -69,7 +69,10 @@
   .rhythm-heading { text-align: left; font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); opacity: 0.92; margin: 0 0 2.2rem; }
 
   .rhythm-grid { display: grid; grid-template-columns: repeat(7, 1fr); align-items: start; gap: 34px 14px; }
-  .rhythm-group-label { position: absolute; left: 0; bottom: 100%; margin-bottom: 0.5rem; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.9; white-space: nowrap; }
+  .rhythm-group-label { position: absolute; left: 0; bottom: 100%; margin-bottom: 0.5rem; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.9; white-space: nowrap; cursor: pointer; transition: opacity 0.2s ease; }
+  .rhythm-cell.group-active .rhythm-group-label { opacity: 1; }
+  .rhythm-group-label::before { content: '→'; display: inline-block; margin-right: 0.45em; opacity: 0; transform: translateX(4px); transition: opacity 0.2s ease, transform 0.2s ease; }
+  .rhythm-cell.group-active .rhythm-group-label::before { opacity: 0.8; transform: translateX(0); }
   .rhythm-cell { background: rgba(245,242,235,0.035); border: 1px solid var(--border); position: relative; overflow: visible; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, opacity 0.25s ease; }
   /* Natural rhythm: no manual height. Each cell's first child (the base
      image/video/frame) lays out at its own intrinsic aspect ratio at the
@@ -579,6 +582,7 @@
       btn.classList.add('active');
       document.getElementById('view-' + target).classList.add('active');
       if (target === 'map' && window._leafletMap) window._leafletMap.invalidateSize();
+      if (target !== 'content' && window._resetContentView) window._resetContentView();
     });
   });
 
@@ -665,7 +669,7 @@
           { type: 'img', src: '2026-images/2026-p1/7-microclimatichange/microclimate.webp' },
           { type: 'img', src: '2026-images/2026-p1/5-bird/kus-goc-haritasi.webp' },
         ] },
-      { name: '02 Hıdırlık Hill', count: 6, items: [
+      { name: 'Hıdırlık Hill', count: 6, items: [
           { type: 'video', src: '2026-images/2026-p2/mainpage/main-page.mp4' },
           { type: 'layers',
             base: '2026-images/2026-p2/themodel/',
@@ -752,6 +756,7 @@
                     clearInterval(frame._pollTimer);
                     frame._pollTimer = null;
                     try {
+                      doc.documentElement.classList.remove('freeze-anim');
                       win.setYear(2026);
                       const buttons = Array.from(doc.querySelectorAll('.layer-row .layer-btn'))
                         .filter((b) => b.dataset.key !== 'civilized');
@@ -782,6 +787,7 @@
                     if (activeBtn) activeBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
                   }
                   if (win && typeof win.setYear === 'function') win.setYear(2010);
+                  if (doc) doc.documentElement.classList.add('freeze-anim');
                 } catch (e) { /* ignore */ }
               },
             } },
@@ -827,14 +833,17 @@
       // pass a `custom` start/stop pair instead of using this generic freeze.
       frame.addEventListener('load', () => {
         if (reveal) reveal(frame);
-        if (custom) return;
         const doc = frame.contentDocument;
         if (!doc) return;
+        // Always inject the freeze stylesheet, even for `custom` cells — a
+        // page's own CSS keyframe animations (pulses etc.) otherwise keep
+        // running forever from the moment it loads, regardless of hover.
         const style = doc.createElement('style');
         style.textContent = '.freeze-anim, .freeze-anim * { animation-play-state: paused !important; }';
         doc.head.appendChild(style);
         doc.documentElement.classList.add('freeze-anim');
         doc.querySelectorAll('video').forEach((v) => v.pause());
+        if (custom) return;
       });
       media.appendChild(frame);
       cell.appendChild(media);
@@ -1196,6 +1205,16 @@
     function clearDimmed() {
       grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.remove('dimmed'));
     }
+
+    // Called from the tab switcher when leaving this view — a hovered or
+    // pinned group's timers (effect/cycle/zones intervals, the map's
+    // click-cycle timer) would otherwise keep running invisibly behind
+    // "By Map" and jank things up once you switch back.
+    window._resetContentView = function () {
+      pinnedGroup = null;
+      clearDimmed();
+      setActiveGroup(null);
+    };
 
     grid.addEventListener('mouseover', (e) => {
       const cell = e.target.closest('.rhythm-cell');
