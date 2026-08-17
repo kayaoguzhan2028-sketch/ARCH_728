@@ -15,9 +15,10 @@
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
-  .nav-links { display:flex; align-items:center; gap:0.8rem; }
-  .nav-link { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.45; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; color:var(--white); text-decoration:none; transition:opacity 0.2s,border-color 0.2s; }
-  .nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.5); }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .map-stage { position:fixed; top:52px; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:var(--black); }
   .map-inner { position:relative; display:inline-block; line-height:0; font-size:0; user-select:none; }
@@ -49,9 +50,15 @@
 <body>
 <nav>
   <a href="2026-7.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <div class="nav-links">
-    <a href="2026-7.html" class="nav-link">Main</a>
-    <a href="2026-7-map.html" class="nav-link">The Map</a>
+  <div class="nav-center-links">
+    <a href="2026-7.html">Intro</a>
+    <a href="2026-7-nomad-soil.html">Nomad Soil</a>
+    <a href="2026-7-debris.html">Debris</a>
+    <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
+    <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
+    <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+    <a href="2026-7-map.html">The Map</a>
+    <a href="2026-7-timeline.html" class="active">The Timeline</a>
   </div>
 </nav>
 

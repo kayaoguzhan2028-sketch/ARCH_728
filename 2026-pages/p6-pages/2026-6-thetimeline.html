@@ -118,6 +118,25 @@
   const decadeModal = document.getElementById('decade-modal');
   const modalContent = document.getElementById('modal-content');
 
+  function positionLegendLabel(rect) {
+    if (window.innerWidth <= 720) return;
+    const gap = 14;
+    const labelWidth = legendLabel.offsetWidth || 320;
+    let left = rect.right + gap;
+    let top = rect.top;
+    if (left + labelWidth > window.innerWidth - 16) left = window.innerWidth - labelWidth - 16;
+    if (top < 16) top = 16;
+    legendLabel.style.left = left + 'px';
+    legendLabel.style.right = 'auto';
+    legendLabel.style.top = top + 'px';
+  }
+
+  function resetLegendLabelPosition() {
+    legendLabel.style.left = '';
+    legendLabel.style.right = '';
+    legendLabel.style.top = '';
+  }
+
   const TIMELINE_BASE = '../../2026-images/2026-p6/3-the-timeline/';
 
   const decadeContent = {
@@ -328,6 +347,7 @@
           shape.removeAttribute('class');
           shape.addEventListener('mouseenter', () => {
             legendLabel.innerHTML = `<h3>${overlay.dataset.label}</h3><p>${overlay.dataset.desc}</p>`;
+            positionLegendLabel(shape.getBoundingClientRect());
             legendLabel.classList.add('active');
           });
           shape.addEventListener('mouseleave', () => {
@@ -387,6 +407,7 @@
       if (activeDecadeImg) activeDecadeImg.classList.remove('active-hover');
       if (found) {
         found.classList.add('active-hover');
+        resetLegendLabelPosition();
         legendLabel.innerHTML = `<h3>${decadeLabels[found.dataset.decade]}</h3><p>Click to view details.</p>`;
         legendLabel.classList.add('active');
       } else {
