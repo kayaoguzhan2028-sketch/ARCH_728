@@ -14,9 +14,10 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .page-nav { display:flex; gap:0.8rem; }
-  .page-nav-link { font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.2); padding:0.4em 1em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
-  .page-nav-link:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .wrap { max-width:1000px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
@@ -36,6 +37,9 @@
   .hotspot-zone { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-zone:hover { opacity:0.25; }
   .hotspot-zone.active { opacity:0.35; }
+  .hotspot-pulse { fill:none; stroke:var(--accent); stroke-width:4; opacity:0.85; pointer-events:none; transform-box:fill-box; transform-origin:center; animation:hotspot-pulse 2.2s ease-out infinite; }
+  .hotspot-pulse.visited { animation:none; opacity:0; }
+  @keyframes hotspot-pulse { 0% { transform:scale(0.7); opacity:0.85; } 100% { transform:scale(1.55); opacity:0; } }
 
   .micro-result { display:none; flex-direction:column; gap:1.5rem; margin-top:3.5rem; padding-top:3rem; border-top:1px solid var(--border); scroll-margin-top:5rem; }
   .micro-result.active { display:flex; }
@@ -50,10 +54,13 @@
 </head>
 <body>
 <nav>
-  <a href="../../2026.html" class="nav-back">← 2026</a>
-  <div class="page-nav">
-    <a href="2026-5-timeline.html" class="page-nav-link">← The Timeline</a>
-    <a href="2026-5-waterways.html" class="page-nav-link">Waterways →</a>
+  <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
+  <div class="nav-center-links">
+    <a href="2026-5.html">Intro</a>
+    <a href="2026-5-timeline.html">Timeline</a>
+    <a href="2026-5-microsection.html" class="active">Microsections</a>
+    <a href="2026-5-waterways.html">Waterways</a>
+    <a href="2026-5-references.html">References</a>
   </div>
 </nav>
 <div class="wrap">
@@ -66,6 +73,10 @@
     <div class="interactive-image">
       <img src="../../2026-images/2026-p5/03-MicroSections/base-microsection.webp" alt="Microsection base diagram">
       <svg class="hotspot-overlay" viewBox="0 0 3781 1993" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="hotspot-pulse" cx="398.2" cy="1171.17" r="37.76" style="animation-delay:0s;"/>
+        <circle class="hotspot-pulse" cx="709.9" cy="1167.66" r="37.76" style="animation-delay:0.5s;"/>
+        <circle class="hotspot-pulse" cx="1253.24" cy="1438.78" r="37.76" style="animation-delay:1s;"/>
+        <circle class="hotspot-pulse" cx="1588.35" cy="1386.7" r="37.76" style="animation-delay:1.5s;"/>
         <circle class="hotspot-zone" cx="398.2" cy="1171.17" r="37.76"/>
         <circle class="hotspot-zone" cx="709.9" cy="1167.66" r="37.76"/>
         <circle class="hotspot-zone" cx="1253.24" cy="1438.78" r="37.76"/>
@@ -95,12 +106,14 @@
   const microResultImg = document.getElementById('micro-result-img');
   const microResultText = document.getElementById('micro-result-text');
   const hotspotZones = document.querySelectorAll('.hotspot-zone');
+  const hotspotPulses = document.querySelectorAll('.hotspot-pulse');
 
   hotspotZones.forEach((zone, i) => {
     zone.addEventListener('click', () => {
       microResultText.textContent = microData[i].text;
       microResult.classList.add('active');
       hotspotZones.forEach((z, j) => z.classList.toggle('active', j === i));
+      hotspotPulses[i].classList.add('visited');
 
       const scrollToResult = () => microResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
       microResultImg.onload = scrollToResult;
