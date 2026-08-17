@@ -12,17 +12,17 @@
   html, body { min-height: 100%; background: var(--black); color: var(--white); font-family: var(--font); }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
-  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; align-items:center; gap:1.3rem; }
-  .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
   .nav-link.active { opacity:1; border-bottom-color:var(--white); }
   .nav-dropdown { position:relative; display:flex; align-items:center; }
   .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.9rem 0.9rem 0.7rem; margin-top:0; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
-  .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
   .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
   .info-btn:hover { opacity:1; }
@@ -48,8 +48,8 @@
   .gif-block { margin-top:4rem; }
   .gif-block img, .gif-block video { display:block; width:100%; height:auto; }
   .gif-row { display:grid; grid-template-columns:70% 30%; gap:1.5rem; align-items:center; }
-  .gif-caption { font-size:0.95rem; line-height:1.85; opacity:0.7; margin:0; }
-  .gif-reference { font-size:0.75rem; line-height:1.7; opacity:0.45; margin-top:0.6rem; }
+  .gif-caption { font-size:1.1rem; line-height:1.85; margin:0; }
+  .gif-reference { font-size:1rem; line-height:1.7; opacity:0.8; margin-top:0.6rem; }
 
   .accordion-btn { display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1.5rem; padding:0.85em 1.2em; background:none; border:1px solid var(--border); color:var(--white); font-family:var(--font); font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; cursor:pointer; opacity:0.7; transition:opacity 0.2s; }
   .accordion-btn:hover { opacity:1; }

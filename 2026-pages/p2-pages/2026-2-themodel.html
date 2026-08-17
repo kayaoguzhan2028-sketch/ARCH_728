@@ -24,10 +24,10 @@
   }
   .nav-back { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
   .nav-back:hover { opacity: 1; }
-  .nav-title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.55; pointer-events: none; }
-  .nav-links { display: flex; gap: 1.6rem; align-items: center; }
-  .nav-link { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--white); text-decoration: none; opacity: 0.35; transition: opacity 0.2s; }
-  .nav-link:hover { opacity: 1; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   /* LEGEND */
   .legend-panel {
@@ -39,7 +39,7 @@
     flex-shrink: 0;
     padding: 1.8rem 2rem 0.6rem 2.8rem;
     font-size: 0.95rem; font-style: italic; line-height: 1.4;
-    color: var(--accent); opacity: 0.85;
+    color: var(--accent); opacity: 1;
   }
   .legend {
     flex: 1; min-height: 0;
@@ -59,9 +59,8 @@
     margin-right: auto;
   }
   .below-section p {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     line-height: 1.95;
-    opacity: 0.72;
     font-family: var(--font);
   }
   .below-section .credit {
@@ -72,7 +71,7 @@
 
   .legend-title {
     font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--white); opacity: 0.18; margin-bottom: 1.6rem;
+    color: var(--white); opacity: 0.4; margin-bottom: 1.6rem;
   }
 
   /* GROUP */
@@ -199,10 +198,14 @@
 
 <nav>
   <a href="2026-2.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <span class="nav-title">The Model</span>
-  <div class="nav-links">
-    <a href="2026-2-thesection.html" class="nav-link">The Section</a>
-    <a href="2026-2-thetimeline.html" class="nav-link">The Timeline</a>
+  <div class="nav-center-links">
+    <a href="2026-2.html">Intro</a>
+    <a href="2026-2-themodel.html" class="active">The Model</a>
+    <a href="2026-2-thesection.html">The Section</a>
+    <a href="2026-2-thetimeline.html">The Timeline</a>
+    <a href="2026-2-condition1.html">Condition 1</a>
+    <a href="2026-2-condition2.html">Condition 2</a>
+    <a href="2026-2-condition3.html">Condition 3</a>
   </div>
 </nav>
 

@@ -14,15 +14,16 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-conditions { display:flex; gap:1.4rem; align-items:center; }
-  .nav-conditions a { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.35; transition:opacity 0.2s; }
-  .nav-conditions a:hover { opacity:1; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .wrap { max-width:620px; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body { font-size:1.1rem; line-height:1.95; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:3rem 0 0.6rem; }
@@ -32,31 +33,10 @@
   .body ul li:last-child { margin-bottom:0; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
 
-  .sub-nav { display:flex; gap:2rem; justify-content:center; margin:4rem 0; }
-  .sub-nav a { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.65em 1.6em; opacity:0.5; transition:opacity 0.2s,border-color 0.2s; }
-  .sub-nav a:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
-
   .info-rule { border:none; border-top:1px solid var(--border); margin:4rem 0 3.5rem; }
   .project-title { font-size:clamp(1.5rem,3.5vw,2.4rem); font-weight:400; line-height:1.2; letter-spacing:0.03em; color:#c87530; margin-bottom:0.5rem; }
   .project-subtitle { font-size:1rem; font-style:italic; color:#c87530; opacity:0.8; line-height:1.5; margin-bottom:2.5rem; }
   .author-line { font-size:0.78rem; letter-spacing:0.12em; opacity:0.45; margin-bottom:2.8rem; }
-
-  #cursor-tooltip {
-    position: fixed;
-    pointer-events: none;
-    z-index: 500;
-    max-width: 380px;
-    padding: 1.2rem 1.5rem;
-    background: rgba(10,10,10,0.94);
-    border: 1px solid rgba(245,242,235,0.12);
-    font-size: 0.88rem;
-    line-height: 1.82;
-    color: var(--white);
-    opacity: 0;
-    transition: opacity 0.18s;
-    transform: translate(18px, 18px);
-  }
-  #cursor-tooltip.visible { opacity: 1; }
 
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
@@ -68,23 +48,19 @@
 
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <div class="nav-conditions">
+  <div class="nav-center-links">
+    <a href="2026-2.html" class="active">Intro</a>
+    <a href="2026-2-themodel.html">The Model</a>
+    <a href="2026-2-thesection.html">The Section</a>
+    <a href="2026-2-thetimeline.html">The Timeline</a>
     <a href="2026-2-condition1.html">Condition 1</a>
     <a href="2026-2-condition2.html">Condition 2</a>
     <a href="2026-2-condition3.html">Condition 3</a>
   </div>
 </nav>
 
-<div id="cursor-tooltip"></div>
-
 <div class="wrap">
   <div class="body">
-
-    <div class="sub-nav">
-      <a href="2026-2-themodel.html" data-tooltip="The model is the core instrument of this project. It does not reconstruct a single historical moment but holds all temporal states of Hıdırlık Hill simultaneously: collisions, erasures, and continuities made visible in three dimensions. Navigate between different layers to read how each of them was made, unmade, and replaced.">The Model</a>
-      <a href="2026-2-thesection.html" data-tooltip="The section cuts through the hill from its present surface down to its oldest ground. Each stratum marks a moment of transformation. A settlement cleared, a slope degraded, a layer sealed beneath concrete. Click on any band to travel directly to the archival materials that document it.">The Section</a>
-      <a href="2026-2-thetimeline.html" data-tooltip="The archive spans six centuries of Hıdırlık Hill's transformation. Maps, cadastral records, aerial photographs, press clippings, plans, and postcards are gathered here not as background context but as primary evidence. Each document reads for what it reveals about the ground itself. Browse by century, or follow &quot;the section&quot; to land directly at a specific stratum.">The Timeline</a>
-    </div>
 
     <hr class="info-rule">
 
@@ -116,25 +92,5 @@
   </dl>
 </div>
 
-<script>
-  const tooltip = document.getElementById('cursor-tooltip');
-
-  document.addEventListener('mousemove', e => {
-    let x = e.clientX, y = e.clientY;
-    const tw = 380 + 32, th = 160;
-    if (x + tw > window.innerWidth)  x = e.clientX - tw - 4;
-    if (y + th > window.innerHeight) y = e.clientY - th - 4;
-    tooltip.style.left = x + 'px';
-    tooltip.style.top  = y + 'px';
-  });
-
-  document.querySelectorAll('[data-tooltip]').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      tooltip.textContent = el.dataset.tooltip;
-      tooltip.classList.add('visible');
-    });
-    el.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
-  });
-</script>
 </body>
 </html>

@@ -12,17 +12,17 @@
   html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; background:linear-gradient(to bottom, rgba(10,10,10,0.65), rgba(10,10,10,0)); }
-  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; align-items:center; gap:1.3rem; }
-  .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
   .nav-link.active { opacity:1; border-bottom-color:var(--white); }
   .nav-dropdown { position:relative; display:flex; align-items:center; }
   .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.5rem; padding:0.9rem 0.9rem 0.7rem; margin-top:0; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
-  .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.55; white-space:nowrap; transition:opacity 0.2s; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
 
   .img-stage { position:relative; width:80%; margin:0 auto; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
@@ -34,6 +34,7 @@
   .wrap { max-width:960px; margin:0 auto; padding:2rem 2rem 8rem; }
   .sec { margin-bottom:6rem; scroll-margin-top:52px; }
   .sec-head { font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); opacity:0.6; padding-top:2rem; border-top:1px solid var(--border); margin-bottom:2.5rem; display:block; }
+  #references-head { font-size:1rem; opacity:0.8; }
   .sec:first-child .sec-head { padding-top:0; border-top:none; }
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
   .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
@@ -53,7 +54,7 @@
   #sec-cayirhan .sec-text > .label { margin-top:0; margin-bottom:0; }
   .sec-text p { margin-bottom:1rem; text-align:justify; }
   .sec-text a { color:var(--accent); text-decoration:underline; word-break:break-all; }
-  .sec-text ol { padding-left:1.4rem; font-size:1.1rem; }
+  .sec-text ol { padding-left:1.4rem; font-size:1rem; opacity:0.8; }
   .sec-text ol li { margin-bottom:1rem; }
   .sec-text ol li:last-child { margin-bottom:0; }
   @media (max-width:680px) {
@@ -263,7 +264,7 @@
     </div>
 
     <div class="sec">
-      <span class="sec-head">References</span>
+      <span class="sec-head" id="references-head">References</span>
       <div class="sec-text">
         <ol>
           <li>Climate Change Policy and Research Association. (2021). <em>Nallıhan Bird Sanctuary report</em>. <a href="https://www.iklimdernegi.org/wp-content/uploads/2024/03/nallihan-kus-cenneti-raporu_33.pdf" target="_blank" rel="noopener">https://www.iklimdernegi.org/wp-content/uploads/2024/03/nallihan-kus-cenneti-raporu_33.pdf</a></li>

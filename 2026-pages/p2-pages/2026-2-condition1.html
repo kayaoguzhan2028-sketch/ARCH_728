@@ -14,7 +14,10 @@
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
 
   .page { padding: 5rem 4rem 6rem; max-width: 1100px; margin: 0 auto; }
 
@@ -76,16 +79,23 @@
   .condition-text {
     max-width: 700px;
     margin: 3.5rem auto 0;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     line-height: 1.95;
-    opacity: 0.82;
   }
 </style>
 </head>
 <body>
 <nav>
   <a href="2026-2.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
-  <span class="nav-tag">Condition 1</span>
+  <div class="nav-center-links">
+    <a href="2026-2.html">Intro</a>
+    <a href="2026-2-themodel.html">The Model</a>
+    <a href="2026-2-thesection.html">The Section</a>
+    <a href="2026-2-thetimeline.html">The Timeline</a>
+    <a href="2026-2-condition1.html" class="active">Condition 1</a>
+    <a href="2026-2-condition2.html">Condition 2</a>
+    <a href="2026-2-condition3.html">Condition 3</a>
+  </div>
 </nav>
 
 <div class="page">
