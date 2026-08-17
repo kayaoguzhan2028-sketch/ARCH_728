@@ -22,8 +22,8 @@
   #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
   #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
   #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; font-family:var(--font); }
-  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
+  #info-panel p { font-size:1.1rem; line-height:1.85; opacity:1; font-family:var(--font); }
+  #info-panel ul { font-size:1.1rem; line-height:1.85; opacity:1; padding-left:1.2rem; margin:0; }
   #info-panel ul li { margin-bottom:0.8rem; }
   #info-panel ul li:last-child { margin-bottom:0; }
   #info-panel em { font-style:italic; }
@@ -33,7 +33,7 @@
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
   .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:1; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
@@ -54,7 +54,7 @@
   .rich-modal-frame { position:relative; width:100%; max-width:620px; max-height:90vh; overflow-y:auto; background:var(--black); border:1px solid var(--border); padding:3rem 2rem 2rem; }
   .rich-modal-frame h2 { font-size:1.4rem; font-weight:400; letter-spacing:0.04em; margin-bottom:1.2rem; }
   .rich-modal-frame img, .rich-modal-frame video { width:100%; display:block; opacity:0.92; }
-  .rich-modal-frame p { font-size:1.05rem; line-height:1.9; opacity:0.82; text-align:justify; }
+  .rich-modal-frame p { font-size:1.1rem; line-height:1.9; opacity:1; text-align:justify; }
   .rich-modal-close { position:absolute; top:0.8rem; right:0.8rem; width:36px; height:36px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.7; transition:opacity 0.2s,background 0.2s; }
   .rich-modal-close:hover { opacity:1; background:rgba(245,242,235,0.14); }
   .media-row { display:flex; gap:2rem; align-items:center; margin:3rem 0; }
@@ -146,7 +146,7 @@
   .image-modal-frame { position:relative; width:100%; max-width:620px; max-height:90vh; overflow-y:auto; background:var(--black); border:1px solid var(--border); padding:3rem 2rem 2rem; }
   .image-modal-frame img { width:100%; display:block; margin:0 0 1.5rem; opacity:0.92; transition:opacity 0.15s ease; }
   .image-modal-frame img.loading { opacity:0; }
-  .image-modal-frame p { font-size:1.1rem; line-height:1.95; opacity:0.82; margin:0; text-align:justify; }
+  .image-modal-frame p { font-size:1.1rem; line-height:1.95; opacity:1; margin:0; text-align:justify; }
   .image-modal-close { position:absolute; top:0.8rem; right:0.8rem; width:36px; height:36px; border-radius:50%; background:rgba(245,242,235,0.06); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.7; transition:opacity 0.2s,background 0.2s; }
   .image-modal-close:hover { opacity:1; background:rgba(245,242,235,0.14); }
   .panel-overlay { position:fixed; inset:0; z-index:300; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; padding:2rem; }
@@ -155,7 +155,7 @@
   .panel-overlay img { max-width:90vw; max-height:80vh; display:block; opacity:1; transition:opacity 0.15s ease; }
   .panel-overlay img.loading { opacity:0; }
   .panel-content-wrap:has(.panel-caption:not(:empty)) img { max-width:50vw; max-height:80vh; flex-shrink:0; }
-  .panel-caption { max-width:480px; font-size:1.05rem; line-height:1.85; opacity:0.85; }
+  .panel-caption { max-width:480px; font-size:1.1rem; line-height:1.85; opacity:1; }
   .panel-caption:empty { display:none; }
   @media (max-width:768px) {
     .panel-content-wrap { flex-direction:column; }
@@ -168,7 +168,7 @@
   .text-panel-overlay.open { opacity:1; pointer-events:auto; }
   .text-panel-content { max-width:640px; max-height:80vh; overflow-y:auto; }
   .text-panel-content h2 { font-size:1.4rem; font-weight:400; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:1.4rem; }
-  .text-panel-content p { font-size:1.08rem; line-height:1.9; opacity:0.85; }
+  .text-panel-content p { font-size:1.1rem; line-height:1.9; opacity:1; }
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
   .meta-item dt { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.5; }
@@ -224,7 +224,7 @@
     <div class="section">
       <div style="display:flex; flex-direction:column; width:fit-content; max-width:100%; margin:0 auto;">
         <img src="../../2026-images/2026-p8/section-01/main.webp" alt="" style="max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0;">
-        <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0.6rem; text-align:right;">Source: Cover of Çubuk Barajı / Le Barrage de Çubuk (1939), published by T.C. Nafıa Vekâleti.</p>
+        <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0.6rem; text-align:right;">Source: Cover of Çubuk Barajı / Le Barrage de Çubuk (1939), published by T.C. Nafıa Vekâleti.</p>
       </div>
     </div>
 
@@ -264,7 +264,7 @@
       <div class="section5-grid">
         <div class="section5-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;">
           <img src="../../2026-images/2026-p8/section-04/1.webp" alt="" style="max-width:100%;max-height:80%;object-fit:contain;display:block;margin:0;">
-          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
+          <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
         </div>
         <div class="section5-cell" style="padding:0;">
           <p style="text-align:justify; margin-bottom:1rem;">The Çubuk basin's Arkhe is defined by an ephemeral, <strong>seasonal water system</strong> rather than abundant accumulation.</p>
@@ -281,7 +281,7 @@
       <div class="section6-grid">
         <div class="section6-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
           <img src="../../2026-images/2026-p8/section-04/2.webp" alt="" style="max-width:100%;max-height:80%;object-fit:contain;display:block;margin:0;">
-          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
+          <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
         </div>
         <div class="section6-cell">
           <p style="text-align:justify; margin-bottom:1rem;">The site's geology did not passively accept construction; the <strong>initial bedrock found at a 17m depth</strong> was weathered and saturated with pyrite (FeS), <strong>actively threatening the durability of any intervention</strong>.</p>
@@ -297,7 +297,7 @@
       <div class="section7-grid">
         <div class="section7-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
           <img src="../../2026-images/2026-p8/section-04/3.webp" alt="" style="max-width:100%;max-height:80%;object-fit:contain;display:block;margin:0;">
-          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
+          <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right; width:100%;">Source: Çubuk Barajı / Le Barrage de Çubuk (1939), Publication of the Ministry of Public Works of the Republic of Turkey. Image digitally edited by the authors.</p>
         </div>
         <div class="section7-cell">
           <p style="text-align:justify; margin-bottom:1rem;">To stave off the inevitable Entropy threatened by the <strong>pyrite-rich soil, trass was actively added to the concrete mix to neutralize deterioration</strong>, while copper waterstops were embedded at the joints to enforce absolute watertightness.</p>
@@ -344,7 +344,7 @@
         <video autoplay loop muted playsinline style="max-height:calc(100vh - 52px - 6rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0;">
           <source src="../../2026-images/2026-p8/section-07/group-8-gif-4.mp4" type="video/mp4">
         </video>
-        <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Google Earth Pro historical imagery, accessed June 2026. Compilation and animation by authors.</p>
+        <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right; width:100%;">Source: Google Earth Pro historical imagery, accessed June 2026. Compilation and animation by authors.</p>
       </div>
     </div>
 
@@ -369,7 +369,7 @@
             <img src="../../2026-images/2026-p8/section-09/1.webp" alt="" style="width:50%; height:100%; object-fit:contain; display:block; margin:0;">
             <img src="../../2026-images/2026-p8/section-09/2.webp" alt="" style="width:50%; height:100%; object-fit:contain; display:block; margin:0;">
           </div>
-          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Source: Çubuk Haber (2021), "Türkiye's First Dam, Çubuk-1, Holds Water Again After 27 Years" ( https://cdn1.ntv.com.tr/gorsel/nNXov47LW0GMF8_G_swnPQ.jpg?width=960&mode=crop&scale=both ). Image adapted and digitally processed by the authors.</p>
+          <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right; width:100%;">Source: Çubuk Haber (2021), "Türkiye's First Dam, Çubuk-1, Holds Water Again After 27 Years" ( https://cdn1.ntv.com.tr/gorsel/nNXov47LW0GMF8_G_swnPQ.jpg?width=960&mode=crop&scale=both ). Image adapted and digitally processed by the authors.</p>
         </div>
         <div class="section14-cell">
           <p style="text-align:justify;">The juxtaposition of a fully submerged reservoir against its completely dry basin physically maps the landscape's inevitable transition from tectonic mastery to entropic release. The human-imposed water mass acts as an artificial seal, suffocating the natura and forcing the soil's bio-infrastructure into a state of suppression . However, when this artificial hydrology fractures and the water recedes, the illusion of permanence is shattered; the newly exposed, sediment-heavy ground immediately metabolizes the legacy of the Tekton to synthesize the foundation of a new Arkhe.</p>
@@ -394,7 +394,7 @@
         </div>
         <div class="section15-cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;">
           <img src="../../2026-images/2026-p8/section-10/conclusion.webp" alt="" style="max-width:100%;max-height:85%;object-fit:contain;display:block;margin:0;">
-          <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right; width:100%;">Collage by authors, 2026.</p>
+          <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right; width:100%;">Collage by authors, 2026.</p>
         </div>
       </div>
     </div>
@@ -698,7 +698,7 @@
     <p style="margin-bottom:1.5rem;">The waterline of the reservoir functions as a <strong>dynamic metabolic boundary rather than a static edge</strong>. Driven by the environmental reality of seasonal and annual precipitation, its continuous expansion and regression visually map the <strong>ongoing friction between the cycles</strong>.</p>
     <p style="margin-bottom:1.5rem;">When precipitation is high, the expanding waterline asserts the structural hegemony of the dam, submerging the critical zone, enforcing the tectonic order, and temporarily halting surface-level waterline biology. However, as the water regresses during seasonal cycles, it exposes the inherent vulnerability of the site. This regression unveils the <strong>heavy accumulation of sediment along the banks</strong>. More crucially, it temporarily releases the site into localized Entropy. In these exposed, liminal margins, the suppressed <strong>bio-infrastructure briefly reclaims the soil</strong> before the tectonic cycle inevitably submerges them once again.</p>
     <img src="../../2026-images/2026-p8/section-08/su/2-cubuk.webp" alt="" style="margin-bottom:0;">
-    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; margin-bottom:1.5rem; text-align:right;">Historical and contemporary views of Çubuk-1 Dam Recreation Area. Collage prepared by the authors using and adapting visual materials from Anka Haber (https://ankahaber.net/haber/cubuk1_baraji_rekreasyon_alani_yillar_sonra_yeniden_civil_civil_20652) and SALT Research Archive (https://archives.saltresearch.org/handle/123456789/113037).</p>
+    <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; margin-bottom:1.5rem; text-align:right;">Historical and contemporary views of Çubuk-1 Dam Recreation Area. Collage prepared by the authors using and adapting visual materials from Anka Haber (https://ankahaber.net/haber/cubuk1_baraji_rekreasyon_alani_yillar_sonra_yeniden_civil_civil_20652) and SALT Research Archive (https://archives.saltresearch.org/handle/123456789/113037).</p>
     <p style="margin-bottom:1.5rem;">The fluid and expansive water form has been reshaped into a narrow, linear channel. The central island has been removed, turning the water surface into a single, directed form. The shoreline has also been sharpened and more clearly bounded.</p>
     <video autoplay loop muted playsinline>
       <source src="../../2026-images/2026-p8/section-08/su/group-8-gif-3.mp4" type="video/mp4">
@@ -708,20 +708,20 @@
   const BETON_MODAL_HTML = `
     <h2>Built Environment Metabolism</h2>
     <img src="../../2026-images/2026-p8/section-08/beton/diorama-2.webp" alt="" style="margin-bottom:0;">
-    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; margin-bottom:1.5rem; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
+    <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; margin-bottom:1.5rem; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
     <video autoplay loop muted playsinline style="margin-bottom:0;">
       <source src="../../2026-images/2026-p8/section-08/beton/gif-1.mp4" type="video/mp4">
     </video>
-    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right;">Source: Animation prepared by the authors using images from Kültür Envanteri (https://kulturenvanteri.com/en/yer/cubuk-1-baraji/) and Wikimedia Commons (Modern primat, 2022, CC BY-SA 4.0, https://tr.wikipedia.org/wiki/Çubuk-1_Barajı#/media/Dosya:Çubuk-1_Barajı.jpg)</p>
+    <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right;">Source: Animation prepared by the authors using images from Kültür Envanteri (https://kulturenvanteri.com/en/yer/cubuk-1-baraji/) and Wikimedia Commons (Modern primat, 2022, CC BY-SA 4.0, https://tr.wikipedia.org/wiki/Çubuk-1_Barajı#/media/Dosya:Çubuk-1_Barajı.jpg)</p>
   `;
 
   const TOPRAK_MODAL_HTML = `
     <h2>Soil Metabolism</h2>
     <img src="../../2026-images/2026-p8/section-08/toprak/diorama.webp" alt="" style="margin-bottom:0;">
-    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; margin-bottom:1.5rem; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
+    <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; margin-bottom:1.5rem; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
     <img src="../../2026-images/2026-p8/section-08/toprak/1.webp" alt="" style="margin-bottom:0;">
     <img src="../../2026-images/2026-p8/section-08/toprak/2.webp" alt="" style="margin-bottom:0;">
-    <p style="font-size:0.7rem; color:var(--mid); opacity:0.5; margin-top:0; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
+    <p style="font-size:1rem; color:var(--mid); opacity:0.8; margin-top:0; text-align:right;">Site photograph taken during fieldwork (Photo by Authors, 2026)</p>
   `;
 
   const overlaySvg13 = document.getElementById('overlay-svg13');

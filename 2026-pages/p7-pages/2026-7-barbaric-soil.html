@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/webp" href="../../must-images/favicon/Mimfak.webp">
-<title>Debris — ARCH 728</title>
+<title>Barbaric Soil — ARCH 728</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -18,11 +18,16 @@
   .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-center-links a:hover { opacity:1; }
   .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.55rem; padding:0.9rem 1.1rem 0.8rem; margin-top:0.4rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
+  .nav-dropdown-menu .dropdown-label { font-size:0.56rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.35; white-space:nowrap; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; white-space:nowrap; }
   .wrap { max-width:50%; margin:0 auto; padding:8rem 2rem 6rem; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
-  .body { font-size:1.2rem; line-height:1.95; opacity:0.82; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:1; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
@@ -66,11 +71,17 @@
   <a href="2026-7.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
   <div class="nav-center-links">
     <a href="2026-7.html">Intro</a>
-    <a href="2026-7-nomad-soil.html">Nomad Soil</a>
-    <a href="2026-7-debris.html" class="active">Debris</a>
-    <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
-    <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
-    <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+    <div class="nav-dropdown">
+      <a href="2026-7-nomad-soil.html" class="active">The Figures of Migrant Soil</a>
+      <div class="nav-dropdown-menu">
+        <span class="dropdown-label">Soil Types</span>
+        <a href="2026-7-nomad-soil.html">Nomad Soil</a>
+        <a href="2026-7-barbaric-soil.html" class="active">Barbaric Soil</a>
+        <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
+        <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
+        <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+      </div>
+    </div>
     <a href="2026-7-map.html">The Map</a>
     <a href="2026-7-timeline.html">The Timeline</a>
   </div>

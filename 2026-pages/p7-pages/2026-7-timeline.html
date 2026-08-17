@@ -19,6 +19,11 @@
   .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-center-links a:hover { opacity:1; }
   .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.55rem; padding:0.9rem 1.1rem 0.8rem; margin-top:0.4rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
+  .nav-dropdown-menu .dropdown-label { font-size:0.56rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.35; white-space:nowrap; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; white-space:nowrap; }
 
   .map-stage { position:fixed; top:52px; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:var(--black); }
   .map-inner { position:relative; display:inline-block; line-height:0; font-size:0; user-select:none; }
@@ -34,12 +39,12 @@
   #timeline-lightbox-content figure { margin:0 0 3rem; }
   #timeline-lightbox-content figure:last-child { margin-bottom:0; }
   #timeline-lightbox-content img { width:100%; height:auto; object-fit:contain; display:block; }
-  #timeline-lightbox-content figcaption { margin-top:0.8rem; font-size:0.82rem; line-height:1.6; opacity:0.6; text-align:center; }
-  #timeline-lightbox-content .text-block { font-size:1rem; line-height:1.85; opacity:0.85; text-align:left; margin-top:1rem; }
+  #timeline-lightbox-content figcaption { margin-top:0.8rem; font-size:1.1rem; line-height:1.6; opacity:1; text-align:center; }
+  #timeline-lightbox-content .text-block { font-size:1.1rem; line-height:1.85; opacity:1; text-align:left; margin-top:1rem; }
   #timeline-lightbox-content .text-block h3 { font-size:1.15rem; font-weight:400; letter-spacing:0.02em; margin:2.5rem 0 1rem; opacity:1; }
   #timeline-lightbox-content .text-block h3:first-child { margin-top:0; }
   #timeline-lightbox-content .text-block p { margin-bottom:1.2rem; text-align:justify; }
-  #timeline-lightbox-content .text-block .references { margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border); font-size:0.8rem; line-height:1.7; opacity:0.6; }
+  #timeline-lightbox-content .text-block .references { margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border); font-size:1rem; line-height:1.7; opacity:0.8; }
   #timeline-lightbox-content .text-block .references h3 { font-size:0.9rem; margin-bottom:1rem; }
   #timeline-lightbox-content .text-block .references p { margin-bottom:0.8rem; text-align:left; }
   #timeline-lightbox-content .text-block a { color:var(--accent); }
@@ -52,11 +57,17 @@
   <a href="2026-7.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
   <div class="nav-center-links">
     <a href="2026-7.html">Intro</a>
-    <a href="2026-7-nomad-soil.html">Nomad Soil</a>
-    <a href="2026-7-debris.html">Debris</a>
-    <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
-    <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
-    <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+    <div class="nav-dropdown">
+      <a href="2026-7-nomad-soil.html">The Figures of Migrant Soil</a>
+      <div class="nav-dropdown-menu">
+        <span class="dropdown-label">Soil Types</span>
+        <a href="2026-7-nomad-soil.html">Nomad Soil</a>
+        <a href="2026-7-barbaric-soil.html">Barbaric Soil</a>
+        <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
+        <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
+        <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+      </div>
+    </div>
     <a href="2026-7-map.html">The Map</a>
     <a href="2026-7-timeline.html" class="active">The Timeline</a>
   </div>

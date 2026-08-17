@@ -18,6 +18,11 @@
   .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-center-links a:hover { opacity:1; }
   .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.55rem; padding:0.9rem 1.1rem 0.8rem; margin-top:0.4rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
+  .nav-dropdown-menu .dropdown-label { font-size:0.56rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.35; white-space:nowrap; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; white-space:nowrap; }
   .map-stage { position:fixed; top:52px; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:var(--black); }
   .map-inner { position:relative; display:inline-block; line-height:0; font-size:0; user-select:none; }
   #map-main { display:block; max-width:100vw; max-height:calc(100vh - 52px); width:auto; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
@@ -43,7 +48,7 @@
   #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
   #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
   #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; font-family:var(--font); }
+  #info-panel p { font-size:1.1rem; line-height:1.85; opacity:1; font-family:var(--font); }
   #info-panel em { font-style:italic; }
   #hover-icon { position:fixed; top:0; left:0; z-index:200; display:flex; flex-direction:column; align-items:center; pointer-events:none; opacity:0; transform:translate(24px,24px); transition:opacity 0.2s ease; }
   #hover-icon.active { opacity:1; }
@@ -60,11 +65,17 @@
   </div>
   <div class="nav-center-links">
     <a href="2026-7.html" class="active">Intro</a>
-    <a href="2026-7-nomad-soil.html">Nomad Soil</a>
-    <a href="2026-7-debris.html">Debris</a>
-    <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
-    <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
-    <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+    <div class="nav-dropdown">
+      <a href="2026-7-nomad-soil.html">The Figures of Migrant Soil</a>
+      <div class="nav-dropdown-menu">
+        <span class="dropdown-label">Soil Types</span>
+        <a href="2026-7-nomad-soil.html">Nomad Soil</a>
+        <a href="2026-7-barbaric-soil.html">Barbaric Soil</a>
+        <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
+        <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
+        <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+      </div>
+    </div>
     <a href="2026-7-map.html">The Map</a>
     <a href="2026-7-timeline.html">The Timeline</a>
   </div>
@@ -192,7 +203,7 @@ mapInner.addEventListener('mouseleave', () => {
 let genericBuildingClicks = 0;
 mapInner.addEventListener('click', () => {
   if (activeSoilHit && activeSoilHit.id === '02') {
-    window.location.href = '2026-7-debris.html';
+    window.location.href = '2026-7-barbaric-soil.html';
   } else if (activeSoilHit && activeSoilHit.id === '07') {
     window.location.href = '2026-7-nomad-soil.html';
   } else if (activeSoilHit && activeSoilHit.id === '06') {
