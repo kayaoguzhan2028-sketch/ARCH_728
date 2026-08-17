@@ -215,11 +215,11 @@
 <div id="map"></div>
 
 <div id="slider-panel">
-  <span id="year-label">2010</span>
-  <span id="demolition-counter" lang="en"><span class="count">0</span> squatter houses demolished</span>
+  <span id="year-label">Abstraction of 2026</span>
+  <span id="demolition-counter" lang="en" style="display:none;"><span class="count">0</span> squatter houses demolished</span>
   <div class="slider-row">
-    <button id="year-prev" class="year-arrow" aria-label="Previous year" disabled>‹</button>
-    <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2010">
+    <button id="year-prev" class="year-arrow" aria-label="Previous year">‹</button>
+    <input id="year-slider" type="range" min="2010" max="2026" step="1" value="2026">
     <button id="year-next" class="year-arrow" aria-label="Next year">›</button>
   </div>
   <div class="slider-ticks">
@@ -247,7 +247,7 @@
 
 <script>
   const CIRCLE_CENTER = L.latLng(39.8572724, 32.8407268);
-  const CIRCLE_RADIUS = 2000; // metre
+  const CIRCLE_RADIUS = 2300; // metre
 
   const mapEl = document.getElementById('map');
   mapEl.classList.add('dimmed');
@@ -317,10 +317,6 @@
       setTimeout(() => map.removeLayer(marker), 1200);
     });
   }
-
-  LayerManager.loadYear(2010, _origDataPath).then(({ demolition }) => {
-    flashNewDemolitions(demolition, 2010);
-  });
 
   // Yer adları katmanı (mahalle/semt isimleri) — statik, tek seferlik veri
   const labelsLayer = L.layerGroup();
@@ -534,6 +530,9 @@
   prevBtn.addEventListener('click', () => stepYear(-1));
   nextBtn.addEventListener('click', () => stepYear(1));
   slider.addEventListener('input', () => setYear(parseInt(slider.value)));
+
+  // Sayfa doğrudan "Abstraction of 2026" ile açılır — 2010'dan başlamıyor, kilit de yok.
+  setYear(YEAR_MAX);
 </script>
 
 </body>

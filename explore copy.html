@@ -63,13 +63,44 @@
   .lens-node.label-top    .lens-node-label { left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); }
   .lens-node.label-bottom .lens-node-label { left: 50%; top: calc(100% + 10px); transform: translateX(-50%); }
 
-  #view-content { position: absolute; inset: 0; overflow: hidden; cursor: default; }
-  .shape { position: absolute; cursor: pointer; transition: transform 0.35s ease, opacity 0.4s ease, filter 0.4s ease; will-change: transform; }
-  .shape.selected { transform: scale(1.25) !important; }
-  .shape.dimmed { opacity: 0.45; filter: saturate(0.2); }
+  #view-content { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; cursor: default; align-items: flex-start; justify-content: center; }
 
-  #shape-tooltip { position: fixed; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); white-space: nowrap; z-index: 20; }
-  #shape-tooltip.visible { opacity: 1; }
+  .rhythm-wrap { width: 100%; max-width: 1600px; margin: 0 auto; padding: 2.75rem 2rem 4rem; }
+  .rhythm-heading { text-align: left; font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); opacity: 0.92; margin: 0 0 2.2rem; }
+
+  .rhythm-grid { display: grid; grid-template-columns: repeat(7, 1fr); align-items: start; gap: 34px 14px; }
+  .rhythm-group-label { position: absolute; left: 0; bottom: 100%; margin-bottom: 0.5rem; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.9; white-space: nowrap; }
+  .rhythm-cell { background: rgba(245,242,235,0.035); border: 1px solid var(--border); position: relative; overflow: visible; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, opacity 0.25s ease; }
+  /* Natural rhythm: no manual height. Each cell's first child (the base
+     image/video/frame) lays out at its own intrinsic aspect ratio at the
+     fixed column width — that's what gives each cell its height. Every
+     later sibling (crossfade/highlight layers) is stacked absolutely on
+     top of that established box, not the other way around. */
+  .cell-media { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .cell-media > :first-child { position: relative; display: block; width: 100%; height: auto; }
+  .cell-media > :not(:first-child) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* Iframe crops can't self-report an intrinsic height the way an image
+     can — they stay absolutely positioned (scaled/cropped by JS) and the
+     cell instead gets an explicit aspect-ratio matching the crop window. */
+  .cell-media > .cell-frame:first-child { position: absolute; }
+  .cell-frame { border: none; pointer-events: none; transform-origin: top left; }
+  .cell-img { display: block; width: 100%; height: auto; object-fit: cover; }
+  .cell-stack { display: flex; flex-direction: column; width: 100%; }
+  .cell-stack-img { display: block; width: 100%; height: auto; }
+  .effect-layer { object-fit: cover; opacity: 0; transition: opacity 0.35s ease; }
+  .effect-layer.active { opacity: 1; }
+  .layer-img { object-fit: contain; opacity: 0; transition: opacity 0.4s ease; }
+  .layer-img.on { opacity: 1; }
+  .cell-zone-overlay svg { width: 100%; height: 100%; display: block; }
+  .cell-zone-shape { fill: var(--accent); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, filter 0.25s ease; }
+  .cell-zone-shape.cell-zone-active { opacity: 0.5; filter: drop-shadow(0 0 8px rgba(245,220,140,0.9)) drop-shadow(0 0 18px rgba(245,200,80,0.7)); }
+  .slide-after-img { object-fit: cover; clip-path: inset(0 100% 0 0); animation: slideReveal 4s ease-in-out infinite alternate; animation-play-state: paused; }
+  .rhythm-cell.group-active .slide-after-img { animation-play-state: running; }
+  @keyframes slideReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .cell-placeholder { display: block; width: 100%; aspect-ratio: 1 / 1; }
+  .rhythm-cell:hover { background: rgba(245,242,235,0.08); border-color: rgba(245,242,235,0.28); }
+  .rhythm-cell.dimmed { opacity: 0.28; }
+  .rhythm-cell .cell-index { position: absolute; top: 0.55rem; left: 0.7rem; font-size: 0.6rem; letter-spacing: 0.14em; color: var(--mid); opacity: 0.4; font-family: 'EB Garamond', Georgia, serif; }
 
   footer { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 48px; border-top: 1px solid var(--border); background: var(--black); }
   .footer-meta { font-size: 0.72rem; letter-spacing: 0.1em; color: var(--white); opacity: 0.22; }
@@ -160,15 +191,10 @@
 
   <!-- BY CONTENT -->
   <div class="view" id="view-content">
-    <img class="shape" id="shape-0" src="2026-images/2026-p1/1-mainpage/component-1.webp" data-label="Powerplant" data-href="2026-pages/p1-pages/2026-1-interactivepage.html" style="width:120px;height:auto;" draggable="false" alt="Powerplant">
-    <img class="shape" id="shape-1" src="2026-images/2026-p2/themodel/23-model-meshtopo.webp" data-label="The Model" data-href="2026-pages/p2-pages/2026-2-themodel.html" style="width:135px;height:auto;" draggable="false" alt="The Model">
-    <img class="shape" id="shape-2" src="2026-images/2026-p3/0-project-brief-page/sifting-the-soil-key-image-1.0.webp" data-label="Sifters" data-href="2026-pages/p3-pages/2026-3.html" style="width:110px;height:auto;" draggable="false" alt="Sifters">
-    <img class="shape" id="shape-3" src="must-images/by-content/saydam.webp" data-label="Reeds" data-href="2026-pages/p4-pages/2026-4.html" style="width:120px;height:auto;" draggable="false" alt="Reeds">
-    <img class="shape" id="shape-4" src="2026-images/2026-p5/ikon/ikon.webp" data-label="Hotel" data-href="2026-pages/p5-pages/2026-5.html" style="width:67.5px;height:auto;" draggable="false" alt="Hotel">
-    <img class="shape" id="shape-5" src="2026-images/2026-p6/0-main-page/by-year-visual.webp" data-label="Timeline" data-href="2026-pages/p6-pages/2026-6-thetimeline.html" style="width:110px;height:auto;filter:grayscale(1);" draggable="false" alt="Timeline">
-    <img class="shape" id="shape-6" src="must-images/by-content/debris.webp" data-label="Barbaric Soil" data-href="2026-pages/p7-pages/2026-7-barbaric-soil.html" style="width:120px;height:auto;" draggable="false" alt="Barbaric Soil">
-    <img class="shape" id="shape-7" src="2026-images/2026-p8/section-02/1.webp" data-label="The Helical" data-href="2026-pages/p8-pages/2026-8.html" style="width:100px;height:auto;" draggable="false" alt="The Helical">
-    <div id="shape-tooltip"></div>
+    <div class="rhythm-wrap">
+      <h2 class="rhythm-heading">Soil</h2>
+      <div class="rhythm-grid" id="rhythm-grid"></div>
+    </div>
   </div>
 
 </div>
@@ -562,9 +588,9 @@
     { num: '02', label: 'Hıdırlık Tepe',               url: '2026-pages/p2-pages/2026-2.html' },
     { num: '03', label: 'Grid',                        url: '2026-pages/p3-pages/2026-3.html' },
     { num: '04', label: 'Bilkent Territory',           url: '2026-pages/p4-pages/2026-4.html' },
-    { num: '05', label: 'Ankara Çankaya (vinç) Hotel', url: '2026-pages/p5-pages/2026-5.html' },
+    { num: '05', label: 'The Grand Çankaya Hotel', url: '2026-pages/p5-pages/2026-5.html' },
     { num: '06', label: 'Imrahor Valley',              url: '2026-pages/p6-pages/2026-6.html' },
-    { num: '07', label: 'İlker Mahallesi',             url: '2026-pages/p7-pages/2026-7.html' },
+    { num: '07', label: 'Ilker Neighbourhood',         url: '2026-pages/p7-pages/2026-7.html' },
     { num: '08', label: 'ÇUBUK I Dam',                 url: '2026-pages/p8-pages/2026-8.html' },
   ];
 
@@ -594,83 +620,584 @@
   libraryOverlay.addEventListener('click', (e) => { if (e.target === libraryOverlay) closeLibrary(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLibrary(); });
 
-  // ── Bouncing shapes ──
-  const container = document.getElementById('view-content');
-  const shapes = [
-    { el: document.getElementById('shape-0'), w: 120, h: 120, vx:  0.70, vy:  0.70 },
-    { el: document.getElementById('shape-1'), w: 135, h: 135, vx: -0.70, vy:  0.70 },
-    { el: document.getElementById('shape-2'), w: 110, h: 110, vx:  0.65, vy: -0.65 },
-    { el: document.getElementById('shape-3'), w: 120, h:  84, vx: -0.75, vy:  0.65 },
-    { el: document.getElementById('shape-4'), w: 67.5, h: 118.5, vx:  0.60, vy: -0.70 },
-    { el: document.getElementById('shape-5'), w: 110, h: 107, vx: -0.45, vy:  0.55 },
-    { el: document.getElementById('shape-6'), w: 120, h: 120, vx:  0.75, vy:  0.50 },
-    { el: document.getElementById('shape-7'), w: 100, h: 100, vx: -0.55, vy: -0.45 },
-  ];
+  // ── By Content: rhythmic, non-repeating grid, grouped by project ──
+  (function () {
+    const grid = document.getElementById('rhythm-grid');
 
-  shapes.forEach(s => {
-    s.x = Math.random() * Math.max(0, window.innerWidth  - s.w);
-    s.y = Math.random() * Math.max(0, window.innerHeight - s.h);
-    s.el.style.left = s.x + 'px';
-    s.el.style.top  = s.y + 'px';
-  });
+    // No manual height rhythm anymore — each cell's own media (image/video/
+    // iframe crop) lays out at its intrinsic aspect ratio at the fixed
+    // column width, so the natural rhythm comes from the content itself.
 
-  const shapeTooltip = document.getElementById('shape-tooltip');
-  let hoveredShape = null;
-  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-
-  shapes.forEach(s => {
-    if (s.el.dataset.href) {
-      s.el.style.cursor = 'pointer';
-      s.el.addEventListener('click', () => { window.location.href = s.el.dataset.href; });
+    // Every animated cell (interval, video, live iframe) registers a
+    // start/stop pair here instead of running on its own. Nothing runs by
+    // default — a group's motion only turns on while it's the hovered
+    // (undimmed) one, so at most one group is ever animating at a time,
+    // no matter how large the grid grows.
+    const groupControllers = [];
+    function registerController(group, ctrl) {
+      groupControllers.push({ group, start: ctrl.start, stop: ctrl.stop });
     }
-  });
-
-  if (isTouch) {
-    shapes.forEach(s => { s.vx *= 0.55; s.vy *= 0.55; });
-  } else {
-    shapes.forEach(s => {
-      s.el.addEventListener('mouseenter', () => {
-        hoveredShape = s;
-        s.el.classList.add('selected');
-        shapes.forEach(other => { if (other.el !== s.el) other.el.classList.add('dimmed'); });
-        shapeTooltip.textContent = s.el.dataset.label;
-        shapeTooltip.classList.add('visible');
+    function setActiveGroup(g) {
+      grid.querySelectorAll('.rhythm-cell').forEach((c) => {
+        c.classList.toggle('group-active', g !== null && c.dataset.group === g);
       });
-      s.el.addEventListener('mouseleave', () => {
-        hoveredShape = null;
-        shapes.forEach(other => other.el.classList.remove('selected', 'dimmed'));
-        shapeTooltip.classList.remove('visible');
+      groupControllers.forEach((c) => {
+        if (g !== null && c.group === g) c.start();
+        else c.stop();
       });
-    });
-  }
+    }
 
-  function animate() {
-    const cw = container.clientWidth;
-    const ch = container.clientHeight;
-    if (cw > 0 && ch > 0) {
-      shapes.forEach(s => {
-        const isSelected = (s === hoveredShape);
-        const spd = isSelected ? 0.5 : 1;
-        s.x += s.vx * spd; s.y += s.vy * spd;
-        if (s.x <= 0)        { s.x = 0;        s.vx =  Math.abs(s.vx); }
-        if (s.x + s.w >= cw) { s.x = cw - s.w; s.vx = -Math.abs(s.vx); }
-        if (s.y <= 0)        { s.y = 0;        s.vy =  Math.abs(s.vy); }
-        if (s.y + s.h >= ch) { s.y = ch - s.h; s.vy = -Math.abs(s.vy); }
-        s.el.style.left = s.x + 'px';
-        s.el.style.top  = s.y + 'px';
-        if (isSelected && hoveredShape) {
-          const tipW = shapeTooltip.offsetWidth || 120;
-          const gap  = 14;
-          shapeTooltip.style.left      = (s.x + s.w + gap + tipW < cw ? s.x + s.w + gap : Math.max(8, s.x - tipW - gap)) + 'px';
-          shapeTooltip.style.top       = (s.y + s.h / 2) + 'px';
-          shapeTooltip.style.transform = 'translateY(-50%)';
+    // Placeholder counts — update .count per group once the real page lists are given.
+    const GROUPS = [
+      { name: 'Çayırhan Ash Lake', count: 8, items: [
+          { type: 'img', src: '2026-images/2026-p1/1-mainpage/kapak-yatay.webp' },
+          { type: 'effect', interval: 1400, bg: '2026-images/2026-p1/2-interactive-page/cayirhan-main-photo.webp',
+            base: '2026-images/2026-p1/2-interactive-page/SVG/', frames: [
+              'cayirhan-main-photo-microclimate.webp','cayirhan-main-photo-fabrika.webp','cayirhan-main-photo-golet.webp',
+              'cayirhan-main-photo-kus.webp','cayirhan-main-photo-toprak.webp','cayirhan-main-photo-yapi.webp' ] },
+          { type: 'effect', interval: 1400, bg: '2026-images/2026-p1/4-power-plant/factory-final.webp',
+            base: '2026-images/2026-p1/4-power-plant/SVG/', frames: [
+              'highlights-ashlake.webp','highlights-baraj.webp','highlights-cayirhan.webp','highlights-circle.webp',
+              'highlights-fabrika.webp','highlights-production.webp','highlights-risk.webp','highlights-waste.webp' ] },
+          { type: 'img', src: '2026-images/2026-p1/3-infrastructure/calisma-2/infrastructure-section-2.webp' },
+          { type: 'img', src: '2026-images/2026-p1/6-soil/soil.webp' },
+          { type: 'img', src: '2026-images/2026-p1/8-ashlake/ashlake-main-image.webp' },
+          { type: 'img', src: '2026-images/2026-p1/7-microclimatichange/microclimate.webp' },
+          { type: 'img', src: '2026-images/2026-p1/5-bird/kus-goc-haritasi.webp' },
+        ] },
+      { name: 'Hıdırlık Hill', count: 6, items: [
+          { type: 'video', src: '2026-images/2026-p2/mainpage/main-page.mp4' },
+          { type: 'layers',
+            base: '2026-images/2026-p2/themodel/',
+            standalone: '24-model-anagörsel-renderered.webp',
+            layers: [
+              '03-model-exisitngslum.webp', '01-model-toki.webp', '16-model-tomb.webp',
+              '13-model-existingtree.webp', '08-model-electrictower.webp', '17-model-rockyformations.webp',
+              '20-model-path.webp', '04-model-slumlaststage.webp', '09-model-lightpole.webp',
+            ] },
+          { type: 'effect', bg: '2026-images/2026-p2/thesection/section-kolajkesit-01.webp', bgDim: true,
+            base: '2026-images/2026-p2/thesection/',
+            frames: [ 'section-kolajkesit-slice1.webp', 'section-kolajkesit-slice2.webp', 'section-kolajkesit-slice3.webp', 'section-kolajkesit-slice4.webp' ] },
+          { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-01-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-01-a.webp' },
+          { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-02.webp',   after: '2026-images/2026-p2/conditions/condition-sonrasi-02.webp' },
+          { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-03-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-03-a.webp' },
+        ] },
+      { name: 'Grid', count: 5, items: [
+          { type: 'img', src: '2026-images/2026-p3/1-entrance-page-1/key-image-soil-grounds-1.1.webp' },
+          { type: 'img', src: '2026-images/2026-p3/2-errors-on-ankara-soil-page-2/error-transition-section-2.3.1.webp' },
+          { type: 'cycle', interval: 3000, delay: 0, frames: [
+              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.1.webp',
+              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.1.webp',
+              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.1.webp' ] },
+          { type: 'cycle', interval: 3000, delay: 500, frames: [
+              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.2.webp',
+              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.2.webp',
+              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.2.webp' ] },
+          { type: 'cycle', interval: 3000, delay: 1000, frames: [
+              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.3.webp',
+              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.3.webp',
+              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.3.webp' ] },
+        ] },
+      { name: 'Bilkent Territory', count: 3, items: [
+          { type: 'img', src: '2026-images/2026-p4/webp/0-entry/ana-sayfa-image.webp' },
+          { type: 'img', src: '2026-images/2026-p4/webp/4-1-species-inventory/4-1-1-species-inventory-photographs.webp' },
+          { type: 'img', src: '2026-images/2026-p4/webp/4-2-habitat-strata/4-2-habitat-strata.webp' },
+        ] },
+      { name: 'The Grand Çankaya Hotel', count: 4, items: [
+          { type: 'img', src: '2026-images/2026-p5/01-Home/main-image.webp' },
+          { type: 'cycle', interval: 3000, delay: 0, frames: [
+              '2026-images/2026-p5/02-Timeline/current-up.webp',
+              '2026-images/2026-p5/02-Timeline/stage-1-up.webp',
+              '2026-images/2026-p5/02-Timeline/stage-2-up.webp' ] },
+          { type: 'img', src: '2026-images/2026-p5/03-MicroSections/base-microsection.webp' },
+          { type: 'img', src: '2026-images/2026-p5/04-WaterWays/city-scale.webp' },
+        ] },
+      { name: 'Imrahor Valley', count: 4, items: [
+          { type: 'img', src: '2026-images/2026-p6/0-main-page/main-page.webp' },
+          { type: 'cycle', interval: 700, bg: '2026-images/2026-p6/2-the-factories/factory-main-visual.webp', frames: [
+              '2026-images/2026-p6/2-the-factories/factory-1.webp','2026-images/2026-p6/2-the-factories/factory-2.webp',
+              '2026-images/2026-p6/2-the-factories/factory-3.webp','2026-images/2026-p6/2-the-factories/factory-4.webp',
+              '2026-images/2026-p6/2-the-factories/factory-5.webp','2026-images/2026-p6/2-the-factories/factory-6.webp',
+              '2026-images/2026-p6/2-the-factories/factory-7.webp','2026-images/2026-p6/2-the-factories/factory-8.webp',
+              '2026-images/2026-p6/2-the-factories/factory-9.webp' ] },
+          { type: 'zones', bg: '2026-images/2026-p6/1-the-soil/soil-2.webp', svg: '2026-images/2026-p6/1-the-soil/SVG/soil-2-zones-all.svg' },
+          { type: 'cycle', interval: 900, bg: '2026-images/2026-p6/3-the-timeline/timeline-1.webp', frames: [
+              '2026-images/2026-p6/3-the-timeline/timeline-30lar.webp','2026-images/2026-p6/3-the-timeline/timeline-60lar.webp',
+              '2026-images/2026-p6/3-the-timeline/timeline-90lar.webp','2026-images/2026-p6/3-the-timeline/timeline-2020ler.webp' ] },
+        ] },
+      { name: 'Ilker Neighbourhood', count: 3, items: [
+          { type: 'cycle', interval: 2000, bg: '2026-images/2026-p7/opening-page/axon-all/01-trailmap-son.webp', frames: [
+              '2026-images/2026-p7/opening-page/axon-all/07-nomadicearthmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/02-barbarianmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/03-proletarianmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/04-genericbuildingsetmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/05-displacementmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/06-vagabondearthmap.webp' ] },
+          // The Map — a full Leaflet app, not a set of pre-rendered images. On hover we
+          // drive its own year slider to 2026 (unlocking its 5 animation toggles) and
+          // click through them in sequence; on unhover we click the active one off again
+          // and reset the year, same as if a visitor had walked the slider back down.
+          { type: 'frame', url: '2026-pages/p7-pages/2026-7-map.html', custom: {
+              start: (frame) => {
+                // Leaflet + roughjs load from a CDN via blocking <script> tags
+                // before the page's own inline script runs, so `setYear` may
+                // not exist yet the instant we hover — poll briefly for it
+                // instead of silently giving up on the first try.
+                let tries = 0;
+                frame._pollTimer = setInterval(() => {
+                  tries++;
+                  const win = frame.contentWindow, doc = frame.contentDocument;
+                  const ready = win && doc && typeof win.setYear === 'function' && doc.querySelector('.layer-row .layer-btn');
+                  if (ready) {
+                    clearInterval(frame._pollTimer);
+                    frame._pollTimer = null;
+                    try {
+                      win.setYear(2026);
+                      const buttons = Array.from(doc.querySelectorAll('.layer-row .layer-btn'))
+                        .filter((b) => b.dataset.key !== 'civilized');
+                      let i = -1;
+                      function tick() {
+                        try {
+                          if (i >= 0) buttons[i].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                          i = (i + 1) % buttons.length;
+                          buttons[i].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                        } catch (e) { /* page's own script errored — leave it as-is */ }
+                      }
+                      tick();
+                      frame._animTimer = setInterval(tick, 4000);
+                    } catch (e) { /* page's own script errored (e.g. CDN blocked) — nothing more we can do */ }
+                  } else if (tries > 40) {
+                    clearInterval(frame._pollTimer);
+                    frame._pollTimer = null;
+                  }
+                }, 150);
+              },
+              stop: (frame) => {
+                if (frame._pollTimer) { clearInterval(frame._pollTimer); frame._pollTimer = null; }
+                if (frame._animTimer) { clearInterval(frame._animTimer); frame._animTimer = null; }
+                try {
+                  const win = frame.contentWindow, doc = frame.contentDocument;
+                  if (doc) {
+                    const activeBtn = doc.querySelector('.layer-row .layer-btn.active');
+                    if (activeBtn) activeBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                  }
+                  if (win && typeof win.setYear === 'function') win.setYear(2010);
+                } catch (e) { /* ignore */ }
+              },
+            } },
+          { type: 'cycle', interval: 2000, bg: '2026-images/2026-p7/timeline/timeline-tam.webp', frames: [
+              '2026-images/2026-p7/timeline/1-renkli.webp','2026-images/2026-p7/timeline/2-renkli.webp',
+              '2026-images/2026-p7/timeline/3-renkli.webp','2026-images/2026-p7/timeline/4-renkli.webp',
+              '2026-images/2026-p7/timeline/5-renkli.webp','2026-images/2026-p7/timeline/6-renkli.webp' ] },
+        ] },
+      { name: 'ÇUBUK I Dam', count: 4, items: [
+          { type: 'img', src: '2026-images/2026-p8/section-01/main.webp' },
+          { type: 'img', src: '2026-images/2026-p8/section-03/main.webp' },
+          { type: 'stack', srcs: [
+              '2026-images/2026-p8/section-06/1.webp',
+              '2026-images/2026-p8/section-06/2.webp' ] },
+          { type: 'video', src: '2026-images/2026-p8/section-07/group-8-gif-4.mp4' },
+        ] },
+    ];
+
+    // Some pages only reveal their real "content" behind a hover state.
+    // These handlers force that state once, right after load — no live
+    // interaction, just a one-time scripted nudge so the frozen crop shows
+    // the lit-up version instead of the resting one. (Currently unused —
+    // every "frame" cell so far shows its own content without a nudge —
+    // kept in place for the next iframe cell that needs one.)
+    const REVEAL_HANDLERS = {};
+
+    // Live, non-interactive crop of the real page — zoomed into the hero
+    // area (skipping the nav/title block) rather than shrinking the whole page.
+    function mountFrame(cell, url, group, custom) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+      const frame = document.createElement('iframe');
+      frame.className = 'cell-frame';
+      frame.src = url;
+      frame.loading = 'lazy';
+      frame.tabIndex = -1;
+      frame.setAttribute('scrolling', 'no');
+      const reveal = REVEAL_HANDLERS[url];
+      // The embedded page runs fully on its own (its own videos, CSS
+      // animations) — freeze all of that the moment it loads, and only
+      // let it move while this cell's group is the active one. Pages with
+      // their own scripted state (e.g. a slider that has to move first)
+      // pass a `custom` start/stop pair instead of using this generic freeze.
+      frame.addEventListener('load', () => {
+        if (reveal) reveal(frame);
+        if (custom) return;
+        const doc = frame.contentDocument;
+        if (!doc) return;
+        const style = doc.createElement('style');
+        style.textContent = '.freeze-anim, .freeze-anim * { animation-play-state: paused !important; }';
+        doc.head.appendChild(style);
+        doc.documentElement.classList.add('freeze-anim');
+        doc.querySelectorAll('video').forEach((v) => v.pause());
+      });
+      media.appendChild(frame);
+      cell.appendChild(media);
+
+      const CROP_W = 800;         // virtual viewport width — legible zoom, still a desktop layout
+      const CROP_VISIBLE_H = 500; // how tall the cropped window itself looks (cell's own aspect-ratio)
+      const CROP_OFFSET_Y = 52;   // matches the fixed nav's own height — just skip the header bar
+      frame.style.width = CROP_W + 'px';
+      frame.style.height = '850px'; // ≈ a real laptop viewport height, so 100vh-based sections don't over-center
+      // Frames can't self-report a size — give both the cell and its media
+      // wrapper an explicit aspect-ratio directly (not relying on percentage-
+      // height inheriting through .cell-media, which isn't consistent enough
+      // across browsers and was leaving frame cells collapsed to 0 height).
+      cell.style.aspectRatio = CROP_W + ' / ' + CROP_VISIBLE_H;
+      media.style.aspectRatio = CROP_W + ' / ' + CROP_VISIBLE_H;
+      media.style.height = 'auto';
+
+      function scaleFrame() {
+        const cw = cell.clientWidth, ch = cell.clientHeight;
+        if (!cw || !ch) return; // cell still hidden (e.g. "By Content" tab not active yet)
+        const scale = cw / CROP_W;
+        frame.style.transform = 'scale(' + scale + ') translateY(-' + CROP_OFFSET_Y + 'px)';
+      }
+
+      // ResizeObserver re-fires once the cell actually gets a size — covers
+      // both window resizes and the tab switch from display:none to visible.
+      if (window.ResizeObserver) {
+        new ResizeObserver(scaleFrame).observe(cell);
+      } else {
+        scaleFrame();
+        window.addEventListener('resize', scaleFrame);
+      }
+
+      if (custom) {
+        registerController(group, {
+          start: () => custom.start && custom.start(frame),
+          stop: () => custom.stop && custom.stop(frame),
+        });
+      } else {
+        registerController(group, {
+          start: () => {
+            const doc = frame.contentDocument;
+            if (!doc) return;
+            doc.documentElement.classList.remove('freeze-anim');
+            doc.querySelectorAll('video').forEach((v) => v.play().catch(() => {}));
+          },
+          stop: () => {
+            const doc = frame.contentDocument;
+            if (!doc) return;
+            doc.documentElement.classList.add('freeze-anim');
+            doc.querySelectorAll('video').forEach((v) => v.pause());
+          },
+        });
+      }
+    }
+
+    // Plain static image, no page/iframe involved at all.
+    function mountImage(cell, src) {
+      const img = document.createElement('img');
+      img.className = 'cell-img';
+      img.src = src;
+      img.loading = 'lazy';
+      img.alt = '';
+      cell.appendChild(img);
+    }
+
+    // Two (or more) static images stacked in normal flow, in one cell — for
+    // pages whose own section already shows them stacked together, not a
+    // crossfade or highlight, just placed one under the other.
+    function mountImageStack(cell, cfg) {
+      const wrap = document.createElement('div');
+      wrap.className = 'cell-stack';
+      cfg.srcs.forEach((src) => {
+        const img = document.createElement('img');
+        img.className = 'cell-stack-img';
+        img.src = src;
+        img.loading = 'lazy';
+        img.alt = '';
+        wrap.appendChild(img);
+      });
+      cell.appendChild(wrap);
+    }
+
+    // Looping muted video (used where the page's own visual is a video, not a still).
+    // Paused by default — only plays while its group is the active one.
+    function mountVideo(cell, src, group) {
+      const video = document.createElement('video');
+      video.className = 'cell-img';
+      video.src = src;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      cell.appendChild(video);
+
+      registerController(group, {
+        start: () => video.play().catch(() => {}),
+        stop: () => video.pause(),
+      });
+    }
+
+    // Random blink crossfade through a fixed set of frames — no hover, just
+    // loops while its group is active. Shows a static first frame otherwise.
+    function mountEffect(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+      if (cfg.bg) {
+        const bg = document.createElement('img');
+        bg.className = 'effect-layer active';
+        bg.src = cfg.bg;
+        bg.loading = 'lazy';
+        bg.alt = '';
+        if (cfg.bgDim) bg.style.filter = 'brightness(0.3)';
+        media.appendChild(bg);
+      }
+      const layers = cfg.frames.map(f => {
+        const img = document.createElement('img');
+        img.className = 'effect-layer';
+        img.src = cfg.base + f;
+        img.loading = 'lazy';
+        img.alt = '';
+        media.appendChild(img);
+        return img;
+      });
+      cell.appendChild(media);
+      if (layers.length) layers[0].classList.add('active');
+
+      let current = 0;
+      let intervalId = null;
+      function tick() {
+        layers[current].classList.remove('active');
+        let next;
+        do { next = Math.floor(Math.random() * layers.length); } while (layers.length > 1 && next === current);
+        current = next;
+        layers[current].classList.add('active');
+      }
+      registerController(group, {
+        start: () => { if (!intervalId) intervalId = setInterval(tick, cfg.interval || 500); },
+        stop: () => { if (intervalId) { clearInterval(intervalId); intervalId = null; } },
+      });
+    }
+
+    // Fixed-order crossfade through a sequence of frames (not random), each
+    // held for cfg.interval ms. cfg.delay staggers the first flip so
+    // several cycle-cells running side by side don't change in lockstep.
+    // Shows the first frame statically until its group is active.
+    function mountCycle(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+      if (cfg.bg) {
+        const bg = document.createElement('img');
+        bg.className = 'effect-layer active';
+        bg.src = cfg.bg;
+        bg.loading = 'lazy';
+        bg.alt = '';
+        if (cfg.bgDim) bg.style.filter = 'brightness(0.3)';
+        media.appendChild(bg);
+      }
+      const layers = cfg.frames.map((src, i) => {
+        const img = document.createElement('img');
+        img.className = 'effect-layer' + (!cfg.bg && i === 0 ? ' active' : '');
+        img.src = src;
+        img.loading = 'lazy';
+        img.alt = '';
+        media.appendChild(img);
+        return img;
+      });
+      cell.appendChild(media);
+
+      let current = cfg.bg ? -1 : 0;
+      let intervalId = null;
+      let timeoutId = null;
+      function tick() {
+        if (current >= 0) layers[current].classList.remove('active');
+        current = (current + 1) % layers.length;
+        layers[current].classList.add('active');
+      }
+      registerController(group, {
+        start: () => {
+          if (intervalId || timeoutId) return;
+          timeoutId = setTimeout(() => {
+            timeoutId = null;
+            intervalId = setInterval(tick, cfg.interval || 3000);
+          }, cfg.delay || 0);
+        },
+        stop: () => {
+          if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+          if (intervalId) { clearInterval(intervalId); intervalId = null; }
+        },
+      });
+    }
+
+    // SVG hotspot zones (fetched live, same as the source page) that glow
+    // one at a time over a base image, in DOM order — for pages whose
+    // "highlight" is a colored shape fill rather than a swapped image.
+    function mountZones(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const bg = document.createElement('img');
+      bg.className = 'effect-layer active';
+      bg.src = cfg.bg;
+      bg.loading = 'lazy';
+      bg.alt = '';
+      media.appendChild(bg);
+
+      const svgWrap = document.createElement('div');
+      svgWrap.className = 'cell-zone-overlay';
+      media.appendChild(svgWrap);
+      cell.appendChild(media);
+
+      let paths = [];
+      let current = -1;
+      let intervalId = null;
+
+      fetch(cfg.svg)
+        .then((res) => res.text())
+        .then((svgText) => {
+          svgWrap.innerHTML = svgText;
+          const svgEl = svgWrap.querySelector('svg');
+          if (svgEl) { svgEl.removeAttribute('width'); svgEl.removeAttribute('height'); }
+          paths = Array.from(svgWrap.querySelectorAll('path, circle, rect, polygon, ellipse'));
+          paths.forEach((p) => { p.removeAttribute('class'); p.classList.add('cell-zone-shape'); });
+        });
+
+      function tick() {
+        if (!paths.length) return;
+        if (current >= 0) paths[current].classList.remove('cell-zone-active');
+        current = (current + 1) % paths.length;
+        paths[current].classList.add('cell-zone-active');
+      }
+      registerController(group, {
+        start: () => { if (!intervalId) intervalId = setInterval(tick, 700); },
+        stop: () => {
+          if (intervalId) { clearInterval(intervalId); intervalId = null; }
+          if (current >= 0 && paths[current]) paths[current].classList.remove('cell-zone-active');
+          current = -1;
+        },
+      });
+    }
+
+    // Layers randomly toggle on/off on top of a base render, biased to
+    // accumulate (turning on is more likely than turning off).
+    function mountLayers(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const base = document.createElement('img');
+      base.className = 'effect-layer active';
+      base.src = cfg.base + cfg.standalone;
+      base.loading = 'lazy';
+      base.alt = '';
+      media.appendChild(base);
+
+      const layers = cfg.layers.map(f => {
+        const img = document.createElement('img');
+        img.className = 'layer-img';
+        img.src = cfg.base + f;
+        img.loading = 'lazy';
+        img.alt = '';
+        media.appendChild(img);
+        return img;
+      });
+      cell.appendChild(media);
+
+      let intervalId = null;
+      function tick() {
+        const img = layers[Math.floor(Math.random() * layers.length)];
+        const isOn = img.classList.contains('on');
+        const turnOn = Math.random() < (isOn ? 0.3 : 0.7); // biased: opening more likely than closing
+        img.classList.toggle('on', turnOn);
+      }
+      registerController(group, {
+        start: () => { if (!intervalId) intervalId = setInterval(tick, 550); },
+        stop: () => { if (intervalId) { clearInterval(intervalId); intervalId = null; } },
+      });
+    }
+
+    // Auto-animated before/after reveal — the site's own comparison-slider,
+    // just swept back and forth on its own instead of waiting for a drag.
+    function mountSlide(cell, cfg) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const before = document.createElement('img');
+      before.className = 'effect-layer active';
+      before.src = cfg.before;
+      before.loading = 'lazy';
+      before.alt = '';
+      media.appendChild(before);
+
+      const after = document.createElement('img');
+      after.className = 'slide-after-img';
+      after.src = cfg.after;
+      after.loading = 'lazy';
+      after.alt = '';
+      media.appendChild(after);
+
+      cell.appendChild(media);
+    }
+
+    let cellNum = 0;
+
+    GROUPS.forEach((group, gIndex) => {
+      for (let i = 0; i < group.count; i++) {
+        cellNum++;
+
+        const cell = document.createElement('div');
+        cell.className = 'rhythm-cell';
+        cell.dataset.group = gIndex;
+        cell.dataset.index = cellNum;
+
+        if (i === 0) {
+          const label = document.createElement('span');
+          label.className = 'rhythm-group-label';
+          label.textContent = group.name;
+          cell.appendChild(label);
         }
-      });
-    }
-    requestAnimationFrame(animate);
-  }
 
-  animate();
+        grid.appendChild(cell); // attach first so clientWidth/Height are real when mountFrame reads them
+
+        const groupKey = String(gIndex);
+        const item = group.items && group.items[i];
+        const pageUrl = group.pages && group.pages[i];
+        if (item) {
+          if (item.type === 'img') mountImage(cell, item.src);
+          else if (item.type === 'stack') mountImageStack(cell, item);
+          else if (item.type === 'video') mountVideo(cell, item.src, groupKey);
+          else if (item.type === 'effect') mountEffect(cell, item, groupKey);
+          else if (item.type === 'layers') mountLayers(cell, item, groupKey);
+          else if (item.type === 'slide') mountSlide(cell, item);
+          else if (item.type === 'cycle') mountCycle(cell, item, groupKey);
+          else if (item.type === 'zones') mountZones(cell, item, groupKey);
+          else if (item.type === 'frame') mountFrame(cell, item.url, groupKey, item.custom);
+        } else if (pageUrl) {
+          mountFrame(cell, pageUrl, groupKey);
+        } else {
+          const placeholder = document.createElement('div');
+          placeholder.className = 'cell-placeholder';
+          cell.appendChild(placeholder);
+          const idx = document.createElement('span');
+          idx.className = 'cell-index';
+          idx.textContent = String(cellNum).padStart(2, '0');
+          cell.appendChild(idx);
+        }
+      }
+    });
+
+    // Hover a group's own cells → dim every other group, and only animate
+    // (video/interval/iframe) that one group while it's hovered.
+    grid.addEventListener('mouseover', (e) => {
+      const cell = e.target.closest('.rhythm-cell');
+      if (!cell) return;
+      const g = cell.dataset.group;
+      grid.querySelectorAll('.rhythm-cell').forEach(c => {
+        c.classList.toggle('dimmed', c.dataset.group !== g);
+      });
+      setActiveGroup(g);
+    });
+    grid.addEventListener('mouseleave', () => {
+      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.remove('dimmed'));
+      setActiveGroup(null);
+    });
+  })();
 </script>
 </body>
 </html>

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/webp" href="../../must-images/favicon/Mimfak.webp">
 <title>Project 2026-4 — ARCH 728</title>
+<script>if (new URLSearchParams(location.search).has('embed')) document.documentElement.classList.add('embed-mode');</script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -104,6 +105,7 @@
 
   #welcome-modal { position:fixed; inset:0; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; z-index:1100; padding:2rem; }
   #welcome-modal.hidden { display:none; }
+  html.embed-mode #welcome-modal { display:none; }
   #welcome-modal-inner { position:relative; max-width:460px; padding:2.5rem 2.5rem 2.2rem; border:1px solid rgba(245,242,235,0.25); background:var(--black); text-align:center; }
   #welcome-modal-inner p { font-size:1rem; line-height:1.85; opacity:0.85; margin-bottom:1.2rem; }
   #welcome-modal-inner p:last-child { margin-bottom:0; }
