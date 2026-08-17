@@ -11,9 +11,6 @@
   :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --main-w: min(100%, calc((100vh - 52px - 4rem) * 1.41418)); }
   html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
-  #intro-splash { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--black); color:var(--white); display:flex; align-items:center; justify-content:center; text-align:center; z-index:1000; transition:opacity 0.9s ease, visibility 0.9s; }
-  #intro-splash span { font-size:clamp(1.6rem,4.5vw,2.8rem); letter-spacing:0.1em; text-transform:uppercase; font-weight:400; }
-  #intro-splash.hide { opacity:0; visibility:hidden; pointer-events:none; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
@@ -29,7 +26,7 @@
   .sub-nav a.active { opacity:1; border-color:rgba(245,242,235,0.45); }
   nav .sub-nav { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); margin:0; gap:0.4rem 0.8rem; flex-wrap:nowrap; }
   nav .sub-nav a { padding:0.42em 0.85em; font-size:0.6rem; }
-  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
+  .body { font-size:1.1rem; line-height:1.95; text-align:justify; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
   .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
@@ -91,12 +88,11 @@
 </style>
 </head>
 <body>
-<div id="intro-splash"><span>Sifting Ankara Soil</span></div>
 <nav>
   <a href="../../explore.html" class="nav-back">← Back</a>
   <div class="sub-nav">
     <a href="2026-3-projectinfo.html">Info</a>
-    <a href="2026-3.html" class="active">Entrance</a>
+    <a href="2026-3.html" class="active">Intro</a>
     <a href="2026-3-errors.html">Errors</a>
     <a href="2026-3-soilscenesifters.html">Sifters</a>
     <a href="2026-3-siftingwhatdetectingerrors.html">Sifting What?</a>
@@ -174,8 +170,6 @@
   </dl>
 </div>
 <script>
-  setTimeout(() => { document.getElementById('intro-splash').classList.add('hide'); }, 1400);
-
   const sections = document.querySelectorAll('.body .section');
   const sectionOffset = 52;
 
