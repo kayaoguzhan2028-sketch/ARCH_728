@@ -15,8 +15,13 @@
   .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
   .nav-back:hover { opacity:1; }
   .nav-title { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.5; white-space:nowrap; }
-  .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; color:var(--white); text-decoration:none; transition:opacity 0.2s; }
-  .nav-tag:hover { opacity:0.6; }
+  .home-btn { position:fixed; top:0.6rem; right:1rem; z-index:200; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,242,235,0.35); background:rgba(10,10,10,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; color:var(--white); text-decoration:none; opacity:0.65; transition:opacity 0.2s, border-color 0.2s; }
+  .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .home-btn svg { width:15px; height:15px; display:block; }
+  @media (max-width:640px) {
+    .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
+    .home-btn svg { width:13px; height:13px; }
+  }
   .wrap { max-width:1800px; margin:0 auto; padding:8rem 2rem 6rem; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--mid); margin-bottom:3.5rem; line-height:1.6; }
@@ -45,8 +50,10 @@
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
   <span class="nav-title">References</span>
-  <a href="2026-3.html" class="nav-tag">Main Page</a>
 </nav>
+<a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
+</a>
 <div class="wrap">
   <h1>Inspired Images</h1>
   <hr class="rule">

@@ -18,6 +18,18 @@
   .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-center-links a:hover { opacity:1; }
   .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
+  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
+  .info-btn:hover { opacity:1; }
+  .info-btn.open { opacity:1; }
+  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
+  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
+  #info-panel h2:first-child { margin-top:0; }
+  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; text-align:justify; }
+  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
+  #info-panel ul li { margin-bottom:0.8rem; }
+  #info-panel ul li:last-child { margin-bottom:0; }
+  #info-panel em { font-style:italic; }
 
   .wrap { max-width:1200px; margin:0 auto; padding:8rem 2rem 6rem; }
   h1 { font-size:clamp(2rem,4vw,3rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:1rem; color:var(--orange); text-align:center; }
@@ -36,15 +48,29 @@
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
   @media (max-width:640px) {
     nav { padding:0 1rem; }
-    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 0.8rem; scrollbar-width:none; }
+    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.8rem; scrollbar-width:none; }
     .nav-center-links::-webkit-scrollbar { display:none; }
     .wrap { padding-left:1.4rem; padding-right:1.4rem; }
+  }
+  .home-btn { position:fixed; top:0.6rem; right:1rem; z-index:200; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,242,235,0.35); background:rgba(10,10,10,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; color:var(--white); text-decoration:none; opacity:0.65; transition:opacity 0.2s, border-color 0.2s; }
+  .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .home-btn svg { width:15px; height:15px; display:block; }
+  @media (max-width:640px) {
+    .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
+    .home-btn svg { width:13px; height:13px; }
   }
 </style>
 </head>
 <body>
+<a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
+</a>
+
 <nav>
-  <a href="../../explore.html" class="nav-back">← Back</a>
+  <div style="display:flex;align-items:center;">
+    <a href="../../explore.html" class="nav-back">← Back</a>
+    <button class="info-btn" id="info-toggle">Project Info</button>
+  </div>
   <div class="nav-center-links">
     <a href="2026-6.html" class="active">Intro</a>
     <a href="2026-6-thefactories.html">The Factories</a>
@@ -53,6 +79,26 @@
     <a href="2026-6-thestoryline.html">The Storyline</a>
   </div>
 </nav>
+<div id="info-panel">
+  <h2>Group Members</h2>
+  <p>Elif Ceyhan, Hatice Köksal, İnci Ergün, İpek Deniz Alpdoğan Kaya</p>
+
+  <h2>Main Title</h2>
+  <p>Imrahor Valley</p>
+
+  <h2>Research Questions</h2>
+  <ul>
+    <li>How does the process of becoming reveal soil's shifting identity?</li>
+    <li>What transformations does soil undergo in İmrahor Valley as it shifts from resource to residue through the history of brick production?</li>
+    <li>What material traces of brick production remain now in the landscape after the industry's decline?</li>
+  </ul>
+
+  <h2>Position Statement</h2>
+  <p>Imrahor Valley is widely recognized with its ecological value and current political interventions. However, this project approaches the valley through a relatively overlooked aspect of it: the history of brick production. With the clay-and-silt alluvial deposits along the stream, İmrahor functioned as one of the main sites for brick production in the last century, physically contributing to the construction of Ankara. From the 1930s onwards, soil was seen as a resource, excavated from the valley, transformed into brick and tile, and incorporated into the expanding fabric of the city. Following the decline of brick production in the 1990s, the factories gradually disappeared, leaving behind excavation pits, industrial debris, and a landscape that continues to absorb the consequences of decades of extraction. By tracing this overlooked history, the project investigates how soil loses its stable identity, and shifts between resource and residue with brick production.</p>
+
+  <h2>Methodology</h2>
+  <p>This project uses archival research, literature review, oral history, and site-based observation to trace the history of brick production in İmrahor Valley. Maps, aerial photographs, journal and newspaper archives, planning documents, academic studies, and social media archives are examined alongside an interview with a former factory owner. For the current situation, field observations and photographs are used to document the soil, remaining factories, extraction pits, ponds, and residues.</p>
+</div>
 <div class="wrap">
   <section class="section">
     <h1>Imrahor Valley</h1>
@@ -76,5 +122,16 @@
     <div class="meta-item"><dt>Authors</dt><dd>Elif Ceyhan, Hatice Köksal, İnci Ergün, İpek Deniz Alpdoğan Kaya</dd></div>
   </dl>
 </div>
+<script>
+  const infoBtn   = document.getElementById('info-toggle');
+  const infoPanel = document.getElementById('info-panel');
+  infoBtn.addEventListener('click', () => {
+    const open = infoPanel.classList.toggle('open');
+    infoBtn.classList.toggle('open', open);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { infoPanel.classList.remove('open'); infoBtn.classList.remove('open'); }
+  });
+</script>
 </body>
 </html>

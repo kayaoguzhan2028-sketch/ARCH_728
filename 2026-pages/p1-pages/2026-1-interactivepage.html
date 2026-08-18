@@ -19,7 +19,7 @@
   .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; align-items:center; gap:1.3rem; }
   @media (max-width:640px) {
     nav { padding:0 1rem; }
-    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 0.8rem; scrollbar-width:none; }
+    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.8rem; scrollbar-width:none; }
     .nav-center-links::-webkit-scrollbar { display:none; }
     #future-section { grid-template-columns:1fr; grid-template-rows:auto; height:auto; max-width:100%; }
   }
@@ -51,7 +51,7 @@
   .clip-text p { margin-bottom:1.2rem; font-size:1.1rem; line-height:1.75; text-align:justify; text-align-last:right; }
   .clip-text p:last-child { margin-bottom:0; }
   .clip-text .poem { font-style:italic; opacity:0.85; }
-  .clip-text .reference { font-size:1rem; line-height:1.7; opacity:0.8; }
+  .clip-text .reference { font-size:1rem; line-height:1.6; opacity:0.8; }
   .clip-video { flex:1; max-width:640px; width:100%; aspect-ratio:16/9; }
   .clip-video iframe { width:100%; height:100%; border:0; display:block; }
 
@@ -68,7 +68,7 @@
   #future-section .grid-cell:nth-child(2) { align-items:center; }
   #future-section .grid-cell img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
   #future-section .grid-cell p { font-size:1.1rem; text-align:justify; }
-  #future-section .grid-cell .reference { font-size:1rem; line-height:1.7; opacity:0.8; }
+  #future-section .grid-cell .reference { font-size:1rem; line-height:1.6; opacity:0.8; }
 
   .img-hover-wrap { position:relative; max-width:100%; max-height:100%; cursor:pointer; }
   .img-hover-wrap img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
@@ -87,14 +87,25 @@
   .collage-item img { width:100%; height:auto; display:block; margin-bottom:1.2rem; opacity:0.92; }
   .collage-item p { font-size:1.1rem; line-height:1.75; margin-bottom:1rem; }
   .collage-item p:last-child { margin-bottom:0; }
-  .collage-item .reference { font-size:1rem; line-height:1.7; opacity:0.8; }
+  .collage-item .reference { font-size:1rem; line-height:1.6; opacity:0.8; }
 
   .overlay-img { opacity:0; transition:filter 0.3s ease, opacity 0.2s ease; }
   .overlay-img.hover { opacity:1; filter:drop-shadow(0 0 6px rgba(245,220,140,0.55)); }
   .overlay-img.active { opacity:1; filter:drop-shadow(0 0 14px rgba(245,220,140,1)) drop-shadow(0 0 32px rgba(245,200,80,0.7)); }
+  .home-btn { position:fixed; top:0.6rem; right:1rem; z-index:200; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,242,235,0.35); background:rgba(10,10,10,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; color:var(--white); text-decoration:none; opacity:0.65; transition:opacity 0.2s, border-color 0.2s; }
+  .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .home-btn svg { width:15px; height:15px; display:block; }
+  @media (max-width:640px) {
+    .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
+    .home-btn svg { width:13px; height:13px; }
+  }
 </style>
 </head>
 <body>
+<a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
+</a>
+
 
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
@@ -104,6 +115,7 @@
     <div class="nav-dropdown">
       <a href="2026-1-powerplant.html" class="nav-link" data-key="fabrika">Power Plant</a>
       <div class="nav-dropdown-menu">
+        <a href="2026-1-powerplant.html">The Timeline</a>
         <a href="2026-1-narative.html">The Narratives</a>
         <a href="2026-1-powerplantkey.html">The Interaction</a>
       </div>

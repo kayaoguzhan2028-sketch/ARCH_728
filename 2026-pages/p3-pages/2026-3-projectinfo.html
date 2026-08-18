@@ -37,8 +37,10 @@
   .body h3 { font-size:1.05rem; font-weight:400; font-style:italic; margin:1.8rem 0 0.8rem; opacity:0.95; }
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
-  .body .reference { font-size:0.74rem; line-height:1.7; opacity:0.45; margin-bottom:0.5rem; text-align:left; }
-  .body .reference:last-child { margin-bottom:0; }
+  .reference-block { max-width:780px; font-size:1rem; line-height:1.6; opacity:0.8; text-align:justify; }
+  .reference-block h2 { font-size:1rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.8; font-weight:400; margin-bottom:0.5rem; }
+  .reference-block p { margin-bottom:0.3rem; }
+  .reference-block p:last-child { margin-bottom:0; }
   .bottom-link { margin-top:4rem; text-align:right; }
   .page-link-btn { display:inline-block; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; border:1px solid rgba(245,242,235,0.18); padding:0.7em 1.6em; opacity:0.55; transition:opacity 0.2s,border-color 0.2s; }
   .page-link-btn:hover { opacity:1; border-color:rgba(245,242,235,0.45); }
@@ -48,16 +50,27 @@
   .meta-item dd { font-size:0.88rem; opacity:0.65; }
   @media (max-width:640px) {
     nav { padding:0 1rem; }
-    nav .sub-nav { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex-wrap:nowrap; flex:1; margin:0 0.8rem; scrollbar-width:none; }
+    nav .sub-nav { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex-wrap:nowrap; flex:1; margin:0 2.6rem 0 0.8rem; scrollbar-width:none; }
     nav .sub-nav::-webkit-scrollbar { display:none; }
     .key-icon { margin-right:0; }
     .wrap { padding-left:1.4rem; padding-right:1.4rem; }
     .intro-images { flex-direction:column; }
     .intro-images img { width:100%; }
   }
+  .home-btn { position:fixed; top:0.6rem; right:1rem; z-index:200; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,242,235,0.35); background:rgba(10,10,10,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; color:var(--white); text-decoration:none; opacity:0.65; transition:opacity 0.2s, border-color 0.2s; }
+  .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .home-btn svg { width:15px; height:15px; display:block; }
+  @media (max-width:640px) {
+    .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
+    .home-btn svg { width:13px; height:13px; }
+  }
 </style>
 </head>
 <body>
+<a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
+</a>
+
 <nav>
   <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
   <div class="sub-nav">
@@ -137,11 +150,13 @@
     <h3>The Micro Scene</h3>
     <p>Descending into the subterranean micro-scale, this scene penetrates the intricate metabolism of the soil, exposing the vibrant network of non-human creatures that physically construct and sustain the substrate. This intimate resolution fundamentally dismantles the "Blue Marble" paradigm—which abstracts the planet as a distant, passive, and impersonal resource—and forcefully grounds the project in the reality of "Gaia." Within this framework, the Earth is no longer a peaceful, stand-alone globe, but a fiercely active, composite figure where human and non-human destinies are deeply entangled. Crucially, the diagnostic sifter must recalibrate its logic at this depth. Unlike the synthetic detritus and industrial externalities identified as anthropogenic "errors" in the broader urban context, these subterranean organisms—the worms, larvae, ants, and burrowing mammals—are emphatically not anomalies to be filtered out. They possess an absolute, intrinsic right to exist within the geostrata. In the speculative after-sift condition, these entities are reclassified as indispensable collaborators, functioning as vital "supporters of the sifter." They are the primary biological engines of the earth, perpetually digesting, aerating, and regenerating the terrain. By actively validating their presence rather than attempting to over-engineer their habitat, the scene illustrates that profound terrestrial care requires acknowledging the soil’s inherent sovereignty, allowing its native, non-human operators to freely perform the continuous labor of world-making.</p>
 
-    <h2>References</h2>
-    <p class="reference">Design Earth (Rania Ghosn + El Hadi Jazairy). Geostories: Another Architecture for the Environment.</p>
-    <p class="reference">Ratti, Carlo, Claudel, Matthew. Open Source Architecture, 132-192. London: Thames and Hudson, New York: Actar Publishers, 2018.</p>
-    <p class="reference">Erguler, Z. A., &amp; Ulusay, R. (2003). Engineering characteristics and environmental impacts of the expansive Ankara Clay, and swelling maps for SW and central parts of the Ankara (Turkey) metropolitan area. Environmental Geology, 44, 979–992. https://doi.org/10.1007/s00254-003-0841-y.</p>
-    <p class="reference">Yıldız, N. E., &amp; Kahveci, B. (2024). ICONA modeli kullanılarak toprak erozyonu riskinin tahmin edilmesi: Ankara ili örneği [Estimation of soil erosion risk using ICONA model: The case of Ankara]. Journal of Anatolian Environmental and Animal Sciences, 9(4), 822–831. https://doi.org/10.35229/jaes.1591959.</p>
+    <div class="reference-block">
+      <h2>References</h2>
+      <p>Design Earth (Rania Ghosn + El Hadi Jazairy). Geostories: Another Architecture for the Environment.</p>
+      <p>Ratti, Carlo, Claudel, Matthew. Open Source Architecture, 132-192. London: Thames and Hudson, New York: Actar Publishers, 2018.</p>
+      <p>Erguler, Z. A., &amp; Ulusay, R. (2003). Engineering characteristics and environmental impacts of the expansive Ankara Clay, and swelling maps for SW and central parts of the Ankara (Turkey) metropolitan area. Environmental Geology, 44, 979–992. https://doi.org/10.1007/s00254-003-0841-y.</p>
+      <p>Yıldız, N. E., &amp; Kahveci, B. (2024). ICONA modeli kullanılarak toprak erozyonu riskinin tahmin edilmesi: Ankara ili örneği [Estimation of soil erosion risk using ICONA model: The case of Ankara]. Journal of Anatolian Environmental and Animal Sciences, 9(4), 822–831. https://doi.org/10.35229/jaes.1591959.</p>
+    </div>
   </div>
 
   <div class="bottom-link">
