@@ -81,6 +81,10 @@
   @media (max-width:600px) {
     .media-row { flex-direction:column; }
     .media-row > img, .media-row .slider-inline { flex:0 0 auto; width:100%; }
+    nav { padding:0 1rem; }
+    .section2-grid { grid-template-columns:1fr; grid-template-rows:auto; height:auto; margin:1.5rem auto; }
+    .section2-cell { overflow:visible; }
+    .section:has(.section2-grid) { height:auto; overflow:visible; padding:3rem 0; }
   }
   .section { scroll-margin-top:52px; min-height:calc(100vh - 52px); display:flex; flex-direction:column; justify-content:center; }
   .section:not(:has(.gif-media)) { height:calc(100vh - 52px); overflow:hidden; }

@@ -66,9 +66,17 @@
   #view-content { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; cursor: default; align-items: flex-start; justify-content: center; }
 
   .rhythm-wrap { width: 100%; max-width: 1600px; margin: 0 auto; padding: 2.75rem 2rem 4rem; }
-  .rhythm-heading { text-align: left; font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); opacity: 0.92; margin: 0 0 2.2rem; }
+  .rhythm-heading { text-align: left; font-size: 2rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); opacity: 0.92; margin: 0 0 2.2rem; }
 
   .rhythm-grid { display: grid; grid-template-columns: repeat(7, 1fr); align-items: start; gap: 34px 14px; }
+  @media (max-width: 640px) {
+    .rhythm-wrap { padding: 2rem 1rem 3rem; }
+    .rhythm-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 10px; }
+    .rhythm-group-label { white-space: normal; font-size: 0.62rem; }
+  }
+  @media (min-width: 641px) and (max-width: 1000px) {
+    .rhythm-grid { grid-template-columns: repeat(3, 1fr); gap: 26px 12px; }
+  }
   .rhythm-group-label { position: absolute; left: 0; bottom: 100%; margin-bottom: 0.5rem; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.9; white-space: nowrap; cursor: pointer; transition: opacity 0.2s ease; }
   .rhythm-cell.group-active .rhythm-group-label { opacity: 1; animation: labelColorCycle 3s ease-in-out infinite; }
   @keyframes labelColorCycle { 0%, 100% { color: #ff8a3d; } 33.33% { color: #4aa3ff; } 66.66% { color: var(--white); } }
@@ -152,6 +160,19 @@
   .map-panel-text a:hover { opacity: 1; }
   .map-panel.mode-geojson .map-panel-close { display: none; }
   .map-panel.mode-geojson .map-panel-back { display: inline-block; }
+
+  @media (max-width: 640px) {
+    .map-panel { top: auto; bottom: 0; left: 0; right: 0; width: 100%; max-width: none; max-height: 62vh; overflow-y: auto; border: none; border-top: 1px solid var(--border); border-radius: 14px 14px 0 0; padding: 1.1rem 1.3rem 1.6rem; transform: translateY(14px); transition: opacity 0.22s ease, transform 0.22s ease; }
+    .map-panel.visible { transform: translateY(0); }
+    .map-panel-label { font-size: 1rem; padding-right: 1.6rem; }
+    .map-panel-close { top: 0.7rem; right: 0.9rem; font-size: 1rem; padding: 0.3rem; }
+    .map-panel-actions { flex-wrap: wrap; }
+    .map-panel-link, .map-panel-back { flex: 1 1 auto; text-align: center; padding: 0.6em 0.8em; font-size: 0.72rem; }
+    .map-panel-text { font-size: 0.86rem; }
+  }
+  @media (max-width: 900px), (hover: none) {
+    .node::before, .lens-node::before { content: ''; position: absolute; inset: -14px; z-index: 1; }
+  }
 
   #map-theme-btn { background: none; border: 1px solid rgba(245,242,235,0.25); color: var(--white); font-family: 'EB Garamond', serif; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.2em 0.65em; cursor: pointer; opacity: 0.45; transition: opacity 0.2s; }
   #map-theme-btn:hover { opacity: 1; }
@@ -753,6 +774,13 @@
           // and reset the year, same as if a visitor had walked the slider back down.
           { type: 'frame', url: '2026-pages/p7-pages/2026-7-map.html', custom: {
               start: (frame) => {
+                // setActiveGroup() re-fires start() on every mouseover within
+                // the same group (moving between cells inside Ilker
+                // Neighbourhood, not just entering it) — without this guard
+                // each pass over the cell spun up a brand new poll + tick
+                // loop on top of the previous one, which was never cleared,
+                // leaving several independent 4s cycles fighting each other.
+                if (frame._pollTimer || frame._animTimer) return;
                 // Leaflet + roughjs load from a CDN via blocking <script> tags
                 // before the page's own inline script runs, so `setYear` may
                 // not exist yet the instant we hover — poll briefly for it
@@ -1297,20 +1325,55 @@
       setActiveGroup(null);
     };
 
+    // No real hover on touch devices, so the whole preview mechanism never
+    // triggers there. Mobile gets its own model instead: everything starts
+    // dark, tapping a cell lights that group up (without navigating), and
+    // tapping the same group again reverts to all-dark — only the group's
+    // own name actually navigates. Desktop keeps hover-preview + click-
+    // anywhere-navigates exactly as before.
+    const isTouch = window.matchMedia('(hover: none)').matches;
+    let mobileActiveGroup = null;
+
+    if (isTouch) {
+      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.add('dimmed'));
+    }
+
     grid.addEventListener('mouseover', (e) => {
+      if (isTouch) return;
       const cell = e.target.closest('.rhythm-cell');
       if (!cell) return;
       applyDimmed(cell.dataset.group);
       setActiveGroup(cell.dataset.group);
     });
     grid.addEventListener('mouseleave', () => {
+      if (isTouch) return;
       clearDimmed();
       setActiveGroup(null);
     });
     grid.addEventListener('click', (e) => {
+      const label = e.target.closest('.rhythm-group-label');
+      if (label) {
+        const g = label.closest('.rhythm-cell').dataset.group;
+        window.location.href = LIBRARY_PROJECTS[Number(g)].url;
+        return;
+      }
       const cell = e.target.closest('.rhythm-cell');
       if (!cell) return;
       const g = cell.dataset.group;
+
+      if (isTouch) {
+        if (mobileActiveGroup === g) {
+          mobileActiveGroup = null;
+          grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.add('dimmed'));
+          setActiveGroup(null);
+        } else {
+          mobileActiveGroup = g;
+          applyDimmed(g);
+          setActiveGroup(g);
+        }
+        return;
+      }
+
       window.location.href = LIBRARY_PROJECTS[Number(g)].url;
     });
   })();

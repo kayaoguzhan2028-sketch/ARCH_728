@@ -16,6 +16,12 @@
   .nav-back:hover { opacity:1; }
   .nav-tag { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.25; border:1px solid rgba(245,242,235,0.2); padding:0.2em 0.7em; }
   .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; align-items:center; gap:1.3rem; }
+  @media (max-width:640px) {
+    nav { padding:0 1rem; }
+    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 0.8rem; scrollbar-width:none; }
+    .nav-center-links::-webkit-scrollbar { display:none; }
+    #trace-grid { grid-template-columns:1fr; height:auto; overflow:visible; max-width:100%; }
+  }
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
   .nav-link.active { opacity:1; border-bottom-color:var(--white); }

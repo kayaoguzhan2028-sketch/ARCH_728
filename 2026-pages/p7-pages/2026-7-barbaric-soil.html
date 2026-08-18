@@ -64,6 +64,14 @@
   .lightbox-close:hover { opacity:1; background:var(--accent); color:var(--black); }
   .aqw-inner--lightbox { display:inline-block; width:auto; cursor:default; }
   .aqw-inner--lightbox .aqw-img { width:auto; max-width:92vw; max-height:92vh; cursor:default; }
+  @media (max-width:700px) {
+    nav { padding:0 1rem; }
+    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 0.6rem; scrollbar-width:none; gap:0.9rem; }
+    .nav-center-links::-webkit-scrollbar { display:none; }
+    .nav-center-links a { font-size:0.6rem; }
+    .wrap { max-width:100%; padding-left:1.4rem; padding-right:1.4rem; }
+    .aqw-inner:not(.aqw-inner--lightbox) { width:92%; }
+  }
 </style>
 </head>
 <body>

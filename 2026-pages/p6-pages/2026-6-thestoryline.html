@@ -30,6 +30,8 @@
   .hotspot-overlay svg { width:100%; height:100%; display:block; }
   .hotspot-overlay path, .hotspot-overlay circle, .hotspot-overlay rect, .hotspot-overlay polygon, .hotspot-overlay ellipse { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-overlay path:hover, .hotspot-overlay circle:hover, .hotspot-overlay rect:hover, .hotspot-overlay polygon:hover, .hotspot-overlay ellipse:hover { opacity:0.3; }
+  .hotspot-pulse-shape { fill:none; stroke:var(--accent); stroke-width:2.5; opacity:0.85; pointer-events:none; transform-box:fill-box; transform-origin:center; animation:hotspotPulseShape 2.2s ease-out infinite; }
+  @keyframes hotspotPulseShape { 0% { transform:scale(0.8); opacity:0.9; } 100% { transform:scale(1.7); opacity:0; } }
 
   .modal-overlay { position:fixed; inset:0; z-index:200; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
   .modal-overlay.open { opacity:1; pointer-events:auto; }
@@ -49,6 +51,12 @@
   .interview-body p { font-size:1.1rem; line-height:1.9; margin-bottom:1.4rem; }
   .interview-body p:last-child { margin-bottom:0; }
   .interview-body .speaker { color:var(--accent); font-style:italic; margin-right:0.3em; }
+  @media (max-width:640px) {
+    nav { padding:0 1rem; }
+    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 0.8rem; scrollbar-width:none; }
+    .nav-center-links::-webkit-scrollbar { display:none; }
+    .wrap { padding-left:1.4rem; padding-right:1.4rem; }
+  }
 </style>
 </head>
 <body>
@@ -177,9 +185,18 @@
         }
 
         const shapes = overlay.querySelectorAll('path, circle, rect, polygon, ellipse');
-        shapes.forEach((shape) => {
+        shapes.forEach((shape, i) => {
           if (hiddenClasses.has(shape.getAttribute('class'))) { shape.remove(); return; }
           shape.removeAttribute('class');
+
+          // Passive "you can click this" cue — a pulsing outline traced from
+          // the same "+" geometry as the hit target itself, not a circle.
+          const pulse = shape.cloneNode(true);
+          pulse.removeAttribute('class');
+          pulse.setAttribute('class', 'hotspot-pulse-shape');
+          pulse.style.animationDelay = (Number(spot) * 0.15 + i * 0.05) + 's';
+          shape.parentNode.insertBefore(pulse, shape.nextSibling);
+
           shape.addEventListener('mouseenter', () => highlight.classList.add('active'));
           shape.addEventListener('mouseleave', () => highlight.classList.remove('active'));
           shape.addEventListener('click', () => {
