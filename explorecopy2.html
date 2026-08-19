@@ -121,7 +121,13 @@
      — MagneticImage's hover scale (1.55x, in JS) is what makes a hovered
      icon prominent again, not the base size. */
   .icon-cell { position: relative; width: 100%; max-width: 82px; cursor: pointer; will-change: transform; transform-style: preserve-3d; }
-  .icon-img { display: block; width: 100%; height: auto; will-change: transform; }
+  /* height:auto here used to make .icon-figure's box follow each source
+     image's own (non-square) aspect ratio — which made .icon-glow's circle
+     render as a squashed ellipse on anything but a perfectly square source.
+     object-fit:contain (paired with .icon-figure's aspect-ratio:1/1 below)
+     keeps every icon at its own proportions while guaranteeing the box
+     around it — and so the glow "coin" — is always a true circle. */
+  .icon-img { display: block; width: 100%; height: 100%; object-fit: contain; will-change: transform; }
 
   /* Cluster label — prototype of the "spatial cluster" grouping (Soil, Air
      now, more later): orange accent used sparingly as a wayfinding color
@@ -139,7 +145,7 @@
      sweep from the original effect was dropped — on these small line-art
      icons it read as a ghosted white duplicate of the icon rather than a
      glint of light, not what was wanted here.) */
-  .icon-figure { position: relative; transform-style: preserve-3d; will-change: transform; }
+  .icon-figure { position: relative; aspect-ratio: 1 / 1; transform-style: preserve-3d; will-change: transform; }
   /* Circular glow behind the icon — the original TiltHoverEffects demo used
      square photos that already filled their frame; ours are line-art icons
      floating inside empty space, so there's no "frame" for the tilt/shine
