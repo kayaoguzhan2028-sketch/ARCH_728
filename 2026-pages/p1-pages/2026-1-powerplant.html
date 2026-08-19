@@ -20,6 +20,7 @@
     nav { padding:0 1rem; }
     .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.8rem; scrollbar-width:none; }
     .nav-center-links::-webkit-scrollbar { display:none; }
+    .wrap { padding-left:1.4rem; padding-right:1.4rem; }
   }
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
@@ -30,11 +31,11 @@
   .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
 
-  .img-stage { position:relative; width:80%; margin:0 auto; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
+  .img-stage { position:relative; width:100vw; max-width:930px; margin-left:50%; transform:translateX(-50%); margin-bottom:2.5rem; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
   .img-stage > img { width:100%; height:100%; object-fit:contain; display:block; filter:brightness(1) contrast(1); }
   .svg-layer { position:absolute; pointer-events:none; overflow:visible; }
 
-  .wrap { max-width:960px; margin:0 auto; padding:5rem 2rem 8rem; }
+  .wrap { max-width:620px; margin:0 auto; padding:5rem 0 6rem; }
   .body { font-size:1.1rem; line-height:1.95; text-align:justify; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
@@ -92,11 +93,11 @@
     <a href="2026-1-bird.html" class="nav-link">Bird Migration</a>
   </div>
 </nav>
-<div class="img-stage">
-  <img src="../../2026-images/2026-p1/4-power-plant/factory-final.webp" alt="Çayırhan Ash Lake" fetchpriority="high">
-  <div class="svg-layer" id="svg-layer"></div>
-</div>
 <div class="wrap">
+  <div class="img-stage">
+    <img src="../../2026-images/2026-p1/4-power-plant/factory-final.webp" alt="Çayırhan Ash Lake" fetchpriority="high">
+    <div class="svg-layer" id="svg-layer"></div>
+  </div>
   <div class="body">
     <p>This collage is a spatio-temporal analysis of the industrial production of the Çayırhan Thermal Power Plant from the 1950s to 2025, documenting the ecological damage this process has inflicted on the landscape. The chronological flow traces the economic growth that began with the discovery of coal, followed by the commissioning of the power plant and its subsequent privatization. Ultimately, the visual serves as a critical timeline of this industrial expansion, illustrating how air, soil, and water have been progressively contaminated over time.</p>
     <div class="btn-row">

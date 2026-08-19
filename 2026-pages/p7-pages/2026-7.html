@@ -41,15 +41,6 @@
   .node-preview { position:absolute; bottom:calc(100% + 52px); left:50%; transform:translateX(-50%) translateY(10px); width:62px; height:62px; border:1px solid rgba(245,242,235,0.25); overflow:hidden; opacity:0; pointer-events:none; transition:opacity 0.35s ease,transform 0.35s ease; }
   .node-preview img { width:100%; height:100%; object-fit:cover; display:block; }
   .node:hover .node-preview { opacity:1; transform:translateX(-50%) translateY(0); }
-  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
-  .info-btn:hover { opacity:1; }
-  .info-btn.open { opacity:1; }
-  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:380px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
-  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
-  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
-  #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:1.1rem; line-height:1.85; opacity:1; font-family:var(--font); }
-  #info-panel em { font-style:italic; }
   #hover-icon { position:fixed; top:0; left:0; z-index:200; display:flex; flex-direction:column; align-items:center; pointer-events:none; opacity:0; transform:translate(24px,24px); transition:opacity 0.2s ease; }
   #hover-icon.active { opacity:1; }
   #hover-icon img { width:90px; height:90px; object-fit:contain; }
@@ -76,11 +67,9 @@
 
 
 <nav>
-  <div style="display:flex;align-items:center;">
-    <a href="../../explore.html" class="nav-back">← Back</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
-  </div>
+  <a href="../../explore.html" class="nav-back">← Back</a>
   <div class="nav-center-links">
+    <a href="2026-7-info.html">Info</a>
     <a href="2026-7.html" class="active">Intro</a>
     <div class="nav-dropdown">
       <a href="2026-7-nomad-soil.html">The Figures of Migrant Soil</a>
@@ -97,19 +86,6 @@
     <a href="2026-7-timeline.html">The Timeline</a>
   </div>
 </nav>
-
-<div id="info-panel">
-  <h2>Project Title</h2>
-  <p>Migrant Ground: Excavation, Kinopolitics, and the Political Geography of Soil Displacement in Ankara — Ilker Street</p>
-  <h2>Research Question</h2>
-  <p>How does the movement of soil through Ankara's excavation apparatus constitute it as a migrant subject — one that traverses five ontological identities from nomadic ground to civilized concrete — and what political geography does this trajectory produce?</p>
-  <h2>Position Statement</h2>
-  <p>This study proposes that Ankara's soil operates as a migrant figure in Thomas Nail's sense — not a stable substrate beneath urban transformation, but a social and political subject constituted through movement: excavated, expelled, rerouted, and redeposited across the city's transformation corridors. Drawing on Nail's kinopolitics and <em>The Figure of the Migrant</em>, this study reads the excavation apparatus — its truck routes as migration corridors, its dump sites as de-subjectivizing camps, its potted and landscaped soils as disciplined laborers — as the infrastructural regime that governs Ankara's migrant ground. The central argument is that the political geography of Ankara is not produced by buildings or masterplans alone, but by the managed movement of soil: a kinopolitical order in which matter is assigned differential social identities across five ontological stages — nomadic, barbaric, vagabond, proletarianized, and civilized — as it moves from gecekondu ground to artificial mountain to concrete tower. The excavation dump site, where all migrant soils converge and lose their territorial memory, is not a marginal infrastructural node but the political center of this geography: the camp where ground is made anonymous before it is made monumental.</p>
-  <h2>Proposed Method</h2>
-  <p>This study employs a multi-scalar qualitative methodology combining critical cartography, ethnographic fieldwork, and regulatory document analysis. At the macro scale, excavation truck routes are mapped as migration corridors to visualize the kinopolitical infrastructure governing soil movement across Ankara. At the meso scale, the excavation dump site in Mamak is treated as the primary field site — observed, documented, and read as a political space of de-subjectivization. At the micro scale, the five-stage ontological typology (nomadic → barbaric → vagabond → proletarianized → civilized) is applied as an analytical grid to classify soil matter encountered across different urban conditions. Theoretical analysis proceeds through close reading of kinopolitics, triangulated with criticism of current Turkish excavation legislation and urban transformation policy.</p>
-  <h2>Data</h2>
-  <p>Field photography documenting soil in transit — excavation trucks, active dump operations, material accumulation — forms the visual core of the study, supplemented by historical aerial imagery and satellite overlays that trace the Mamak dump site's transformation from early formation to its current artificial topography. Ecological records of vegetation loss, hydrological shifts, and landslide events register what the soil's movement has cost the ground it left behind. Geology and urban engineering theses held in the YÖK National Thesis Center — particularly master's theses on excavation site selection and soil composition in the Ankara basin — provide the technical substrate for reading the site's spatial logic as simultaneously geological and political. Nail's <em>The Figure of the Migrant</em> and <em>Kinopolitics</em> function not as objects of analysis but as theoretical lenses, orienting the study toward movement, expulsion, and subject-formation rather than static spatial categories.</p>
-</div>
 
 <div class="map-stage">
   <div class="map-inner">
@@ -139,13 +115,6 @@
 </div>
 
 <script>
-const infoToggle = document.getElementById('info-toggle');
-const infoPanel  = document.getElementById('info-panel');
-infoToggle.addEventListener('click', () => {
-  const open = infoPanel.classList.toggle('open');
-  infoToggle.classList.toggle('open', open);
-});
-
 // ── Soil-layer hover reveal ───────────────────────────────────────────────────
 const soilLayers = ['07','02','03','04','05','06'].map(id => ({
   id,
@@ -180,6 +149,33 @@ const hoverIconLabel = document.getElementById('hover-icon-label');
 
 const mapInner = document.querySelector('.map-inner');
 let activeSoilHit = null;
+let soilClearTimer = null;
+
+function applySoilHit(hit, e) {
+  activeSoilHit = hit;
+  soilLayers.forEach(L => L.layer.classList.toggle('active', L === hit));
+  mapInner.style.cursor = 'pointer';
+  const info = HOVER_INFO[hit.id];
+  if (info.icon) {
+    hoverIconImg.src = info.icon;
+    hoverIconImg.style.display = '';
+  } else {
+    hoverIconImg.style.display = 'none';
+  }
+  hoverIconLabel.textContent = info.label;
+  hoverIcon.style.left = e.clientX + 'px';
+  hoverIcon.style.top = e.clientY + 'px';
+  hoverIcon.classList.add('active');
+}
+
+function clearSoilHit() {
+  soilClearTimer = null;
+  activeSoilHit = null;
+  soilLayers.forEach(L => L.layer.classList.remove('active'));
+  mapInner.style.cursor = 'default';
+  hoverIcon.classList.remove('active');
+}
+
 mapInner.addEventListener('mousemove', e => {
   const rect = mapInner.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -191,31 +187,21 @@ mapInner.addEventListener('mousemove', e => {
     const el = L.doc.elementFromPoint(x, y);
     if (el && el.matches('path,polygon')) { hit = L; break; }
   }
-  activeSoilHit = hit;
-  soilLayers.forEach(L => L.layer.classList.toggle('active', L === hit));
-  mapInner.style.cursor = hit ? 'pointer' : 'default';
 
-  const info = hit && HOVER_INFO[hit.id];
-  if (info) {
-    if (info.icon) {
-      hoverIconImg.src = info.icon;
-      hoverIconImg.style.display = '';
-    } else {
-      hoverIconImg.style.display = 'none';
-    }
-    hoverIconLabel.textContent = info.label;
-    hoverIcon.style.left = e.clientX + 'px';
-    hoverIcon.style.top = e.clientY + 'px';
-    hoverIcon.classList.add('active');
-  } else {
-    hoverIcon.classList.remove('active');
+  if (hit) {
+    if (soilClearTimer) { clearTimeout(soilClearTimer); soilClearTimer = null; }
+    applySoilHit(hit, e);
+  } else if (activeSoilHit && !soilClearTimer) {
+    // The shapes for each soil layer are drawn as several separate pieces scattered
+    // across the artwork, so the cursor briefly crosses real gaps between them while
+    // moving within what still reads as the same region. Wait a beat before clearing
+    // so the hover doesn't flicker off in those gaps.
+    soilClearTimer = setTimeout(clearSoilHit, 150);
   }
 });
 mapInner.addEventListener('mouseleave', () => {
-  activeSoilHit = null;
-  soilLayers.forEach(L => L.layer.classList.remove('active'));
-  mapInner.style.cursor = 'default';
-  hoverIcon.classList.remove('active');
+  if (soilClearTimer) { clearTimeout(soilClearTimer); soilClearTimer = null; }
+  clearSoilHit();
 });
 let genericBuildingClicks = 0;
 mapInner.addEventListener('click', () => {

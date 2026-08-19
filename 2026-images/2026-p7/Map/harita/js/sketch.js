@@ -52,9 +52,29 @@ const SketchLayer = L.Layer.extend({
   },
 
   _redraw: function() {
+    const ctx = this._canvas.getContext('2d');
     const rc = rough.canvas(this._canvas);
     const features = (this._data && this._data.features) || [];
+    const clip = this._opts.clipCircle;
+
+    if (clip) {
+      const centerPt = this._map.latLngToLayerPoint(clip.center);
+      const cx = centerPt.x - this._topLeft.x;
+      const cy = centerPt.y - this._topLeft.y;
+      // north edge point at clip.radius metres, projected to px at current zoom/latitude
+      const dLat = (clip.radius / 6378137) * (180 / Math.PI);
+      const edgePt = this._map.latLngToLayerPoint(L.latLng(clip.center.lat + dLat, clip.center.lng));
+      const r = Math.hypot(edgePt.x - centerPt.x, edgePt.y - centerPt.y);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.clip();
+    }
+
     features.forEach(f => this._drawFeature(rc, f));
+
+    if (clip) ctx.restore();
   },
 
   _project: function(coord) {

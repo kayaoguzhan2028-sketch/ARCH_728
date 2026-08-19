@@ -24,19 +24,6 @@
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
   .nav-dropdown-menu a { display:block; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.7; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
-  .info-btn { font-size:0.64rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.4rem; }
-  .info-btn:hover { opacity:1; }
-  .info-btn.open { opacity:1; }
-  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
-  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
-  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
-  #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; text-align:justify; }
-  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
-  #info-panel ul li { margin-bottom:0.8rem; }
-  #info-panel ul li:last-child { margin-bottom:0; }
-  #info-panel em { font-style:italic; }
-
   .wrap { margin:0; padding:52px 0 0; }
   .label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; margin-bottom:2rem; display:block; }
   h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; }
@@ -150,20 +137,14 @@
 <div id="welcome-modal">
   <div id="welcome-modal-inner">
     <button id="welcome-modal-close" aria-label="Close">×</button>
-    <p>To calibrate your view of the diagram, you may zoom in and out while scrolling:<br><strong>Ctrl</strong> + Scroll (Windows)<br><strong>⌘</strong> + Scroll (Mac)</p>
-    <p>To reset, set your browser zoom to 100%:<br><strong>Ctrl+0</strong> (Windows)<br><strong>⌘+0</strong> (Mac)</p>
-    <p>The page will not appear identically on every screen, so please calibrate the view to your own display.</p>
-    <p>Explore the diagram by following the pulses within it. Enjoy.</p>
+    <p>Click the pulsing points to explore the diagram.</p>
   </div>
 </div>
 <nav>
-  <div style="display:flex;align-items:center;">
-    <a href="../../explore.html" class="nav-back">← Back</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
-  </div>
+  <a href="../../explore.html" class="nav-back">← Back</a>
   <div class="nav-center-links">
-    <a href="2026-4.html" class="nav-link active">Intro</a>
-    <a href="2026-4-proposal&amp;methodology.html" class="nav-link">proposal &amp; methodology</a>
+    <a href="2026-4-proposal&amp;methodology.html" class="nav-link">Intro</a>
+    <a href="2026-4.html" class="nav-link active">Poster</a>
     <a href="2026-4-aerial-assessment.html" class="nav-link">aerial assessment</a>
     <div class="nav-dropdown">
       <a href="2026-4-sections1.html" class="nav-link">sections</a>
@@ -185,20 +166,6 @@
     </div>
   </div>
 </nav>
-<div id="info-panel">
-  <h2>Main Title</h2>
-  <p>Bilkent Territory</p>
-
-  <h2>Research Questions</h2>
-  <p>In the cases of Beytepe Pond, Bilkent City Hospital, and the arboretum, do emergent plant formations indicate the erasure of the steppe, or do they reveal soil's capacity to retain, reactivate, and rearticulate its own ecological archive in a new location?</p>
-
-  <h2>Methodology</h2>
-  <p>This research adopts a multi-scalar and interpretive methodology to investigate the mobility of urban soil and its ecological consequences in Ankara. This is achieved through the examination of Bilkent area in 3 contexts in terms of movement's consequences: sterilized, incomplete and refurbished. Hospital and its surroundings, the Beytepe Pond and the arboretum (Botanical Park's incomplete parts) are approached as a critical site where these dynamics become materially observable. Rather than treating soil as a fixed and stable ground, the study approaches it as a dynamic, circulating, and metabolically active medium. To capture this condition, the methodology combines spatial mapping, field observation, territorial relationality, experimental ortographic projections, field observation, and critical material interpretation through plant species analysis.</p>
-  <p>At the core of the study is the tracing of soil movement generated through large-scale excavation practices, particularly those associated with the construction of Bilkent City Hospital. This is achieved through spatial mapping techniques and site analysis that identify the points of extraction, transportation, and deposition of soil. Temporal analysis, supported by satellite imagery and planning documents, is used to understand how these movements unfold over time and how they correlate with changes in land use and ecological conditions. Field observations conducted in and around Beytepe Pond provide a situated understanding of these processes.</p>
-  <p>These observations are not treated as isolated data points, but as indicators of broader material and ecological transformations. The botanical park intro building and half-finished entry are targeted to observe the uncompleted construction and vegetation processes resulted in wilderness, remaining in the center of a designed area. This part reflects on the ever-changing status of the existing ecological particles and bare refurbishment with material flows, ecological continuity, and soil movement.</p>
-  <p>The methodology also incorporates a material reading of soil as a stratified and relational entity. By examining the physical characteristics and concealing water features within the ground, the study interprets soil as both a carrier of past conditions and a medium through which new ecological assemblages emerge. This approach is complemented by critical reading of planning documents, archival research, aerial photographs and site visits which reveal how soil is differently framed across institutional and ecological discourse. Importantly, this research does not seek to establish linear causality between soil movement and ecological change. Instead, it employs an interpretive and relational approach that connects between excavation, hydrological systems, and emergent vegetation. Through this framework, soil is understood not only as material, but also as archive-retaining, transporting, and rearticulating ecological traces across urban space.</p>
-</div>
-
 <div class="wrap">
   <div class="body">
     <section class="grid3x3">
@@ -315,16 +282,6 @@
   document.getElementById('welcome-modal-close').addEventListener('click', closeWelcomeModal);
   welcomeModal.addEventListener('click', (e) => {
     if (e.target === welcomeModal) closeWelcomeModal();
-  });
-
-  const infoBtn   = document.getElementById('info-toggle');
-  const infoPanel = document.getElementById('info-panel');
-  infoBtn.addEventListener('click', () => {
-    const open = infoPanel.classList.toggle('open');
-    infoBtn.classList.toggle('open', open);
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { infoPanel.classList.remove('open'); infoBtn.classList.remove('open'); }
   });
 
   document.querySelectorAll('.hotspot-overlay a').forEach((a, i) => {

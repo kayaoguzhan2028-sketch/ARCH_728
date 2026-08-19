@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/Mimfak.webp">
+<title>Info — Project 2026-7 — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --orange:#d97a3f; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
+  .nav-dropdown { position:relative; display:flex; align-items:center; }
+  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.55rem; padding:0.9rem 1.1rem 0.8rem; margin-top:0.4rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+  .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
+  .nav-dropdown-menu .dropdown-label { font-size:0.56rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.35; white-space:nowrap; }
+  .nav-dropdown-menu a { display:block; font-size:0.64rem; white-space:nowrap; }
+
+  .wrap { max-width:620px; margin:0 auto; padding:calc(52px + 3rem) 0 6rem; }
+  @media (max-width:700px) {
+    nav { padding:0 1rem; }
+    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.6rem; scrollbar-width:none; gap:0.9rem; }
+    .nav-center-links::-webkit-scrollbar { display:none; }
+    .nav-center-links a { font-size:0.6rem; }
+    .wrap { padding-left:1.4rem; padding-right:1.4rem; }
+  }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; color:var(--orange); }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--orange); margin-bottom:1rem; line-height:1.6; }
+  .author-line { font-size:0.78rem; letter-spacing:0.12em; opacity:0.45; margin-bottom:3rem; }
+  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  .body { font-size:1.1rem; line-height:1.95; text-align:justify; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+  .body h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body h2:first-child { margin-top:0; }
+  .body em { font-style:italic; }
+  .home-btn { position:fixed; top:0.6rem; right:1rem; z-index:200; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,242,235,0.35); background:rgba(10,10,10,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; color:var(--white); text-decoration:none; opacity:0.65; transition:opacity 0.2s, border-color 0.2s; }
+  .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .home-btn svg { width:15px; height:15px; display:block; }
+  @media (max-width:640px) {
+    .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
+    .home-btn svg { width:13px; height:13px; }
+  }
+</style>
+</head>
+<body>
+<a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
+</a>
+
+<nav>
+  <a href="../../explore.html" class="nav-back">← Back</a>
+  <div class="nav-center-links">
+    <a href="2026-7-info.html" class="active">Info</a>
+    <a href="2026-7.html">Intro</a>
+    <div class="nav-dropdown">
+      <a href="2026-7-nomad-soil.html">The Figures of Migrant Soil</a>
+      <div class="nav-dropdown-menu">
+        <span class="dropdown-label">Soil Types</span>
+        <a href="2026-7-nomad-soil.html">Nomad Soil</a>
+        <a href="2026-7-barbaric-soil.html">Barbaric Soil</a>
+        <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
+        <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
+        <a href="2026-7-civilized-soil.html">Civilized Soil</a>
+      </div>
+    </div>
+    <a href="2026-7-map.html">The Map</a>
+    <a href="2026-7-timeline.html">The Timeline</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <h1>Migrant Ground</h1>
+  <p class="subtitle">Excavation, Kinopolitics, and the Political Geography of Soil Displacement in Ankara — Ilker Street</p>
+  <p class="author-line">Ali Onur Demirçalı, Nisa Keleş, Oğuzhan Kaya</p>
+  <hr class="rule">
+
+  <div class="body">
+    <h2>Research Question</h2>
+    <p>How does the movement of soil through Ankara's excavation apparatus constitute it as a migrant subject — one that traverses five ontological identities from nomadic ground to civilized concrete — and what political geography does this trajectory produce?</p>
+
+    <h2>Position Statement</h2>
+    <p>This study proposes that Ankara's soil operates as a migrant figure in Thomas Nail's sense — not a stable substrate beneath urban transformation, but a social and political subject constituted through movement: excavated, expelled, rerouted, and redeposited across the city's transformation corridors. Drawing on Nail's kinopolitics and <em>The Figure of the Migrant</em>, this study reads the excavation apparatus — its truck routes as migration corridors, its dump sites as de-subjectivizing camps, its potted and landscaped soils as disciplined laborers — as the infrastructural regime that governs Ankara's migrant ground. The central argument is that the political geography of Ankara is not produced by buildings or masterplans alone, but by the managed movement of soil: a kinopolitical order in which matter is assigned differential social identities across five ontological stages — nomadic, barbaric, vagabond, proletarianized, and civilized — as it moves from gecekondu ground to artificial mountain to concrete tower. The excavation dump site, where all migrant soils converge and lose their territorial memory, is not a marginal infrastructural node but the political center of this geography: the camp where ground is made anonymous before it is made monumental.</p>
+
+    <h2>Proposed Method</h2>
+    <p>This study employs a multi-scalar qualitative methodology combining critical cartography, ethnographic fieldwork, and regulatory document analysis. At the macro scale, excavation truck routes are mapped as migration corridors to visualize the kinopolitical infrastructure governing soil movement across Ankara. At the meso scale, the excavation dump site in Mamak is treated as the primary field site — observed, documented, and read as a political space of de-subjectivization. At the micro scale, the five-stage ontological typology (nomadic → barbaric → vagabond → proletarianized → civilized) is applied as an analytical grid to classify soil matter encountered across different urban conditions. Theoretical analysis proceeds through close reading of kinopolitics, triangulated with criticism of current Turkish excavation legislation and urban transformation policy.</p>
+
+    <h2>Data</h2>
+    <p>Field photography documenting soil in transit — excavation trucks, active dump operations, material accumulation — forms the visual core of the study, supplemented by historical aerial imagery and satellite overlays that trace the Mamak dump site's transformation from early formation to its current artificial topography. Ecological records of vegetation loss, hydrological shifts, and landslide events register what the soil's movement has cost the ground it left behind. Geology and urban engineering theses held in the YÖK National Thesis Center — particularly master's theses on excavation site selection and soil composition in the Ankara basin — provide the technical substrate for reading the site's spatial logic as simultaneously geological and political. Nail's <em>The Figure of the Migrant</em> and <em>Kinopolitics</em> function not as objects of analysis but as theoretical lenses, orienting the study toward movement, expulsion, and subject-formation rather than static spatial categories.</p>
+  </div>
+</div>
+</body>
+</html>

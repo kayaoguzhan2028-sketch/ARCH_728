@@ -156,10 +156,13 @@ const LayerManager = (function() {
     const geojson = await _fetchGeoJSON(_dataPath('hafriyat_guzergah.geojson'));
     HafriyatAnimation.load(geojson);
 
+    // Nomadic ve Vagabond çizimleri sadece çalışma çemberinin içinde görünsün
+    const _clipCircle = { center: CIRCLE_CENTER, radius: CIRCLE_RADIUS };
+
     // vagabond verisi data-mine/ klasöründe duruyor (üretilmiş abstraction verisi, data/ ile aynı yıl mantığına girmiyor)
     const vagabondPath = file => _dataPath(file).replace('/data/', '/data-mine/');
     const vagabondGeojson = await _fetchGeoJSON(vagabondPath('vadi-vagabond.geojson'));
-    const vagabondLayer   = sketchLayer(vagabondGeojson, CONFIGS.vagabond);
+    const vagabondLayer   = sketchLayer(vagabondGeojson, Object.assign({}, CONFIGS.vagabond, { clipCircle: _clipCircle }));
     if (_visible.vagabond) vagabondLayer.addTo(_map);
     _layers.vagabond = vagabondLayer;
 
@@ -178,7 +181,8 @@ const LayerManager = (function() {
     const nomadicFrames = await Promise.all(
       Array.from({ length: 10 }, (_, i) => _fetchGeoJSON(vagabondPath(`vadi-abstraction-frame-${i}.geojson`)))
     );
-    NomadicAnimation.load(nomadicBase, nomadicFrames, CONFIGS.nomadic, CONFIGS.nomadic);
+    const _nomadicConfig = Object.assign({}, CONFIGS.nomadic, { clipCircle: _clipCircle });
+    NomadicAnimation.load(nomadicBase, nomadicFrames, _nomadicConfig, _nomadicConfig);
     if (_visible.nomadic) NomadicAnimation.show();
   }
 

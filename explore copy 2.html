@@ -63,9 +63,17 @@
   .lens-node.label-top    .lens-node-label { left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); }
   .lens-node.label-bottom .lens-node-label { left: 50%; top: calc(100% + 10px); transform: translateX(-50%); }
 
-  #view-content { position: absolute; inset: 0; overflow: hidden; cursor: default; }
-  .shape { position: absolute; cursor: pointer; transition: transform 0.35s ease, opacity 0.4s ease, filter 0.4s ease; will-change: transform; }
-  .shape.selected { transform: scale(1.25) !important; }
+  #view-content { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; cursor: default; align-items: flex-start; justify-content: center; }
+  .icon-grid-wrap { width: 100%; max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+  .icon-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3rem 2rem; align-items: center; justify-items: center; }
+  @media (max-width: 900px) {
+    .icon-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .icon-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .shape { position: static; width: 100%; height: auto; max-width: 130px; cursor: pointer; transition: transform 0.3s ease, opacity 0.4s ease, filter 0.4s ease; }
+  .shape.selected { transform: scale(1.15); }
   .shape.dimmed { opacity: 0.45; filter: saturate(0.2); }
 
   #shape-tooltip { position: fixed; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); white-space: nowrap; z-index: 20; }
@@ -159,14 +167,18 @@
 
   <!-- BY CONTENT -->
   <div class="view" id="view-content">
-    <img class="shape" id="shape-0" src="2026-images/2026-p1/1-mainpage/component-1.webp" data-label="Powerplant" data-href="2026-pages/p1-pages/2026-1-interactivepage.html" style="width:120px;height:auto;" draggable="false" alt="Powerplant">
-    <img class="shape" id="shape-1" src="2026-images/2026-p2/themodel/23-model-meshtopo.webp" data-label="The Model" data-href="2026-pages/p2-pages/2026-2-themodel.html" style="width:135px;height:auto;" draggable="false" alt="The Model">
-    <img class="shape" id="shape-2" src="2026-images/2026-p3/0-project-brief-page/sifting-the-soil-key-image-1.0.webp" data-label="Sifters" data-href="2026-pages/p3-pages/2026-3.html" style="width:110px;height:auto;" draggable="false" alt="Sifters">
-    <img class="shape" id="shape-3" src="must-images/by-content/saydam.webp" data-label="Reeds" data-href="2026-pages/p4-pages/2026-4.html" style="width:120px;height:auto;" draggable="false" alt="Reeds">
-    <img class="shape" id="shape-4" src="2026-images/2026-p5/ikon/ikon.webp" data-label="Hotel" data-href="2026-pages/p5-pages/2026-5.html" style="width:67.5px;height:auto;" draggable="false" alt="Hotel">
-    <img class="shape" id="shape-5" src="2026-images/2026-p6/0-main-page/by-year-visual.webp" data-label="Timeline" data-href="2026-pages/p6-pages/2026-6-thetimeline.html" style="width:110px;height:auto;filter:grayscale(1);" draggable="false" alt="Timeline">
-    <img class="shape" id="shape-6" src="must-images/by-content/debris.webp" data-label="Barbaric Soil" data-href="2026-pages/p7-pages/2026-7-barbaric-soil.html" style="width:120px;height:auto;" draggable="false" alt="Barbaric Soil">
-    <img class="shape" id="shape-7" src="2026-images/2026-p8/section-02/1.webp" data-label="The Helical" data-href="2026-pages/p8-pages/2026-8.html" style="width:100px;height:auto;" draggable="false" alt="The Helical">
+    <div class="icon-grid-wrap">
+      <div class="icon-grid">
+        <img class="shape" id="shape-0" src="2026-images/2026-p1/1-mainpage/component-1.webp" data-label="Powerplant" data-href="2026-pages/p1-pages/2026-1-interactivepage.html" draggable="false" alt="Powerplant">
+        <img class="shape" id="shape-1" src="2026-images/2026-p2/themodel/23-model-meshtopo.webp" data-label="The Model" data-href="2026-pages/p2-pages/2026-2-themodel.html" draggable="false" alt="The Model">
+        <img class="shape" id="shape-2" src="2026-images/2026-p3/0-project-brief-page/sifting-the-soil-key-image-1.0.webp" data-label="Sifters" data-href="2026-pages/p3-pages/2026-3.html" draggable="false" alt="Sifters">
+        <img class="shape" id="shape-3" src="must-images/by-content/saydam.webp" data-label="Reeds" data-href="2026-pages/p4-pages/2026-4.html" draggable="false" alt="Reeds">
+        <img class="shape" id="shape-4" src="2026-images/2026-p5/ikon/ikon.webp" data-label="Hotel" data-href="2026-pages/p5-pages/2026-5.html" draggable="false" alt="Hotel">
+        <img class="shape" id="shape-5" src="2026-images/2026-p6/0-main-page/by-year-visual.webp" data-label="Timeline" data-href="2026-pages/p6-pages/2026-6-thetimeline.html" style="filter:grayscale(1);" draggable="false" alt="Timeline">
+        <img class="shape" id="shape-6" src="must-images/by-content/debris.webp" data-label="Barbaric Soil" data-href="2026-pages/p7-pages/2026-7-barbaric-soil.html" draggable="false" alt="Barbaric Soil">
+        <img class="shape" id="shape-7" src="2026-images/2026-p8/section-02/1.webp" data-label="The Helical" data-href="2026-pages/p8-pages/2026-8.html" draggable="false" alt="The Helical">
+      </div>
+    </div>
     <div id="shape-tooltip"></div>
   </div>
 
@@ -592,83 +604,38 @@
   libraryOverlay.addEventListener('click', (e) => { if (e.target === libraryOverlay) closeLibrary(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLibrary(); });
 
-  // ── Bouncing shapes ──
-  const container = document.getElementById('view-content');
-  const shapes = [
-    { el: document.getElementById('shape-0'), w: 120, h: 120, vx:  0.70, vy:  0.70 },
-    { el: document.getElementById('shape-1'), w: 135, h: 135, vx: -0.70, vy:  0.70 },
-    { el: document.getElementById('shape-2'), w: 110, h: 110, vx:  0.65, vy: -0.65 },
-    { el: document.getElementById('shape-3'), w: 120, h:  84, vx: -0.75, vy:  0.65 },
-    { el: document.getElementById('shape-4'), w: 67.5, h: 118.5, vx:  0.60, vy: -0.70 },
-    { el: document.getElementById('shape-5'), w: 110, h: 107, vx: -0.45, vy:  0.55 },
-    { el: document.getElementById('shape-6'), w: 120, h: 120, vx:  0.75, vy:  0.50 },
-    { el: document.getElementById('shape-7'), w: 100, h: 100, vx: -0.55, vy: -0.45 },
-  ];
+  // ── Icon grid (By Content) ──
+  const shapes = Array.from(document.querySelectorAll('.icon-grid .shape'));
 
-  shapes.forEach(s => {
-    s.x = Math.random() * Math.max(0, window.innerWidth  - s.w);
-    s.y = Math.random() * Math.max(0, window.innerHeight - s.h);
-    s.el.style.left = s.x + 'px';
-    s.el.style.top  = s.y + 'px';
-  });
-
-  const shapeTooltip = document.getElementById('shape-tooltip');
-  let hoveredShape = null;
-  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-
-  shapes.forEach(s => {
-    if (s.el.dataset.href) {
-      s.el.style.cursor = 'pointer';
-      s.el.addEventListener('click', () => { window.location.href = s.el.dataset.href; });
+  shapes.forEach(el => {
+    if (el.dataset.href) {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', () => { window.location.href = el.dataset.href; });
     }
   });
 
-  if (isTouch) {
-    shapes.forEach(s => { s.vx *= 0.55; s.vy *= 0.55; });
-  } else {
-    shapes.forEach(s => {
-      s.el.addEventListener('mouseenter', () => {
-        hoveredShape = s;
-        s.el.classList.add('selected');
-        shapes.forEach(other => { if (other.el !== s.el) other.el.classList.add('dimmed'); });
-        shapeTooltip.textContent = s.el.dataset.label;
+  const shapeTooltip = document.getElementById('shape-tooltip');
+  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+  if (!isTouch) {
+    shapes.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        el.classList.add('selected');
+        shapes.forEach(other => { if (other !== el) other.classList.add('dimmed'); });
+        shapeTooltip.textContent = el.dataset.label;
         shapeTooltip.classList.add('visible');
       });
-      s.el.addEventListener('mouseleave', () => {
-        hoveredShape = null;
-        shapes.forEach(other => other.el.classList.remove('selected', 'dimmed'));
+      el.addEventListener('mousemove', (e) => {
+        shapeTooltip.style.left = (e.clientX + 16) + 'px';
+        shapeTooltip.style.top  = (e.clientY - 10) + 'px';
+        shapeTooltip.style.transform = 'none';
+      });
+      el.addEventListener('mouseleave', () => {
+        shapes.forEach(other => other.classList.remove('selected', 'dimmed'));
         shapeTooltip.classList.remove('visible');
       });
     });
   }
-
-  function animate() {
-    const cw = container.clientWidth;
-    const ch = container.clientHeight;
-    if (cw > 0 && ch > 0) {
-      shapes.forEach(s => {
-        const isSelected = (s === hoveredShape);
-        const spd = isSelected ? 0.5 : 1;
-        s.x += s.vx * spd; s.y += s.vy * spd;
-        if (s.x <= 0)        { s.x = 0;        s.vx =  Math.abs(s.vx); }
-        if (s.x + s.w >= cw) { s.x = cw - s.w; s.vx = -Math.abs(s.vx); }
-        if (s.y <= 0)        { s.y = 0;        s.vy =  Math.abs(s.vy); }
-        if (s.y + s.h >= ch) { s.y = ch - s.h; s.vy = -Math.abs(s.vy); }
-        s.el.style.left = s.x + 'px';
-        s.el.style.top  = s.y + 'px';
-        if (isSelected && hoveredShape) {
-          const tipW = shapeTooltip.offsetWidth || 120;
-          const gap  = 14;
-          shapeTooltip.style.left      = (s.x + s.w + gap + tipW < cw ? s.x + s.w + gap : Math.max(8, s.x - tipW - gap)) + 'px';
-          shapeTooltip.style.top       = (s.y + s.h / 2) + 'px';
-          shapeTooltip.style.transform = 'translateY(-50%)';
-        }
-      });
-    }
-    requestAnimationFrame(animate);
-  }
-
-  animate();
 </script>
 </body>
 </html>

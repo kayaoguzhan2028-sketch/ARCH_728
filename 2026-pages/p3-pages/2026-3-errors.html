@@ -8,7 +8,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --errors-img-w: min(100%, (100vh - 52px - 4rem) * 1.35); }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
   html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
@@ -39,8 +39,14 @@
   .section > img { max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0 auto; }
   .img-text-col { display:flex; flex-direction:column; gap:0.2rem; }
   .img-text-col > img { flex:0 0 auto; max-height:calc(100vh - 52px - 4rem); width:auto; max-width:100%; object-fit:contain; display:block; margin:0 auto; cursor:pointer; }
-  .img-text-col .caption-block { flex:0 0 auto; max-width:900px; margin:0 auto; font-size:1.1rem; line-height:1.6; opacity:0.78; }
-  img.img-fixed-w { width:var(--errors-img-w); max-width:100%; height:auto; max-height:none; display:block; margin:0 auto; }
+  .img-text-col .caption-block { flex:0 0 auto; max-width:620px; margin:0 auto; font-size:1.1rem; line-height:1.6; opacity:0.78; }
+  img.img-fixed-w { width:100%; max-width:930px; height:auto; max-height:none; display:block; margin:0 auto; }
+  .lightbox-trigger { cursor:pointer; }
+  .lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.92); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
+  .lightbox.active { display:flex; }
+  .lightbox img { max-width:100%; max-height:100%; object-fit:contain; }
+  .lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:#f5f2eb; font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); z-index:1001; }
+  .lightbox-close:hover { opacity:0.7; }
   .img-text-col .caption-block h2 { font-size:1rem; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 0.7rem; }
   .img-text-col .caption-block p { margin-bottom:0.7rem; }
   .img-text-col .caption-block p:last-child { margin-bottom:0; }
@@ -104,13 +110,13 @@
 <div class="wrap">
   <div class="body">
 
-    <div class="section section-top">
-      <img id="errors-1" class="img-fixed-w" src="../../2026-images/2026-p3/2-errors-on-ankara-soil-page-2/errors-2.1.webp" alt="Errors on Ankara Soil 2.1" style="cursor:pointer;">
+    <div class="section section-top section-auto">
+      <img id="errors-1" class="img-fixed-w lightbox-trigger" src="../../2026-images/2026-p3/2-errors-on-ankara-soil-page-2/errors-2.1.webp" alt="Errors on Ankara Soil 2.1">
     </div>
 
     <div class="section section-auto">
       <div class="img-text-col">
-        <img id="errors-2" class="img-fixed-w" src="../../2026-images/2026-p3/2-errors-on-ankara-soil-page-2/errors-2.2.webp" alt="Errors on Ankara Soil 2.2">
+        <img id="errors-2" class="img-fixed-w lightbox-trigger" src="../../2026-images/2026-p3/2-errors-on-ankara-soil-page-2/errors-2.2.webp" alt="Errors on Ankara Soil 2.2">
         <div class="caption-block">
           <p>When the city ignores this matrix, the earth retaliates. The act of sifting exposes the severe consequences of design erasure, reframing structural failures not as engineering defects, but as physical messages of the Earth's resistance. Our research focuses on systemic management failures across specific geotechnical realities:</p>
           <p><strong>The "Ankara Clay" Hazard:</strong> In southwestern districts, including our own METU Campus, developers build lightweight structures with shallow foundations (0.2–0.5m) directly on expansive clay with a 2-meter active zone. This negligence causes severe 45-degree cracks, as the soil's internal swelling pressure easily exceeds the weight of the buildings above it.</p>
@@ -121,8 +127,8 @@
       </div>
     </div>
 
-    <div class="section">
-      <img src="../../2026-images/2026-p3/2-errors-on-ankara-soil-page-2/error-transition-section-2.3.1.webp" alt="Error transition section">
+    <div class="section section-auto">
+      <img class="img-fixed-w lightbox-trigger" src="../../2026-images/2026-p3/2-errors-on-ankara-soil-page-2/error-transition-section-2.3.1.webp" alt="Error transition section">
     </div>
 
     <div class="section section-auto">
@@ -157,6 +163,26 @@
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">×</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+<script>
+  document.querySelectorAll('.lightbox-trigger').forEach(function(img){
+    img.addEventListener('click', function(){
+      var lbImg = document.getElementById('lightboxImg');
+      lbImg.src = this.src;
+      lbImg.alt = this.alt;
+      document.getElementById('lightbox').classList.add('active');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', function(){
+    document.getElementById('lightbox').classList.remove('active');
+  });
+  document.getElementById('lightbox').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('active');
+  });
+</script>
 <script>
   const sections = document.querySelectorAll('.body .section');
   const sectionOffset = 52;
@@ -180,9 +206,6 @@
 
   document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
   document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
-
-  document.getElementById('errors-1').addEventListener('click', () => scrollToSection(currentSectionIndex() + 1));
-  document.getElementById('errors-2').addEventListener('click', () => scrollToSection(currentSectionIndex() - 1));
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); scrollToSection(currentSectionIndex() + 1); }

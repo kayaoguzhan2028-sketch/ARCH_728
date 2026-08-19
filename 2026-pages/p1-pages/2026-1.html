@@ -8,7 +8,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --orange:#d97a3f; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
   html, body { min-height: 100%; background: var(--black); color: var(--white); font-family: var(--font); }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
@@ -20,7 +20,7 @@
     nav { padding:0 1rem; }
     .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.8rem; scrollbar-width:none; }
     .nav-center-links::-webkit-scrollbar { display:none; }
-    .gif-row { grid-template-columns:1fr; }
+    .wrap { padding-left:1.4rem; padding-right:1.4rem; }
   }
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
@@ -30,32 +30,33 @@
   .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
   .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
-  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
-  .info-btn:hover { opacity:1; }
-  .info-btn.open { opacity:1; }
-
-  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
-  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
-  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
-  #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; text-align:justify; }
-  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
-  #info-panel ul li { margin-bottom:0.8rem; }
-  #info-panel ul li:last-child { margin-bottom:0; }
-  #info-panel em { font-style:italic; }
-
-  .wrap { max-width:1000px; margin:0 auto; padding:7.5rem 2.5rem 4rem; }
-  #main-img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; }
-  .body-title { font-size:1.3rem; text-align:center; margin-top:2.5rem; line-height:1.5; }
-  .body-text { font-size:1.1rem; line-height:1.95; margin-top:1rem; text-align:justify; width:90%; margin-left:auto; margin-right:auto; }
+  .wrap { max-width:620px; margin:0 auto; padding:calc(52px + 3rem) 0 6rem; }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; color:var(--orange); }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--orange); margin-bottom:1rem; line-height:1.6; }
+  .author-line { font-size:0.78rem; letter-spacing:0.12em; opacity:0.45; margin-bottom:3rem; }
+  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  #main-img { display:block; width:100%; height:auto; margin-top:1rem; user-select:none; -webkit-user-drag:none; }
+  .img-hover-wrap { position:relative; cursor:pointer; }
+  .hover-label { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(10,10,10,0.55); color:var(--white); font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0; transition:opacity 0.2s ease; text-align:center; padding:1rem; pointer-events:none; }
+  .img-hover-wrap:hover .hover-label { opacity:1; }
+  .lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.92); display:none; align-items:center; justify-content:center; z-index:1000; padding:3rem; }
+  .lightbox.active { display:flex; }
+  .lightbox img { max-width:90vw; max-height:90vh; object-fit:contain; display:block; }
+  .lightbox-close { position:fixed; top:1.5rem; right:1.5rem; width:40px; height:40px; border:1px solid rgba(245,242,235,0.4); background:transparent; color:var(--white); font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:var(--font); z-index:1001; }
+  .lightbox-close:hover { opacity:0.7; }
+  .body-text { font-size:1.1rem; line-height:1.95; opacity:0.82; margin-top:1rem; text-align:justify; }
+  .body-col h2 { font-size:1.25rem; font-weight:400; margin:3rem 0 1rem; letter-spacing:0.04em; }
+  .body-col p, .body-col ul { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
+  .body-col ul { padding-left:1.2rem; }
+  .body-col ul li { margin-bottom:0.8rem; }
+  .body-col ul li:last-child { margin-bottom:0; }
   .cta-btn { display:block; width:max-content; margin:2rem auto 0; padding:0.85em 2em; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); border:1px solid var(--accent); text-decoration:none; transition:background 0.2s ease, color 0.2s ease; }
   .cta-btn:hover { background:var(--accent); color:var(--black); }
 
   .gif-block { margin-top:4rem; }
   .gif-block img, .gif-block video { display:block; width:100%; height:auto; }
-  .gif-row { display:grid; grid-template-columns:70% 30%; gap:1.5rem; align-items:center; }
-  .gif-caption { font-size:1.1rem; line-height:1.85; margin:0; }
-  .gif-reference { font-size:1rem; line-height:1.7; opacity:0.8; margin-top:0.6rem; }
+  .gif-caption { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; margin-top:1.2rem; }
+  .gif-reference { font-size:1rem; line-height:1.6; opacity:0.8; margin-top:1.2rem; }
 
   .accordion-btn { display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1.5rem; padding:0.85em 1.2em; background:none; border:1px solid var(--border); color:var(--white); font-family:var(--font); font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; cursor:pointer; opacity:0.7; transition:opacity 0.2s; }
   .accordion-btn:hover { opacity:1; }
@@ -80,10 +81,7 @@
 </a>
 
 <nav>
-  <div style="display:flex;align-items:center;">
-    <a href="../../explore.html" class="nav-back">← Back</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
-  </div>
+  <a href="../../explore.html" class="nav-back">← Back</a>
   <div class="nav-center-links">
     <a href="2026-1.html" class="nav-link active">Intro</a>
     <a href="2026-1-interactivepage.html" class="nav-link">Interactive Page</a>
@@ -103,30 +101,29 @@
   </div>
 </nav>
 
-<div id="info-panel">
-  <h2>Group Members</h2>
-  <p>Bilge Nur Ateş, Elif Bilge Küçükkülahlı, İrem Çiçen</p>
-  <h2>Main Title</h2>
-  <p>Leakage</p>
-  <h2>Sub-Title</h2>
-  <p><em>Çayırhan Ash Lake</em></p>
-  <h2>Research Questions</h2>
-  <ul>
-    <li>How do the toxic slag and fly ash accumulated in the Çayırhan Ash Lake seep into the invisible depths of the landscape and transform its physical reality?</li>
-    <li>In what ways do spatial stratification and boundary permeability trigger rhizomatic seepage and invisible contamination cycles within the region?</li>
-    <li>How does this infected waterscape alter the local microclimate and disrupt the ecological networks and flight paths of non-human actors?</li>
-  </ul>
-  <h2>Position Statement</h2>
-  <p>Rather than a static scar left on the landscape by industrial production, the Çayırhan Ash Lake operates as a fluid and active toxic assemblage leaking into both the subterranean layers and the sky. This project positions "leakage" not merely as a technical failure, but as a rhizomatic agent that dissolves boundaries, infects water bodies, and alters living ecologies. By spatializing these invisible contamination cycles, the work aims to expose the toxic stratification beneath the industrial landscape and reveal the deviated migration routes above it.</p>
-  <h2>Methodology</h2>
-  <p>This research employs a multi-dimensional spatial analysis that integrates historical archives, timeline tracing, advanced mapping techniques, and forensic landscape methodologies. By overlaying satellite imagery with chemical and ecological data, the project maps the subterranean toxic layers of the ash lake and tracks the resulting deviations in avian migration routes across the Nallıhan basin. The cross-sections and analytical diagrams serve as critical tools to deconstruct the slow, invisible violence inflicted by industrial infrastructure on the living environment over time.</p>
-</div>
-
 <div class="wrap">
   <section class="section">
-    <img id="main-img" src="../../2026-images/2026-p1/1-mainpage/kapak-yatay.webp" draggable="false" alt="">
-    <p class="body-title">Leakage<br>Çayırhan Ash Lake</p>
+    <h1>Leakage</h1>
+    <p class="subtitle">Çayırhan Ash Lake</p>
+    <p class="author-line">Bilge Nur Ateş, Elif Bilge Küçükkülahlı, İrem Çiçen</p>
+    <hr class="rule">
+    <div class="img-hover-wrap">
+      <img id="main-img" class="lightbox-trigger" src="../../2026-images/2026-p1/1-mainpage/kapak-yatay.webp" draggable="false" alt="">
+      <span class="hover-label">Click to expand</span>
+    </div>
     <p class="body-text">Rather than a static scar left on the landscape by industrial production, the Çayırhan Ash Lake operates as a fluid and active toxic assemblage leaking into both the subterranean layers and the sky. This project positions "leakage" not merely as a technical failure, but as a rhizomatic agent that dissolves boundaries, infects water bodies, and alters living ecologies. By spatializing these invisible contamination cycles, the work aims to expose the toxic stratification beneath the industrial landscape and reveal the deviated migration routes above it.</p>
+
+    <div class="body-col">
+      <h2>Research Questions</h2>
+      <ul>
+        <li>How do the toxic slag and fly ash accumulated in the Çayırhan Ash Lake seep into the invisible depths of the landscape and transform its physical reality?</li>
+        <li>In what ways do spatial stratification and boundary permeability trigger rhizomatic seepage and invisible contamination cycles within the region?</li>
+        <li>How does this infected waterscape alter the local microclimate and disrupt the ecological networks and flight paths of non-human actors?</li>
+      </ul>
+      <h2>Methodology</h2>
+      <p>This research employs a multi-dimensional spatial analysis that integrates historical archives, timeline tracing, advanced mapping techniques, and forensic landscape methodologies. By overlaying satellite imagery with chemical and ecological data, the project maps the subterranean toxic layers of the ash lake and tracks the resulting deviations in avian migration routes across the Nallıhan basin. The cross-sections and analytical diagrams serve as critical tools to deconstruct the slow, invisible violence inflicted by industrial infrastructure on the living environment over time.</p>
+    </div>
+
     <a href="2026-1-interactivepage.html" class="cta-btn">Interactive Key Map</a>
     <button class="accordion-btn" id="modelgif-toggle">
       <span>Model GIF</span>
@@ -140,33 +137,42 @@
   </section>
 
   <section class="section gif-block">
-    <div class="gif-row">
-      <video autoplay loop muted playsinline>
-        <source src="../../2026-images/2026-p1/1-mainpage/gifs-composed.mp4" type="video/mp4">
-      </video>
-      <p class="gif-caption">The gifs illustrate the rising level of the ash lake through time. It can be observed that the ancient city is encroached upon by the increasing toxic waste.</p>
-    </div>
+    <video autoplay loop muted playsinline>
+      <source src="../../2026-images/2026-p1/1-mainpage/gifs-composed.mp4" type="video/mp4">
+    </video>
+    <p class="gif-caption">The gifs illustrate the rising level of the ash lake through time. It can be observed that the ancient city is encroached upon by the increasing toxic waste.</p>
     <p class="gif-reference">Reference: (Satellite views are used to create image) Ahmet Soyak Belgehane. (2020, August 1). Juliopolis Antik Kenti batı yakası kaçak kazı kurbanı olmuş (2020) https://youtu.be/YLU86PKOQwY?si=l8jHG5av_7taauz4</p>
   </section>
 </div>
 
-<script>
-  const infoBtn   = document.getElementById('info-toggle');
-  const infoPanel = document.getElementById('info-panel');
-  infoBtn.addEventListener('click', () => {
-    const open = infoPanel.classList.toggle('open');
-    infoBtn.classList.toggle('open', open);
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { infoPanel.classList.remove('open'); infoBtn.classList.remove('open'); }
-  });
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
 
+<script>
   const modelgifToggle  = document.getElementById('modelgif-toggle');
   const modelgifContent = document.getElementById('modelgif-content');
   modelgifToggle.addEventListener('click', () => {
     modelgifToggle.classList.toggle('open');
     modelgifContent.classList.toggle('open');
   });
+
+  const lightbox    = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  function openLightbox(src) {
+    lightboxImg.src = src;
+    lightbox.classList.add('active');
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+  }
+  document.querySelectorAll('.lightbox-trigger').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.src));
+  });
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 </body>
 </html>

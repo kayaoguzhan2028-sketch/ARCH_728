@@ -20,6 +20,7 @@
     nav { padding:0 1rem; }
     .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.8rem; scrollbar-width:none; }
     .nav-center-links::-webkit-scrollbar { display:none; }
+    .wrap { padding-left:1.4rem; padding-right:1.4rem; }
   }
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
@@ -30,10 +31,10 @@
   .nav-dropdown-menu a { display:block; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; white-space:nowrap; transition:opacity 0.2s; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
 
-  .img-stage { position:relative; width:80%; margin:0 auto; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
+  .img-stage { position:relative; width:100vw; max-width:930px; margin-left:50%; transform:translateX(-50%); margin-bottom:2.5rem; aspect-ratio:4/3; background:var(--black); overflow:hidden; }
   .img-stage > img { width:100%; height:100%; object-fit:contain; display:block; filter:brightness(1) contrast(1); }
 
-  .wrap { max-width:960px; margin:0 auto; padding:5rem 2rem 8rem; }
+  .wrap { max-width:620px; margin:0 auto; padding:5rem 0 6rem; }
   .body { font-size:1.1rem; line-height:1.95; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
@@ -48,14 +49,16 @@
   .body ol li { margin-bottom:1rem; }
   .body ol li:last-child { margin-bottom:0; }
 
-  .narrative-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin:3rem 0; }
+  .btn-row { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin:2.5rem 0; }
+  .scenario-btn { font-family:var(--font); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:1px solid var(--accent); padding:0.7em 1.6em; cursor:pointer; opacity:0.65; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
+  .scenario-btn:hover, .scenario-btn.active { opacity:1; background:var(--accent); color:var(--black); }
+
+  .narrative-row { display:flex; flex-direction:column; gap:2.5rem; margin:0 0 3rem; }
+  .narrative-item { display:none; scroll-margin-top:52px; }
+  .narrative-item.open { display:block; }
   .narrative-item img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
   .narrative-item h3 { font-size:0.85rem; font-weight:600; letter-spacing:0.1em; margin:1.2rem 0 0.6rem; }
   .narrative-item p { font-size:1.1rem; line-height:1.7; margin:0; text-align:justify; }
-
-  @media (max-width: 720px) {
-    .narrative-row { grid-template-columns:1fr; }
-  }
   .home-btn { position:fixed; top:0.6rem; right:1rem; z-index:200; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,242,235,0.35); background:rgba(10,10,10,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; color:var(--white); text-decoration:none; opacity:0.65; transition:opacity 0.2s, border-color 0.2s; }
   .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
   .home-btn svg { width:15px; height:15px; display:block; }
@@ -90,26 +93,32 @@
     <a href="2026-1-bird.html" class="nav-link">Bird Migration</a>
   </div>
 </nav>
-<div class="img-stage">
-  <img src="../../2026-images/2026-p1/4-power-plant/factory-final.webp" alt="Çayırhan Ash Lake" fetchpriority="high">
-</div>
 <div class="wrap">
+  <div class="img-stage">
+    <img src="../../2026-images/2026-p1/4-power-plant/factory-final.webp" alt="Çayırhan Ash Lake" fetchpriority="high">
+  </div>
   <div class="body">
     <p>These narratives, adapted from “Chapter IV: Excerpts from Çayırhan’s Past” of Prof. Dr. Suna Kili’s pioneering monographic work, <em>Çayırhan</em> (1978) (pp. 21-29), reflect the social transformation processes of the region through the raw and unfiltered voices of people who directly witnessed that period, by addressing the concept of land from different perspectives.</p>
     <p>Land should not be seen merely as an agricultural means of production or a piece of land occupying space on the earth. Land is also a source of identity, memory, livelihood, and struggle.</p>
 
+    <div class="btn-row">
+      <button class="scenario-btn" type="button" data-target="narrative-1">The Struggle for Land</button>
+      <button class="scenario-btn" type="button" data-target="narrative-2">The Lake Struggle &amp; Cooperativism</button>
+      <button class="scenario-btn" type="button" data-target="narrative-3">Coal Mining &amp; Unionization</button>
+    </div>
+
     <div class="narrative-row">
-      <figure class="narrative-item">
+      <figure class="narrative-item" id="narrative-1">
         <img src="../../2026-images/2026-p1/10-narrative/narrative-1.webp" loading="lazy" alt="">
         <h3>THE STRUGGLE FOR LAND</h3>
         <p>Land is a place of rights and justice. In this section, both the landlord and the state are against the people. Neither the sultan, nor the court, nor the law enforcement is on the side of the people. But the people of Çayırhan are resisting. This is a popular initiative and a resistance force resorted to for their land in order to survive against the oppression that has continued for years; it is the result of the accumulation of ages.</p>
       </figure>
-      <figure class="narrative-item">
+      <figure class="narrative-item" id="narrative-2">
         <img src="../../2026-images/2026-p1/10-narrative/narrative-2.webp" loading="lazy" alt="">
         <h3>THE LAKE STRUGGLE AND COOPERATIVISM</h3>
         <p>Land is a cultural memory and a lost homeland. This section interprets the impact of the construction of the Sarıyar Dam. The dam is a state initiative. This initiative has given rise to migration to the new village, new difficulties, new struggles, and a new type of “Lake Lord.” In this formation, a new popular initiative has emerged in the face of the state-people-lord relations.</p>
       </figure>
-      <figure class="narrative-item">
+      <figure class="narrative-item" id="narrative-3">
         <img src="../../2026-images/2026-p1/10-narrative/narrative-3.webp" loading="lazy" alt="">
         <h3>COAL MINING AND UNIONIZATION</h3>
         <p>Land is an underground capital and an industrial basin. This section discusses the discovery of lignite coal. The purchase of the mines by the Turkish Coal Enterprises, the workers’ movements, and the popular initiative arising from the workers’ movement are mentioned. This is an attempt to organize through unionization, thus gaining new economic, social, and political rights.</p>
@@ -124,5 +133,21 @@
     </div>
   </div>
 </div>
+<script>
+  const scenarioBtns = document.querySelectorAll('.scenario-btn');
+  scenarioBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      const alreadyOpen = target.classList.contains('open');
+      document.querySelectorAll('.narrative-item').forEach(s => s.classList.remove('open'));
+      scenarioBtns.forEach(b => b.classList.remove('active'));
+      if (!alreadyOpen) {
+        target.classList.add('open');
+        btn.classList.add('active');
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
 </body>
 </html>

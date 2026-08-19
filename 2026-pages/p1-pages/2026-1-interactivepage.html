@@ -21,7 +21,8 @@
     nav { padding:0 1rem; }
     .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.8rem; scrollbar-width:none; }
     .nav-center-links::-webkit-scrollbar { display:none; }
-    #future-section { grid-template-columns:1fr; grid-template-rows:auto; height:auto; max-width:100%; }
+    .section { padding-left:1.4rem; padding-right:1.4rem; }
+    #future-section { padding-left:1.4rem; padding-right:1.4rem; }
   }
   .nav-link { font-size:0.66rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.85; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-link:hover, .nav-link.linked-hover { opacity:1; }
@@ -33,42 +34,42 @@
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { opacity:1; }
 
   .wrap { padding-top:52px; }
-  .section { scroll-margin-top:52px; height:calc(100vh - 52px); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.6rem; padding:1.5rem 2rem; text-align:center; }
-  .wrap > .section:first-child { justify-content:flex-start; }
+  .section { scroll-margin-top:52px; height:auto; overflow:visible; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.6rem; padding:3rem 0; text-align:center; }
 
-  .img-wrap { position:relative; width:min(92%, calc(46vh * 2579 / 1383)); aspect-ratio:2579/1383; }
+  .img-wrap { position:relative; width:100%; max-width:930px; aspect-ratio:2579/1383; }
   #main-img { width:100%; height:100%; object-fit:contain; display:block; user-select:none; -webkit-user-drag:none; }
   #overlay-svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 
-  .body-text { max-width:702px; font-size:1.1rem; line-height:1.8; text-align:justify; }
+  .body-text { max-width:620px; font-size:1.1rem; line-height:1.8; text-align:justify; }
 
   .btn-row { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
   .btn-row a { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); border:1px solid var(--accent); padding:0.7em 1.6em; text-decoration:none; opacity:0.65; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
   .btn-row a:hover, .btn-row a.linked-hover { opacity:1; background:var(--accent); color:var(--black); }
 
-  .section-split { flex-direction:row; align-items:center; justify-content:center; gap:4rem; text-align:left; flex-wrap:wrap; }
-  .clip-text { flex:1; max-width:560px; }
-  .clip-text p { margin-bottom:1.2rem; font-size:1.1rem; line-height:1.75; text-align:justify; text-align-last:right; }
+  .section-split { flex-direction:column; align-items:stretch; text-align:left; max-width:620px; margin:0 auto; }
+  .scenarios-label { font-size:1.6rem; font-weight:400; letter-spacing:0.04em; color:var(--white); opacity:0.9; text-align:center; margin-bottom:0.8rem; }
+  .scenario-btn { font-family:var(--font); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:1px solid var(--accent); padding:0.7em 1.6em; cursor:pointer; opacity:0.65; transition:opacity 0.2s ease,background 0.2s ease,color 0.2s ease; }
+  .scenario-btn:hover, .scenario-btn.active { opacity:1; background:var(--accent); color:var(--black); }
+  .scenario { scroll-margin-top:52px; width:100%; display:none; flex-direction:column; gap:1.5rem; }
+  .scenario.open { display:flex; }
+  .clip-text p { margin-bottom:1.2rem; font-size:1.1rem; line-height:1.75; text-align:justify; }
   .clip-text p:last-child { margin-bottom:0; }
   .clip-text .poem { font-style:italic; opacity:0.85; }
-  .clip-text .reference { font-size:1rem; line-height:1.6; opacity:0.8; }
-  .clip-video { flex:1; max-width:640px; width:100%; aspect-ratio:16/9; }
+  .reference-block { max-width:780px; font-size:1rem; line-height:1.6; opacity:0.8; text-align:justify; }
+  .reference-block h2 { font-size:1rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.8; font-weight:400; margin-bottom:0.5rem; }
+  .reference-block p { margin-bottom:0.3rem; }
+  .reference-block p:last-child { margin-bottom:0; }
+  .clip-video { width:100%; aspect-ratio:16/9; margin-bottom:1.5rem; }
   .clip-video iframe { width:100%; height:100%; border:0; display:block; }
 
   .future-image { flex:1; max-width:600px; }
   .future-image img { width:100%; height:auto; max-height:70vh; object-fit:contain; display:block; }
 
-  #future-section { display:grid; grid-template-columns:50% 50%; grid-template-rows:minmax(0, 40%) minmax(0, 33%) minmax(0, 27%); align-items:stretch; justify-items:stretch; width:100%; max-width:clamp(620px, 90vw, 1900px); height:calc((100vh - 52px) * 0.99); margin:0 auto calc((100vh - 52px) * 0.01); gap:0; scroll-margin-top:52px; }
-  #future-section .grid-cell { overflow:hidden; border:none; padding:1%; min-height:0; display:flex; align-items:flex-start; justify-content:center; }
-  #future-section .grid-cell:nth-child(odd) { justify-content:flex-end; }
-  #future-section .grid-cell:nth-child(even) { justify-content:flex-start; }
-  #future-section .grid-cell:nth-child(3) { justify-content:flex-start; }
-  #future-section .grid-cell:nth-child(5) { padding-right:10%; }
-  #future-section .grid-cell:nth-child(1) { align-items:center; }
-  #future-section .grid-cell:nth-child(2) { align-items:center; }
-  #future-section .grid-cell img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
-  #future-section .grid-cell p { font-size:1.1rem; text-align:justify; }
-  #future-section .grid-cell .reference { font-size:1rem; line-height:1.6; opacity:0.8; }
+  #future-section { display:flex; flex-direction:column; align-items:center; gap:2.5rem; width:100%; max-width:620px; margin:1rem auto 4rem; padding:0; scroll-margin-top:52px; }
+  #future-section .grid-cell { width:100%; text-align:left; }
+  #future-section .grid-cell img { width:100%; height:auto; display:block; }
+  #future-section .grid-cell p { font-size:1.1rem; line-height:1.95; opacity:0.82; text-align:justify; }
+  #future-section .grid-cell .reference-block { margin-top:0.8rem; }
 
   .img-hover-wrap { position:relative; max-width:100%; max-height:100%; cursor:pointer; }
   .img-hover-wrap img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
@@ -140,49 +141,62 @@
   </section>
 
   <section class="section section-split">
-    <div class="clip-text">
-      <p>This clip works as a trial which explains the process of energy and consuming metabolism of the soil and ash in Çayırhan by showing a relation with the process of smoking in a theoretical background. While creating the steps of the structure, the article of "Encountering Bioinfrastructure" is taken as essential. There are 3 phases, namely; Consumption: energy metabolism, Residue: displaced material, transported ash and Deception: a human made toxic soil mosaic.</p>
-      <p class="poem">Every burn leaves a residue<br>the falling waste does not vanish<br>It relocates and becomes the soil<br>and this synthetic soil constructs<br>as a deceptive paradise</p>
-      <p class="reference">Puig de la Bellacasa, M. (2014). Encountering bioinfrastructure: Ecological struggles and the sciences of soil. Social Epistemology, 28(1), 26-40.</p>
-    </div>
     <div class="clip-video">
       <iframe src="https://www.dailymotion.com/embed/video/k1yr9T9pCACLd3GHers" title="Soil and Ash Metabolism — Video" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
-    <div class="btn-row" style="flex:0 0 100%;">
-      <a href="#future-section">Alternative Scenarios</a>
+    <div class="clip-text">
+      <p>This clip works as a trial which explains the process of energy and consuming metabolism of the soil and ash in Çayırhan by showing a relation with the process of smoking in a theoretical background. While creating the steps of the structure, the article of "Encountering Bioinfrastructure" is taken as essential. There are 3 phases, namely; Consumption: energy metabolism, Residue: displaced material, transported ash and Deception: a human made toxic soil mosaic.</p>
+      <p class="poem">Every burn leaves a residue<br>the falling waste does not vanish<br>It relocates and becomes the soil<br>and this synthetic soil constructs<br>as a deceptive paradise</p>
+      <div class="reference-block">
+        <h2>References</h2>
+        <p>Puig de la Bellacasa, M. (2014). Encountering bioinfrastructure: Ecological struggles and the sciences of soil. Social Epistemology, 28(1), 26-40.</p>
+      </div>
+    </div>
+    <p class="scenarios-label" style="margin-top:1.5rem;">Alternative Scenarios</p>
+    <div class="btn-row">
+      <button class="scenario-btn" type="button" data-target="scenario-1">Ecological Remediation</button>
+      <button class="scenario-btn" type="button" data-target="scenario-2">Closed-Loop Production</button>
+      <button class="scenario-btn" type="button" data-target="scenario-3">Restored Wetland</button>
     </div>
   </section>
 
   <section id="future-section">
-    <div class="grid-cell">
-      <div class="img-hover-wrap">
-        <img src="../../2026-images/2026-p1/2-interactive-page/interactive-2.webp" alt="" class="lightbox-trigger">
-        <span class="hover-label">Click to expand</span>
+    <div class="scenario" id="scenario-1">
+      <div class="grid-cell">
+        <div class="img-hover-wrap">
+          <img src="../../2026-images/2026-p1/2-interactive-page/interactive-2.webp" alt="" class="lightbox-trigger">
+          <span class="hover-label">Click to expand</span>
+        </div>
+      </div>
+      <div class="grid-cell">
+        <p>The final phase of the Çayırhan project looks beyond the crisis of leakage to explore a future of landscape on-site remediation. By deploying localized botanical and soil-cleansing strategies, the design actively counteracts decades of chemical and thermal accumulation within the terrain. The resulting landscape serves as a living laboratory where vegetation absorbs the slow violence of the past, paving the way for the ultimate recovery of regional skyways and water bodies.</p>
       </div>
     </div>
-    <div class="grid-cell">
-      <p>The final phase of the Çayırhan project looks beyond the crisis of leakage to explore a future of landscape on-site remediation. By deploying localized botanical and soil-cleansing strategies, the design actively counteracts decades of chemical and thermal accumulation within the terrain. The resulting landscape serves as a living laboratory where vegetation absorbs the slow violence of the past, paving the way for the ultimate recovery of regional skyways and water bodies.</p>
-    </div>
-    <div class="grid-cell">
-      <div class="img-hover-wrap">
-        <img src="../../2026-images/2026-p1/2-interactive-page/collage-1.webp" alt="" class="lightbox-trigger">
-        <span class="hover-label">Click to expand</span>
+    <div class="scenario" id="scenario-2">
+      <div class="grid-cell">
+        <div class="img-hover-wrap">
+          <img src="../../2026-images/2026-p1/2-interactive-page/collage-1.webp" alt="" class="lightbox-trigger">
+          <span class="hover-label">Click to expand</span>
+        </div>
       </div>
-    </div>
-    <div class="grid-cell">
-      <div class="img-hover-wrap">
-        <img src="../../2026-images/2026-p1/2-interactive-page/collage-2.webp" alt="" class="lightbox-trigger">
-        <span class="hover-label">Click to expand</span>
-      </div>
-    </div>
-    <div class="grid-cell">
-      <div>
+      <div class="grid-cell">
         <p>This speculative collage work illustrates an alternative scenario that the power plant transforms it internally instead of leaking its waste into the outside world. Instead of turning the waste into an ash lake that poisons the landscape, a closed loop industrial metabolism ecosystem is created inside the factory, which transforms it into building materials such as concrete binder, brick, aerated concrete, and gypsum plaster. Therefore, the scene transforms the factory from a destructive machine, that consumes nature with residues, into a circular production center.</p>
-        <p class="reference">Çavuşoğlu, İ. (2008). UÇUCU KÜLLERİN DOLGU MALZEMESİ OLARAK KULLANILMASI: ÖRNEK BİR UYGULAMA (ÇAYIRHAN). Bilimsel Madencilik Dergisi, 47(3), 3-13.</p>
+        <div class="reference-block">
+          <h2>References</h2>
+          <p>Çavuşoğlu, İ. (2008). UÇUCU KÜLLERİN DOLGU MALZEMESİ OLARAK KULLANILMASI: ÖRNEK BİR UYGULAMA (ÇAYIRHAN). Bilimsel Madencilik Dergisi, 47(3), 3-13.</p>
+        </div>
       </div>
     </div>
-    <div class="grid-cell">
-      <p>This speculative collage work illustrates the multi layered landscape which supports life cycle as a healing space in an alternative scenario where a power plant transforms it internally instead of leaking its residue into the outside world. In this scenario, the area of the lake is a natural wetland ecosystem which provides healthy areas for fish farms and local production near Çayırhan Dam. Moreover, since the invisible wall of pollution created by the power plant in the air has disappeared, birds are regaining their historical migration routes and can safely locate themselves in this basin.</p>
+    <div class="scenario" id="scenario-3">
+      <div class="grid-cell">
+        <div class="img-hover-wrap">
+          <img src="../../2026-images/2026-p1/2-interactive-page/collage-2.webp" alt="" class="lightbox-trigger">
+          <span class="hover-label">Click to expand</span>
+        </div>
+      </div>
+      <div class="grid-cell">
+        <p>This speculative collage work illustrates the multi layered landscape which supports life cycle as a healing space in an alternative scenario where a power plant transforms it internally instead of leaking its residue into the outside world. In this scenario, the area of the lake is a natural wetland ecosystem which provides healthy areas for fish farms and local production near Çayırhan Dam. Moreover, since the invisible wall of pollution created by the power plant in the air has disappeared, birds are regaining their historical migration routes and can safely locate themselves in this basin.</p>
+      </div>
     </div>
   </section>
 
@@ -310,6 +324,21 @@
     btn.addEventListener('mouseleave', () => {
       const g = document.getElementById('overlay-' + key);
       if (g) g.classList.remove('active');
+    });
+  });
+
+  const scenarioBtns = document.querySelectorAll('.scenario-btn');
+  scenarioBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      const alreadyOpen = target.classList.contains('open');
+      document.querySelectorAll('.scenario').forEach(s => s.classList.remove('open'));
+      scenarioBtns.forEach(b => b.classList.remove('active'));
+      if (!alreadyOpen) {
+        target.classList.add('open');
+        btn.classList.add('active');
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   });
 
