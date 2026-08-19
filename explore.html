@@ -7,6 +7,7 @@
 <title>Atlas — Explore</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,57 +66,132 @@
 
   #view-content { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; cursor: default; align-items: flex-start; justify-content: center; }
 
-  .rhythm-wrap { width: 100%; max-width: 1600px; margin: 0 auto; padding: 2.75rem 2rem 4rem; }
-  .rhythm-heading { text-align: left; font-size: 2rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); opacity: 0.92; margin: 0 0 2.2rem; }
+  /* Background layer behind the grid — "Soil" contour lines (topographic/
+     strata-style, procedural SVG, no extra asset) with its own slow
+     mouse-parallax so the whole scene reads as one space with depth,
+     instead of icons floating over a flat void. Moves at a fraction of the
+     icon parallax (see CONTENT_BG_RATIO in the JS) — background layers are
+     supposed to move less than the foreground, that's what sells the depth;
+     it just needed to move *some* to read as intentional. */
+  .content-bg { position: absolute; inset: -6%; opacity: 0.16; pointer-events: none; will-change: transform; }
+  .content-bg svg { width: 100%; height: 100%; }
+  .content-bg path { fill: none; stroke: var(--mid); stroke-width: 1; }
 
-  .rhythm-grid { display: grid; grid-template-columns: repeat(7, 1fr); align-items: start; gap: 34px 14px; }
-  @media (max-width: 640px) {
-    .rhythm-wrap { padding: 2rem 1rem 3rem; }
-    .rhythm-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 10px; }
-    .rhythm-group-label { white-space: normal; font-size: 0.62rem; }
+  /* Theme sidebar — same pattern as .century-list in 2026-2-thetimeline.html:
+     a fixed, vertically-centered column of names on the left; clicking one
+     swaps what's shown on the right (renderCluster() in the JS), instead of
+     trying to fit every theme on screen at once. */
+  .theme-list { position: absolute; top: 0; bottom: 0; left: 0; width: 150px; display: flex; flex-direction: column; justify-content: center; gap: 1rem; padding-left: 2rem; z-index: 10; }
+  .theme-btn { background: none; border: none; color: var(--white); font-family: 'EB Garamond', serif; font-size: 1.1rem; letter-spacing: 0.16em; text-transform: uppercase; text-align: left; cursor: pointer; opacity: 0.32; transition: opacity 0.2s; padding: 0.15rem 0; }
+  .theme-btn:hover { opacity: 0.7; }
+  .theme-btn.active { opacity: 1; font-weight: 700; }
+  @media (max-width: 900px) {
+    .theme-list { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.6rem 1.4rem; padding: 1rem 1rem 0; width: 100%; }
   }
-  @media (min-width: 641px) and (max-width: 1000px) {
-    .rhythm-grid { grid-template-columns: repeat(3, 1fr); gap: 26px 12px; }
+
+  .icon-grid-wrap { position: relative; width: 100%; max-width: 1500px; margin: 0 auto; padding: 1.5rem 2rem; }
+  /* perspective lives on the wrap, not the grid itself — matches the Codrops
+     original, where every .grid__item is tilted independently in 3D but the
+     grid container stays a flat 2D layout. */
+  .icon-grid-wrap { perspective: 1400px; }
+  .icon-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3rem 2rem; align-items: center; justify-items: center; }
+  @media (max-width: 900px) {
+    .icon-grid { grid-template-columns: repeat(3, 1fr); }
   }
-  .rhythm-group-label { position: absolute; left: 0; bottom: 100%; margin-bottom: 0.5rem; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.9; white-space: nowrap; cursor: pointer; transition: opacity 0.2s ease; }
-  .rhythm-cell.group-active .rhythm-group-label { opacity: 1; animation: labelColorCycle 3s ease-in-out infinite; }
-  @keyframes labelColorCycle { 0%, 100% { color: #ff8a3d; } 33.33% { color: #4aa3ff; } 66.66% { color: var(--white); } }
-  .rhythm-group-label::before { content: '→'; display: inline-block; margin-right: 0.45em; opacity: 0; transform: translateX(4px); transition: opacity 0.2s ease, transform 0.2s ease; }
-  .rhythm-cell.group-active .rhythm-group-label::before { opacity: 0.8; transform: translateX(0); }
-  .rhythm-cell { background: rgba(245,242,235,0.035); border: 1px solid var(--border); position: relative; overflow: visible; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, opacity 0.25s ease; }
-  /* Natural rhythm: no manual height. Each cell's first child (the base
-     image/video/frame) lays out at its own intrinsic aspect ratio at the
-     fixed column width — that's what gives each cell its height. Every
-     later sibling (crossfade/highlight layers) is stacked absolutely on
-     top of that established box, not the other way around. */
-  .cell-media { position: relative; width: 100%; height: 100%; overflow: hidden; }
-  .cell-media > :first-child { position: relative; display: block; width: 100%; height: auto; }
-  .cell-media > :not(:first-child) { position: absolute; inset: 0; width: 100%; height: 100%; }
-  /* Iframe crops can't self-report an intrinsic height the way an image
-     can — they stay absolutely positioned (scaled/cropped by JS) and the
-     cell instead gets an explicit aspect-ratio matching the crop window. */
-  .cell-media > .cell-frame:first-child { position: absolute; }
-  .cell-frame { border: none; pointer-events: none; transform-origin: top left; }
-  .cell-img { display: block; width: 100%; height: auto; object-fit: cover; }
-  .cell-stack { display: flex; flex-direction: column; width: 100%; }
-  .cell-stack-img { display: block; width: 100%; height: auto; }
-  .effect-layer { object-fit: cover; opacity: 0; transition: opacity 0.35s ease; }
-  .effect-layer.active { opacity: 1; }
-  .layer-img { object-fit: contain; opacity: 0; transition: opacity 0.4s ease; }
-  .layer-img.on { opacity: 1; }
-  .cell-zone-overlay svg { width: 100%; height: 100%; display: block; }
-  .cell-zone-shape { fill: var(--accent); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, filter 0.25s ease; }
-  .cell-zone-shape.cell-zone-active { opacity: 0.8; filter: drop-shadow(0 0 10px rgba(245,220,140,1)) drop-shadow(0 0 24px rgba(245,200,80,0.9)); }
-  .slide-after-img { object-fit: cover; clip-path: inset(0 100% 0 0); animation: slideReveal 4s ease-in-out infinite alternate; animation-play-state: paused; }
-  .rhythm-cell.group-active .slide-after-img { animation-play-state: running; }
-  @keyframes slideReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-  .pulse-hotspot { fill: none; stroke: #f5dc8c; stroke-width: 26; opacity: 0; pointer-events: none; transform-box: fill-box; transform-origin: center; }
-  .rhythm-cell.group-active .pulse-hotspot { animation: pulseHotspot 1.8s ease-out infinite; }
-  @keyframes pulseHotspot { 0% { transform: scale(0.7); opacity: 1; } 100% { transform: scale(2.4); opacity: 0; } }
-  .cell-placeholder { display: block; width: 100%; aspect-ratio: 1 / 1; }
-  .rhythm-cell:hover { background: rgba(245,242,235,0.08); border-color: rgba(245,242,235,0.28); }
-  .rhythm-cell.dimmed { opacity: 0.28; }
-  .rhythm-cell .cell-index { position: absolute; top: 0.55rem; left: 0.7rem; font-size: 0.6rem; letter-spacing: 0.14em; color: var(--mid); opacity: 0.4; font-family: 'EB Garamond', Georgia, serif; }
+  @media (max-width: 560px) {
+    .icon-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  /* Scattered layout (desktop only — see .icon-slot below): each icon sits
+     at a hand-placed, slightly rotated point instead of a grid cell, like
+     pieces laid out loosely on a table. .icon-slot only carries that static
+     placement; .icon-cell inside it is still the GSAP target for the 3D
+     tilt/parallax, so the two transforms never fight over the same
+     element's `transform` property. */
+  .icon-grid.scattered { display: block; }
+  @media (min-width: 901px) {
+    /* Only the active theme's icons are ever rendered (see renderCluster()
+       in the JS), so each one gets the full canvas to itself — no more
+       splitting the width between simultaneous clusters. Canvas height is
+       viewport-fit (100vh minus nav+footer+wrap padding) rather than a
+       fixed px value, so it lands on one screen with no scrolling at any
+       reasonable window height. Left padding clears .theme-list. */
+    #view-content { overflow-y: hidden; }
+    .icon-grid-wrap { padding-left: 11rem; }
+    .icon-grid.scattered { position: relative; height: calc(100vh - 180px); min-height: 460px; max-height: 720px; }
+    .icon-grid.scattered .icon-slot {
+      position: absolute; left: var(--sx); top: var(--sy);
+      transform: translate(-50%, -50%) rotate(var(--srot));
+    }
+  }
+  /* Icon cell: ported from Codrops "3DGridContentPreview" — each cell tilts
+     in 3D based on its position and parallaxes with the cursor (GridItem3D,
+     JS below); the icon inside is separately, magnetically pulled toward
+     the cursor on hover (MagneticImage, JS below). Both ranges were toned
+     down from the original — its full-viewport grid items could travel far
+     more than these ~130px icons before it started looking like the whole
+     thing was sliding off rather than settling toward the cursor. */
+  /* Smaller resting size (more room to fit many more icons later, per plan)
+     — MagneticImage's hover scale (1.55x, in JS) is what makes a hovered
+     icon prominent again, not the base size. */
+  .icon-cell { position: relative; width: 100%; max-width: 82px; cursor: pointer; will-change: transform; transform-style: preserve-3d; }
+  /* height:auto here used to make .icon-figure's box follow each source
+     image's own (non-square) aspect ratio — which made .icon-glow's circle
+     render as a squashed ellipse on anything but a perfectly square source.
+     object-fit:contain (paired with .icon-figure's aspect-ratio:1/1 below)
+     keeps every icon at its own proportions while guaranteeing the box
+     around it — and so the glow "coin" — is always a true circle. */
+  .icon-img { display: block; width: 100%; height: 100%; object-fit: contain; will-change: transform; }
+
+  /* Icon figure/shadow — ported from Codrops "TiltHoverEffects"
+     (github.com/codrops/TiltHoverEffects): a per-cell hover tilt (rotateX/Y
+     relative to THIS cell's own bounds, not the whole window — different
+     from GridItem3D's ambient parallax above) plus a soft ellipse shadow
+     that fades in underneath — reads as "this icon lifted up off the
+     background" rather than flat/pasted on it. (The masked white shine
+     sweep from the original effect was dropped — on these small line-art
+     icons it read as a ghosted white duplicate of the icon rather than a
+     glint of light, not what was wanted here.) */
+  .icon-figure { position: relative; aspect-ratio: 1 / 1; transform-style: preserve-3d; will-change: transform; }
+  /* Circular glow behind the icon — the original TiltHoverEffects demo used
+     square photos that already filled their frame; ours are line-art icons
+     floating inside empty space, so there's no "frame" for the tilt/shine
+     to play against. This gives them one: a circle "fills up" behind the
+     icon on hover. It lives inside .icon-figure (same element GSAP tilts in
+     TiltFx below), so it tilts together with the icon automatically — no
+     separate JS wiring needed for that part.
+     "Coin" fit: the circle circumscribes the (now guaranteed-square, see
+     .icon-figure above) frame — its edge passes exactly through the
+     square's 4 corners, not its side midpoints. For a square of side S that
+     circle's diameter is S·√2 ≈ 141.42% of S, hence the 141.42% width/
+     height below. Brightness: 100% at the center down to 40% right at that
+     circle's own edge (closest-side sizing on the gradient maps its 100%
+     stop to this element's own edge, which is where the square's corners
+     now sit). */
+  .icon-glow {
+    position: absolute; left: 50%; top: 50%; width: 141.42%; height: 141.42%;
+    transform: translate(-50%, -50%) translateZ(-2px) scale(0.6);
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, rgba(255,138,61,1) 0%, rgba(255,138,61,0.4) 100%);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+  /* 1.55 here matches MagneticImage's own hover scale on .icon-img exactly
+     (JS below) — the glow's 141.42% "circumscribes the corners" math above
+     was computed against the icon's resting size, so growing the glow by
+     any other factor than the icon's own growth would throw that
+     relationship off at the hovered (grown) size. Uniformly scaling both
+     by the same 1.55 keeps the coin's corners-on-the-circle relationship
+     true whether the icon is resting or hovered, not just at rest. */
+  .icon-cell:hover .icon-glow { opacity: 1; transform: translate(-50%, -50%) translateZ(-2px) scale(1.55); }
+  .icon-shadow {
+    position: absolute; left: 10%; right: 10%; bottom: -14%; height: 26%;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.6), transparent 72%);
+    opacity: 0; transition: opacity 0.35s ease-out; pointer-events: none; transform: translateZ(-1px);
+  }
+  .icon-cell:hover .icon-shadow { opacity: 1; }
+
+  #shape-tooltip { position: fixed; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); white-space: nowrap; z-index: 20; }
+  #shape-tooltip.visible { opacity: 1; }
 
   footer { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 48px; border-top: 1px solid var(--border); background: var(--black); }
   .footer-meta { font-size: 0.72rem; letter-spacing: 0.1em; color: var(--white); opacity: 0.22; }
@@ -217,12 +293,42 @@
     </div>
   </div>
 
-  <!-- BY CONTENT -->
+  <!-- BY CONTENT — 3D magnetic grid, ported from Codrops "3DGridContentPreview"
+       (github.com/codrops/3DGridContentPreview): each icon parallaxes as the
+       cursor moves anywhere on screen, and is magnetically pulled toward the
+       cursor on hover. Each icon also gets a local hover tilt + lift shadow,
+       ported from Codrops "TiltHoverEffects"
+       (github.com/codrops/TiltHoverEffects) — see .icon-figure/.icon-shadow —
+       so it visually separates from the background instead of reading as
+       flat/pasted onto it. Themes (Soil, Air, Water, Waste — see CLUSTERS in
+       the JS below) are picked from the .theme-list on the left, same
+       pattern as the century sidebar in 2026-2-thetimeline.html: only the
+       active theme's icons are ever in the DOM, so there's no crowding and
+       nothing to fit multiple themes into one screen at once. A slow-
+       parallax contour-line background sits behind it for depth (see
+       .content-bg) — one shared "ground" for every theme, not just Soil.
+       The grid markup below is intentionally just an empty mount point —
+       see renderCluster()/initIconInteractions() in the JS. -->
   <div class="view" id="view-content">
-    <div class="rhythm-wrap">
-      <h2 class="rhythm-heading">Reflections on Landscape - Soil</h2>
-      <div class="rhythm-grid" id="rhythm-grid"></div>
+    <div class="content-bg" id="content-bg">
+      <svg viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M -50,120 C 150,60 350,180 550,110 S 900,40 1050,100" />
+        <path d="M -50,230 C 180,170 320,290 560,220 S 880,160 1050,210" />
+        <path d="M -50,340 C 160,300 380,400 540,330 S 900,280 1050,330" />
+        <path d="M -50,450 C 200,390 340,480 580,410 S 860,370 1050,440" />
+        <path d="M -50,560 C 170,510 360,600 550,530 S 900,490 1050,550" />
+      </svg>
     </div>
+    <div class="theme-list" id="theme-list">
+      <button class="theme-btn active" data-cluster="Soil">Soil</button>
+      <button class="theme-btn" data-cluster="Air">Air</button>
+      <button class="theme-btn" data-cluster="Water">Water</button>
+      <button class="theme-btn" data-cluster="Waste">Waste</button>
+    </div>
+    <div class="icon-grid-wrap">
+      <div class="icon-grid scattered" id="icon-grid"></div>
+    </div>
+    <div id="shape-tooltip"></div>
   </div>
 
 </div>
@@ -649,734 +755,394 @@
   libraryOverlay.addEventListener('click', (e) => { if (e.target === libraryOverlay) closeLibrary(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLibrary(); });
 
-  // ── By Content: rhythmic, non-repeating grid, grouped by project ──
-  (function () {
-    const grid = document.getElementById('rhythm-grid');
+  // ── Icon grid (By Content) — ported from Codrops "3DGridContentPreview" ──
+  // (github.com/codrops/3DGridContentPreview: MagneticFx + GridItem, adapted
+  // to plain <script> globals instead of their ES-module/webpack build, and
+  // without the click-through "preview" panel since these icons already
+  // link straight to real project pages.)
+  // ── Cluster data + renderer ──
+  // This is the actual answer to "how does this scale as new projects come
+  // in": every icon on this page is one entry in CLUSTERS below, not
+  // hand-written markup. Adding project #9 to Soil, or a whole new theme,
+  // means adding one object here. Only the ACTIVE theme's icons are ever in
+  // the DOM at once (renderCluster() below, switched via .theme-list in the
+  // HTML) — same left-sidebar-picks-what's-shown pattern as the century
+  // list in 2026-2-thetimeline.html — so each theme gets the full canvas
+  // to itself instead of every theme competing for space on one screen.
+  function svgIcon(inner) {
+    return 'data:image/svg+xml,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' + inner + '</svg>'
+    );
+  }
+  // Air/Water/Waste placeholder art — invented line-icons (same thin
+  // white-stroke language as the real Soil icons) just to demo the layout;
+  // swap for real project images once those projects exist.
+  const A = 'stroke="#f5f2eb" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  const AIR_ICONS = {
+    wind:    svgIcon('<path d="M10,30 Q30,20 50,30 T90,30" ' + A + '/><path d="M10,50 Q30,40 50,50 T85,50" ' + A + '/><path d="M10,70 Q30,60 50,70 T75,70" ' + A + '/>'),
+    cloud:   svgIcon('<g ' + A + '><circle cx="35" cy="55" r="18"/><circle cx="58" cy="42" r="22"/><circle cx="80" cy="58" r="13"/><path d="M20,66 h68"/></g>'),
+    bird:    svgIcon('<path d="M8,55 Q35,28 50,50 Q65,28 92,55" ' + A + '/>'),
+    balloon: svgIcon('<g ' + A + '><ellipse cx="50" cy="38" rx="22" ry="28"/><path d="M42,64 L58,64 L50,74 Z"/><line x1="50" y1="74" x2="50" y2="95"/></g>'),
+    kite:    svgIcon('<g ' + A + '><path d="M50,8 L76,45 L50,92 L24,45 Z"/><path d="M24,45 L76,45 M50,8 L50,92"/><path d="M50,92 q6,5 0,10 q-6,5 0,10"/></g>'),
+    turbine: svgIcon('<g ' + A + '><circle cx="50" cy="50" r="4" fill="#f5f2eb"/><path d="M50,50 Q40,20 56,8"/><path d="M50,50 Q76,60 90,40"/><path d="M50,50 Q34,76 16,68"/></g>'),
+    chimney: svgIcon('<g ' + A + '><rect x="30" y="45" width="24" height="45"/><path d="M42,45 Q34,30 45,22 Q56,14 48,4"/></g>'),
+    breath:  svgIcon('<g ' + A + '><path d="M50,14 v26"/><path d="M50,40 Q28,46 24,72 Q21,92 35,89 Q46,86 50,58"/><path d="M50,40 Q72,46 76,72 Q79,92 65,89 Q54,86 50,58"/></g>'),
+  };
+  const WATER_ICONS = {
+    droplet: svgIcon('<path d="M50,10 C65,35 78,52 78,66 a28,28 0 1,1 -56,0 C22,52 35,35 50,10 Z" ' + A + '/>'),
+    wave:    svgIcon('<path d="M8,45 Q25,30 42,45 T76,45 T92,45" ' + A + '/><path d="M8,65 Q25,50 42,65 T76,65 T92,65" ' + A + '/>'),
+    river:   svgIcon('<path d="M15,20 Q35,35 25,50 Q15,65 40,75 Q65,85 55,60 Q48,45 70,40 Q88,36 85,15" ' + A + '/>'),
+    well:    svgIcon('<g ' + A + '><ellipse cx="50" cy="35" rx="26" ry="10"/><path d="M24,35 v18 a26,10 0 0,0 52,0 v-18"/><line x1="50" y1="14" x2="50" y2="35"/><path d="M38,8 h24"/></g>'),
+    rain:    svgIcon('<g ' + A + '><path d="M25,50 a15,15 0 0,1 0,-30 a20,20 0 0,1 40,-4 a15,15 0 0,1 3,34 z"/><line x1="35" y1="66" x2="30" y2="80"/><line x1="50" y1="66" x2="45" y2="84"/><line x1="65" y1="66" x2="60" y2="80"/></g>'),
+    glacier: svgIcon('<path d="M10,80 L30,40 L45,60 L60,25 L75,55 L90,80 Z" ' + A + '/>'),
+    tap:     svgIcon('<g ' + A + '><path d="M25,30 h35 a10,10 0 0,1 10,10 v10"/><line x1="70" y1="50" x2="70" y2="60"/><path d="M62,60 h16 l-8,14 z"/><line x1="30" y1="30" x2="30" y2="15"/></g>'),
+  };
+  const WASTE_ICONS = {
+    bin:      svgIcon('<g ' + A + '><path d="M30,30 h40 l-4,50 a4,4 0 0,1 -4,4 h-24 a4,4 0 0,1 -4,-4 Z"/><line x1="24" y1="30" x2="76" y2="30"/><path d="M40,30 v-6 a4,4 0 0,1 4,-4 h12 a4,4 0 0,1 4,4 v6"/><line x1="42" y1="40" x2="44" y2="72"/><line x1="58" y1="40" x2="56" y2="72"/></g>'),
+    recycle:  svgIcon('<g ' + A + '><path d="M35,25 Q55,15 68,32"/><path d="M62,26 l6,6 l8,-3"/><path d="M75,55 Q80,75 60,82"/><path d="M68,78 l-8,4 l2,-9"/><path d="M35,75 Q15,68 20,45"/><path d="M14,52 l-2,-9 l9,3"/></g>'),
+    landfill: svgIcon('<g ' + A + '><path d="M10,80 Q30,30 50,80 Q70,30 90,80 Z"/><line x1="35" y1="60" x2="42" y2="65"/><line x1="55" y1="55" x2="60" y2="62"/></g>'),
+    bottle:   svgIcon('<g ' + A + '><path d="M42,10 h16 v14 l8,10 v50 a6,6 0 0,1 -6,6 h-20 a6,6 0 0,1 -6,-6 v-50 l8,-10 Z"/><line x1="42" y1="10" x2="42" y2="4"/><line x1="58" y1="10" x2="58" y2="4"/></g>'),
+    pile:     svgIcon('<g ' + A + '><path d="M10,75 h30 l-6,-16 h20 l8,16 h22"/><rect x="30" y="45" width="14" height="14" transform="rotate(15 37 52)"/><circle cx="65" cy="50" r="8"/></g>'),
+    pipe:     svgIcon('<g ' + A + '><path d="M15,35 h40 a15,15 0 0,1 15,15 v35"/><ellipse cx="15" cy="35" rx="6" ry="10"/><ellipse cx="70" cy="85" rx="10" ry="6"/></g>'),
+    decay:    svgIcon('<g ' + A + ' stroke-width="3"><circle cx="50" cy="50" r="30" stroke-width="4"/><path d="M35,35 l10,10 -6,8 M60,32 l6,14 -10,4 M40,65 l14,-4 2,12"/></g>'),
+  };
 
-    // No manual height rhythm anymore — each cell's own media (image/video/
-    // iframe crop) lays out at its intrinsic aspect ratio at the fixed
-    // column width, so the natural rhythm comes from the content itself.
+  // Full canvas per active theme — a 4-col x 2-row scatter with hand jitter,
+  // sx/sy/rot in %/deg (see .icon-slot in the CSS). Soil is real content;
+  // Air/Water/Waste are the invented placeholders above.
+  const CLUSTERS = [
+    {
+      name: 'Soil',
+      items: [
+        { id: 'shape-0', label: 'The Powerplant', href: '2026-pages/p1-pages/2026-1.html', img: 'must-images/by-content/Soil - Group 1 - The Powerplant.webp', size: 98, sx: '14%', sy: '20%', rot: -6 },
+        { id: 'shape-1', label: 'The Model', href: '2026-pages/p2-pages/2026-2.html', img: 'must-images/by-content/Soil - Group 2 - The Model.webp', size: 130, sx: '37%', sy: '30%', rot: 5 },
+        { id: 'shape-2', label: 'The Sifters', href: '2026-pages/p3-pages/2026-3.html', img: 'must-images/by-content/Soil - Group 3 - The Sifters.webp', sx: '60%', sy: '16%', rot: 8 },
+        { id: 'shape-3', label: 'The Reeds', href: '2026-pages/p4-pages/2026-4-proposal&methodology.html', img: 'must-images/by-content/Soil - Group 4 - The Reeds.webp', size: 98, sx: '83%', sy: '26%', rot: -4 },
+        { id: 'shape-4', label: 'The Hotel', href: '2026-pages/p5-pages/2026-5.html', img: 'must-images/by-content/Soil - Group 5 - The Hotel.webp', size: 74, opacity: 0.8, sx: '18%', sy: '72%', rot: 6 },
+        { id: 'shape-5', label: 'The Timeline', href: '2026-pages/p6-pages/2026-6.html', img: 'must-images/by-content/Soil - Group 6 - The Timeline.webp', filter: 'grayscale(1) brightness(1.5)', sx: '40%', sy: '82%', rot: -9 },
+        { id: 'shape-6', label: 'The Migrant', href: '2026-pages/p7-pages/2026-7-info.html', img: 'must-images/by-content/Soil - Group 7 - The Migrant.webp', sx: '63%', sy: '68%', rot: 3 },
+        { id: 'shape-7', label: 'The Helical', href: '2026-pages/p8-pages/2026-8.html', img: 'must-images/by-content/Soil - Group 8 - The Hellical.webp', sx: '86%', sy: '78%', rot: -5 },
+      ],
+    },
+    {
+      // Placeholder content only — no href, clicking these does nothing.
+      name: 'Air',
+      items: [
+        { id: 'air-0', label: 'The Wind', img: AIR_ICONS.wind, sx: '12%', sy: '24%', rot: 4 },
+        { id: 'air-1', label: 'The Cloud', img: AIR_ICONS.cloud, sx: '35%', sy: '14%', rot: -6 },
+        { id: 'air-2', label: 'The Bird', img: AIR_ICONS.bird, sx: '58%', sy: '28%', rot: 7 },
+        { id: 'air-3', label: 'The Balloon', img: AIR_ICONS.balloon, sx: '82%', sy: '18%', rot: -3 },
+        { id: 'air-4', label: 'The Kite', img: AIR_ICONS.kite, sx: '16%', sy: '76%', rot: 5 },
+        { id: 'air-5', label: 'The Turbine', img: AIR_ICONS.turbine, sx: '38%', sy: '66%', rot: -8 },
+        { id: 'air-6', label: 'The Chimney', img: AIR_ICONS.chimney, sx: '61%', sy: '80%', rot: 6 },
+        { id: 'air-7', label: 'The Breath', img: AIR_ICONS.breath, sx: '85%', sy: '70%', rot: -4 },
+      ],
+    },
+    {
+      name: 'Water',
+      items: [
+        { id: 'water-0', label: 'The Droplet', img: WATER_ICONS.droplet, sx: '14%', sy: '18%', rot: -5 },
+        { id: 'water-1', label: 'The Wave', img: WATER_ICONS.wave, sx: '38%', sy: '30%', rot: 6 },
+        { id: 'water-2', label: 'The River', img: WATER_ICONS.river, sx: '62%', sy: '16%', rot: -7 },
+        { id: 'water-3', label: 'The Well', img: WATER_ICONS.well, sx: '84%', sy: '28%', rot: 4 },
+        { id: 'water-4', label: 'The Rain', img: WATER_ICONS.rain, sx: '24%', sy: '72%', rot: -6 },
+        { id: 'water-5', label: 'The Glacier', img: WATER_ICONS.glacier, sx: '50%', sy: '80%', rot: 5 },
+        { id: 'water-6', label: 'The Tap', img: WATER_ICONS.tap, sx: '74%', sy: '68%', rot: -4 },
+      ],
+    },
+    {
+      name: 'Waste',
+      items: [
+        { id: 'waste-0', label: 'The Bin', img: WASTE_ICONS.bin, sx: '14%', sy: '20%', rot: 5 },
+        { id: 'waste-1', label: 'The Recycle', img: WASTE_ICONS.recycle, sx: '38%', sy: '32%', rot: -6 },
+        { id: 'waste-2', label: 'The Landfill', img: WASTE_ICONS.landfill, sx: '62%', sy: '14%', rot: 7 },
+        { id: 'waste-3', label: 'The Bottle', img: WASTE_ICONS.bottle, sx: '84%', sy: '26%', rot: -4 },
+        { id: 'waste-4', label: 'The Pile', img: WASTE_ICONS.pile, sx: '24%', sy: '72%', rot: 6 },
+        { id: 'waste-5', label: 'The Pipe', img: WASTE_ICONS.pipe, sx: '50%', sy: '82%', rot: -5 },
+        { id: 'waste-6', label: 'The Decay', img: WASTE_ICONS.decay, sx: '74%', sy: '66%', rot: 4 },
+      ],
+    },
+  ];
 
-    // Every animated cell (interval, video, live iframe) registers a
-    // start/stop pair here instead of running on its own. Nothing runs by
-    // default — a group's motion only turns on while it's the hovered
-    // (undimmed) one, so at most one group is ever animating at a time,
-    // no matter how large the grid grows.
-    const groupControllers = [];
-    function registerController(group, ctrl) {
-      groupControllers.push({ group, start: ctrl.start, stop: ctrl.stop });
-    }
-    function setActiveGroup(g) {
-      grid.querySelectorAll('.rhythm-cell').forEach((c) => {
-        c.classList.toggle('group-active', g !== null && c.dataset.group === g);
-      });
-      groupControllers.forEach((c) => {
-        if (g !== null && c.group === g) c.start();
-        else c.stop();
-      });
-    }
+  // Builds only the given cluster's icons into #icon-grid, discarding
+  // whatever was there before — the previous cluster's rAF loops notice
+  // their cell is no longer in the document (see the isConnected checks in
+  // MagneticImage.render/GridItem3D.move below) and stop themselves, so
+  // nothing keeps running for a theme that isn't showing.
+  function renderCluster(name) {
+    const grid = document.getElementById('icon-grid');
+    grid.innerHTML = '';
+    const cluster = CLUSTERS.find(c => c.name === name);
+    if (!cluster) return;
 
-    // Placeholder counts — update .count per group once the real page lists are given.
-    const GROUPS = [
-      { name: 'Çayırhan Ash Lake', count: 8, items: [
-          { type: 'img', src: '2026-images/2026-p1/1-mainpage/kapak-yatay.webp' },
-          { type: 'effect', interval: 1400, bg: '2026-images/2026-p1/2-interactive-page/cayirhan-main-photo.webp',
-            base: '2026-images/2026-p1/2-interactive-page/SVG/', frames: [
-              'cayirhan-main-photo-microclimate.webp','cayirhan-main-photo-fabrika.webp','cayirhan-main-photo-golet.webp',
-              'cayirhan-main-photo-kus.webp','cayirhan-main-photo-toprak.webp','cayirhan-main-photo-yapi.webp' ] },
-          { type: 'effect', interval: 1400, bg: '2026-images/2026-p1/4-power-plant/factory-final.webp',
-            base: '2026-images/2026-p1/4-power-plant/SVG/', frames: [
-              'highlights-ashlake.webp','highlights-baraj.webp','highlights-cayirhan.webp','highlights-circle.webp',
-              'highlights-fabrika.webp','highlights-production.webp','highlights-risk.webp','highlights-waste.webp' ] },
-          { type: 'img', src: '2026-images/2026-p1/3-infrastructure/calisma-2/infrastructure-section-2.webp' },
-          { type: 'img', src: '2026-images/2026-p1/6-soil/soil.webp' },
-          { type: 'img', src: '2026-images/2026-p1/8-ashlake/ashlake-main-image.webp' },
-          { type: 'img', src: '2026-images/2026-p1/7-microclimatichange/microclimate.webp' },
-          { type: 'img', src: '2026-images/2026-p1/5-bird/kus-goc-haritasi.webp' },
-        ] },
-      { name: 'Hıdırlık Hill', count: 6, items: [
-          { type: 'video', src: '2026-images/2026-p2/mainpage/main-page.mp4' },
-          { type: 'layers',
-            base: '2026-images/2026-p2/themodel/',
-            standalone: '24-model-anagörsel-renderered.webp',
-            layers: [
-              '03-model-exisitngslum.webp', '01-model-toki.webp', '16-model-tomb.webp',
-              '13-model-existingtree.webp', '08-model-electrictower.webp', '17-model-rockyformations.webp',
-              '20-model-path.webp', '04-model-slumlaststage.webp', '09-model-lightpole.webp',
-            ] },
-          { type: 'effect', bg: '2026-images/2026-p2/thesection/section-kolajkesit-01.webp', bgDim: true,
-            base: '2026-images/2026-p2/thesection/',
-            frames: [ 'section-kolajkesit-slice1.webp', 'section-kolajkesit-slice2.webp', 'section-kolajkesit-slice3.webp', 'section-kolajkesit-slice4.webp' ] },
-          { type: 'slide', shorten: 0.58, before: '2026-images/2026-p2/conditions/condition-oncesi-01-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-01-a.webp' },
-          { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-02.webp',   after: '2026-images/2026-p2/conditions/condition-sonrasi-02.webp' },
-          { type: 'slide', shorten: 0.55, before: '2026-images/2026-p2/conditions/condition-oncesi-03-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-03-a.webp' },
-        ] },
-      { name: 'Grid', count: 5, items: [
-          { type: 'img', src: '2026-images/2026-p3/1-entrance-page-1/key-image-soil-grounds-1.1.webp' },
-          { type: 'img', src: '2026-images/2026-p3/2-errors-on-ankara-soil-page-2/error-transition-section-2.3.1.webp' },
-          { type: 'cycle', interval: 2000, delay: 0, frames: [
-              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.1.webp',
-              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.1.webp',
-              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.1.webp' ] },
-          { type: 'cycle', interval: 2000, delay: 500, frames: [
-              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.2.webp',
-              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.2.webp',
-              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.2.webp' ] },
-          { type: 'cycle', interval: 2000, delay: 1000, frames: [
-              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.3.webp',
-              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.3.webp',
-              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.3.webp' ] },
-        ] },
-      { name: 'Bilkent Territory', count: 3, items: [
-          { type: 'img', src: '2026-images/2026-p4/webp/0-entry/ana-sayfa-image.webp' },
-          { type: 'img', src: '2026-images/2026-p4/webp/4-1-species-inventory/4-1-1-species-inventory-photographs.webp' },
-          { type: 'img', src: '2026-images/2026-p4/webp/4-2-habitat-strata/4-2-habitat-strata.webp' },
-        ] },
-      { name: 'The Grand Çankaya Hotel', count: 4, items: [
-          { type: 'img', shorten: 0.85, src: '2026-images/2026-p5/01-Home/main-image.webp' },
-          { type: 'cycle', interval: 2000, delay: 0, frames: [
-              '2026-images/2026-p5/02-Timeline/current-up.webp',
-              '2026-images/2026-p5/02-Timeline/stage-1-up.webp',
-              '2026-images/2026-p5/02-Timeline/stage-2-up.webp' ] },
-          { type: 'pulse', src: '2026-images/2026-p5/03-MicroSections/base-microsection.webp', viewBox: '0 0 3781 1993',
-            dots: [
-              { cx: 398.2,   cy: 1171.17, r: 37.76 },
-              { cx: 709.9,   cy: 1167.66, r: 37.76 },
-              { cx: 1253.24, cy: 1438.78, r: 37.76 },
-              { cx: 1588.35, cy: 1386.7,  r: 37.76 },
-            ] },
-          { type: 'img', src: '2026-images/2026-p5/04-WaterWays/city-scale.webp' },
-        ] },
-      { name: 'Imrahor Valley', count: 4, items: [
-          { type: 'img', src: '2026-images/2026-p6/0-main-page/main-page.webp' },
-          { type: 'cycle', interval: 700, bg: '2026-images/2026-p6/2-the-factories/factory-main-visual.webp', frames: [
-              '2026-images/2026-p6/2-the-factories/factory-1.webp','2026-images/2026-p6/2-the-factories/factory-2.webp',
-              '2026-images/2026-p6/2-the-factories/factory-3.webp','2026-images/2026-p6/2-the-factories/factory-4.webp',
-              '2026-images/2026-p6/2-the-factories/factory-5.webp','2026-images/2026-p6/2-the-factories/factory-6.webp',
-              '2026-images/2026-p6/2-the-factories/factory-7.webp','2026-images/2026-p6/2-the-factories/factory-8.webp',
-              '2026-images/2026-p6/2-the-factories/factory-9.webp' ] },
-          { type: 'zones', bg: '2026-images/2026-p6/1-the-soil/soil-2.webp', svg: '2026-images/2026-p6/1-the-soil/SVG/soil-2-zones-all.svg' },
-          { type: 'cycle', interval: 900, bg: '2026-images/2026-p6/3-the-timeline/timeline-1.webp', frames: [
-              '2026-images/2026-p6/3-the-timeline/timeline-30lar.webp','2026-images/2026-p6/3-the-timeline/timeline-60lar.webp',
-              '2026-images/2026-p6/3-the-timeline/timeline-90lar.webp','2026-images/2026-p6/3-the-timeline/timeline-2020ler.webp' ] },
-        ] },
-      { name: 'Ilker Neighbourhood', count: 3, items: [
-          { type: 'cycle', interval: 1500, bg: '2026-images/2026-p7/opening-page/axon-all/01-trailmap-son.webp', frames: [
-              '2026-images/2026-p7/opening-page/axon-all/07-nomadicearthmap.webp',
-              '2026-images/2026-p7/opening-page/axon-all/02-barbarianmap.webp',
-              '2026-images/2026-p7/opening-page/axon-all/03-proletarianmap.webp',
-              '2026-images/2026-p7/opening-page/axon-all/04-genericbuildingsetmap.webp',
-              '2026-images/2026-p7/opening-page/axon-all/05-displacementmap.webp',
-              '2026-images/2026-p7/opening-page/axon-all/06-vagabondearthmap.webp' ] },
-          // The Map — a full Leaflet app, not a set of pre-rendered images. On hover we
-          // drive its own year slider to 2026 (unlocking its 5 animation toggles) and
-          // click through them in sequence; on unhover we click the active one off again
-          // and reset the year, same as if a visitor had walked the slider back down.
-          { type: 'frame', url: '2026-pages/p7-pages/2026-7-map.html', custom: {
-              start: (frame) => {
-                // setActiveGroup() re-fires start() on every mouseover within
-                // the same group (moving between cells inside Ilker
-                // Neighbourhood, not just entering it) — without this guard
-                // each pass over the cell spun up a brand new poll + tick
-                // loop on top of the previous one, which was never cleared,
-                // leaving several independent 4s cycles fighting each other.
-                if (frame._pollTimer || frame._animTimer) return;
-                // Leaflet + roughjs load from a CDN via blocking <script> tags
-                // before the page's own inline script runs, so `setYear` may
-                // not exist yet the instant we hover — poll briefly for it
-                // instead of silently giving up on the first try.
-                let tries = 0;
-                frame._pollTimer = setInterval(() => {
-                  tries++;
-                  const win = frame.contentWindow, doc = frame.contentDocument;
-                  const ready = win && doc && typeof win.setYear === 'function' && doc.querySelector('.layer-row .layer-btn');
-                  if (ready) {
-                    clearInterval(frame._pollTimer);
-                    frame._pollTimer = null;
-                    try {
-                      doc.documentElement.classList.remove('freeze-anim');
-                      win.setYear(2026);
-                      const buttons = Array.from(doc.querySelectorAll('.layer-row .layer-btn'))
-                        .filter((b) => b.dataset.key !== 'civilized');
-                      let i = -1;
-                      function tick() {
-                        try {
-                          if (i >= 0) buttons[i].dispatchEvent(new MouseEvent('click', { bubbles: true }));
-                          i = (i + 1) % buttons.length;
-                          buttons[i].dispatchEvent(new MouseEvent('click', { bubbles: true }));
-                        } catch (e) { /* page's own script errored — leave it as-is */ }
-                      }
-                      tick();
-                      frame._animTimer = setInterval(tick, 4000);
-                    } catch (e) { /* page's own script errored (e.g. CDN blocked) — nothing more we can do */ }
-                  } else if (tries > 40) {
-                    clearInterval(frame._pollTimer);
-                    frame._pollTimer = null;
-                  }
-                }, 150);
-              },
-              stop: (frame) => {
-                if (frame._pollTimer) { clearInterval(frame._pollTimer); frame._pollTimer = null; }
-                if (frame._animTimer) { clearInterval(frame._animTimer); frame._animTimer = null; }
-                try {
-                  const win = frame.contentWindow, doc = frame.contentDocument;
-                  if (doc) {
-                    const activeBtn = doc.querySelector('.layer-row .layer-btn.active');
-                    if (activeBtn) activeBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-                  }
-                  if (win && typeof win.setYear === 'function') win.setYear(2010);
-                  if (doc) doc.documentElement.classList.add('freeze-anim');
-                } catch (e) { /* ignore */ }
-              },
-            } },
-          { type: 'cycle', interval: 2000, bg: '2026-images/2026-p7/timeline/timeline-tam.webp', frames: [
-              '2026-images/2026-p7/timeline/1-renkli.webp','2026-images/2026-p7/timeline/2-renkli.webp',
-              '2026-images/2026-p7/timeline/3-renkli.webp','2026-images/2026-p7/timeline/4-renkli.webp',
-              '2026-images/2026-p7/timeline/5-renkli.webp','2026-images/2026-p7/timeline/6-renkli.webp' ] },
-        ] },
-      { name: 'Çubuk Dam', count: 4, items: [
-          { type: 'img', src: '2026-images/2026-p8/section-01/main.webp' },
-          { type: 'img', src: '2026-images/2026-p8/section-03/main.webp' },
-          { type: 'stack', srcs: [
-              '2026-images/2026-p8/section-06/1.webp',
-              '2026-images/2026-p8/section-06/2.webp' ] },
-          { type: 'video', src: '2026-images/2026-p8/section-07/group-8-gif-4.mp4' },
-        ] },
-    ];
+    cluster.items.forEach(item => {
+      const slot = document.createElement('div');
+      slot.className = 'icon-slot';
+      slot.style.setProperty('--sx', item.sx);
+      slot.style.setProperty('--sy', item.sy);
+      slot.style.setProperty('--srot', item.rot + 'deg');
 
-    // Some pages only reveal their real "content" behind a hover state.
-    // These handlers force that state once, right after load — no live
-    // interaction, just a one-time scripted nudge so the frozen crop shows
-    // the lit-up version instead of the resting one. (Currently unused —
-    // every "frame" cell so far shows its own content without a nudge —
-    // kept in place for the next iframe cell that needs one.)
-    const REVEAL_HANDLERS = {};
+      const cell = document.createElement('div');
+      cell.className = 'icon-cell';
+      cell.id = item.id;
+      cell.dataset.label = item.label;
+      if (item.href) cell.dataset.href = item.href;
+      if (item.size) cell.style.maxWidth = item.size + 'px';
+      if (item.opacity !== undefined) cell.style.opacity = item.opacity;
 
-    // Live, non-interactive crop of the real page — zoomed into the hero
-    // area (skipping the nav/title block) rather than shrinking the whole page.
-    function mountFrame(cell, url, group, custom) {
-      const media = document.createElement('div');
-      media.className = 'cell-media';
-      const frame = document.createElement('iframe');
-      frame.className = 'cell-frame';
-      frame.src = url;
-      frame.loading = 'lazy';
-      frame.tabIndex = -1;
-      frame.setAttribute('scrolling', 'no');
-      const reveal = REVEAL_HANDLERS[url];
-      // The embedded page runs fully on its own (its own videos, CSS
-      // animations) — freeze all of that the moment it loads, and only
-      // let it move while this cell's group is the active one. Pages with
-      // their own scripted state (e.g. a slider that has to move first)
-      // pass a `custom` start/stop pair instead of using this generic freeze.
-      frame.addEventListener('load', () => {
-        if (reveal) reveal(frame);
-        const doc = frame.contentDocument;
-        if (!doc) return;
-        // Always inject the freeze stylesheet, even for `custom` cells — a
-        // page's own CSS keyframe animations (pulses etc.) otherwise keep
-        // running forever from the moment it loads, regardless of hover.
-        const style = doc.createElement('style');
-        style.textContent = '.freeze-anim, .freeze-anim * { animation-play-state: paused !important; }';
-        doc.head.appendChild(style);
-        doc.documentElement.classList.add('freeze-anim');
-        doc.querySelectorAll('video').forEach((v) => v.pause());
-        if (custom) return;
-      });
-      media.appendChild(frame);
-      cell.appendChild(media);
-
-      const CROP_W = 800;         // virtual viewport width — legible zoom, still a desktop layout
-      const CROP_VISIBLE_H = 500; // how tall the cropped window itself looks (cell's own aspect-ratio)
-      const CROP_OFFSET_Y = 52;   // matches the fixed nav's own height — just skip the header bar
-      frame.style.width = CROP_W + 'px';
-      frame.style.height = '850px'; // ≈ a real laptop viewport height, so 100vh-based sections don't over-center
-      // Frames can't self-report a size — give both the cell and its media
-      // wrapper an explicit aspect-ratio directly (not relying on percentage-
-      // height inheriting through .cell-media, which isn't consistent enough
-      // across browsers and was leaving frame cells collapsed to 0 height).
-      cell.style.aspectRatio = CROP_W + ' / ' + CROP_VISIBLE_H;
-      media.style.aspectRatio = CROP_W + ' / ' + CROP_VISIBLE_H;
-      media.style.height = 'auto';
-
-      function scaleFrame() {
-        const cw = cell.clientWidth, ch = cell.clientHeight;
-        if (!cw || !ch) return; // cell still hidden (e.g. "By Content" tab not active yet)
-        const scale = cw / CROP_W;
-        frame.style.transform = 'scale(' + scale + ') translateY(-' + CROP_OFFSET_Y + 'px)';
-      }
-
-      // ResizeObserver re-fires once the cell actually gets a size — covers
-      // both window resizes and the tab switch from display:none to visible.
-      if (window.ResizeObserver) {
-        new ResizeObserver(scaleFrame).observe(cell);
-      } else {
-        scaleFrame();
-        window.addEventListener('resize', scaleFrame);
-      }
-
-      if (custom) {
-        registerController(group, {
-          start: () => custom.start && custom.start(frame),
-          stop: () => custom.stop && custom.stop(frame),
-        });
-      } else {
-        registerController(group, {
-          start: () => {
-            const doc = frame.contentDocument;
-            if (!doc) return;
-            doc.documentElement.classList.remove('freeze-anim');
-            doc.querySelectorAll('video').forEach((v) => v.play().catch(() => {}));
-          },
-          stop: () => {
-            const doc = frame.contentDocument;
-            if (!doc) return;
-            doc.documentElement.classList.add('freeze-anim');
-            doc.querySelectorAll('video').forEach((v) => v.pause());
-          },
-        });
-      }
-    }
-
-    // Plain static image, no page/iframe involved at all. Optional `shorten`
-    // (e.g. 0.8) crops the natural height down to that fraction, for rhythm.
-    function mountImage(cell, src, shorten) {
-      if (shorten) {
-        const media = document.createElement('div');
-        media.className = 'cell-media';
-        const img = document.createElement('img');
-        img.className = 'cell-img';
-        img.src = src;
-        img.loading = 'lazy';
-        img.alt = '';
-        img.style.height = '100%';
-        img.style.objectFit = 'cover';
-        img.addEventListener('load', () => {
-          media.style.aspectRatio = img.naturalWidth + ' / ' + (img.naturalHeight * shorten);
-        });
-        media.appendChild(img);
-        cell.appendChild(media);
-        return;
-      }
+      const figure = document.createElement('div');
+      figure.className = 'icon-figure';
+      const glow = document.createElement('div');
+      glow.className = 'icon-glow';
+      const shadow = document.createElement('div');
+      shadow.className = 'icon-shadow';
       const img = document.createElement('img');
-      img.className = 'cell-img';
-      img.src = src;
-      img.loading = 'lazy';
-      img.alt = '';
-      cell.appendChild(img);
-    }
+      img.className = 'icon-img';
+      img.src = item.img;
+      img.draggable = false;
+      img.alt = item.label;
+      if (item.filter) img.style.filter = item.filter;
 
-    // Two (or more) static images stacked in normal flow, in one cell — for
-    // pages whose own section already shows them stacked together, not a
-    // crossfade or highlight, just placed one under the other.
-    function mountImageStack(cell, cfg) {
-      const wrap = document.createElement('div');
-      wrap.className = 'cell-stack';
-      cfg.srcs.forEach((src) => {
-        const img = document.createElement('img');
-        img.className = 'cell-stack-img';
-        img.src = src;
-        img.loading = 'lazy';
-        img.alt = '';
-        wrap.appendChild(img);
+      figure.appendChild(glow);
+      figure.appendChild(shadow);
+      figure.appendChild(img);
+      cell.appendChild(figure);
+      slot.appendChild(cell);
+      grid.appendChild(slot);
+    });
+  }
+
+  const shapeTooltip = document.getElementById('shape-tooltip');
+  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const contentView = document.getElementById('view-content');
+
+  function lerp(a, b, n) { return (1 - n) * a + n * b; }
+  function mapRange(x, a, b, c, d) { return (x - a) * (d - c) / (b - a) + c; }
+  function calcWinsize() { return { width: window.innerWidth, height: window.innerHeight }; }
+
+  let winsize = calcWinsize();
+  window.addEventListener('resize', () => winsize = calcWinsize());
+
+  // shared cursor position — every cell's rAF loop below reads this same
+  // value, exactly like the original's single window-level mousemove.
+  let mousepos = { x: winsize.width / 2, y: winsize.height / 2 };
+  window.addEventListener('mousemove', (e) => { mousepos = { x: e.clientX, y: e.clientY }; });
+
+  // MagneticFx: the icon inside a hovered cell is pulled toward the
+  // cursor (amt 0.04 lerp, same as the original) and scales up; on
+  // mouseleave it eases back to (0,0) scale 1 with GSAP's power4 ease.
+  class MagneticImage {
+    constructor(el) {
+      this.el = el;
+      this.rendered = { tx: { previous: 0, current: 0 }, ty: { previous: 0, current: 0 } };
+      const cell = el.closest('.icon-cell');
+      cell.addEventListener('mouseenter', () => {
+        this.hoverTimeout = setTimeout(() => {
+          // Recompute fresh right as the hover starts, instead of relying
+          // on a rect cached at page-load — a couple of icons were
+          // overshooting far more than the rest because their cached rect
+          // (taken before webp images had finished loading/settling into
+          // the scattered layout) no longer matched the element's real
+          // position, so the "distance to cursor" math was off.
+          this.rect = this.el.getBoundingClientRect();
+          this.rendered.tx.previous = gsap.getProperty(this.el, 'x');
+          this.rendered.ty.previous = gsap.getProperty(this.el, 'y');
+          this.loopRender();
+          if (this.outTl) this.outTl.kill();
+          this.inTl = gsap.timeline().to(this.el, { duration: 0.5, ease: 'expo', scale: 1.55 });
+        }, 10);
       });
-      cell.appendChild(wrap);
-    }
-
-    // Static base image with live pulsing hotspot rings on top (matches the
-    // source page's own SVG hotspot markers) — pure CSS animation, gated by
-    // .group-active so it only pulses while this cell's group is hovered/pinned.
-    function mountPulse(cell, cfg) {
-      const media = document.createElement('div');
-      media.className = 'cell-media';
-
-      const img = document.createElement('img');
-      img.className = 'cell-img';
-      img.src = cfg.src;
-      img.loading = 'lazy';
-      img.alt = '';
-      media.appendChild(img);
-
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('viewBox', cfg.viewBox);
-      svg.setAttribute('preserveAspectRatio', 'none');
-      cfg.dots.forEach((d, i) => {
-        const c = document.createElementNS(svgNS, 'circle');
-        c.setAttribute('class', 'pulse-hotspot');
-        c.setAttribute('cx', d.cx);
-        c.setAttribute('cy', d.cy);
-        c.setAttribute('r', d.r);
-        c.style.animationDelay = (i * 0.5) + 's';
-        svg.appendChild(c);
-      });
-      media.appendChild(svg);
-
-      cell.appendChild(media);
-    }
-
-    // Looping muted video (used where the page's own visual is a video, not a still).
-    // Paused by default — only plays while its group is the active one.
-    function mountVideo(cell, src, group) {
-      const video = document.createElement('video');
-      video.className = 'cell-img';
-      video.src = src;
-      video.loop = true;
-      video.muted = true;
-      video.playsInline = true;
-      cell.appendChild(video);
-
-      registerController(group, {
-        start: () => video.play().catch(() => {}),
-        stop: () => video.pause(),
+      cell.addEventListener('mouseleave', () => {
+        if (this.hoverTimeout) clearTimeout(this.hoverTimeout);
+        this.stopRendering();
+        if (this.inTl) this.inTl.kill();
+        this.outTl = gsap.timeline().to(this.el, { duration: 1, ease: 'power4', x: 0, y: 0, scale: 1 });
       });
     }
-
-    // Random blink crossfade through a fixed set of frames — no hover, just
-    // loops while its group is active. Shows a static first frame otherwise.
-    function mountEffect(cell, cfg, group) {
-      const media = document.createElement('div');
-      media.className = 'cell-media';
-      if (cfg.bg) {
-        const bg = document.createElement('img');
-        bg.className = 'effect-layer active';
-        bg.src = cfg.bg;
-        bg.loading = 'lazy';
-        bg.alt = '';
-        if (cfg.bgDim) bg.style.filter = 'brightness(0.3)';
-        media.appendChild(bg);
-      }
-      const layers = cfg.frames.map(f => {
-        const img = document.createElement('img');
-        img.className = 'effect-layer';
-        img.src = cfg.base + f;
-        img.loading = 'lazy';
-        img.alt = '';
-        media.appendChild(img);
-        return img;
-      });
-      cell.appendChild(media);
-      if (layers.length) layers[0].classList.add('active');
-
-      let current = 0;
-      let intervalId = null;
-      function tick() {
-        layers[current].classList.remove('active');
-        let next;
-        do { next = Math.floor(Math.random() * layers.length); } while (layers.length > 1 && next === current);
-        current = next;
-        layers[current].classList.add('active');
-      }
-      registerController(group, {
-        start: () => { if (!intervalId) intervalId = setInterval(tick, cfg.interval || 500); },
-        stop: () => { if (intervalId) { clearInterval(intervalId); intervalId = null; } },
-      });
+    loopRender() { if (!this.raf) this.raf = requestAnimationFrame(() => this.render()); }
+    stopRendering() { if (this.raf) { cancelAnimationFrame(this.raf); this.raf = undefined; } }
+    render() {
+      this.raf = undefined;
+      if (!this.el.isConnected) return; // theme was switched away mid-hover — stop, don't reschedule
+      // 0.14 instead of the original's 0.3 — at that strength a hovered
+      // icon could travel most of its own width just from where inside
+      // it the cursor happened to land. Also hard-clamped to ±26px as a
+      // safety net so no icon can ever travel further than that,
+      // regardless of cursor position within it.
+      const rawX = (mousepos.x - (this.rect.left + this.rect.width / 2)) * 0.14;
+      const rawY = (mousepos.y - (this.rect.top + this.rect.height / 2)) * 0.14;
+      this.rendered.tx.current = Math.max(-26, Math.min(26, rawX));
+      this.rendered.ty.current = Math.max(-26, Math.min(26, rawY));
+      this.rendered.tx.previous = lerp(this.rendered.tx.previous, this.rendered.tx.current, 0.04);
+      this.rendered.ty.previous = lerp(this.rendered.ty.previous, this.rendered.ty.current, 0.04);
+      gsap.set(this.el, { x: this.rendered.tx.previous, y: this.rendered.ty.previous });
+      this.loopRender();
     }
+  }
 
-    // Fixed-order crossfade through a sequence of frames (not random), each
-    // held for cfg.interval ms. cfg.delay staggers the first flip so
-    // several cycle-cells running side by side don't change in lockstep.
-    // Shows the first frame statically until its group is active.
-    function mountCycle(cell, cfg, group) {
-      const media = document.createElement('div');
-      media.className = 'cell-media';
-      if (cfg.bg) {
-        const bg = document.createElement('img');
-        bg.className = 'effect-layer active';
-        bg.src = cfg.bg;
-        bg.loading = 'lazy';
-        bg.alt = '';
-        if (cfg.bgDim) bg.style.filter = 'brightness(0.3)';
-        media.appendChild(bg);
-      }
-      const layers = cfg.frames.map((src, i) => {
-        const img = document.createElement('img');
-        img.className = 'effect-layer' + (!cfg.bg && i === 0 ? ' active' : '');
-        img.src = src;
-        img.loading = 'lazy';
-        img.alt = '';
-        media.appendChild(img);
-        return img;
-      });
-      cell.appendChild(media);
-
-      let current = cfg.bg ? -1 : 0;
-      let intervalId = null;
-      let timeoutId = null;
-      function tick() {
-        if (current >= 0) layers[current].classList.remove('active');
-        current = (current + 1) % layers.length;
-        layers[current].classList.add('active');
-      }
-      registerController(group, {
-        start: () => {
-          if (intervalId || timeoutId) return;
-          timeoutId = setTimeout(() => {
-            timeoutId = null;
-            intervalId = setInterval(tick, cfg.interval || 3000);
-          }, cfg.delay || 0);
-        },
-        stop: () => {
-          if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
-          if (intervalId) { clearInterval(intervalId); intervalId = null; }
-        },
-      });
+  // GridItem: on load, each cell is tilted based on its quadrant of the
+  // viewport (further from center = more rotated + pushed back in Z, the
+  // "concave wall" look), then continuously parallaxes as the cursor
+  // moves anywhere on the page — not just while hovering that cell.
+  class GridItem3D {
+    constructor(cell) {
+      this.cell = cell;
+      this.rotationVals = { x: 0, y: 0 };
+      this.rxstart = 3;
+      this.rystart = 5;
+      new MagneticImage(cell.querySelector('.icon-img'));
+      this.layout();
+      this.loop();
     }
-
-    // SVG hotspot zones (fetched live, same as the source page) that glow
-    // one at a time over a base image, in DOM order — for pages whose
-    // "highlight" is a colored shape fill rather than a swapped image.
-    function mountZones(cell, cfg, group) {
-      const media = document.createElement('div');
-      media.className = 'cell-media';
-
-      const bg = document.createElement('img');
-      bg.className = 'effect-layer active';
-      bg.src = cfg.bg;
-      bg.loading = 'lazy';
-      bg.alt = '';
-      media.appendChild(bg);
-
-      // Loaded via <object>, not fetch() — fetch() of a local file is blocked
-      // by the browser when this page is opened as file://, which silently
-      // left `paths` empty forever and the highlight never showing at all.
-      // <object> uses normal resource loading, so it works under file:// too.
-      const svgObj = document.createElement('object');
-      svgObj.className = 'cell-zone-overlay';
-      svgObj.type = 'image/svg+xml';
-      svgObj.data = cfg.svg;
-      media.appendChild(svgObj);
-      cell.appendChild(media);
-
-      let paths = [];
-      let current = -1;
-      let intervalId = null;
-
-      svgObj.addEventListener('load', () => {
-        const doc = svgObj.contentDocument;
-        const svgEl = doc && doc.querySelector('svg');
-        if (!svgEl) return;
-        svgEl.removeAttribute('width');
-        svgEl.removeAttribute('height');
-        // The <object>'s document is isolated from the parent page's
-        // stylesheet (and its CSS custom properties), so the highlight
-        // styling has to be injected directly into it.
-        const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
-        style.textContent = 'svg{width:100%;height:100%;display:block;}' +
-          '.cell-zone-shape{fill:#c9b8a8;opacity:0;pointer-events:none;transition:opacity .25s ease,filter .25s ease;}' +
-          '.cell-zone-shape.cell-zone-active{opacity:.8;filter:drop-shadow(0 0 10px rgba(245,220,140,1)) drop-shadow(0 0 24px rgba(245,200,80,.9));}';
-        svgEl.appendChild(style);
-        paths = Array.from(svgEl.querySelectorAll('path, circle, rect, polygon, ellipse'));
-        paths.forEach((p) => { p.removeAttribute('class'); p.setAttribute('class', 'cell-zone-shape'); });
-      });
-
-      function tick() {
-        if (!paths.length) return;
-        if (current >= 0) paths[current].classList.remove('cell-zone-active');
-        current = (current + 1) % paths.length;
-        paths[current].classList.add('cell-zone-active');
-      }
-      registerController(group, {
-        start: () => { if (!intervalId) intervalId = setInterval(tick, 700); },
-        stop: () => {
-          if (intervalId) { clearInterval(intervalId); intervalId = null; }
-          if (current >= 0 && paths[current]) paths[current].classList.remove('cell-zone-active');
-          current = -1;
-        },
-      });
+    layout() {
+      const rect = this.cell.getBoundingClientRect();
+      this.isLeft = rect.left + rect.width / 2 < winsize.width / 2;
+      this.isTop = rect.top + rect.height / 2 < winsize.height / 2;
+      this.rY = this.isLeft
+        ? mapRange(rect.left + rect.width / 2, 0, winsize.width / 2, this.rystart, 0)
+        : mapRange(rect.left + rect.width / 2, winsize.width / 2, winsize.width, 0, -this.rystart);
+      this.rX = this.isTop
+        ? mapRange(rect.top + rect.height / 2, 0, winsize.height / 2, -this.rxstart, 0)
+        : mapRange(rect.top + rect.height / 2, winsize.height / 2, winsize.height, 0, this.rxstart);
+      this.tZ = this.isLeft
+        ? mapRange(rect.left + rect.width / 2, 0, winsize.width / 2, -30, -70)
+        : mapRange(rect.left + rect.width / 2, winsize.width / 2, winsize.width, -70, -30);
+      gsap.set(this.cell, { rotationX: this.rX, rotationY: this.rY, z: this.tZ });
     }
-
-    // Layers randomly toggle on/off on top of a base render, biased to
-    // accumulate (turning on is more likely than turning off).
-    function mountLayers(cell, cfg, group) {
-      const media = document.createElement('div');
-      media.className = 'cell-media';
-
-      const base = document.createElement('img');
-      base.className = 'effect-layer active';
-      base.src = cfg.base + cfg.standalone;
-      base.loading = 'lazy';
-      base.alt = '';
-      media.appendChild(base);
-
-      const layers = cfg.layers.map(f => {
-        const img = document.createElement('img');
-        img.className = 'layer-img';
-        img.src = cfg.base + f;
-        img.loading = 'lazy';
-        img.alt = '';
-        media.appendChild(img);
-        return img;
-      });
-      cell.appendChild(media);
-
-      let intervalId = null;
-      function tick() {
-        const img = layers[Math.floor(Math.random() * layers.length)];
-        const isOn = img.classList.contains('on');
-        const turnOn = Math.random() < (isOn ? 0.3 : 0.7); // biased: opening more likely than closing
-        img.classList.toggle('on', turnOn);
-      }
-      registerController(group, {
-        start: () => { if (!intervalId) intervalId = setInterval(tick, 550); },
-        stop: () => { if (intervalId) { clearInterval(intervalId); intervalId = null; } },
-      });
-    }
-
-    // Auto-animated before/after reveal — the site's own comparison-slider,
-    // just swept back and forth on its own instead of waiting for a drag.
-    function mountSlide(cell, cfg) {
-      const media = document.createElement('div');
-      media.className = 'cell-media';
-
-      const before = document.createElement('img');
-      before.className = 'effect-layer active';
-      before.src = cfg.before;
-      before.loading = 'lazy';
-      before.alt = '';
-      // cfg.shorten (e.g. 0.7) crops the natural height down to that
-      // fraction — only used to break up rows where neighboring slide
-      // cells would otherwise land on the exact same natural height.
-      if (cfg.shorten) {
-        before.style.height = '100%';
-        before.style.objectFit = 'cover';
-        before.addEventListener('load', () => {
-          media.style.aspectRatio = before.naturalWidth + ' / ' + (before.naturalHeight * cfg.shorten);
+    loop() { if (!this.raf) this.raf = requestAnimationFrame(() => this.move()); }
+    move() {
+      this.raf = undefined;
+      if (!this.cell.isConnected) return; // theme was switched away — stop looping for this cell
+      // skip the work while the "By Content" tab isn't visible — the loop
+      // still ticks (cheap) but doesn't touch layout/style until it is.
+      if (contentView.classList.contains('active')) {
+        // Rotation only — no shared x/y translation here anymore. That
+        // translation used the same mousepos-to-range formula for every
+        // cell, so every icon slid in the exact same direction by the
+        // exact same amount at once; the per-icon sliding people actually
+        // want to see already comes from MagneticImage above, which reacts
+        // to each icon's own position relative to the cursor.
+        this.rotationVals.x = this.isTop
+          ? lerp(this.rotationVals.x, mapRange(mousepos.y, 0, winsize.height / 2, this.rxstart, 0), 0.04)
+          : lerp(this.rotationVals.x, mapRange(mousepos.y, winsize.height / 2, winsize.height, 0, -this.rxstart), 0.04);
+        this.rotationVals.y = this.isLeft
+          ? lerp(this.rotationVals.y, mapRange(mousepos.x, 0, winsize.width / 2, -this.rystart, 0), 0.04)
+          : lerp(this.rotationVals.y, mapRange(mousepos.x, winsize.width / 2, winsize.width, 0, this.rystart), 0.04);
+        gsap.set(this.cell, {
+          rotationX: -this.rX - this.rotationVals.x,
+          rotationY: -this.rY - this.rotationVals.y,
         });
       }
-      media.appendChild(before);
-
-      const after = document.createElement('img');
-      after.className = 'slide-after-img';
-      after.src = cfg.after;
-      after.loading = 'lazy';
-      after.alt = '';
-      media.appendChild(after);
-
-      cell.appendChild(media);
+      this.loop();
     }
+  }
 
-    let cellNum = 0;
-
-    GROUPS.forEach((group, gIndex) => {
-      for (let i = 0; i < group.count; i++) {
-        cellNum++;
-
-        const cell = document.createElement('div');
-        cell.className = 'rhythm-cell';
-        cell.dataset.group = gIndex;
-        cell.dataset.index = cellNum;
-
-        if (i === 0) {
-          const label = document.createElement('span');
-          label.className = 'rhythm-group-label';
-          label.textContent = group.name;
-          cell.appendChild(label);
-        }
-
-        grid.appendChild(cell); // attach first so clientWidth/Height are real when mountFrame reads them
-
-        const groupKey = String(gIndex);
-        const item = group.items && group.items[i];
-        const pageUrl = group.pages && group.pages[i];
-        if (item) {
-          if (item.type === 'img') mountImage(cell, item.src, item.shorten);
-          else if (item.type === 'stack') mountImageStack(cell, item);
-          else if (item.type === 'pulse') mountPulse(cell, item);
-          else if (item.type === 'video') mountVideo(cell, item.src, groupKey);
-          else if (item.type === 'effect') mountEffect(cell, item, groupKey);
-          else if (item.type === 'layers') mountLayers(cell, item, groupKey);
-          else if (item.type === 'slide') mountSlide(cell, item);
-          else if (item.type === 'cycle') mountCycle(cell, item, groupKey);
-          else if (item.type === 'zones') mountZones(cell, item, groupKey);
-          else if (item.type === 'frame') mountFrame(cell, item.url, groupKey, item.custom);
-        } else if (pageUrl) {
-          mountFrame(cell, pageUrl, groupKey);
-        } else {
-          const placeholder = document.createElement('div');
-          placeholder.className = 'cell-placeholder';
-          cell.appendChild(placeholder);
-          const idx = document.createElement('span');
-          idx.className = 'cell-index';
-          idx.textContent = String(cellNum).padStart(2, '0');
-          cell.appendChild(idx);
-        }
-      }
-    });
-
-    // Hover a group's own cells → dim every other group, and only animate
-    // (video/interval/iframe) that one group while it's hovered. Clicking
-    // anywhere in a group (name or any cell) navigates to that project's page.
-    function applyDimmed(g) {
-      grid.querySelectorAll('.rhythm-cell').forEach(c => {
-        c.classList.toggle('dimmed', c.dataset.group !== g);
+  // TiltFx — ported from Codrops "TiltHoverEffects"
+  // (github.com/codrops/TiltHoverEffects): unlike GridItem3D above (whole-
+  // window mouse position, ambient/always-on) or MagneticImage (pulls the
+  // icon *toward* the cursor), this reacts only to the cursor's position
+  // *inside this one cell* while hovering it, tilting the .icon-figure
+  // layer and lifting it toward the camera (translateZ) with a shadow
+  // fading in underneath — the combination that makes a hovered icon read as
+  // separated from the flat background instead of pasted onto it. Targets
+  // .icon-figure (not .icon-cell, which GridItem3D already animates, and
+  // not .icon-img, which MagneticImage already animates) so none of the
+  // three systems ever fight over the same element's transform.
+  class TiltFx {
+    constructor(cell) {
+      this.cell = cell;
+      this.figure = cell.querySelector('.icon-figure');
+      if (!this.figure) return;
+      cell.addEventListener('mousemove', (e) => this.onMove(e));
+      cell.addEventListener('mouseleave', () => this.onLeave());
+    }
+    onMove(e) {
+      const b = this.cell.getBoundingClientRect();
+      const px = (e.clientX - b.left) / b.width;
+      const py = (e.clientY - b.top) / b.height;
+      gsap.set(this.figure, {
+        rotateX: (0.5 - py) * 16,
+        rotateY: (px - 0.5) * 16,
+        z: 16,
+        transformPerspective: 400,
       });
     }
-    function clearDimmed() {
-      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.remove('dimmed'));
+    onLeave() {
+      gsap.to(this.figure, { duration: 1, ease: 'elastic.out(1, 0.4)', rotateX: 0, rotateY: 0, z: 0 });
+    }
+  }
+
+  // Wires GridItem3D/TiltFx/click/tooltip onto whatever .icon-cell elements
+  // are currently in #icon-grid — called once at startup and again every
+  // time the active theme changes (renderCluster() replaces the DOM, so
+  // this has to re-select and re-wire fresh each time).
+  function initIconInteractions() {
+    const shapes = Array.from(document.querySelectorAll('.icon-grid .icon-cell'));
+
+    if (!isTouch && window.gsap) {
+      shapes.forEach(cell => { new GridItem3D(cell); new TiltFx(cell); });
     }
 
-    // Called from the tab switcher when leaving this view — a hovered
-    // group's timers (effect/cycle/zones intervals, the map's click-cycle
-    // timer) would otherwise keep running invisibly behind "By Map" and
-    // jank things up once you switch back.
-    window._resetContentView = function () {
-      clearDimmed();
-      setActiveGroup(null);
-    };
+    shapes.forEach(el => {
+      if (el.dataset.href) {
+        el.addEventListener('click', () => { window.location.href = el.dataset.href; });
+      }
+    });
 
-    // No real hover on touch devices, so the whole preview mechanism never
-    // triggers there. Mobile gets its own model instead: everything starts
-    // dark, tapping a cell lights that group up (without navigating), and
-    // tapping the same group again reverts to all-dark — only the group's
-    // own name actually navigates. Desktop keeps hover-preview + click-
-    // anywhere-navigates exactly as before.
-    const isTouch = window.matchMedia('(hover: none)').matches;
-    let mobileActiveGroup = null;
-
-    if (isTouch) {
-      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.add('dimmed'));
+    if (!isTouch) {
+      shapes.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          shapeTooltip.textContent = el.dataset.label;
+          shapeTooltip.classList.add('visible');
+        });
+        el.addEventListener('mousemove', (e) => {
+          shapeTooltip.style.left = (e.clientX + 16) + 'px';
+          shapeTooltip.style.top  = (e.clientY - 10) + 'px';
+          shapeTooltip.style.transform = 'none';
+        });
+        el.addEventListener('mouseleave', () => {
+          shapeTooltip.classList.remove('visible');
+        });
+      });
     }
+  }
 
-    grid.addEventListener('mouseover', (e) => {
-      if (isTouch) return;
-      const cell = e.target.closest('.rhythm-cell');
-      if (!cell) return;
-      applyDimmed(cell.dataset.group);
-      setActiveGroup(cell.dataset.group);
+  // Theme sidebar — same interaction pattern as .century-btn in
+  // 2026-2-thetimeline.html: click swaps .active and reloads what's shown.
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('active')) return;
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCluster(btn.dataset.cluster);
+      initIconInteractions();
     });
-    grid.addEventListener('mouseleave', () => {
-      if (isTouch) return;
-      clearDimmed();
-      setActiveGroup(null);
-    });
-    grid.addEventListener('click', (e) => {
-      const label = e.target.closest('.rhythm-group-label');
-      if (label) {
-        const g = label.closest('.rhythm-cell').dataset.group;
-        window.location.href = LIBRARY_PROJECTS[Number(g)].url;
-        return;
+  });
+
+  renderCluster('Soil');
+  initIconInteractions();
+
+  if (!isTouch && window.gsap) {
+    // Background parallax: the contour-line layer behind the grid moves
+    // too, just far less than the icons (BG_RATIO vs. the icons' own
+    // ranges above) — a background is supposed to move less than the
+    // foreground, it just wasn't moving *at all* before, which is what
+    // made the icon motion feel disconnected from the scene around it.
+    // Independent of which theme is active, so it's set up once here.
+    const bgEl = document.getElementById('content-bg');
+    const BG_RATIO = 0.012;
+    let bgPos = { x: 0, y: 0 };
+    (function loopBg() {
+      if (contentView.classList.contains('active')) {
+        const tx = (mousepos.x - winsize.width / 2) * BG_RATIO;
+        const ty = (mousepos.y - winsize.height / 2) * BG_RATIO;
+        bgPos.x = lerp(bgPos.x, tx, 0.03);
+        bgPos.y = lerp(bgPos.y, ty, 0.03);
+        gsap.set(bgEl, { x: bgPos.x + '%', y: bgPos.y + '%' });
       }
-      const cell = e.target.closest('.rhythm-cell');
-      if (!cell) return;
-      const g = cell.dataset.group;
-
-      if (isTouch) {
-        if (mobileActiveGroup === g) {
-          mobileActiveGroup = null;
-          grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.add('dimmed'));
-          setActiveGroup(null);
-        } else {
-          mobileActiveGroup = g;
-          applyDimmed(g);
-          setActiveGroup(g);
-        }
-        return;
-      }
-
-      window.location.href = LIBRARY_PROJECTS[Number(g)].url;
-    });
-  })();
+      requestAnimationFrame(loopBg);
+    })();
+  }
 </script>
 </body>
 </html>
