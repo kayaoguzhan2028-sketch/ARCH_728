@@ -72,9 +72,73 @@
   @media (max-width: 560px) {
     .icon-grid { grid-template-columns: repeat(2, 1fr); }
   }
-  .shape { position: static; width: 100%; height: auto; max-width: 130px; cursor: pointer; transition: transform 0.3s ease, opacity 0.4s ease, filter 0.4s ease; }
-  .shape.selected { transform: scale(1.15); }
-  .shape.dimmed { opacity: 0.45; filter: saturate(0.2); }
+  /* Icon cell: static webp illustration, one of 4 isolated hover-effect
+     variants (A: warp, B: fragment, C: tilt, D: morph) — see each block below. */
+  .icon-cell { position: relative; width: 100%; max-width: 130px; cursor: pointer; }
+  .icon-img { display: block; width: 100%; height: auto; }
+
+  /* ── Variant A — warp/distortion (icons 1–2) ──
+     A second copy of the same image, run through an SVG feTurbulence +
+     feDisplacementMap filter (procedural liquid noise — no extra asset needed),
+     revealed only in a soft circle that tracks the cursor via a CSS mask
+     positioned with --mx/--my. Only opacity is transitioned (GPU-cheap); the
+     mask position itself just snaps to the last mouse sample each rAF tick. */
+  .variant-warp { --mx: 50%; --my: 50%; }
+  .variant-warp .warp-layer {
+    position: absolute; inset: 0; opacity: 0; pointer-events: none;
+    filter: url(#icon-warp-filter);
+    -webkit-mask-image: radial-gradient(90px circle at var(--mx) var(--my), #000 0%, #000 35%, transparent 75%);
+    mask-image: radial-gradient(90px circle at var(--mx) var(--my), #000 0%, #000 35%, transparent 75%);
+    transition: opacity 0.35s ease-out; will-change: opacity;
+  }
+  .variant-warp:hover .warp-layer { opacity: 1; }
+  @supports not ((mask-image: none) or (-webkit-mask-image: none)) {
+    .variant-warp .warp-layer { display: none; }
+  }
+
+  /* ── Variant B — fragment/shatter (icons 3–4) ──
+     The source <img> is kept invisible purely to size the box; JS slices the
+     same webp into an 8-piece background-position grid (built at runtime,
+     no pre-cut sprite asset) and each piece gets its own small
+     translate/rotate + staggered transition-delay. */
+  .variant-fragment .frag-sizer { visibility: hidden; }
+  .frag-piece {
+    position: absolute; background-repeat: no-repeat;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    transition: transform 0.4s ease-out; will-change: transform;
+  }
+  .variant-fragment:hover .frag-piece {
+    transform: translate3d(var(--tx), var(--ty), 0) rotate(var(--tr));
+  }
+
+  /* ── Variant C — magnetic tilt (icons 5–6) ──
+     perspective on the cell, rotateX/rotateY on the inner wrapper driven by
+     mouse position (clamped ±9deg), plus a specular highlight that tracks
+     the cursor the same way the warp mask does. */
+  .variant-tilt { perspective: 500px; }
+  .tilt-inner {
+    position: relative; transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform 0.3s ease-out; will-change: transform;
+  }
+  .tilt-shine {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background: radial-gradient(110px circle at var(--mx,50%) var(--my,50%), rgba(245,242,235,0.4), transparent 65%);
+    transition: opacity 0.3s ease-out;
+  }
+  .variant-tilt:hover .tilt-shine { opacity: 1; }
+
+  /* ── Variant D — morph/cross-fade (icons 7–8) ──
+     No second image exists, so the "second look" is the same webp re-filtered
+     at runtime (hue-rotate + invert + contrast) and cross-faded in on hover.
+     Pure CSS, no JS needed for this one. */
+  .variant-morph { overflow: hidden; }
+  .variant-morph .morph-layer {
+    position: absolute; inset: 0; opacity: 0;
+    filter: hue-rotate(150deg) invert(0.85) contrast(1.3) saturate(1.5);
+    transition: opacity 0.5s ease-in-out; will-change: opacity;
+  }
+  .variant-morph:hover .morph-layer { opacity: 1; }
 
   #shape-tooltip { position: fixed; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); white-space: nowrap; z-index: 20; }
   #shape-tooltip.visible { opacity: 1; }
@@ -166,17 +230,58 @@
   </div>
 
   <!-- BY CONTENT -->
+  <!-- Hidden SVG defs: shared procedural "liquid warp" filter for variant A
+       (feTurbulence generates the noise in-browser — no displacement-map
+       asset needed), reused by both warp cells. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="icon-warp-filter" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.015 0.02" numOctaves="2" seed="7" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
   <div class="view" id="view-content">
     <div class="icon-grid-wrap">
       <div class="icon-grid">
-        <img class="shape" id="shape-0" src="2026-images/2026-p1/1-mainpage/component-1.webp" data-label="Powerplant" data-href="2026-pages/p1-pages/2026-1-interactivepage.html" draggable="false" alt="Powerplant">
-        <img class="shape" id="shape-1" src="2026-images/2026-p2/themodel/23-model-meshtopo.webp" data-label="The Model" data-href="2026-pages/p2-pages/2026-2-themodel.html" draggable="false" alt="The Model">
-        <img class="shape" id="shape-2" src="2026-images/2026-p3/0-project-brief-page/sifting-the-soil-key-image-1.0.webp" data-label="Sifters" data-href="2026-pages/p3-pages/2026-3.html" draggable="false" alt="Sifters">
-        <img class="shape" id="shape-3" src="must-images/by-content/saydam.webp" data-label="Reeds" data-href="2026-pages/p4-pages/2026-4.html" draggable="false" alt="Reeds">
-        <img class="shape" id="shape-4" src="2026-images/2026-p5/ikon/ikon.webp" data-label="Hotel" data-href="2026-pages/p5-pages/2026-5.html" draggable="false" alt="Hotel">
-        <img class="shape" id="shape-5" src="2026-images/2026-p6/0-main-page/by-year-visual.webp" data-label="Timeline" data-href="2026-pages/p6-pages/2026-6-thetimeline.html" style="filter:grayscale(1);" draggable="false" alt="Timeline">
-        <img class="shape" id="shape-6" src="must-images/by-content/debris.webp" data-label="Barbaric Soil" data-href="2026-pages/p7-pages/2026-7-barbaric-soil.html" draggable="false" alt="Barbaric Soil">
-        <img class="shape" id="shape-7" src="2026-images/2026-p8/section-02/1.webp" data-label="The Helical" data-href="2026-pages/p8-pages/2026-8.html" draggable="false" alt="The Helical">
+        <!-- 1–2: Variant A — warp -->
+        <div class="icon-cell variant-warp" id="shape-0" data-variant="warp" data-label="Powerplant" data-href="2026-pages/p1-pages/2026-1-interactivepage.html">
+          <img class="icon-img" src="2026-images/2026-p1/1-mainpage/component-1.webp" draggable="false" alt="Powerplant">
+          <img class="icon-img warp-layer" src="2026-images/2026-p1/1-mainpage/component-1.webp" draggable="false" alt="" aria-hidden="true">
+        </div>
+        <div class="icon-cell variant-warp" id="shape-1" data-variant="warp" data-label="The Model" data-href="2026-pages/p2-pages/2026-2-themodel.html">
+          <img class="icon-img" src="2026-images/2026-p2/themodel/23-model-meshtopo.webp" draggable="false" alt="The Model">
+          <img class="icon-img warp-layer" src="2026-images/2026-p2/themodel/23-model-meshtopo.webp" draggable="false" alt="" aria-hidden="true">
+        </div>
+        <!-- 3–4: Variant B — fragment/shatter -->
+        <div class="icon-cell variant-fragment" id="shape-2" data-variant="fragment" data-label="Sifters" data-href="2026-pages/p3-pages/2026-3.html">
+          <img class="icon-img frag-sizer" src="2026-images/2026-p3/0-project-brief-page/sifting-the-soil-key-image-1.0.webp" draggable="false" alt="Sifters">
+        </div>
+        <div class="icon-cell variant-fragment" id="shape-3" data-variant="fragment" data-label="Reeds" data-href="2026-pages/p4-pages/2026-4.html">
+          <img class="icon-img frag-sizer" src="must-images/by-content/saydam.webp" draggable="false" alt="Reeds">
+        </div>
+        <!-- 5–6: Variant C — magnetic tilt -->
+        <div class="icon-cell variant-tilt" id="shape-4" data-variant="tilt" data-label="Hotel" data-href="2026-pages/p5-pages/2026-5.html">
+          <div class="tilt-inner">
+            <img class="icon-img" src="2026-images/2026-p5/ikon/ikon.webp" draggable="false" alt="Hotel">
+            <div class="tilt-shine"></div>
+          </div>
+        </div>
+        <div class="icon-cell variant-tilt" id="shape-5" data-variant="tilt" data-label="Timeline" data-href="2026-pages/p6-pages/2026-6-thetimeline.html">
+          <div class="tilt-inner">
+            <img class="icon-img" src="2026-images/2026-p6/0-main-page/by-year-visual.webp" style="filter:grayscale(1);" draggable="false" alt="Timeline">
+            <div class="tilt-shine"></div>
+          </div>
+        </div>
+        <!-- 7–8: Variant D — morph/cross-fade (pure CSS, no JS) -->
+        <div class="icon-cell variant-morph" id="shape-6" data-variant="morph" data-label="Barbaric Soil" data-href="2026-pages/p7-pages/2026-7-barbaric-soil.html">
+          <img class="icon-img" src="must-images/by-content/debris.webp" draggable="false" alt="Barbaric Soil">
+          <img class="icon-img morph-layer" src="must-images/by-content/debris.webp" draggable="false" alt="" aria-hidden="true">
+        </div>
+        <div class="icon-cell variant-morph" id="shape-7" data-variant="morph" data-label="The Helical" data-href="2026-pages/p8-pages/2026-8.html">
+          <img class="icon-img" src="2026-images/2026-p8/section-02/1.webp" draggable="false" alt="The Helical">
+          <img class="icon-img morph-layer" src="2026-images/2026-p8/section-02/1.webp" draggable="false" alt="" aria-hidden="true">
+        </div>
       </div>
     </div>
     <div id="shape-tooltip"></div>
@@ -604,12 +709,106 @@
   libraryOverlay.addEventListener('click', (e) => { if (e.target === libraryOverlay) closeLibrary(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLibrary(); });
 
-  // ── Icon grid (By Content) ──
-  const shapes = Array.from(document.querySelectorAll('.icon-grid .shape'));
+  // ── Icon grid (By Content) ── static grid; each cell runs exactly one of
+  // 4 isolated hover-effect variants, picked via its own data-variant attr
+  // so any of the 4 can be dropped onto any other icon later with no rewiring.
+  const shapes = Array.from(document.querySelectorAll('.icon-grid .icon-cell'));
+
+  // Coalesces rapid mousemove events down to one update per animation
+  // frame — keeps the warp/tilt effects on transform/opacity-only work
+  // instead of thrashing style recalcs on every raw pointer event.
+  function rafThrottle(fn) {
+    let ticking = false, lastArgs = null;
+    return (...args) => {
+      lastArgs = args;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { fn.apply(null, lastArgs); ticking = false; });
+    };
+  }
+
+  // Variant A — warp: mask position (--mx/--my) tracks the cursor over a
+  // pre-warped duplicate layer; the CSS opacity transition (0.35s) handles
+  // the fade back out on mouseleave, no extra JS needed for that part.
+  function initWarpEffect(cell) {
+    const onMove = rafThrottle((e) => {
+      const r = cell.getBoundingClientRect();
+      cell.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      cell.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+    cell.addEventListener('mousemove', onMove);
+  }
+
+  // Variant B — fragment: slices the cell's own sizing <img> into an 8-piece
+  // (4x2) background-position grid at runtime — no pre-cut sprite asset —
+  // then gives each piece a small hand-picked shatter offset + staggered delay.
+  function initFragmentEffect(cell) {
+    const sizer = cell.querySelector('.frag-sizer');
+    if (!sizer) return;
+    const src = sizer.getAttribute('src');
+    const cols = 4, rows = 2;
+    const shatter = [
+      [-7, -9, -8], [6, -10, 7], [-9, 7, 6], [8, 8, -7],
+      [-6, 10, 9], [9, -6, -9], [-8, -6, 8], [7, 9, -6],
+    ];
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const i = row * cols + col;
+        const piece = document.createElement('div');
+        piece.className = 'frag-piece';
+        piece.style.left = (col * 100 / cols) + '%';
+        piece.style.top = (row * 100 / rows) + '%';
+        piece.style.width = (100 / cols) + '%';
+        piece.style.height = (100 / rows) + '%';
+        piece.style.backgroundImage = "url('" + src + "')";
+        piece.style.backgroundSize = (cols * 100) + '% ' + (rows * 100) + '%';
+        piece.style.backgroundPosition = (col * 100 / (cols - 1)) + '% ' + (row * 100 / (rows - 1)) + '%';
+        const [tx, ty, tr] = shatter[i];
+        piece.style.setProperty('--tx', tx + 'px');
+        piece.style.setProperty('--ty', ty + 'px');
+        piece.style.setProperty('--tr', tr + 'deg');
+        piece.style.transitionDelay = (i * 18) + 'ms';
+        cell.appendChild(piece);
+      }
+    }
+  }
+
+  // Variant C — magnetic tilt: rotateX/rotateY on the inner wrapper, clamped
+  // to ±9deg, plus a cursor-tracking specular highlight (same --mx/--my
+  // pattern as the warp mask). Resetting to flat on mouseleave is a plain
+  // transform assignment — the CSS transition on .tilt-inner eases it back.
+  function initTiltEffect(cell) {
+    const inner = cell.querySelector('.tilt-inner');
+    if (!inner) return;
+    const maxDeg = 9;
+    const onMove = rafThrottle((e) => {
+      const r = cell.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      const rotY = (px - 0.5) * 2 * maxDeg;
+      const rotX = (0.5 - py) * 2 * maxDeg;
+      inner.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+      cell.style.setProperty('--mx', (px * 100) + '%');
+      cell.style.setProperty('--my', (py * 100) + '%');
+    });
+    cell.addEventListener('mousemove', onMove);
+    cell.addEventListener('mouseleave', () => {
+      inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  }
+
+  // Variant D — morph: pure CSS cross-fade (filter'd duplicate layer, opacity
+  // 0→1 on :hover) — no JS required, listed here only so the dispatch table
+  // below documents all 4 variants in one place.
+
+  shapes.forEach(cell => {
+    if (cell.dataset.variant === 'warp') initWarpEffect(cell);
+    else if (cell.dataset.variant === 'fragment') initFragmentEffect(cell);
+    else if (cell.dataset.variant === 'tilt') initTiltEffect(cell);
+  });
 
   shapes.forEach(el => {
     if (el.dataset.href) {
-      el.style.cursor = 'pointer';
       el.addEventListener('click', () => { window.location.href = el.dataset.href; });
     }
   });
@@ -620,8 +819,6 @@
   if (!isTouch) {
     shapes.forEach(el => {
       el.addEventListener('mouseenter', () => {
-        el.classList.add('selected');
-        shapes.forEach(other => { if (other !== el) other.classList.add('dimmed'); });
         shapeTooltip.textContent = el.dataset.label;
         shapeTooltip.classList.add('visible');
       });
@@ -631,7 +828,6 @@
         shapeTooltip.style.transform = 'none';
       });
       el.addEventListener('mouseleave', () => {
-        shapes.forEach(other => other.classList.remove('selected', 'dimmed'));
         shapeTooltip.classList.remove('visible');
       });
     });
