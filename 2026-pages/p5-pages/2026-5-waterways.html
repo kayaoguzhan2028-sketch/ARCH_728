@@ -39,9 +39,9 @@
   #waterways-tooltip { position:fixed; background:var(--black); color:var(--white); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; white-space:nowrap; padding:0.5em 0.9em; border:1px solid rgba(245,242,235,0.25); opacity:0; pointer-events:none; transition:opacity 0.15s; z-index:200; transform:translate(-50%,-140%); }
   #waterways-tooltip.show { opacity:1; }
 
-  .site-focus { display:flex; gap:2rem; align-items:flex-start; flex-wrap:wrap; margin:2.5rem 0; }
-  .site-focus img { flex:2 1 380px; max-width:65%; display:block; margin:0; opacity:0.9; }
-  .site-focus p { flex:1 1 220px; margin:0; }
+  .site-focus { display:flex; flex-direction:column; align-items:center; gap:1.5rem; margin:2.5rem 0; }
+  .site-focus img { max-width:620px; width:100%; display:block; margin:0; opacity:0.9; }
+  .site-focus p { max-width:620px; margin:0; }
 
   .triptych { display:flex; gap:1.5rem; flex-wrap:wrap; margin:2.5rem 0; }
   .triptych-item { flex:1 1 180px; }
@@ -100,14 +100,14 @@
     </div>
     <div id="waterways-tooltip"></div>
 
-    <h2>Site Focus</h2>
+    <h2 style="text-align:center;">Site Focus</h2>
 
     <div class="site-focus">
       <img src="../../2026-images/2026-p5/04-WaterWays/site-scale.webp" alt="Site-scale waterways map">
       <p>Changing the scale from the city to the site reveals that there are four waterways situated around the Grand Çankaya Hotel: Dikmen Deresi, İncesu Deresi, Sazlık Deresi, and Kavaklıdere. Kavaklıdere is the nearest one, flowing almost tangently to the hotel site.</p>
     </div>
 
-    <h2>SITE RELATION</h2>
+    <h2 style="text-align:center;">SITE RELATION</h2>
 
     <div class="triptych">
       <div class="triptych-item">

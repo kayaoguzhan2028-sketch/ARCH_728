@@ -1,0 +1,1382 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="must-images/favicon/Mimfak.webp">
+<title>Atlas — Explore</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black: #0a0a0a; --white: #f5f2eb; --mid: #d4cebc; --muted: rgba(245,242,235,0.45); --border: rgba(245,242,235,0.12); --node-size: 8px; }
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--black); color: var(--white); font-family: 'EB Garamond', Georgia, serif; display: flex; flex-direction: column; }
+
+  nav { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 52px; border-bottom: 1px solid var(--border); background: var(--black); z-index: 50; }
+  .nav-left { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85; }
+  .nav-left a { color: var(--white); text-decoration: none; opacity: 0.85; transition: opacity 0.2s; }
+  .nav-left a:hover { opacity: 1; }
+  .view-tabs { display: flex; gap: 0; list-style: none; }
+  .view-tabs li button { background: none; border: none; border-bottom: 2px solid transparent; padding: 0.4rem 1.4rem; font-family: 'EB Garamond', serif; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.4; cursor: pointer; transition: opacity 0.2s, border-color 0.2s; }
+  .view-tabs li button:hover { opacity: 0.75; }
+  .view-tabs li button.active { opacity: 1; border-bottom-color: var(--white); }
+
+  .content { flex: 1; position: relative; overflow: hidden; }
+  .view { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; }
+  .view.active { display: flex; }
+
+  #view-map { align-items: stretch; }
+  .map-container { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .zoom-controls { position: absolute; bottom: 1.4rem; right: 1.4rem; display: flex; flex-direction: column; gap: 4px; z-index: 1000; }
+  .zoom-btn { width: 32px; height: 32px; background: rgba(10,10,10,0.7); border: 1px solid rgba(245,242,235,0.2); color: var(--white); font-family: 'EB Garamond', serif; font-size: 1.1rem; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: border-color 0.2s, opacity 0.2s; opacity: 0.6; display: flex; align-items: center; justify-content: center; }
+  .zoom-btn:hover { opacity: 1; border-color: rgba(245,242,235,0.5); }
+
+  .node { position: relative; display: inline-block; pointer-events: all; touch-action: manipulation; cursor: pointer; }
+  .node-dot { width: var(--node-size); height: var(--node-size); border-radius: 50%; background: #f5f2eb; border: 1.5px solid #0a0a0a; transition: transform 0.2s; position: relative; z-index: 2; }
+  .node-dot::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid rgba(245,242,235,0.55); animation: pulse 2.5s ease-out infinite; opacity: 0; }
+  .node-image .node-dot { width: 20px; height: 20px; background-image: var(--node-img); background-size: cover; background-position: center; }
+  @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(2.2); opacity: 0; } }
+  .node:hover .node-dot { transform: scale(1.5); }
+  .node-label { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; white-space: nowrap; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); }
+  .node:hover .node-label { opacity: 1; }
+
+  .node-cluster .cluster-label { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); display: flex; gap: 4px; opacity: 0; pointer-events: none; transition: opacity 0.18s; white-space: nowrap; }
+  .node-cluster:hover .cluster-label { opacity: 1; pointer-events: auto; }
+  .cluster-link { background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; color: var(--white); text-decoration: none; backdrop-filter: blur(4px); transition: border-color 0.15s; }
+  .cluster-link:hover { border-color: rgba(245,242,235,0.5); }
+
+  /* Lens radial menu */
+  .lens-menu { position: absolute; inset: 0; z-index: 998; pointer-events: none; }
+  .lens-arc-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .lens-arc { fill: none; stroke: rgba(245,242,235,0.45); stroke-width: 1; stroke-dasharray: 4 5; }
+  .lens-node { position: absolute; transform: translate(-50%, -50%); cursor: pointer; pointer-events: auto; }
+  .lens-node-dot { width: calc(var(--node-size) * 1.6); height: calc(var(--node-size) * 1.6); border-radius: 50%; background: #f5f2eb; border: 1.5px solid #0a0a0a; transform: scale(0); opacity: 0; transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1), opacity 0.32s ease; }
+  .lens-node:hover .lens-node-dot { transform: scale(1.2); }
+  .lens-node.visible .lens-node-dot { transform: scale(1); opacity: 1; }
+  .lens-node.visible:hover .lens-node-dot { transform: scale(1.2); }
+  .lens-node-label { position: absolute; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; white-space: nowrap; font-size: 0.82rem; letter-spacing: 0.05em; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.25s ease; }
+  .lens-node.visible .lens-node-label { opacity: 1; }
+  .lens-node.label-right .lens-node-label { left: calc(100% + 10px); top: 50%; transform: translateY(-50%); }
+  .lens-node.label-left  .lens-node-label { right: calc(100% + 10px); top: 50%; transform: translateY(-50%); }
+  .lens-node.label-top    .lens-node-label { left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); }
+  .lens-node.label-bottom .lens-node-label { left: 50%; top: calc(100% + 10px); transform: translateX(-50%); }
+
+  #view-content { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; cursor: default; align-items: flex-start; justify-content: center; }
+
+  .rhythm-wrap { width: 100%; max-width: 1600px; margin: 0 auto; padding: 2.75rem 2rem 4rem; }
+  .rhythm-heading { text-align: left; font-size: 2rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); opacity: 0.92; margin: 0 0 2.2rem; }
+
+  .rhythm-grid { display: grid; grid-template-columns: repeat(7, 1fr); align-items: start; gap: 34px 14px; }
+  @media (max-width: 640px) {
+    .rhythm-wrap { padding: 2rem 1rem 3rem; }
+    .rhythm-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 10px; }
+    .rhythm-group-label { white-space: normal; font-size: 0.62rem; }
+  }
+  @media (min-width: 641px) and (max-width: 1000px) {
+    .rhythm-grid { grid-template-columns: repeat(3, 1fr); gap: 26px 12px; }
+  }
+  .rhythm-group-label { position: absolute; left: 0; bottom: 100%; margin-bottom: 0.5rem; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.9; white-space: nowrap; cursor: pointer; transition: opacity 0.2s ease; }
+  .rhythm-cell.group-active .rhythm-group-label { opacity: 1; animation: labelColorCycle 3s ease-in-out infinite; }
+  @keyframes labelColorCycle { 0%, 100% { color: #ff8a3d; } 33.33% { color: #4aa3ff; } 66.66% { color: var(--white); } }
+  .rhythm-group-label::before { content: '→'; display: inline-block; margin-right: 0.45em; opacity: 0; transform: translateX(4px); transition: opacity 0.2s ease, transform 0.2s ease; }
+  .rhythm-cell.group-active .rhythm-group-label::before { opacity: 0.8; transform: translateX(0); }
+  .rhythm-cell { background: rgba(245,242,235,0.035); border: 1px solid var(--border); position: relative; overflow: visible; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, opacity 0.25s ease; }
+  /* Natural rhythm: no manual height. Each cell's first child (the base
+     image/video/frame) lays out at its own intrinsic aspect ratio at the
+     fixed column width — that's what gives each cell its height. Every
+     later sibling (crossfade/highlight layers) is stacked absolutely on
+     top of that established box, not the other way around. */
+  .cell-media { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .cell-media > :first-child { position: relative; display: block; width: 100%; height: auto; }
+  .cell-media > :not(:first-child) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* Iframe crops can't self-report an intrinsic height the way an image
+     can — they stay absolutely positioned (scaled/cropped by JS) and the
+     cell instead gets an explicit aspect-ratio matching the crop window. */
+  .cell-media > .cell-frame:first-child { position: absolute; }
+  .cell-frame { border: none; pointer-events: none; transform-origin: top left; }
+  .cell-img { display: block; width: 100%; height: auto; object-fit: cover; }
+  .cell-stack { display: flex; flex-direction: column; width: 100%; }
+  .cell-stack-img { display: block; width: 100%; height: auto; }
+  .effect-layer { object-fit: cover; opacity: 0; transition: opacity 0.35s ease; }
+  .effect-layer.active { opacity: 1; }
+  .layer-img { object-fit: contain; opacity: 0; transition: opacity 0.4s ease; }
+  .layer-img.on { opacity: 1; }
+  .cell-zone-overlay svg { width: 100%; height: 100%; display: block; }
+  .cell-zone-shape { fill: var(--accent); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, filter 0.25s ease; }
+  .cell-zone-shape.cell-zone-active { opacity: 0.8; filter: drop-shadow(0 0 10px rgba(245,220,140,1)) drop-shadow(0 0 24px rgba(245,200,80,0.9)); }
+  .slide-after-img { object-fit: cover; clip-path: inset(0 100% 0 0); animation: slideReveal 4s ease-in-out infinite alternate; animation-play-state: paused; }
+  .rhythm-cell.group-active .slide-after-img { animation-play-state: running; }
+  @keyframes slideReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .pulse-hotspot { fill: none; stroke: #f5dc8c; stroke-width: 26; opacity: 0; pointer-events: none; transform-box: fill-box; transform-origin: center; }
+  .rhythm-cell.group-active .pulse-hotspot { animation: pulseHotspot 1.8s ease-out infinite; }
+  @keyframes pulseHotspot { 0% { transform: scale(0.7); opacity: 1; } 100% { transform: scale(2.4); opacity: 0; } }
+  .cell-placeholder { display: block; width: 100%; aspect-ratio: 1 / 1; }
+  .rhythm-cell:hover { background: rgba(245,242,235,0.08); border-color: rgba(245,242,235,0.28); }
+  .rhythm-cell.dimmed { opacity: 0.28; }
+  .rhythm-cell .cell-index { position: absolute; top: 0.55rem; left: 0.7rem; font-size: 0.6rem; letter-spacing: 0.14em; color: var(--mid); opacity: 0.4; font-family: 'EB Garamond', Georgia, serif; }
+
+  footer { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 48px; border-top: 1px solid var(--border); background: var(--black); }
+  .footer-meta { font-size: 0.72rem; letter-spacing: 0.1em; color: var(--white); opacity: 0.22; }
+  .btn-library { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.38rem 1.2rem; border: 1px solid rgba(245,242,235,0.25); background: none; color: var(--white); font-family: 'EB Garamond', serif; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: border-color 0.2s, opacity 0.2s; opacity: 0.6; }
+  .btn-library:hover { opacity: 1; border-color: rgba(245,242,235,0.6); }
+  .btn-library svg { width: 11px; height: 11px; opacity: 0.7; }
+
+  /* Library overlay */
+  .library-overlay { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; background: rgba(10,10,10,0.82); backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+  .library-overlay.visible { opacity: 1; pointer-events: auto; }
+  .library-panel { position: relative; width: min(440px, 90vw); max-height: 80vh; overflow-y: auto; background: var(--black); border: 1px solid var(--border); padding: 2.2rem 2.2rem; }
+  .library-close { position: absolute; top: 0.9rem; right: 1rem; background: none; border: none; color: var(--white); cursor: pointer; opacity: 0.4; font-size: 0.85rem; line-height: 1; padding: 0.2rem; transition: opacity 0.15s; }
+  .library-close:hover { opacity: 1; }
+  .library-title { font-size: 1.5rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .library-subtitle { font-size: 1.2rem; font-style: italic; letter-spacing: 0.04em; color: var(--mid); opacity: 0.7; margin-bottom: 1.8rem; }
+  .library-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+  .library-list a { display: flex; gap: 0.9rem; align-items: baseline; padding: 0.6rem 0.2rem; color: var(--white); text-decoration: none; font-size: 0.95rem; letter-spacing: 0.04em; opacity: 0.65; border-bottom: 1px solid var(--border); transition: opacity 0.18s, padding-left 0.18s; }
+  .library-list a:hover { opacity: 1; padding-left: 0.5rem; }
+  .library-index { font-size: 0.72rem; letter-spacing: 0.15em; opacity: 0.5; min-width: 1.6em; }
+
+  #leaflet-map { position: absolute; inset: 0; }
+  .leaflet-container { background: var(--black); }
+  .leaflet-tile-pane { filter: brightness(1.75) contrast(1.05); }
+  body.map-light .leaflet-tile-pane { filter: brightness(1) contrast(1); }
+  body.map-light .leaflet-container { background: #e8e4da; }
+  .leaflet-control-attribution { background: rgba(10,10,10,0.6) !important; color: rgba(245,242,235,0.22) !important; font-size: 0.55rem !important; }
+  .leaflet-control-attribution a { color: rgba(245,242,235,0.22) !important; }
+  .leaflet-attribution-flag { display: none !important; }
+
+  .map-panel { position: absolute; top: 1.2rem; right: 4.4rem; z-index: 1000; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.85rem 1.1rem; width: 220px; backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity 0.22s; }
+  .map-panel.visible { opacity: 1; pointer-events: auto; }
+  .map-panel-label { font-size: 0.88rem; letter-spacing: 0.06em; margin-bottom: 0.75rem; padding-right: 1rem; line-height: 1.4; opacity: 0.9; }
+  .map-panel-close { position: absolute; top: 0.45rem; right: 0.55rem; background: none; border: none; color: var(--white); cursor: pointer; opacity: 0.35; font-size: 0.75rem; line-height: 1; padding: 0.1rem 0.2rem; transition: opacity 0.15s; }
+  .map-panel-close:hover { opacity: 0.9; }
+  .map-panel-link { display: inline-block; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white); text-decoration: none; border: 1px solid rgba(245,242,235,0.28); padding: 0.28em 0.7em; opacity: 0.65; transition: opacity 0.18s, border-color 0.18s; }
+  .map-panel-link:hover { opacity: 1; border-color: rgba(245,242,235,0.55); }
+  .map-panel-actions { display: flex; justify-content: flex-start; align-items: center; margin-top: 0.75rem; gap: 0.5rem; }
+  .map-panel-back { display: none; font-family: 'EB Garamond', serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; background: none; border: 1px solid rgba(245,242,235,0.28); color: var(--white); cursor: pointer; padding: 0.28em 0.7em; opacity: 0.65; transition: opacity 0.18s, border-color 0.18s; }
+  .map-panel-back:hover { opacity: 1; border-color: rgba(245,242,235,0.55); }
+  .map-panel-text { margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.78rem; line-height: 1.65; opacity: 0.55; white-space: pre-line; }
+  .map-panel-text a { color: var(--white); text-decoration: underline; opacity: 0.8; transition: opacity 0.18s; }
+  .map-panel-text a:hover { opacity: 1; }
+  .map-panel.mode-geojson .map-panel-close { display: none; }
+  .map-panel.mode-geojson .map-panel-back { display: inline-block; }
+
+  @media (max-width: 640px) {
+    .map-panel { top: auto; bottom: 0; left: 0; right: 0; width: 100%; max-width: none; max-height: 62vh; overflow-y: auto; border: none; border-top: 1px solid var(--border); border-radius: 14px 14px 0 0; padding: 1.1rem 1.3rem 1.6rem; transform: translateY(14px); transition: opacity 0.22s ease, transform 0.22s ease; }
+    .map-panel.visible { transform: translateY(0); }
+    .map-panel-label { font-size: 1rem; padding-right: 1.6rem; }
+    .map-panel-close { top: 0.7rem; right: 0.9rem; font-size: 1rem; padding: 0.3rem; }
+    .map-panel-actions { flex-wrap: wrap; }
+    .map-panel-link, .map-panel-back { flex: 1 1 auto; text-align: center; padding: 0.6em 0.8em; font-size: 0.72rem; }
+    .map-panel-text { font-size: 0.86rem; }
+  }
+  @media (max-width: 900px), (hover: none) {
+    .node::before, .lens-node::before { content: ''; position: absolute; inset: -14px; z-index: 1; }
+  }
+
+  #map-theme-btn { background: none; border: 1px solid rgba(245,242,235,0.25); color: var(--white); font-family: 'EB Garamond', serif; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.2em 0.65em; cursor: pointer; opacity: 0.45; transition: opacity 0.2s; min-width: 4.6rem; text-align: center; }
+  #map-theme-btn:hover { opacity: 1; }
+
+  .leaflet-tooltip.map-shape-tooltip { background: rgba(10,10,10,0.88); border: 1px solid rgba(245,242,235,0.12); color: var(--white); font-family: 'EB Garamond', Georgia, serif; font-size: 0.82rem; letter-spacing: 0.04em; padding: 0.35rem 0.75rem; backdrop-filter: blur(4px); box-shadow: none; border-radius: 0; }
+  .leaflet-tooltip.map-shape-tooltip::before { display: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html">← Atlas</a>
+  </div>
+  <ul class="view-tabs">
+    <li><button class="active" data-view="map">By Map</button></li>
+    <li><button data-view="content">By Content</button></li>
+  </ul>
+  <button id="map-theme-btn">bright</button>
+</nav>
+
+<div class="content">
+
+  <!-- BY MAP -->
+  <div class="view active" id="view-map">
+    <div class="map-container" id="map-container">
+      <div id="leaflet-map"></div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="zoom-reset" title="Reset">⌂</button>
+        <button class="zoom-btn" id="zoom-in">+</button>
+        <button class="zoom-btn" id="zoom-out">−</button>
+      </div>
+      <div id="map-panel" class="map-panel">
+        <button class="map-panel-close" id="map-panel-close">✕</button>
+        <div class="map-panel-label" id="map-panel-label"></div>
+        <div class="map-panel-actions">
+          <button class="map-panel-back" id="map-panel-back">← Back</button>
+          <a class="map-panel-link" id="map-panel-link" href="#">Project →</a>
+        </div>
+        <p class="map-panel-text" id="map-panel-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BY CONTENT -->
+  <div class="view" id="view-content">
+    <div class="rhythm-wrap">
+      <h2 class="rhythm-heading">Reflections on Landscape - Soil</h2>
+      <div class="rhythm-grid" id="rhythm-grid"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-meta">© 2026 — ODTÜ</span>
+  <a href="#" class="btn-library" id="library-btn">
+    Open Library
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 6h8M7 3l3 3-3 3"/></svg>
+  </a>
+</footer>
+
+<div class="library-overlay" id="library-overlay">
+  <div class="library-panel">
+    <button class="library-close" id="library-close">✕</button>
+    <h2 class="library-title">Reflections on Landscape</h2>
+    <p class="library-subtitle">Urban Soil Metabolism · Spring 2026</p>
+    <ul class="library-list" id="library-list"></ul>
+  </div>
+</div>
+
+<script>
+  // ── Leaflet Map ──
+  (function () {
+    const BASE = '';
+    const DATA = 'data/project_nodes_html_map.json';
+    const CENTER = [39.892857, 32.785077];
+    const ZOOM = 9;
+
+    window._leafletMap = L.map('leaflet-map', {
+      center: CENTER, zoom: ZOOM, zoomControl: false, attributionControl: true,
+      minZoom: 5, maxBounds: [[35.8, 25.9], [42.1, 44.8]], maxBoundsViscosity: 1.0
+    });
+
+    setTimeout(() => window._leafletMap.invalidateSize(), 0);
+
+    const tileAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+    let activeTile = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: tileAttrib, subdomains: 'abcd', maxZoom: 19
+    }).addTo(window._leafletMap);
+
+    let isLight = false;
+    document.getElementById('map-theme-btn').addEventListener('click', () => {
+      isLight = !isLight;
+      activeTile.remove();
+      activeTile = L.tileLayer(
+        isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+                : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        { attribution: tileAttrib, subdomains: 'abcd', maxZoom: 19 }
+      ).addTo(window._leafletMap);
+      document.body.classList.toggle('map-light', isLight);
+      document.getElementById('map-theme-btn').textContent = isLight ? 'dark' : 'bright';
+    });
+
+    function makeIcon(html, size = 8) {
+      return L.divIcon({ className: '', html, iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+    }
+
+    const mapPanel      = document.getElementById('map-panel');
+    const mapPanelLabel = document.getElementById('map-panel-label');
+    const mapPanelLink  = document.getElementById('map-panel-link');
+    const mapPanelBack  = document.getElementById('map-panel-back');
+    const mapPanelText  = document.getElementById('map-panel-text');
+
+    let activeShape = null, activeMarkerEl = null, initialBounds = null;
+    let prevView = null, mapLocked = false, allMarkers = [], hiddenMarkers = [], lensParent = null;
+
+    function lockMap() {
+      mapLocked = true;
+      window._leafletMap.dragging.disable(); window._leafletMap.scrollWheelZoom.disable();
+      window._leafletMap.touchZoom.disable(); window._leafletMap.doubleClickZoom.disable();
+      window._leafletMap.boxZoom.disable(); window._leafletMap.keyboard.disable();
+    }
+    function unlockMap() {
+      mapLocked = false;
+      window._leafletMap.dragging.enable(); window._leafletMap.scrollWheelZoom.enable();
+      window._leafletMap.touchZoom.enable(); window._leafletMap.doubleClickZoom.enable();
+      window._leafletMap.boxZoom.enable(); window._leafletMap.keyboard.enable();
+    }
+    function clearActive() {
+      if (activeShape) { window._leafletMap.removeLayer(activeShape); activeShape = null; }
+      if (activeMarkerEl) { activeMarkerEl.style.opacity = ''; activeMarkerEl.style.pointerEvents = ''; activeMarkerEl = null; }
+      hiddenMarkers.forEach(m => m.addTo(window._leafletMap));
+      hiddenMarkers = [];
+      mapPanel.classList.remove('visible', 'mode-geojson');
+      mapPanelText.textContent = '';
+      closeLensMenu();
+      lensParent = null;
+      unlockMap();
+    }
+
+    document.getElementById('map-panel-close').addEventListener('click', clearActive);
+    mapPanelBack.addEventListener('click', () => {
+      if (lensParent) {
+        openGeojsonNode(lensParent, undefined, null, true);
+        return;
+      }
+      const view = prevView; prevView = null; clearActive();
+      if (view) window._leafletMap.flyTo(view.center, view.zoom, { duration: 2.4 });
+    });
+
+    // ── Lens radial menu ──
+    const LENS_SPREAD_DEG = 360;
+    const LENS_RADIUS_RATIO = 0.33;
+    const LENS_RADIUS_MIN = 105;
+    const LENS_RADIUS_MAX = 330;
+    const LENS_FIT_RATIO = 0.7;
+    const LENS_STAGGER_MS = 60;
+
+    function getLensRadius() {
+      return Math.max(LENS_RADIUS_MIN, Math.min(LENS_RADIUS_MAX, Math.min(window.innerWidth, window.innerHeight) * LENS_RADIUS_RATIO));
+    }
+
+    let lensMenuEl = null, lensResizeHandler = null;
+
+    function closeLensMenu() {
+      if (!lensMenuEl) return;
+      lensMenuEl.remove();
+      lensMenuEl = null;
+      window.removeEventListener('resize', lensResizeHandler);
+      lensResizeHandler = null;
+    }
+
+    function showLensMenu(n) {
+      closeLensMenu();
+      const children = n.lensChildren || [];
+      if (!children.length) return;
+
+      const menu = document.createElement('div');
+      menu.className = 'lens-menu';
+      document.getElementById('map-container').appendChild(menu);
+      lensMenuEl = menu;
+
+      function layout() {
+        menu.innerHTML = '';
+        const pt = window._leafletMap.latLngToContainerPoint([n.lat, n.lng]);
+        const ax = pt.x, ay = pt.y;
+        const R = getLensRadius();
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('class', 'lens-arc-svg');
+        const circle = document.createElementNS(svgNS, 'circle');
+        circle.setAttribute('class', 'lens-arc');
+        circle.setAttribute('cx', ax);
+        circle.setAttribute('cy', ay);
+        circle.setAttribute('r', R);
+        svg.appendChild(circle);
+        menu.appendChild(svg);
+
+        children.forEach((child, i) => {
+          const phi = (LENS_SPREAD_DEG / children.length) * (i + 0.5) * (Math.PI / 180);
+          const dx = Math.sin(phi), dy = -Math.cos(phi);
+          const x = ax + R * dx;
+          const y = ay + R * dy;
+          const labelDir = Math.abs(dx) >= Math.abs(dy)
+            ? (dx >= 0 ? 'label-right' : 'label-left')
+            : (dy >= 0 ? 'label-bottom' : 'label-top');
+          const item = document.createElement('div');
+          item.className = 'lens-node ' + labelDir;
+          item.style.left = x + 'px';
+          item.style.top = y + 'px';
+          item.innerHTML = `<div class="lens-node-dot"></div><div class="lens-node-label">${child.label}</div>`;
+          item.querySelector('.lens-node-dot').style.transitionDelay = (i * LENS_STAGGER_MS) + 'ms';
+          item.querySelector('.lens-node-label').style.transitionDelay = (i * LENS_STAGGER_MS) + 'ms';
+          item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeLensMenu();
+            openGeojsonNode(child, undefined, n);
+          });
+          menu.appendChild(item);
+          requestAnimationFrame(() => requestAnimationFrame(() => item.classList.add('visible')));
+        });
+      }
+
+      layout();
+
+      lensResizeHandler = () => layout();
+      window.addEventListener('resize', lensResizeHandler);
+    }
+
+    function openGeojsonNode(n, marker, parent, isReturning) {
+      clearActive();
+      lensParent = parent || null;
+      if (!parent && !isReturning) {
+        prevView = { center: window._leafletMap.getCenter(), zoom: window._leafletMap.getZoom() };
+      }
+      if (marker) {
+        const el = marker.getElement();
+        if (el) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; activeMarkerEl = el; }
+      }
+      hiddenMarkers = allMarkers.filter(m => m !== marker);
+      hiddenMarkers.forEach(m => window._leafletMap.removeLayer(m));
+      lockMap();
+      mapPanelLabel.textContent = n.label;
+      mapPanelLink.href = BASE + n.url;
+      mapPanelText.textContent = n.description || '';
+      if (n.link) {
+        mapPanelText.appendChild(document.createElement('br'));
+        const linkEl = document.createElement('a');
+        linkEl.href = n.link;
+        linkEl.target = '_blank';
+        linkEl.rel = 'noopener';
+        linkEl.textContent = n.link;
+        mapPanelText.appendChild(linkEl);
+      }
+      mapPanel.classList.add('visible', 'mode-geojson');
+      const geojsonUrl = DATA.replace(/\/[^/]+$/, '') + '/' + n.geojsonFile + '?v=' + Date.now();
+      fetch(geojsonUrl)
+        .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(data => {
+          if (!mapPanel.classList.contains('visible')) return;
+          const hatchId = 'hatch-' + n.id;
+          const svgNS = 'http://www.w3.org/2000/svg';
+          const baseStyle = n.style || { color: '#f5f2eb', weight: 1.5, opacity: 1, fillOpacity: 0 };
+          if (n.hatch) {
+            let defsSvg = document.getElementById('_hatch_defs_svg');
+            if (!defsSvg) {
+              defsSvg = document.createElementNS(svgNS, 'svg');
+              defsSvg.setAttribute('id', '_hatch_defs_svg');
+              defsSvg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+              document.body.appendChild(defsSvg);
+            }
+            let defs = defsSvg.querySelector('defs');
+            if (!defs) { defs = document.createElementNS(svgNS, 'defs'); defsSvg.appendChild(defs); }
+            if (!defs.querySelector('#' + hatchId)) {
+              const h = n.hatch; const sp = h.spacing || 6;
+              const pat = document.createElementNS(svgNS, 'pattern');
+              pat.setAttribute('id', hatchId); pat.setAttribute('patternUnits', 'userSpaceOnUse');
+              pat.setAttribute('width', sp); pat.setAttribute('height', sp);
+              if (h.type === 'cross') {
+                const mkL = (x1, y1, x2, y2) => {
+                  const l = document.createElementNS(svgNS, 'line');
+                  l.setAttribute('x1', x1); l.setAttribute('y1', y1);
+                  l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+                  l.setAttribute('stroke', h.color || '#f5f2eb');
+                  l.setAttribute('stroke-width', h.width || 1);
+                  l.setAttribute('stroke-opacity', h.opacity || 0.7);
+                  return l;
+                };
+                pat.appendChild(mkL(String(sp/2), '0', String(sp/2), String(sp)));
+                pat.appendChild(mkL('0', String(sp/2), String(sp), String(sp/2)));
+              } else if (h.type === 'dot') {
+                const c = document.createElementNS(svgNS, 'circle');
+                c.setAttribute('cx', String(sp/2)); c.setAttribute('cy', String(sp/2));
+                c.setAttribute('r', String(h.radius || sp * 0.18));
+                c.setAttribute('fill', h.color || '#f5f2eb');
+                c.setAttribute('fill-opacity', h.opacity || 0.7);
+                pat.appendChild(c);
+              } else {
+                pat.setAttribute('patternTransform', 'rotate(' + (h.angle || 45) + ')');
+                const ln = document.createElementNS(svgNS, 'line');
+                ln.setAttribute('x1', '0'); ln.setAttribute('y1', '0');
+                ln.setAttribute('x2', '0'); ln.setAttribute('y2', sp);
+                ln.setAttribute('stroke', h.color || '#f5f2eb');
+                ln.setAttribute('stroke-width', h.width || 1.5);
+                ln.setAttribute('stroke-opacity', h.opacity || 0.8);
+                pat.appendChild(ln);
+              }
+              defs.appendChild(pat);
+            }
+          }
+          const layer = L.geoJSON(data, {
+            interactive: false,
+            style: function(feature) {
+              const geomType = feature && feature.geometry && feature.geometry.type;
+              const isPoly = geomType === 'Polygon' || geomType === 'MultiPolygon';
+              if (isPoly) {
+                return Object.assign({}, baseStyle, n.polygonStyle || {}, {
+                  fillColor:   n.hatch ? ('url(#' + hatchId + ')') : (baseStyle.fillColor || '#f5f2eb'),
+                  fillOpacity: n.hatch ? 1 : (baseStyle.fillOpacity || 0),
+                });
+              }
+              return Object.assign({}, baseStyle, n.lineStyle || {});
+            }
+          }).addTo(window._leafletMap);
+          activeShape = layer;
+          const bounds = layer.getBounds();
+          if (bounds.isValid()) {
+            let zoom;
+            if (n.zoom !== undefined) {
+              zoom = n.zoom;
+            } else if (n.lensChildren && n.lensChildren.length) {
+              const fitSize = getLensRadius() * 2 * LENS_FIT_RATIO;
+              zoom = window._leafletMap.getBoundsZoom(bounds, false, L.point(window.innerWidth - fitSize, window.innerHeight - fitSize));
+            } else {
+              zoom = window._leafletMap.getBoundsZoom(bounds, false, L.point(40, 40));
+            }
+            window._leafletMap.flyTo(bounds.getCenter(), zoom, { duration: 1.4 });
+          }
+          if (n.lensChildren && n.lensChildren.length) {
+            setTimeout(() => { if (mapPanel.classList.contains('visible')) showLensMenu(n); }, 1450);
+          }
+        })
+        .catch(err => console.error('[geojson] fetch error:', err));
+    }
+
+    fetch(DATA).then(r => r.json()).then(nodes => {
+      const markers = [];
+      nodes.forEach(n => {
+        const type = n.type || 'node';
+
+        if (type === 'node') {
+          const html = `<div class="node"><div class="node-dot"></div><div class="node-label">${n.label}</div></div>`;
+          const marker = L.marker([n.lat, n.lng], { icon: makeIcon(html) }).addTo(window._leafletMap);
+          markers.push(marker);
+          marker.on('click', () => {
+            clearActive();
+            prevView = { center: window._leafletMap.getCenter(), zoom: window._leafletMap.getZoom() };
+            const el = marker.getElement();
+            if (el) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; activeMarkerEl = el; }
+            hiddenMarkers = allMarkers.filter(m => m !== marker);
+            hiddenMarkers.forEach(m => window._leafletMap.removeLayer(m));
+            lockMap();
+            window._leafletMap.flyTo([n.lat, n.lng], n.zoom || 14, { duration: 1.4 });
+            mapPanelLabel.textContent = n.label;
+            mapPanelLink.href = BASE + n.url;
+            mapPanelText.textContent = n.description || '';
+            mapPanel.classList.add('visible', 'mode-geojson');
+          });
+
+        } else if (type === 'geojson') {
+          const shapeClass = n.icon === 'image' ? ' node-image' : '';
+          const iconSize = n.icon === 'image' ? 20 : 8;
+          const dotAttr = n.icon === 'image' && n.iconImage ? ` style="--node-img: url('${BASE + n.iconImage}')"` : '';
+          const html = `<div class="node${shapeClass}"><div class="node-dot"${dotAttr}></div><div class="node-label">${n.label}</div></div>`;
+          const marker = L.marker([n.lat, n.lng], { icon: makeIcon(html, iconSize) }).addTo(window._leafletMap);
+          markers.push(marker);
+          marker.on('click', () => openGeojsonNode(n, marker));
+
+        } else {
+          const html = `<div class="node"><div class="node-dot"></div><div class="node-label">${n.label}</div></div>`;
+          const marker = L.marker([n.lat, n.lng], { icon: makeIcon(html) }).addTo(window._leafletMap);
+          markers.push(marker);
+          marker.on('click', () => {
+            clearActive();
+            prevView = { center: window._leafletMap.getCenter(), zoom: window._leafletMap.getZoom() };
+            const el = marker.getElement();
+            if (el) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; activeMarkerEl = el; }
+            hiddenMarkers = allMarkers.filter(m => m !== marker);
+            hiddenMarkers.forEach(m => window._leafletMap.removeLayer(m));
+            lockMap();
+            window._leafletMap.flyTo([n.lat, n.lng], 15, { duration: 1.4 });
+            const shapeStyle = { color: 'rgba(245,242,235,0.75)', weight: 1.5, fillColor: 'rgba(245,242,235,0.08)', fillOpacity: 1 };
+            activeShape = type === 'polygon'
+              ? L.polygon(n.coordinates, shapeStyle).addTo(window._leafletMap)
+              : L.polyline(n.coordinates, { color: 'rgba(245,242,235,0.75)', weight: 2 }).addTo(window._leafletMap);
+            if (n.briefing) activeShape.bindTooltip(n.briefing, { sticky: true, className: 'map-shape-tooltip' });
+            mapPanelLabel.textContent = n.label;
+            mapPanelLink.href = BASE + n.url;
+            mapPanelText.textContent = n.description || '';
+            mapPanel.classList.add('visible', 'mode-geojson');
+          });
+        }
+      });
+
+      allMarkers = markers;
+      if (markers.length) {
+        initialBounds = L.featureGroup(markers).getBounds().pad(0.4);
+        const fitZoom = window._leafletMap.getBoundsZoom(initialBounds) - 1;
+        window._leafletMap.setView(CENTER, fitZoom);
+      }
+    });
+
+    document.getElementById('zoom-in').addEventListener('click',    () => window._leafletMap.zoomIn());
+    document.getElementById('zoom-out').addEventListener('click',   () => window._leafletMap.zoomOut());
+    document.getElementById('zoom-reset').addEventListener('click', () => {
+      prevView = null; clearActive();
+      const z = initialBounds ? window._leafletMap.getBoundsZoom(initialBounds) - 1 : ZOOM;
+      window._leafletMap.flyTo(CENTER, z, { duration: 1.4 });
+    });
+  })();
+
+  // ── View switcher ──
+  const buttons = document.querySelectorAll('.view-tabs button');
+  const views   = document.querySelectorAll('.view');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.view;
+      buttons.forEach(b => b.classList.remove('active'));
+      views.forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('view-' + target).classList.add('active');
+      if (target === 'map' && window._leafletMap) window._leafletMap.invalidateSize();
+      if (target !== 'content' && window._resetContentView) window._resetContentView();
+    });
+  });
+
+  // ── Library overlay ──
+  const LIBRARY_PROJECTS = [
+    { num: '01', label: 'Çayırhan Ash Lake',           url: '2026-pages/p1-pages/2026-1.html' },
+    { num: '02', label: 'Hıdırlık Tepe',               url: '2026-pages/p2-pages/2026-2.html' },
+    { num: '03', label: 'Grid',                        url: '2026-pages/p3-pages/2026-3.html' },
+    { num: '04', label: 'Bilkent Territory',           url: '2026-pages/p4-pages/2026-4-proposal&methodology.html' },
+    { num: '05', label: 'The Grand Çankaya Hotel', url: '2026-pages/p5-pages/2026-5.html' },
+    { num: '06', label: 'Imrahor Valley',              url: '2026-pages/p6-pages/2026-6.html' },
+    { num: '07', label: 'Ilker Neighbourhood',         url: '2026-pages/p7-pages/2026-7-info.html' },
+    { num: '08', label: 'ÇUBUK I Dam',                 url: '2026-pages/p8-pages/2026-8.html' },
+  ];
+
+  const libraryOverlay = document.getElementById('library-overlay');
+  const libraryList    = document.getElementById('library-list');
+
+  LIBRARY_PROJECTS.forEach(p => {
+    const li = document.createElement('li');
+    const a  = document.createElement('a');
+    a.href = p.url;
+    const index = document.createElement('span');
+    index.className = 'library-index';
+    index.textContent = p.num;
+    const label = document.createElement('span');
+    label.textContent = p.label;
+    a.appendChild(index);
+    a.appendChild(label);
+    li.appendChild(a);
+    libraryList.appendChild(li);
+  });
+
+  function openLibrary()  { libraryOverlay.classList.add('visible'); }
+  function closeLibrary() { libraryOverlay.classList.remove('visible'); }
+
+  document.getElementById('library-btn').addEventListener('click', (e) => { e.preventDefault(); openLibrary(); });
+  document.getElementById('library-close').addEventListener('click', closeLibrary);
+  libraryOverlay.addEventListener('click', (e) => { if (e.target === libraryOverlay) closeLibrary(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLibrary(); });
+
+  // ── By Content: rhythmic, non-repeating grid, grouped by project ──
+  (function () {
+    const grid = document.getElementById('rhythm-grid');
+
+    // No manual height rhythm anymore — each cell's own media (image/video/
+    // iframe crop) lays out at its intrinsic aspect ratio at the fixed
+    // column width, so the natural rhythm comes from the content itself.
+
+    // Every animated cell (interval, video, live iframe) registers a
+    // start/stop pair here instead of running on its own. Nothing runs by
+    // default — a group's motion only turns on while it's the hovered
+    // (undimmed) one, so at most one group is ever animating at a time,
+    // no matter how large the grid grows.
+    const groupControllers = [];
+    function registerController(group, ctrl) {
+      groupControllers.push({ group, start: ctrl.start, stop: ctrl.stop });
+    }
+    function setActiveGroup(g) {
+      grid.querySelectorAll('.rhythm-cell').forEach((c) => {
+        c.classList.toggle('group-active', g !== null && c.dataset.group === g);
+      });
+      groupControllers.forEach((c) => {
+        if (g !== null && c.group === g) c.start();
+        else c.stop();
+      });
+    }
+
+    // Placeholder counts — update .count per group once the real page lists are given.
+    const GROUPS = [
+      { name: 'Çayırhan Ash Lake', count: 8, items: [
+          { type: 'img', src: '2026-images/2026-p1/1-mainpage/kapak-yatay.webp' },
+          { type: 'effect', interval: 1400, bg: '2026-images/2026-p1/2-interactive-page/cayirhan-main-photo.webp',
+            base: '2026-images/2026-p1/2-interactive-page/SVG/', frames: [
+              'cayirhan-main-photo-microclimate.webp','cayirhan-main-photo-fabrika.webp','cayirhan-main-photo-golet.webp',
+              'cayirhan-main-photo-kus.webp','cayirhan-main-photo-toprak.webp','cayirhan-main-photo-yapi.webp' ] },
+          { type: 'effect', interval: 1400, bg: '2026-images/2026-p1/4-power-plant/factory-final.webp',
+            base: '2026-images/2026-p1/4-power-plant/SVG/', frames: [
+              'highlights-ashlake.webp','highlights-baraj.webp','highlights-cayirhan.webp','highlights-circle.webp',
+              'highlights-fabrika.webp','highlights-production.webp','highlights-risk.webp','highlights-waste.webp' ] },
+          { type: 'img', src: '2026-images/2026-p1/3-infrastructure/calisma-2/infrastructure-section-2.webp' },
+          { type: 'img', src: '2026-images/2026-p1/6-soil/soil.webp' },
+          { type: 'img', src: '2026-images/2026-p1/8-ashlake/ashlake-main-image.webp' },
+          { type: 'img', src: '2026-images/2026-p1/7-microclimatichange/microclimate.webp' },
+          { type: 'img', src: '2026-images/2026-p1/5-bird/kus-goc-haritasi.webp' },
+        ] },
+      { name: 'Hıdırlık Hill', count: 6, items: [
+          { type: 'video', src: '2026-images/2026-p2/mainpage/main-page.mp4' },
+          { type: 'layers',
+            base: '2026-images/2026-p2/themodel/',
+            standalone: '24-model-anagörsel-renderered.webp',
+            layers: [
+              '03-model-exisitngslum.webp', '01-model-toki.webp', '16-model-tomb.webp',
+              '13-model-existingtree.webp', '08-model-electrictower.webp', '17-model-rockyformations.webp',
+              '20-model-path.webp', '04-model-slumlaststage.webp', '09-model-lightpole.webp',
+            ] },
+          { type: 'effect', bg: '2026-images/2026-p2/thesection/section-kolajkesit-01.webp', bgDim: true,
+            base: '2026-images/2026-p2/thesection/',
+            frames: [ 'section-kolajkesit-slice1.webp', 'section-kolajkesit-slice2.webp', 'section-kolajkesit-slice3.webp', 'section-kolajkesit-slice4.webp' ] },
+          { type: 'slide', shorten: 0.58, before: '2026-images/2026-p2/conditions/condition-oncesi-01-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-01-a.webp' },
+          { type: 'slide', before: '2026-images/2026-p2/conditions/condition-oncesi-02.webp',   after: '2026-images/2026-p2/conditions/condition-sonrasi-02.webp' },
+          { type: 'slide', shorten: 0.55, before: '2026-images/2026-p2/conditions/condition-oncesi-03-a.webp', after: '2026-images/2026-p2/conditions/condition-sonrasi-03-a.webp' },
+        ] },
+      { name: 'Grid', count: 5, items: [
+          { type: 'img', src: '2026-images/2026-p3/1-entrance-page-1/key-image-soil-grounds-1.1.webp' },
+          { type: 'img', src: '2026-images/2026-p3/2-errors-on-ankara-soil-page-2/error-transition-section-2.3.1.webp' },
+          { type: 'cycle', interval: 2000, delay: 0, frames: [
+              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.1.webp',
+              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.1.webp',
+              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.1.webp' ] },
+          { type: 'cycle', interval: 2000, delay: 500, frames: [
+              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.2.webp',
+              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.2.webp',
+              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.2.webp' ] },
+          { type: 'cycle', interval: 2000, delay: 1000, frames: [
+              '2026-images/2026-p3/3-soil-scene-sifters-page-3/sifter-3.3.webp',
+              '2026-images/2026-p3/4-sifting-what-detecting-errors-page-4/sifting-what-4.3.webp',
+              '2026-images/2026-p3/5-after-sift-page-5/after-sift-5.3.webp' ] },
+        ] },
+      { name: 'Bilkent Territory', count: 3, items: [
+          { type: 'img', src: '2026-images/2026-p4/webp/0-entry/ana-sayfa-image.webp' },
+          { type: 'img', src: '2026-images/2026-p4/webp/4-1-species-inventory/4-1-1-species-inventory-photographs.webp' },
+          { type: 'img', src: '2026-images/2026-p4/webp/4-2-habitat-strata/4-2-habitat-strata.webp' },
+        ] },
+      { name: 'The Grand Çankaya Hotel', count: 4, items: [
+          { type: 'img', shorten: 0.85, src: '2026-images/2026-p5/01-Home/main-image.webp' },
+          { type: 'cycle', interval: 2000, delay: 0, frames: [
+              '2026-images/2026-p5/02-Timeline/current-up.webp',
+              '2026-images/2026-p5/02-Timeline/stage-1-up.webp',
+              '2026-images/2026-p5/02-Timeline/stage-2-up.webp' ] },
+          { type: 'pulse', src: '2026-images/2026-p5/03-MicroSections/base-microsection.webp', viewBox: '0 0 3781 1993',
+            dots: [
+              { cx: 398.2,   cy: 1171.17, r: 37.76 },
+              { cx: 709.9,   cy: 1167.66, r: 37.76 },
+              { cx: 1253.24, cy: 1438.78, r: 37.76 },
+              { cx: 1588.35, cy: 1386.7,  r: 37.76 },
+            ] },
+          { type: 'img', src: '2026-images/2026-p5/04-WaterWays/city-scale.webp' },
+        ] },
+      { name: 'Imrahor Valley', count: 4, items: [
+          { type: 'img', src: '2026-images/2026-p6/0-main-page/main-page.webp' },
+          { type: 'cycle', interval: 700, bg: '2026-images/2026-p6/2-the-factories/factory-main-visual.webp', frames: [
+              '2026-images/2026-p6/2-the-factories/factory-1.webp','2026-images/2026-p6/2-the-factories/factory-2.webp',
+              '2026-images/2026-p6/2-the-factories/factory-3.webp','2026-images/2026-p6/2-the-factories/factory-4.webp',
+              '2026-images/2026-p6/2-the-factories/factory-5.webp','2026-images/2026-p6/2-the-factories/factory-6.webp',
+              '2026-images/2026-p6/2-the-factories/factory-7.webp','2026-images/2026-p6/2-the-factories/factory-8.webp',
+              '2026-images/2026-p6/2-the-factories/factory-9.webp' ] },
+          { type: 'zones', bg: '2026-images/2026-p6/1-the-soil/soil-2.webp', svg: '2026-images/2026-p6/1-the-soil/SVG/soil-2-zones-all.svg' },
+          { type: 'cycle', interval: 900, bg: '2026-images/2026-p6/3-the-timeline/timeline-1.webp', frames: [
+              '2026-images/2026-p6/3-the-timeline/timeline-30lar.webp','2026-images/2026-p6/3-the-timeline/timeline-60lar.webp',
+              '2026-images/2026-p6/3-the-timeline/timeline-90lar.webp','2026-images/2026-p6/3-the-timeline/timeline-2020ler.webp' ] },
+        ] },
+      { name: 'Ilker Neighbourhood', count: 3, items: [
+          { type: 'cycle', interval: 1500, bg: '2026-images/2026-p7/opening-page/axon-all/01-trailmap-son.webp', frames: [
+              '2026-images/2026-p7/opening-page/axon-all/07-nomadicearthmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/02-barbarianmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/03-proletarianmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/04-genericbuildingsetmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/05-displacementmap.webp',
+              '2026-images/2026-p7/opening-page/axon-all/06-vagabondearthmap.webp' ] },
+          // The Map — a full Leaflet app, not a set of pre-rendered images. On hover we
+          // drive its own year slider to 2026 (unlocking its 5 animation toggles) and
+          // click through them in sequence; on unhover we click the active one off again
+          // and reset the year, same as if a visitor had walked the slider back down.
+          { type: 'frame', url: '2026-pages/p7-pages/2026-7-map.html', custom: {
+              start: (frame) => {
+                // setActiveGroup() re-fires start() on every mouseover within
+                // the same group (moving between cells inside Ilker
+                // Neighbourhood, not just entering it) — without this guard
+                // each pass over the cell spun up a brand new poll + tick
+                // loop on top of the previous one, which was never cleared,
+                // leaving several independent 4s cycles fighting each other.
+                if (frame._pollTimer || frame._animTimer) return;
+                // Leaflet + roughjs load from a CDN via blocking <script> tags
+                // before the page's own inline script runs, so `setYear` may
+                // not exist yet the instant we hover — poll briefly for it
+                // instead of silently giving up on the first try.
+                let tries = 0;
+                frame._pollTimer = setInterval(() => {
+                  tries++;
+                  const win = frame.contentWindow, doc = frame.contentDocument;
+                  const ready = win && doc && typeof win.setYear === 'function' && doc.querySelector('.layer-row .layer-btn');
+                  if (ready) {
+                    clearInterval(frame._pollTimer);
+                    frame._pollTimer = null;
+                    try {
+                      doc.documentElement.classList.remove('freeze-anim');
+                      win.setYear(2026);
+                      const buttons = Array.from(doc.querySelectorAll('.layer-row .layer-btn'))
+                        .filter((b) => b.dataset.key !== 'civilized');
+                      let i = -1;
+                      function tick() {
+                        try {
+                          if (i >= 0) buttons[i].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                          i = (i + 1) % buttons.length;
+                          buttons[i].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                        } catch (e) { /* page's own script errored — leave it as-is */ }
+                      }
+                      tick();
+                      frame._animTimer = setInterval(tick, 4000);
+                    } catch (e) { /* page's own script errored (e.g. CDN blocked) — nothing more we can do */ }
+                  } else if (tries > 40) {
+                    clearInterval(frame._pollTimer);
+                    frame._pollTimer = null;
+                  }
+                }, 150);
+              },
+              stop: (frame) => {
+                if (frame._pollTimer) { clearInterval(frame._pollTimer); frame._pollTimer = null; }
+                if (frame._animTimer) { clearInterval(frame._animTimer); frame._animTimer = null; }
+                try {
+                  const win = frame.contentWindow, doc = frame.contentDocument;
+                  if (doc) {
+                    const activeBtn = doc.querySelector('.layer-row .layer-btn.active');
+                    if (activeBtn) activeBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                  }
+                  if (win && typeof win.setYear === 'function') win.setYear(2010);
+                  if (doc) doc.documentElement.classList.add('freeze-anim');
+                } catch (e) { /* ignore */ }
+              },
+            } },
+          { type: 'cycle', interval: 2000, bg: '2026-images/2026-p7/timeline/timeline-tam.webp', frames: [
+              '2026-images/2026-p7/timeline/1-renkli.webp','2026-images/2026-p7/timeline/2-renkli.webp',
+              '2026-images/2026-p7/timeline/3-renkli.webp','2026-images/2026-p7/timeline/4-renkli.webp',
+              '2026-images/2026-p7/timeline/5-renkli.webp','2026-images/2026-p7/timeline/6-renkli.webp' ] },
+        ] },
+      { name: 'Çubuk Dam', count: 4, items: [
+          { type: 'img', src: '2026-images/2026-p8/section-01/main.webp' },
+          { type: 'img', src: '2026-images/2026-p8/section-03/main.webp' },
+          { type: 'stack', srcs: [
+              '2026-images/2026-p8/section-06/1.webp',
+              '2026-images/2026-p8/section-06/2.webp' ] },
+          { type: 'video', src: '2026-images/2026-p8/section-07/group-8-gif-4.mp4' },
+        ] },
+    ];
+
+    // Some pages only reveal their real "content" behind a hover state.
+    // These handlers force that state once, right after load — no live
+    // interaction, just a one-time scripted nudge so the frozen crop shows
+    // the lit-up version instead of the resting one. (Currently unused —
+    // every "frame" cell so far shows its own content without a nudge —
+    // kept in place for the next iframe cell that needs one.)
+    const REVEAL_HANDLERS = {};
+
+    // Live, non-interactive crop of the real page — zoomed into the hero
+    // area (skipping the nav/title block) rather than shrinking the whole page.
+    function mountFrame(cell, url, group, custom) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+      const frame = document.createElement('iframe');
+      frame.className = 'cell-frame';
+      frame.src = url;
+      frame.loading = 'lazy';
+      frame.tabIndex = -1;
+      frame.setAttribute('scrolling', 'no');
+      const reveal = REVEAL_HANDLERS[url];
+      // The embedded page runs fully on its own (its own videos, CSS
+      // animations) — freeze all of that the moment it loads, and only
+      // let it move while this cell's group is the active one. Pages with
+      // their own scripted state (e.g. a slider that has to move first)
+      // pass a `custom` start/stop pair instead of using this generic freeze.
+      frame.addEventListener('load', () => {
+        if (reveal) reveal(frame);
+        const doc = frame.contentDocument;
+        if (!doc) return;
+        // Always inject the freeze stylesheet, even for `custom` cells — a
+        // page's own CSS keyframe animations (pulses etc.) otherwise keep
+        // running forever from the moment it loads, regardless of hover.
+        const style = doc.createElement('style');
+        style.textContent = '.freeze-anim, .freeze-anim * { animation-play-state: paused !important; }';
+        doc.head.appendChild(style);
+        doc.documentElement.classList.add('freeze-anim');
+        doc.querySelectorAll('video').forEach((v) => v.pause());
+        if (custom) return;
+      });
+      media.appendChild(frame);
+      cell.appendChild(media);
+
+      const CROP_W = 800;         // virtual viewport width — legible zoom, still a desktop layout
+      const CROP_VISIBLE_H = 500; // how tall the cropped window itself looks (cell's own aspect-ratio)
+      const CROP_OFFSET_Y = 52;   // matches the fixed nav's own height — just skip the header bar
+      frame.style.width = CROP_W + 'px';
+      frame.style.height = '850px'; // ≈ a real laptop viewport height, so 100vh-based sections don't over-center
+      // Frames can't self-report a size — give both the cell and its media
+      // wrapper an explicit aspect-ratio directly (not relying on percentage-
+      // height inheriting through .cell-media, which isn't consistent enough
+      // across browsers and was leaving frame cells collapsed to 0 height).
+      cell.style.aspectRatio = CROP_W + ' / ' + CROP_VISIBLE_H;
+      media.style.aspectRatio = CROP_W + ' / ' + CROP_VISIBLE_H;
+      media.style.height = 'auto';
+
+      function scaleFrame() {
+        const cw = cell.clientWidth, ch = cell.clientHeight;
+        if (!cw || !ch) return; // cell still hidden (e.g. "By Content" tab not active yet)
+        const scale = cw / CROP_W;
+        frame.style.transform = 'scale(' + scale + ') translateY(-' + CROP_OFFSET_Y + 'px)';
+      }
+
+      // ResizeObserver re-fires once the cell actually gets a size — covers
+      // both window resizes and the tab switch from display:none to visible.
+      if (window.ResizeObserver) {
+        new ResizeObserver(scaleFrame).observe(cell);
+      } else {
+        scaleFrame();
+        window.addEventListener('resize', scaleFrame);
+      }
+
+      if (custom) {
+        registerController(group, {
+          start: () => custom.start && custom.start(frame),
+          stop: () => custom.stop && custom.stop(frame),
+        });
+      } else {
+        registerController(group, {
+          start: () => {
+            const doc = frame.contentDocument;
+            if (!doc) return;
+            doc.documentElement.classList.remove('freeze-anim');
+            doc.querySelectorAll('video').forEach((v) => v.play().catch(() => {}));
+          },
+          stop: () => {
+            const doc = frame.contentDocument;
+            if (!doc) return;
+            doc.documentElement.classList.add('freeze-anim');
+            doc.querySelectorAll('video').forEach((v) => v.pause());
+          },
+        });
+      }
+    }
+
+    // Plain static image, no page/iframe involved at all. Optional `shorten`
+    // (e.g. 0.8) crops the natural height down to that fraction, for rhythm.
+    function mountImage(cell, src, shorten) {
+      if (shorten) {
+        const media = document.createElement('div');
+        media.className = 'cell-media';
+        const img = document.createElement('img');
+        img.className = 'cell-img';
+        img.src = src;
+        img.loading = 'lazy';
+        img.alt = '';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.addEventListener('load', () => {
+          media.style.aspectRatio = img.naturalWidth + ' / ' + (img.naturalHeight * shorten);
+        });
+        media.appendChild(img);
+        cell.appendChild(media);
+        return;
+      }
+      const img = document.createElement('img');
+      img.className = 'cell-img';
+      img.src = src;
+      img.loading = 'lazy';
+      img.alt = '';
+      cell.appendChild(img);
+    }
+
+    // Two (or more) static images stacked in normal flow, in one cell — for
+    // pages whose own section already shows them stacked together, not a
+    // crossfade or highlight, just placed one under the other.
+    function mountImageStack(cell, cfg) {
+      const wrap = document.createElement('div');
+      wrap.className = 'cell-stack';
+      cfg.srcs.forEach((src) => {
+        const img = document.createElement('img');
+        img.className = 'cell-stack-img';
+        img.src = src;
+        img.loading = 'lazy';
+        img.alt = '';
+        wrap.appendChild(img);
+      });
+      cell.appendChild(wrap);
+    }
+
+    // Static base image with live pulsing hotspot rings on top (matches the
+    // source page's own SVG hotspot markers) — pure CSS animation, gated by
+    // .group-active so it only pulses while this cell's group is hovered/pinned.
+    function mountPulse(cell, cfg) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const img = document.createElement('img');
+      img.className = 'cell-img';
+      img.src = cfg.src;
+      img.loading = 'lazy';
+      img.alt = '';
+      media.appendChild(img);
+
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', cfg.viewBox);
+      svg.setAttribute('preserveAspectRatio', 'none');
+      cfg.dots.forEach((d, i) => {
+        const c = document.createElementNS(svgNS, 'circle');
+        c.setAttribute('class', 'pulse-hotspot');
+        c.setAttribute('cx', d.cx);
+        c.setAttribute('cy', d.cy);
+        c.setAttribute('r', d.r);
+        c.style.animationDelay = (i * 0.5) + 's';
+        svg.appendChild(c);
+      });
+      media.appendChild(svg);
+
+      cell.appendChild(media);
+    }
+
+    // Looping muted video (used where the page's own visual is a video, not a still).
+    // Paused by default — only plays while its group is the active one.
+    function mountVideo(cell, src, group) {
+      const video = document.createElement('video');
+      video.className = 'cell-img';
+      video.src = src;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      cell.appendChild(video);
+
+      registerController(group, {
+        start: () => video.play().catch(() => {}),
+        stop: () => video.pause(),
+      });
+    }
+
+    // Random blink crossfade through a fixed set of frames — no hover, just
+    // loops while its group is active. Shows a static first frame otherwise.
+    function mountEffect(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+      if (cfg.bg) {
+        const bg = document.createElement('img');
+        bg.className = 'effect-layer active';
+        bg.src = cfg.bg;
+        bg.loading = 'lazy';
+        bg.alt = '';
+        if (cfg.bgDim) bg.style.filter = 'brightness(0.3)';
+        media.appendChild(bg);
+      }
+      const layers = cfg.frames.map(f => {
+        const img = document.createElement('img');
+        img.className = 'effect-layer';
+        img.src = cfg.base + f;
+        img.loading = 'lazy';
+        img.alt = '';
+        media.appendChild(img);
+        return img;
+      });
+      cell.appendChild(media);
+      if (layers.length) layers[0].classList.add('active');
+
+      let current = 0;
+      let intervalId = null;
+      function tick() {
+        layers[current].classList.remove('active');
+        let next;
+        do { next = Math.floor(Math.random() * layers.length); } while (layers.length > 1 && next === current);
+        current = next;
+        layers[current].classList.add('active');
+      }
+      registerController(group, {
+        start: () => { if (!intervalId) intervalId = setInterval(tick, cfg.interval || 500); },
+        stop: () => { if (intervalId) { clearInterval(intervalId); intervalId = null; } },
+      });
+    }
+
+    // Fixed-order crossfade through a sequence of frames (not random), each
+    // held for cfg.interval ms. cfg.delay staggers the first flip so
+    // several cycle-cells running side by side don't change in lockstep.
+    // Shows the first frame statically until its group is active.
+    function mountCycle(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+      if (cfg.bg) {
+        const bg = document.createElement('img');
+        bg.className = 'effect-layer active';
+        bg.src = cfg.bg;
+        bg.loading = 'lazy';
+        bg.alt = '';
+        if (cfg.bgDim) bg.style.filter = 'brightness(0.3)';
+        media.appendChild(bg);
+      }
+      const layers = cfg.frames.map((src, i) => {
+        const img = document.createElement('img');
+        img.className = 'effect-layer' + (!cfg.bg && i === 0 ? ' active' : '');
+        img.src = src;
+        img.loading = 'lazy';
+        img.alt = '';
+        media.appendChild(img);
+        return img;
+      });
+      cell.appendChild(media);
+
+      let current = cfg.bg ? -1 : 0;
+      let intervalId = null;
+      let timeoutId = null;
+      function tick() {
+        if (current >= 0) layers[current].classList.remove('active');
+        current = (current + 1) % layers.length;
+        layers[current].classList.add('active');
+      }
+      registerController(group, {
+        start: () => {
+          if (intervalId || timeoutId) return;
+          timeoutId = setTimeout(() => {
+            timeoutId = null;
+            intervalId = setInterval(tick, cfg.interval || 3000);
+          }, cfg.delay || 0);
+        },
+        stop: () => {
+          if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+          if (intervalId) { clearInterval(intervalId); intervalId = null; }
+        },
+      });
+    }
+
+    // SVG hotspot zones (fetched live, same as the source page) that glow
+    // one at a time over a base image, in DOM order — for pages whose
+    // "highlight" is a colored shape fill rather than a swapped image.
+    function mountZones(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const bg = document.createElement('img');
+      bg.className = 'effect-layer active';
+      bg.src = cfg.bg;
+      bg.loading = 'lazy';
+      bg.alt = '';
+      media.appendChild(bg);
+
+      // Loaded via <object>, not fetch() — fetch() of a local file is blocked
+      // by the browser when this page is opened as file://, which silently
+      // left `paths` empty forever and the highlight never showing at all.
+      // <object> uses normal resource loading, so it works under file:// too.
+      const svgObj = document.createElement('object');
+      svgObj.className = 'cell-zone-overlay';
+      svgObj.type = 'image/svg+xml';
+      svgObj.data = cfg.svg;
+      media.appendChild(svgObj);
+      cell.appendChild(media);
+
+      let paths = [];
+      let current = -1;
+      let intervalId = null;
+
+      svgObj.addEventListener('load', () => {
+        const doc = svgObj.contentDocument;
+        const svgEl = doc && doc.querySelector('svg');
+        if (!svgEl) return;
+        svgEl.removeAttribute('width');
+        svgEl.removeAttribute('height');
+        // The <object>'s document is isolated from the parent page's
+        // stylesheet (and its CSS custom properties), so the highlight
+        // styling has to be injected directly into it.
+        const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
+        style.textContent = 'svg{width:100%;height:100%;display:block;}' +
+          '.cell-zone-shape{fill:#c9b8a8;opacity:0;pointer-events:none;transition:opacity .25s ease,filter .25s ease;}' +
+          '.cell-zone-shape.cell-zone-active{opacity:.8;filter:drop-shadow(0 0 10px rgba(245,220,140,1)) drop-shadow(0 0 24px rgba(245,200,80,.9));}';
+        svgEl.appendChild(style);
+        paths = Array.from(svgEl.querySelectorAll('path, circle, rect, polygon, ellipse'));
+        paths.forEach((p) => { p.removeAttribute('class'); p.setAttribute('class', 'cell-zone-shape'); });
+      });
+
+      function tick() {
+        if (!paths.length) return;
+        if (current >= 0) paths[current].classList.remove('cell-zone-active');
+        current = (current + 1) % paths.length;
+        paths[current].classList.add('cell-zone-active');
+      }
+      registerController(group, {
+        start: () => { if (!intervalId) intervalId = setInterval(tick, 700); },
+        stop: () => {
+          if (intervalId) { clearInterval(intervalId); intervalId = null; }
+          if (current >= 0 && paths[current]) paths[current].classList.remove('cell-zone-active');
+          current = -1;
+        },
+      });
+    }
+
+    // Layers randomly toggle on/off on top of a base render, biased to
+    // accumulate (turning on is more likely than turning off).
+    function mountLayers(cell, cfg, group) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const base = document.createElement('img');
+      base.className = 'effect-layer active';
+      base.src = cfg.base + cfg.standalone;
+      base.loading = 'lazy';
+      base.alt = '';
+      media.appendChild(base);
+
+      const layers = cfg.layers.map(f => {
+        const img = document.createElement('img');
+        img.className = 'layer-img';
+        img.src = cfg.base + f;
+        img.loading = 'lazy';
+        img.alt = '';
+        media.appendChild(img);
+        return img;
+      });
+      cell.appendChild(media);
+
+      let intervalId = null;
+      function tick() {
+        const img = layers[Math.floor(Math.random() * layers.length)];
+        const isOn = img.classList.contains('on');
+        const turnOn = Math.random() < (isOn ? 0.3 : 0.7); // biased: opening more likely than closing
+        img.classList.toggle('on', turnOn);
+      }
+      registerController(group, {
+        start: () => { if (!intervalId) intervalId = setInterval(tick, 550); },
+        stop: () => { if (intervalId) { clearInterval(intervalId); intervalId = null; } },
+      });
+    }
+
+    // Auto-animated before/after reveal — the site's own comparison-slider,
+    // just swept back and forth on its own instead of waiting for a drag.
+    function mountSlide(cell, cfg) {
+      const media = document.createElement('div');
+      media.className = 'cell-media';
+
+      const before = document.createElement('img');
+      before.className = 'effect-layer active';
+      before.src = cfg.before;
+      before.loading = 'lazy';
+      before.alt = '';
+      // cfg.shorten (e.g. 0.7) crops the natural height down to that
+      // fraction — only used to break up rows where neighboring slide
+      // cells would otherwise land on the exact same natural height.
+      if (cfg.shorten) {
+        before.style.height = '100%';
+        before.style.objectFit = 'cover';
+        before.addEventListener('load', () => {
+          media.style.aspectRatio = before.naturalWidth + ' / ' + (before.naturalHeight * cfg.shorten);
+        });
+      }
+      media.appendChild(before);
+
+      const after = document.createElement('img');
+      after.className = 'slide-after-img';
+      after.src = cfg.after;
+      after.loading = 'lazy';
+      after.alt = '';
+      media.appendChild(after);
+
+      cell.appendChild(media);
+    }
+
+    let cellNum = 0;
+
+    GROUPS.forEach((group, gIndex) => {
+      for (let i = 0; i < group.count; i++) {
+        cellNum++;
+
+        const cell = document.createElement('div');
+        cell.className = 'rhythm-cell';
+        cell.dataset.group = gIndex;
+        cell.dataset.index = cellNum;
+
+        if (i === 0) {
+          const label = document.createElement('span');
+          label.className = 'rhythm-group-label';
+          label.textContent = group.name;
+          cell.appendChild(label);
+        }
+
+        grid.appendChild(cell); // attach first so clientWidth/Height are real when mountFrame reads them
+
+        const groupKey = String(gIndex);
+        const item = group.items && group.items[i];
+        const pageUrl = group.pages && group.pages[i];
+        if (item) {
+          if (item.type === 'img') mountImage(cell, item.src, item.shorten);
+          else if (item.type === 'stack') mountImageStack(cell, item);
+          else if (item.type === 'pulse') mountPulse(cell, item);
+          else if (item.type === 'video') mountVideo(cell, item.src, groupKey);
+          else if (item.type === 'effect') mountEffect(cell, item, groupKey);
+          else if (item.type === 'layers') mountLayers(cell, item, groupKey);
+          else if (item.type === 'slide') mountSlide(cell, item);
+          else if (item.type === 'cycle') mountCycle(cell, item, groupKey);
+          else if (item.type === 'zones') mountZones(cell, item, groupKey);
+          else if (item.type === 'frame') mountFrame(cell, item.url, groupKey, item.custom);
+        } else if (pageUrl) {
+          mountFrame(cell, pageUrl, groupKey);
+        } else {
+          const placeholder = document.createElement('div');
+          placeholder.className = 'cell-placeholder';
+          cell.appendChild(placeholder);
+          const idx = document.createElement('span');
+          idx.className = 'cell-index';
+          idx.textContent = String(cellNum).padStart(2, '0');
+          cell.appendChild(idx);
+        }
+      }
+    });
+
+    // Hover a group's own cells → dim every other group, and only animate
+    // (video/interval/iframe) that one group while it's hovered. Clicking
+    // anywhere in a group (name or any cell) navigates to that project's page.
+    function applyDimmed(g) {
+      grid.querySelectorAll('.rhythm-cell').forEach(c => {
+        c.classList.toggle('dimmed', c.dataset.group !== g);
+      });
+    }
+    function clearDimmed() {
+      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.remove('dimmed'));
+    }
+
+    // Called from the tab switcher when leaving this view — a hovered
+    // group's timers (effect/cycle/zones intervals, the map's click-cycle
+    // timer) would otherwise keep running invisibly behind "By Map" and
+    // jank things up once you switch back.
+    window._resetContentView = function () {
+      clearDimmed();
+      setActiveGroup(null);
+    };
+
+    // No real hover on touch devices, so the whole preview mechanism never
+    // triggers there. Mobile gets its own model instead: everything starts
+    // dark, tapping a cell lights that group up (without navigating), and
+    // tapping the same group again reverts to all-dark — only the group's
+    // own name actually navigates. Desktop keeps hover-preview + click-
+    // anywhere-navigates exactly as before.
+    const isTouch = window.matchMedia('(hover: none)').matches;
+    let mobileActiveGroup = null;
+
+    if (isTouch) {
+      grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.add('dimmed'));
+    }
+
+    grid.addEventListener('mouseover', (e) => {
+      if (isTouch) return;
+      const cell = e.target.closest('.rhythm-cell');
+      if (!cell) return;
+      applyDimmed(cell.dataset.group);
+      setActiveGroup(cell.dataset.group);
+    });
+    grid.addEventListener('mouseleave', () => {
+      if (isTouch) return;
+      clearDimmed();
+      setActiveGroup(null);
+    });
+    grid.addEventListener('click', (e) => {
+      const label = e.target.closest('.rhythm-group-label');
+      if (label) {
+        const g = label.closest('.rhythm-cell').dataset.group;
+        window.location.href = LIBRARY_PROJECTS[Number(g)].url;
+        return;
+      }
+      const cell = e.target.closest('.rhythm-cell');
+      if (!cell) return;
+      const g = cell.dataset.group;
+
+      if (isTouch) {
+        if (mobileActiveGroup === g) {
+          mobileActiveGroup = null;
+          grid.querySelectorAll('.rhythm-cell').forEach(c => c.classList.add('dimmed'));
+          setActiveGroup(null);
+        } else {
+          mobileActiveGroup = g;
+          applyDimmed(g);
+          setActiveGroup(g);
+        }
+        return;
+      }
+
+      window.location.href = LIBRARY_PROJECTS[Number(g)].url;
+    });
+  })();
+</script>
+</body>
+</html>

@@ -66,16 +66,21 @@
 
   #view-content { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; cursor: default; align-items: flex-start; justify-content: center; }
 
-  /* Background layer behind the grid — "Soil" contour lines (topographic/
-     strata-style, procedural SVG, no extra asset) with its own slow
-     mouse-parallax so the whole scene reads as one space with depth,
-     instead of icons floating over a flat void. Moves at a fraction of the
-     icon parallax (see CONTENT_BG_RATIO in the JS) — background layers are
-     supposed to move less than the foreground, that's what sells the depth;
-     it just needed to move *some* to read as intentional. */
+  /* Background layer behind the grid — one procedural SVG motif per theme
+     (see BG_PATTERNS/renderBg() in the JS): Soil keeps the original
+     contour/strata lines, Air gets a wavy cross-hatch, Waste a wavy grid,
+     Water a wavy dot-hatch. "Wavy" = every line/dot gets random jitter
+     scaled by that theme's own amp constant (see WAVE_AMP in the JS) —
+     same waviness language as Soil's hand-drawn curves, applied to
+     different base motifs instead of every theme sharing Soil's lines.
+     Single layer, own slow mouse-parallax so the whole scene reads as one
+     space with depth, instead of icons floating over a flat void. Moves at
+     a fraction of the icon parallax (see BG_RATIO in the JS) — background
+     layers are supposed to move less than the foreground. */
   .content-bg { position: absolute; inset: -6%; opacity: 0.16; pointer-events: none; will-change: transform; }
   .content-bg svg { width: 100%; height: 100%; }
   .content-bg path { fill: none; stroke: var(--mid); stroke-width: 1; }
+  .content-bg circle { fill: var(--mid); stroke: none; }
 
   /* Theme sidebar — same pattern as .century-list in 2026-2-thetimeline.html:
      a fixed, vertically-centered column of names on the left; clicking one
@@ -130,10 +135,19 @@
      down from the original — its full-viewport grid items could travel far
      more than these ~130px icons before it started looking like the whole
      thing was sliding off rather than settling toward the cursor. */
-  /* Smaller resting size (more room to fit many more icons later, per plan)
-     — MagneticImage's hover scale (1.55x, in JS) is what makes a hovered
-     icon prominent again, not the base size. */
-  .icon-cell { position: relative; width: 100%; max-width: 82px; cursor: pointer; will-change: transform; transform-style: preserve-3d; }
+  /* One uniform size for every icon (81px) so every coin — glow radius is
+     size × 0.6364 (127.28% width ÷ 2, see .icon-glow above, which already
+     includes the separate 0.9 coin-only shrink) — comes out to the same
+     ~51.5px radius, instead of each icon picking its own size and the
+     coins ending up different diameters. Per-icon `size` overrides in
+     CLUSTERS were removed in favor of this single default; if an icon
+     still needs to look visually smaller/bigger, use `opacity`/art itself,
+     not `size` — that's what would break the shared radius again. */
+  /* contain:layout+style (not paint — paint would clip the coin's glow/rim,
+     which are deliberately wider than this box, right at this box's own
+     edge) scopes this cell's layout/counter recalculation to itself,
+     without touching how it paints. */
+  .icon-cell { position: relative; width: 100%; max-width: 81px; cursor: pointer; will-change: transform; transform-style: preserve-3d; contain: layout style; }
   /* height:auto here used to make .icon-figure's box follow each source
      image's own (non-square) aspect ratio — which made .icon-glow's circle
      render as a squashed ellipse on anything but a perfectly square source.
@@ -142,16 +156,32 @@
      around it — and so the glow "coin" — is always a true circle. */
   .icon-img { display: block; width: 100%; height: 100%; object-fit: contain; will-change: transform; }
 
-  /* Icon figure/shadow — ported from Codrops "TiltHoverEffects"
+  /* Icon figure — ported from Codrops "TiltHoverEffects"
      (github.com/codrops/TiltHoverEffects): a per-cell hover tilt (rotateX/Y
      relative to THIS cell's own bounds, not the whole window — different
-     from GridItem3D's ambient parallax above) plus a soft ellipse shadow
-     that fades in underneath — reads as "this icon lifted up off the
-     background" rather than flat/pasted on it. (The masked white shine
-     sweep from the original effect was dropped — on these small line-art
-     icons it read as a ghosted white duplicate of the icon rather than a
-     glint of light, not what was wanted here.) */
+     from GridItem3D's ambient parallax above) — reads as "this icon lifted
+     up off the background" rather than flat/pasted on it. (The masked white
+     shine sweep from the original effect was dropped — on these small
+     line-art icons it read as a ghosted white duplicate of the icon rather
+     than a glint of light, not what was wanted here. The drop-shadow under
+     the icon was dropped too, per request — the tilt + coin-glow alone
+     already read as "lifted".) */
   .icon-figure { position: relative; aspect-ratio: 1 / 1; transform-style: preserve-3d; will-change: transform; }
+  /* Coin wrapper — groups the glow/rim/notch layers so MagneticImage (JS
+     below) can translate them in lockstep with .icon-img's own magnetic
+     pull. Without this they used to sit still while the icon drifted toward
+     the cursor on its own, reading as two separate things reacting to hover
+     instead of one "icon on a coin". Plain inset:0 box, no visual effect of
+     its own — glow/rim/notch's existing left:50%/top:50% centering math is
+     unchanged since it's still relative to a same-size positioned ancestor.
+     glow/rim/notch below each also get their own `will-change: opacity,
+     transform` — this wrapper moving every rAF tick (magnetic pull) was
+     forcing its children to repaint on the CPU each frame instead of just
+     recompositing, since without their own will-change they weren't
+     getting promoted to their own GPU layer; the notch's masked
+     repeating-conic-gradient is the most expensive of the three to
+     repaint, so it's the one that showed up as visible stutter on hover. */
+  .icon-coin { position: absolute; inset: 0; will-change: transform; }
   /* Circular glow behind the icon — the original TiltHoverEffects demo used
      square photos that already filled their frame; ours are line-art icons
      floating inside empty space, so there's no "frame" for the tilt/shine
@@ -160,35 +190,98 @@
      TiltFx below), so it tilts together with the icon automatically — no
      separate JS wiring needed for that part.
      "Coin" fit: the circle circumscribes the (now guaranteed-square, see
-     .icon-figure above) frame — its edge passes exactly through the
-     square's 4 corners, not its side midpoints. For a square of side S that
-     circle's diameter is S·√2 ≈ 141.42% of S, hence the 141.42% width/
-     height below. Brightness: 100% at the center down to 40% right at that
+     .icon-figure above) frame — its edge would pass exactly through the
+     square's 4 corners at 100% coin scale. For a square of side S that
+     circle's diameter is S·√2 ≈ 141.42% of S — but the coin is deliberately
+     sized at 90% of that (the icon itself is untouched), hence 127.28%
+     (141.42 × 0.9) width/height below, not the "true" circumscribing
+     141.42%. Brightness: 100% at the center down to 40% right at that
      circle's own edge (closest-side sizing on the gradient maps its 100%
-     stop to this element's own edge, which is where the square's corners
-     now sit). */
+     stop to this element's own edge). */
   .icon-glow {
-    position: absolute; left: 50%; top: 50%; width: 141.42%; height: 141.42%;
-    transform: translate(-50%, -50%) translateZ(-2px) scale(0.6);
+    position: absolute; left: 50%; top: 50%; width: 127.28%; height: 127.28%;
+    transform: translate(-50%, -50%) translateZ(var(--coin-z-glow, -4px)) scale(0.6);
     border-radius: 50%;
     background: radial-gradient(circle closest-side, rgba(255,138,61,1) 0%, rgba(255,138,61,0.4) 100%);
-    opacity: 0; pointer-events: none;
+    opacity: 0; pointer-events: none; will-change: opacity, transform;
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   }
-  /* 1.55 here matches MagneticImage's own hover scale on .icon-img exactly
-     (JS below) — the glow's 141.42% "circumscribes the corners" math above
-     was computed against the icon's resting size, so growing the glow by
-     any other factor than the icon's own growth would throw that
-     relationship off at the hovered (grown) size. Uniformly scaling both
-     by the same 1.55 keeps the coin's corners-on-the-circle relationship
-     true whether the icon is resting or hovered, not just at rest. */
-  .icon-cell:hover .icon-glow { opacity: 1; transform: translate(-50%, -50%) translateZ(-2px) scale(1.55); }
-  .icon-shadow {
-    position: absolute; left: 10%; right: 10%; bottom: -14%; height: 26%;
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0.6), transparent 72%);
-    opacity: 0; transition: opacity 0.35s ease-out; pointer-events: none; transform: translateZ(-1px);
+  /* 1.86 here matches MagneticImage's own hover scale on .icon-img exactly
+     (JS below) — the glow's 127.28% "coin fit" math above was computed
+     against the icon's resting size, so growing the glow by any other
+     factor than the icon's own growth would throw that relationship off at
+     the hovered (grown) size. Uniformly scaling both by the same 1.86 keeps
+     the coin's corners-on-the-circle relationship true whether the icon is
+     resting or hovered, not just at rest. */
+  .icon-cell:hover .icon-glow { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-glow, -4px)) scale(1.86); }
+  /* Rim — gives the coin a little cylindrical thickness instead of reading
+     as a flat disc: a darker, slightly WIDER circle sitting a few px behind
+     .icon-glow in the same 3D space (.icon-figure already has
+     transform-style:preserve-3d + TiltFx's tilt), so a thin "edge" ring is
+     always visible around the bright top face, and the tilt shifts which
+     side of that ring shows more, like light catching an actual coin's rim.
+     136.8% = the rim's original 152% × the same 0.9 coin-only shrink as
+     .icon-glow above, so the two stay proportional to each other. */
+  .icon-glow-rim {
+    position: absolute; left: 50%; top: 50%; width: 136.8%; height: 136.8%;
+    transform: translate(-50%, -50%) translateZ(var(--coin-z-rim, -14px)) scale(0.6);
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, rgba(140,65,15,1) 0%, rgba(140,65,15,0.5) 100%);
+    opacity: 0; pointer-events: none; will-change: opacity, transform;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   }
-  .icon-cell:hover .icon-shadow { opacity: 1; }
+  .icon-cell:hover .icon-glow-rim { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-rim, -14px)) scale(1.86); }
+  /* Coin color variants — not applied to any CLUSTERS item right now (Soil
+     stays all-orange per request), kept here since the palette itself was
+     liked and may get switched back on later. Opt in per item via `coin:`
+     in CLUSTERS (see renderCluster()'s `coin-` classList add), e.g.
+     `coin: 'teal'`. Hues are spread around the wheel (teal/violet/rose/
+     blue/lime/crimson/olive) rather than clustered near orange, so icons
+     read as clearly different from each other instead of blurring
+     together. Only .icon-glow and .icon-glow-rim change color;
+     .icon-glow-notch stays the same black repeating-conic-gradient in every
+     variant — the knurled edge reads as "milled metal" regardless of what
+     the coin's face is colored. */
+  .icon-cell.coin-teal    .icon-glow { background: radial-gradient(circle closest-side, rgba(72,181,173,1) 0%, rgba(72,181,173,0.4) 100%); }
+  .icon-cell.coin-teal    .icon-glow-rim { background: radial-gradient(circle closest-side, rgba(30,82,78,1) 0%, rgba(30,82,78,0.5) 100%); }
+  .icon-cell.coin-violet  .icon-glow { background: radial-gradient(circle closest-side, rgba(150,110,214,1) 0%, rgba(150,110,214,0.4) 100%); }
+  .icon-cell.coin-violet  .icon-glow-rim { background: radial-gradient(circle closest-side, rgba(66,46,96,1) 0%, rgba(66,46,96,0.5) 100%); }
+  .icon-cell.coin-rose    .icon-glow { background: radial-gradient(circle closest-side, rgba(214,90,140,1) 0%, rgba(214,90,140,0.4) 100%); }
+  .icon-cell.coin-rose    .icon-glow-rim { background: radial-gradient(circle closest-side, rgba(96,38,60,1) 0%, rgba(96,38,60,0.5) 100%); }
+  .icon-cell.coin-blue    .icon-glow { background: radial-gradient(circle closest-side, rgba(86,140,214,1) 0%, rgba(86,140,214,0.4) 100%); }
+  .icon-cell.coin-blue    .icon-glow-rim { background: radial-gradient(circle closest-side, rgba(36,60,96,1) 0%, rgba(36,60,96,0.5) 100%); }
+  .icon-cell.coin-lime    .icon-glow { background: radial-gradient(circle closest-side, rgba(176,200,70,1) 0%, rgba(176,200,70,0.4) 100%); }
+  .icon-cell.coin-lime    .icon-glow-rim { background: radial-gradient(circle closest-side, rgba(78,90,28,1) 0%, rgba(78,90,28,0.5) 100%); }
+  .icon-cell.coin-crimson .icon-glow { background: radial-gradient(circle closest-side, rgba(204,68,68,1) 0%, rgba(204,68,68,0.4) 100%); }
+  .icon-cell.coin-crimson .icon-glow-rim { background: radial-gradient(circle closest-side, rgba(92,28,28,1) 0%, rgba(92,28,28,0.5) 100%); }
+  .icon-cell.coin-olive   .icon-glow { background: radial-gradient(circle closest-side, rgba(140,130,70,1) 0%, rgba(140,130,70,0.4) 100%); }
+  .icon-cell.coin-olive   .icon-glow-rim { background: radial-gradient(circle closest-side, rgba(62,56,28,1) 0%, rgba(62,56,28,0.5) 100%); }
+  /* Notches — the coin's knurled/milled edge, sitting right at the boundary
+     between .icon-glow (127.28%) and .icon-glow-rim (136.8%): a full 136.8%
+     circle (same box as the rim) masked down to a thin ring via the
+     radial-gradient mask below, painted with alternating dark wedges via
+     repeating-conic-gradient. The mask cuts at 93% of the notch's own
+     radius — 127.28/136.8 — the exact point where the glow's edge meets the
+     rim's edge, so the ring only exists in the rim's brown band, never
+     spilling into the orange glow. Depth (-10px) sits between the rim
+     (-14px) and the glow (-4px) so it reads as sitting ON the coin's actual
+     edge, not floating in front of or behind it.
+     180 notches around the circle: 0.8deg dark wedge / 1.2deg gap, 2deg
+     period, 360deg / 2deg = 180 (was 4deg/8deg for 30 notches — too few
+     and too thick, read as a poker chip instead of a milled coin edge).
+     The wider gap than wedge is what keeps each notch reading as a crisp
+     thin tick rather than a solid alternating stripe. */
+  .icon-glow-notch {
+    position: absolute; left: 50%; top: 50%; width: 136.8%; height: 136.8%;
+    transform: translate(-50%, -50%) translateZ(var(--coin-z-notch, -10px)) scale(0.6);
+    border-radius: 50%;
+    background: repeating-conic-gradient(rgba(10,10,10,0.85) 0deg 0.8deg, transparent 0.8deg 2deg);
+    -webkit-mask-image: radial-gradient(circle closest-side, transparent 93%, black 93%, black 100%);
+    mask-image: radial-gradient(circle closest-side, transparent 93%, black 93%, black 100%);
+    opacity: 0; pointer-events: none; will-change: opacity, transform;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+  .icon-cell:hover .icon-glow-notch { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-notch, -10px)) scale(1.86); }
 
   #shape-tooltip { position: fixed; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); white-space: nowrap; z-index: 20; }
   #shape-tooltip.visible { opacity: 1; }
@@ -296,28 +389,23 @@
   <!-- BY CONTENT — 3D magnetic grid, ported from Codrops "3DGridContentPreview"
        (github.com/codrops/3DGridContentPreview): each icon parallaxes as the
        cursor moves anywhere on screen, and is magnetically pulled toward the
-       cursor on hover. Each icon also gets a local hover tilt + lift shadow,
-       ported from Codrops "TiltHoverEffects"
-       (github.com/codrops/TiltHoverEffects) — see .icon-figure/.icon-shadow —
+       cursor on hover. Each icon also gets a local hover tilt, ported from
+       Codrops "TiltHoverEffects"
+       (github.com/codrops/TiltHoverEffects) — see .icon-figure —
        so it visually separates from the background instead of reading as
        flat/pasted onto it. Themes (Soil, Air, Water, Waste — see CLUSTERS in
        the JS below) are picked from the .theme-list on the left, same
        pattern as the century sidebar in 2026-2-thetimeline.html: only the
        active theme's icons are ever in the DOM, so there's no crowding and
        nothing to fit multiple themes into one screen at once. A slow-
-       parallax contour-line background sits behind it for depth (see
-       .content-bg) — one shared "ground" for every theme, not just Soil.
-       The grid markup below is intentionally just an empty mount point —
-       see renderCluster()/initIconInteractions() in the JS. -->
+       parallax background sits behind it for depth, a different
+       procedural pattern per theme (see .content-bg, BG_PATTERNS/
+       renderBg() in the JS). The grid markup below is intentionally just
+       an empty mount point — see renderCluster()/initIconInteractions()
+       in the JS. -->
   <div class="view" id="view-content">
     <div class="content-bg" id="content-bg">
-      <svg viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M -50,120 C 150,60 350,180 550,110 S 900,40 1050,100" />
-        <path d="M -50,230 C 180,170 320,290 560,220 S 880,160 1050,210" />
-        <path d="M -50,340 C 160,300 380,400 540,330 S 900,280 1050,330" />
-        <path d="M -50,450 C 200,390 340,480 580,410 S 860,370 1050,440" />
-        <path d="M -50,560 C 170,510 360,600 550,530 S 900,490 1050,550" />
-      </svg>
+      <svg viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true"></svg>
     </div>
     <div class="theme-list" id="theme-list">
       <button class="theme-btn active" data-cluster="Soil">Soil</button>
@@ -802,10 +890,104 @@
     recycle:  svgIcon('<g ' + A + '><path d="M35,25 Q55,15 68,32"/><path d="M62,26 l6,6 l8,-3"/><path d="M75,55 Q80,75 60,82"/><path d="M68,78 l-8,4 l2,-9"/><path d="M35,75 Q15,68 20,45"/><path d="M14,52 l-2,-9 l9,3"/></g>'),
     landfill: svgIcon('<g ' + A + '><path d="M10,80 Q30,30 50,80 Q70,30 90,80 Z"/><line x1="35" y1="60" x2="42" y2="65"/><line x1="55" y1="55" x2="60" y2="62"/></g>'),
     bottle:   svgIcon('<g ' + A + '><path d="M42,10 h16 v14 l8,10 v50 a6,6 0 0,1 -6,6 h-20 a6,6 0 0,1 -6,-6 v-50 l8,-10 Z"/><line x1="42" y1="10" x2="42" y2="4"/><line x1="58" y1="10" x2="58" y2="4"/></g>'),
-    pile:     svgIcon('<g ' + A + '><path d="M10,75 h30 l-6,-16 h20 l8,16 h22"/><rect x="30" y="45" width="14" height="14" transform="rotate(15 37 52)"/><circle cx="65" cy="50" r="8"/></g>'),
+    pile:     svgIcon('<g ' + A + '><path d="M15,72 Q10,50 30,45 Q28,30 48,32 Q52,20 68,28 Q82,30 78,48 Q90,52 85,72 Z"/><path d="M35,50 l6,6 M55,45 l6,7 M45,60 l7,5" stroke-width="3"/></g>'),
     pipe:     svgIcon('<g ' + A + '><path d="M15,35 h40 a15,15 0 0,1 15,15 v35"/><ellipse cx="15" cy="35" rx="6" ry="10"/><ellipse cx="70" cy="85" rx="10" ry="6"/></g>'),
-    decay:    svgIcon('<g ' + A + ' stroke-width="3"><circle cx="50" cy="50" r="30" stroke-width="4"/><path d="M35,35 l10,10 -6,8 M60,32 l6,14 -10,4 M40,65 l14,-4 2,12"/></g>'),
+    decay:    svgIcon('<g ' + A + '><circle cx="50" cy="50" r="30" stroke-width="4"/><path d="M35,35 l10,10 -6,8 M60,32 l6,14 -10,4 M40,65 l14,-4 2,12" stroke-width="3"/></g>'),
   };
+
+  // Background patterns — one per theme (see .content-bg in the CSS). Built
+  // once here with plain Math.random() and reused on every theme switch
+  // (renderBg() below just swaps which pre-built set is in the DOM) rather
+  // than regenerated per click, so flipping back to a theme shows the same
+  // pattern instead of a new random one each time.
+  // Wave intensity ("dalga şiddeti") — the amp each generator jitters its
+  // points by. Soil's own hand-drawn lines aren't touched; these three are
+  // tunable per theme.
+  const WAVE_AMP = { Air: 30, Waste: 14, Water: 16 };
+  function waveLine(x1, y1, x2, y2, amp, segments) {
+    // Smooth quadratic-curve waviness between two points — same curve
+    // family as Soil's hand-written lines, reused here for grid/hatch
+    // lines instead of only horizontal contour lines.
+    segments = segments || 3;
+    let d = `M ${x1.toFixed(0)},${y1.toFixed(0)}`;
+    let px = x1, py = y1;
+    for (let s = 1; s <= segments; s++) {
+      const t = s / segments;
+      const nx = x1 + (x2 - x1) * t;
+      const ny = y1 + (y2 - y1) * t;
+      const cx = (px + nx) / 2 + (Math.random() - 0.5) * amp;
+      const cy = (py + ny) / 2 + (Math.random() - 0.5) * amp;
+      d += ` Q ${cx.toFixed(0)},${cy.toFixed(0)} ${nx.toFixed(0)},${ny.toFixed(0)}`;
+      px = nx; py = ny;
+    }
+    return d;
+  }
+  function genCrossHatch(count, amp) {
+    // Air — two sets of wavy diagonals crossing each other, turbulent/
+    // windy rather than Soil's calm horizontal contour lines.
+    const paths = [];
+    const step = 1150 / count;
+    for (let i = 0; i < count; i++) {
+      const x0 = -100 + i * step;
+      paths.push(waveLine(x0, -50, x0 + 750, 750, amp, 4));
+      paths.push(waveLine(x0, 750, x0 + 750, -50, amp, 4));
+    }
+    return paths;
+  }
+  function genGrid(count, amp) {
+    // Waste — a wavy orthogonal grid, industrial/sorting feel.
+    const paths = [];
+    const stepX = 1150 / count;
+    const stepY = 850 / count;
+    for (let i = 0; i < count; i++) {
+      const x = -100 + i * stepX;
+      paths.push(waveLine(x, -50, x, 750, amp, 4));
+    }
+    for (let i = 0; i < count; i++) {
+      const y = -50 + i * stepY;
+      paths.push(waveLine(-100, y, 1100, y, amp, 4));
+    }
+    return paths;
+  }
+  function genDots(rows, cols, amp) {
+    // Water — a jittered dot grid (raindrop/ripple texture); rendered as
+    // <circle> elements by renderBg() below, not <path>.
+    const dots = [];
+    const stepX = 1000 / cols;
+    const stepY = 700 / rows;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = c * stepX + stepX / 2 + (Math.random() - 0.5) * amp;
+        const y = r * stepY + stepY / 2 + (Math.random() - 0.5) * amp;
+        dots.push({ x, y });
+      }
+    }
+    return dots;
+  }
+  const BG_PATTERNS = {
+    // Soil's own hand-written lines, unchanged — just moved from the HTML
+    // into here so renderBg() can populate every theme the same way.
+    Soil: { tag: 'path', items: [
+      'M -50,120 C 150,60 350,180 550,110 S 900,40 1050,100',
+      'M -50,230 C 180,170 320,290 560,220 S 880,160 1050,210',
+      'M -50,340 C 160,300 380,400 540,330 S 900,280 1050,330',
+      'M -50,450 C 200,390 340,480 580,410 S 860,370 1050,440',
+      'M -50,560 C 170,510 360,600 550,530 S 900,490 1050,550',
+    ] },
+    Air:   { tag: 'path',   items: genCrossHatch(5, WAVE_AMP.Air) },
+    Waste: { tag: 'path',   items: genGrid(6, WAVE_AMP.Waste) },
+    Water: { tag: 'circle', items: genDots(7, 10, WAVE_AMP.Water) },
+  };
+  function renderBg(name) {
+    const pattern = BG_PATTERNS[name];
+    if (!pattern) return;
+    const svg = document.querySelector('#content-bg svg');
+    if (pattern.tag === 'circle') {
+      svg.innerHTML = pattern.items.map(p => `<circle cx="${p.x.toFixed(0)}" cy="${p.y.toFixed(0)}" r="3"></circle>`).join('');
+    } else {
+      svg.innerHTML = pattern.items.map(d => `<path d="${d}"></path>`).join('');
+    }
+  }
 
   // Full canvas per active theme — a 4-col x 2-row scatter with hand jitter,
   // sx/sy/rot in %/deg (see .icon-slot in the CSS). Soil is real content;
@@ -814,14 +996,14 @@
     {
       name: 'Soil',
       items: [
-        { id: 'shape-0', label: 'The Powerplant', href: '2026-pages/p1-pages/2026-1.html', img: 'must-images/by-content/Soil - Group 1 - The Powerplant.webp', size: 98, sx: '14%', sy: '20%', rot: -6 },
-        { id: 'shape-1', label: 'The Model', href: '2026-pages/p2-pages/2026-2.html', img: 'must-images/by-content/Soil - Group 2 - The Model.webp', size: 130, sx: '37%', sy: '30%', rot: 5 },
-        { id: 'shape-2', label: 'The Sifters', href: '2026-pages/p3-pages/2026-3.html', img: 'must-images/by-content/Soil - Group 3 - The Sifters.webp', sx: '60%', sy: '16%', rot: 8 },
-        { id: 'shape-3', label: 'The Reeds', href: '2026-pages/p4-pages/2026-4-proposal&methodology.html', img: 'must-images/by-content/Soil - Group 4 - The Reeds.webp', size: 98, sx: '83%', sy: '26%', rot: -4 },
-        { id: 'shape-4', label: 'The Hotel', href: '2026-pages/p5-pages/2026-5.html', img: 'must-images/by-content/Soil - Group 5 - The Hotel.webp', size: 74, opacity: 0.8, sx: '18%', sy: '72%', rot: 6 },
-        { id: 'shape-5', label: 'The Timeline', href: '2026-pages/p6-pages/2026-6.html', img: 'must-images/by-content/Soil - Group 6 - The Timeline.webp', filter: 'grayscale(1) brightness(1.5)', sx: '40%', sy: '82%', rot: -9 },
-        { id: 'shape-6', label: 'The Migrant', href: '2026-pages/p7-pages/2026-7-info.html', img: 'must-images/by-content/Soil - Group 7 - The Migrant.webp', sx: '63%', sy: '68%', rot: 3 },
-        { id: 'shape-7', label: 'The Helical', href: '2026-pages/p8-pages/2026-8.html', img: 'must-images/by-content/Soil - Group 8 - The Hellical.webp', sx: '86%', sy: '78%', rot: -5 },
+        { id: 'shape-0', label: 'The Powerplant', href: '2026-pages/p1-pages/2026-1.html', img: 'must-images/by-content/Soil-Group1-ThePowerplant.webp', sx: '14%', sy: '20%', rot: -6 },
+        { id: 'shape-1', label: 'The Model', href: '2026-pages/p2-pages/2026-2.html', img: 'must-images/by-content/Soil-Group2-TheModel.webp', sx: '37%', sy: '30%', rot: 5 },
+        { id: 'shape-2', label: 'The Sifters', href: '2026-pages/p3-pages/2026-3.html', img: 'must-images/by-content/Soil-Group3-TheSifters.webp', sx: '60%', sy: '16%', rot: 8 },
+        { id: 'shape-3', label: 'The Reeds', href: '2026-pages/p4-pages/2026-4-proposal&methodology.html', img: 'must-images/by-content/Soil-Group4-TheReeds.webp', sx: '83%', sy: '26%', rot: -4 },
+        { id: 'shape-4', label: 'The Hotel', href: '2026-pages/p5-pages/2026-5.html', img: 'must-images/by-content/Soil-Group5-TheHotel.webp', opacity: 0.8, sx: '18%', sy: '72%', rot: 6 },
+        { id: 'shape-5', label: 'The Timeline', href: '2026-pages/p6-pages/2026-6.html', img: 'must-images/by-content/Soil-Group6-TheTimeline.webp', filter: 'grayscale(1) brightness(1.5)', sx: '40%', sy: '82%', rot: -9 },
+        { id: 'shape-6', label: 'The Migrant', href: '2026-pages/p7-pages/2026-7-info.html', img: 'must-images/by-content/Soil-Group7-TheMigrant.webp', sx: '63%', sy: '68%', rot: 3 },
+        { id: 'shape-7', label: 'The Helical', href: '2026-pages/p8-pages/2026-8.html', img: 'must-images/by-content/Soil-Group8-TheHellical.webp', sx: '86%', sy: '78%', rot: -5 },
       ],
     },
     {
@@ -889,13 +1071,18 @@
       if (item.href) cell.dataset.href = item.href;
       if (item.size) cell.style.maxWidth = item.size + 'px';
       if (item.opacity !== undefined) cell.style.opacity = item.opacity;
+      if (item.coin) cell.classList.add('coin-' + item.coin);
 
       const figure = document.createElement('div');
       figure.className = 'icon-figure';
+      const glowRim = document.createElement('div');
+      glowRim.className = 'icon-glow-rim';
+      const glowNotch = document.createElement('div');
+      glowNotch.className = 'icon-glow-notch';
       const glow = document.createElement('div');
       glow.className = 'icon-glow';
-      const shadow = document.createElement('div');
-      shadow.className = 'icon-shadow';
+      const coin = document.createElement('div');
+      coin.className = 'icon-coin';
       const img = document.createElement('img');
       img.className = 'icon-img';
       img.src = item.img;
@@ -903,8 +1090,10 @@
       img.alt = item.label;
       if (item.filter) img.style.filter = item.filter;
 
-      figure.appendChild(glow);
-      figure.appendChild(shadow);
+      coin.appendChild(glowRim);
+      coin.appendChild(glowNotch);
+      coin.appendChild(glow);
+      figure.appendChild(coin);
       figure.appendChild(img);
       cell.appendChild(figure);
       slot.appendChild(cell);
@@ -934,6 +1123,11 @@
   class MagneticImage {
     constructor(el) {
       this.el = el;
+      // The coin (glow/rim/notch, wrapped in .icon-coin — see CSS) used to
+      // sit still while the icon drifted toward the cursor on its own,
+      // reading as two separate things reacting to hover. Driving both from
+      // the same tx/ty each frame (below) keeps them moving as one unit.
+      this.coin = el.closest('.icon-figure').querySelector('.icon-coin');
       this.rendered = { tx: { previous: 0, current: 0 }, ty: { previous: 0, current: 0 } };
       const cell = el.closest('.icon-cell');
       cell.addEventListener('mouseenter', () => {
@@ -949,7 +1143,15 @@
           this.rendered.ty.previous = gsap.getProperty(this.el, 'y');
           this.loopRender();
           if (this.outTl) this.outTl.kill();
-          this.inTl = gsap.timeline().to(this.el, { duration: 0.5, ease: 'expo', scale: 1.55 });
+          // Without this, a fast leave-then-re-enter left the previous
+          // mouseleave's coin tween (below) running untracked — it kept
+          // writing x/y toward 0 on its own schedule at the same time this
+          // frame's render() loop was writing fresh magnetic-pull x/y, and
+          // whichever happened to run last in a given frame won. That fight
+          // was what made the coin randomly snap back to resting size and
+          // stick there mid-hover.
+          if (this.coinOutTl) this.coinOutTl.kill();
+          this.inTl = gsap.timeline().to(this.el, { duration: 0.5, ease: 'expo', scale: 1.86 });
         }, 10);
       });
       cell.addEventListener('mouseleave', () => {
@@ -957,6 +1159,7 @@
         this.stopRendering();
         if (this.inTl) this.inTl.kill();
         this.outTl = gsap.timeline().to(this.el, { duration: 1, ease: 'power4', x: 0, y: 0, scale: 1 });
+        if (this.coin) this.coinOutTl = gsap.to(this.coin, { duration: 1, ease: 'power4', x: 0, y: 0 });
       });
     }
     loopRender() { if (!this.raf) this.raf = requestAnimationFrame(() => this.render()); }
@@ -976,6 +1179,7 @@
       this.rendered.tx.previous = lerp(this.rendered.tx.previous, this.rendered.tx.current, 0.04);
       this.rendered.ty.previous = lerp(this.rendered.ty.previous, this.rendered.ty.current, 0.04);
       gsap.set(this.el, { x: this.rendered.tx.previous, y: this.rendered.ty.previous });
+      if (this.coin) gsap.set(this.coin, { x: this.rendered.tx.previous, y: this.rendered.ty.previous });
       this.loopRender();
     }
   }
@@ -984,15 +1188,41 @@
   // viewport (further from center = more rotated + pushed back in Z, the
   // "concave wall" look), then continuously parallaxes as the cursor
   // moves anywhere on the page — not just while hovering that cell.
+  // Every active icon used to run its own independent requestAnimationFrame
+  // loop for GridItem3D's ambient parallax (8 separate rAF callbacks doing
+  // near-identical lerp math each frame). Consolidated into one shared loop
+  // (activeGridItems + loopGridItems() below) that updates all of them in a
+  // single tick — same visual result, less scheduling/GC overhead than 8
+  // independent callbacks.
+  const activeGridItems = new Set();
   class GridItem3D {
-    constructor(cell) {
+    constructor(cell, applyDrift) {
       this.cell = cell;
       this.rotationVals = { x: 0, y: 0 };
       this.rxstart = 3;
       this.rystart = 5;
+      // Coin drift experiment, Air only for now (applyDrift) — a small
+      // continuous mouse-position-based translate on .icon-figure, same
+      // math family as the background's own parallax (loopBg), not a
+      // :hover effect. .icon-figure sits ABOVE both .icon-coin and
+      // .icon-img in the hierarchy and neither of those two ever get x/y
+      // written to them by anything else here (MagneticImage targets
+      // .icon-img/.icon-coin directly, TiltFx only ever writes rotateX/
+      // rotateY/z/transformPerspective to .icon-figure) — so this drift's
+      // x/y on .icon-figure can never collide with the hover-driven
+      // magnetic-pull system on its children.
+      this.applyDrift = !!applyDrift;
+      this.figure = cell.querySelector('.icon-figure');
+      this.driftPos = { x: 0, y: 0 };
+      // Per-icon ratio AND sign, randomized once here — without this every
+      // icon read the exact same (mouse - center) * ratio formula, so they
+      // all drifted the same direction at the same speed in lockstep
+      // instead of each icon having its own subtle, independent response.
+      this.driftRatioX = (0.008 + Math.random() * 0.022) * (Math.random() < 0.5 ? -1 : 1);
+      this.driftRatioY = (0.008 + Math.random() * 0.022) * (Math.random() < 0.5 ? -1 : 1);
       new MagneticImage(cell.querySelector('.icon-img'));
       this.layout();
-      this.loop();
+      activeGridItems.add(this);
     }
     layout() {
       const rect = this.cell.getBoundingClientRect();
@@ -1009,13 +1239,16 @@
         : mapRange(rect.left + rect.width / 2, winsize.width / 2, winsize.width, -70, -30);
       gsap.set(this.cell, { rotationX: this.rX, rotationY: this.rY, z: this.tZ });
     }
-    loop() { if (!this.raf) this.raf = requestAnimationFrame(() => this.move()); }
-    move() {
-      this.raf = undefined;
-      if (!this.cell.isConnected) return; // theme was switched away — stop looping for this cell
+    update() {
+      if (!this.cell.isConnected) { activeGridItems.delete(this); return; } // theme was switched away — drop it, nothing left to update
       // skip the work while the "By Content" tab isn't visible — the loop
       // still ticks (cheap) but doesn't touch layout/style until it is.
-      if (contentView.classList.contains('active')) {
+      if (!contentView.classList.contains('active')) return;
+      // Skipped while TiltFx has this same cell mid-hover (data-tilt,
+      // set/cleared in TiltFx below) — the ambient sway competing with the
+      // user's own live tilt on the same icon was just extra motion/CPU
+      // for no visual benefit; it resumes the moment the cursor leaves.
+      if (!this.cell.dataset.tilt) {
         // Rotation only — no shared x/y translation here anymore. That
         // translation used the same mousepos-to-range formula for every
         // cell, so every icon slid in the exact same direction by the
@@ -1033,9 +1266,23 @@
           rotationY: -this.rY - this.rotationVals.y,
         });
       }
-      this.loop();
+      // Coin/icon drift (Air only, see constructor) — deliberately NOT
+      // gated by data-tilt like the rotation above: this is meant to keep
+      // running continuously, hover or not, same as the background's own
+      // parallax.
+      if (this.applyDrift && this.figure) {
+        const targetX = (mousepos.x - winsize.width / 2) * this.driftRatioX;
+        const targetY = (mousepos.y - winsize.height / 2) * this.driftRatioY;
+        this.driftPos.x = lerp(this.driftPos.x, targetX, 0.04);
+        this.driftPos.y = lerp(this.driftPos.y, targetY, 0.04);
+        gsap.set(this.figure, { x: this.driftPos.x, y: this.driftPos.y });
+      }
     }
   }
+  (function loopGridItems() {
+    activeGridItems.forEach(item => item.update());
+    requestAnimationFrame(loopGridItems);
+  })();
 
   // TiltFx — ported from Codrops "TiltHoverEffects"
   // (github.com/codrops/TiltHoverEffects): unlike GridItem3D above (whole-
@@ -1053,21 +1300,38 @@
       this.cell = cell;
       this.figure = cell.querySelector('.icon-figure');
       if (!this.figure) return;
+      // Caching the rect on mouseenter, rather than calling
+      // getBoundingClientRect() inside onMove on every single mousemove,
+      // matters more than it looks: getBoundingClientRect() forces a
+      // synchronous layout recalculation, and raw mousemove can fire far
+      // more often than the 60fps rAF loops elsewhere in this file — on a
+      // high-poll-rate mouse/trackpad that's a forced reflow dozens of
+      // times a second while a hovered icon is also mid-animation, which
+      // is exactly the kind of main-thread stall that drops frames and
+      // reads as stutter or an animation "sticking" mid-way. MagneticImage
+      // above already did this right (rect cached once per hover); TiltFx
+      // wasn't.
+      cell.addEventListener('mouseenter', () => {
+        this.rect = this.cell.getBoundingClientRect();
+        this.cell.dataset.tilt = '1'; // pauses GridItem3D's ambient sway on this same cell — see update() above
+      });
       cell.addEventListener('mousemove', (e) => this.onMove(e));
       cell.addEventListener('mouseleave', () => this.onLeave());
     }
     onMove(e) {
-      const b = this.cell.getBoundingClientRect();
+      if (!this.rect) this.rect = this.cell.getBoundingClientRect(); // safety net if mousemove somehow precedes mouseenter
+      const b = this.rect;
       const px = (e.clientX - b.left) / b.width;
       const py = (e.clientY - b.top) / b.height;
       gsap.set(this.figure, {
-        rotateX: (0.5 - py) * 16,
-        rotateY: (px - 0.5) * 16,
+        rotateX: (0.5 - py) * 50,
+        rotateY: (px - 0.5) * 50,
         z: 16,
         transformPerspective: 400,
       });
     }
     onLeave() {
+      delete this.cell.dataset.tilt;
       gsap.to(this.figure, { duration: 1, ease: 'elastic.out(1, 0.4)', rotateX: 0, rotateY: 0, z: 0 });
     }
   }
@@ -1078,9 +1342,14 @@
   // this has to re-select and re-wire fresh each time).
   function initIconInteractions() {
     const shapes = Array.from(document.querySelectorAll('.icon-grid .icon-cell'));
+    // Coin/icon drift (see GridItem3D above) — confirmed working on Air
+    // first, now applied to every theme. If it ever needs rolling back to
+    // just Air (or off entirely), change this one line — everything else
+    // is already gated through the applyDrift flag.
+    const applyDrift = true;
 
     if (!isTouch && window.gsap) {
-      shapes.forEach(cell => { new GridItem3D(cell); new TiltFx(cell); });
+      shapes.forEach(cell => { new GridItem3D(cell, applyDrift); new TiltFx(cell); });
     }
 
     shapes.forEach(el => {
@@ -1114,11 +1383,13 @@
       if (btn.classList.contains('active')) return;
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      renderBg(btn.dataset.cluster);
       renderCluster(btn.dataset.cluster);
       initIconInteractions();
     });
   });
 
+  renderBg('Soil');
   renderCluster('Soil');
   initIconInteractions();
 
@@ -1130,7 +1401,7 @@
     // made the icon motion feel disconnected from the scene around it.
     // Independent of which theme is active, so it's set up once here.
     const bgEl = document.getElementById('content-bg');
-    const BG_RATIO = 0.012;
+    const BG_RATIO = 0.03;
     let bgPos = { x: 0, y: 0 };
     (function loopBg() {
       if (contentView.classList.contains('active')) {

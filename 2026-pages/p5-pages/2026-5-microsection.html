@@ -31,7 +31,7 @@
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
   .body img { max-width:100%; margin:2.5rem 0; opacity:0.88; }
 
-  .interactive-image { position:relative; width:100%; margin:2.5rem 0; }
+  .interactive-image { position:relative; width:100%; max-width:930px; margin:2.5rem auto; }
   .interactive-image img { width:100%; display:block; margin:0; opacity:0.9; }
   .hotspot-overlay { position:absolute; top:0; left:0; width:100%; height:100%; }
   .hotspot-zone { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
@@ -43,8 +43,8 @@
 
   .micro-result { display:none; flex-direction:column; gap:1.5rem; margin-top:3.5rem; padding-top:3rem; border-top:1px solid var(--border); scroll-margin-top:5rem; }
   .micro-result.active { display:flex; }
-  .micro-result img { max-width:100%; max-height:60vh; width:auto; display:block; margin:0 auto; opacity:0.92; }
-  .micro-result .micro-text { font-size:1.1rem; line-height:1.95; opacity:0.82; }
+  .micro-result img { max-width:620px; max-height:60vh; width:auto; display:block; margin:0 auto; opacity:0.92; }
+  .micro-result .micro-text { font-size:1.1rem; line-height:1.95; opacity:0.82; max-width:620px; margin:0 auto; }
 
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
   .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
