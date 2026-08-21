@@ -20,19 +20,6 @@
   .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-center-links a:hover { opacity:1; }
   .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
-  .info-btn { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--white); background:none; border:none; opacity:0.45; cursor:pointer; font-family:var(--font); transition:opacity 0.2s; padding:0; margin-left:1.8rem; }
-  .info-btn:hover { opacity:1; }
-  .info-btn.open { opacity:1; }
-  #info-panel { position:fixed; top:52px; left:0; z-index:90; width:420px; max-width:90vw; max-height:calc(100vh - 52px); overflow-y:auto; background:var(--black); border-right:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 2rem 3rem; opacity:0; pointer-events:none; transform:translateY(-8px); transition:opacity 0.28s ease,transform 0.28s ease; }
-  #info-panel.open { opacity:1; pointer-events:auto; transform:translateY(0); }
-  #info-panel h2 { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); opacity:0.7; font-weight:400; margin:2rem 0 0.6rem; }
-  #info-panel h2:first-child { margin-top:0; }
-  #info-panel p { font-size:0.95rem; line-height:1.85; opacity:0.75; text-align:justify; }
-  #info-panel ul { font-size:0.95rem; line-height:1.85; opacity:0.75; padding-left:1.2rem; margin:0; }
-  #info-panel ul li { margin-bottom:0.8rem; }
-  #info-panel ul li:last-child { margin-bottom:0; }
-  #info-panel em { font-style:italic; }
-
   .wrap { max-width:620px; margin:0 auto; padding:8rem 0 6rem; }
   h1 { font-size:1.6rem; font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:0.8rem; color:var(--orange); }
   .subtitle { font-size:1.05rem; font-style:italic; color:var(--orange); margin-bottom:1rem; line-height:1.6; }
@@ -70,10 +57,7 @@
 </a>
 
 <nav>
-  <div style="display:flex;align-items:center;">
-    <a href="../../explore.html" class="nav-back">← Back</a>
-    <button class="info-btn" id="info-toggle">Project Info</button>
-  </div>
+  <a href="../../explore.html" class="nav-back">← Back</a>
   <div class="nav-center-links">
     <a href="2026-5.html" class="active">Intro</a>
     <a href="2026-5-timeline.html">Timeline</a>
@@ -82,26 +66,6 @@
     <a href="2026-5-references.html">References</a>
   </div>
 </nav>
-<div id="info-panel">
-  <h2>Group Members</h2>
-  <p>Ömür Buğra Gündüz, Nil Erdem</p>
-
-  <h2>Main Title</h2>
-  <p>An Idle Structure Between Soil and City: The Grand Çankaya Hotel</p>
-
-  <h2>Sub-Title</h2>
-  <p><em>Effects of Abandonment on Soil Composition</em></p>
-
-  <h2>Research Questions</h2>
-  <p>How does the prolonged abandonment of 'The Grand Çankaya Hotel' affect localized soil, and how do these effects reshape the relationship between urban space and soil?</p>
-
-  <h2>Position Statement</h2>
-  <p>The approximately 30-year abandonment of the unfinished Grand Çankaya Hotel has contributed to soil contamination through the leaching, weathering, and corrosion of its construction materials, producing concentrations and spatial distributions of heavy metals and alkaline compounds that may differ from Ankara's urban background pollution levels, while simultaneously transforming the relationship between urban space and soil and intersecting with the site's evolving role within Ankara's urban memory as an idle structure.</p>
-
-  <h2>Methodology</h2>
-  <p>This study investigates the soil changes that may have occurred because of the deterioration of building materials during the approximately 30-year period of abandonment of the Grand Çankaya Hotel. Concrete dissolution, reinforcement corrosion, and pollutants that can be carried by groundwater networks are analyzed using literature data to examine the long-term relationship between the structure and the surrounding soil system. Potential material and heavy metal concentrations in the soil are visualized on the existing cross-section, and the extent to which the environmental impacts of the building's point presence can spread over a wide area is investigated through an impact area diagram created towards the valley in the reverse expressive section. The data obtained are represented through diagrams, timelines, and cross-sectional drawings.</p>
-  <p>This research, "Abandoned Buildings' Effects on Soil Composition: The Grand Çankaya Hotel Case," examines the effects of the nearly thirty-year abandonment of the Grand Çankaya Hotel, an important landmark in Ankara's urban memory, on the surrounding soil system. The study considers the building as an actor affecting environmental and ecological processes and investigates its relationship with soil composition, water movements, and the urban environment.</p>
-</div>
 <div class="wrap">
   <h1>An Idle Structure Between Soil and City:<br><span style="font-size:0.75em; color:var(--mid);">The Grand Çankaya Hotel</span></h1>
   <p class="subtitle">Effects of Abandonment on Soil Composition</p>
@@ -127,16 +91,5 @@
     <div class="meta-item"><dt>Dönem</dt><dd>Spring 2026</dd></div>
   </dl>
 </div>
-<script>
-  const infoBtn   = document.getElementById('info-toggle');
-  const infoPanel = document.getElementById('info-panel');
-  infoBtn.addEventListener('click', () => {
-    const open = infoPanel.classList.toggle('open');
-    infoBtn.classList.toggle('open', open);
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { infoPanel.classList.remove('open'); infoBtn.classList.remove('open'); }
-  });
-</script>
 </body>
 </html>
