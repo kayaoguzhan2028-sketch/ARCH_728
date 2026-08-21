@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/webp" href="../../must-images/favicon/Mimfak.webp">
+<title>The Figures of Migrant Soil — ARCH 728</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --orange:#d97a3f; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; }
+  html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
+  .nav-back { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:1; transition:opacity 0.2s; }
+  .nav-back:hover { opacity:1; }
+  .nav-center-links { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:1.6rem; }
+  .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:1; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
+  .nav-center-links a:hover { opacity:1; }
+  .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
+
+  .wrap { max-width:680px; margin:0 auto; padding:calc(52px + 3rem) 0 6rem; }
+  @media (max-width:700px) {
+    nav { padding:0 1rem; }
+    .nav-center-links { position:static; left:auto; top:auto; transform:none; overflow-x:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; flex:1; margin:0 2.6rem 0 0.6rem; scrollbar-width:none; gap:0.9rem; }
+    .nav-center-links::-webkit-scrollbar { display:none; }
+    .nav-center-links a { font-size:0.6rem; }
+    .wrap { padding-left:1.4rem; padding-right:1.4rem; }
+  }
+  h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; margin-bottom:1.2rem; color:var(--orange); }
+  .subtitle { font-size:1.05rem; font-style:italic; color:var(--orange); margin-bottom:3rem; line-height:1.6; }
+  .rule { border:none; border-top:1px solid var(--border); margin-bottom:3.5rem; }
+  .body { font-size:1.1rem; line-height:1.95; text-align:justify; }
+  .body p { margin-bottom:1.6rem; }
+  .body p:last-child { margin-bottom:0; }
+
+  .figure { margin-bottom:5rem; }
+  .figure:last-child { margin-bottom:0; }
+  .figure::after { content:''; display:table; clear:both; }
+  .figure h2 { font-size:1.7rem; font-weight:400; letter-spacing:0.03em; margin-bottom:1.4rem; color:var(--orange); }
+  .figure h3 { font-size:1rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); opacity:1; margin:2.6rem 0 1.1rem; }
+  .figure .subtitle { font-size:1rem; margin-bottom:1.8rem; }
+  .figure p { font-size:1.1rem; line-height:1.95; text-align:justify; opacity:1; margin-bottom:1.5rem; }
+  .figure .dialogue { margin:2rem 0; }
+  .figure .dialogue p { font-style:italic; opacity:1; margin-bottom:0.5rem; text-align:left; }
+  .figure .maroon-line { color:#8b1e3a; font-size:1.2rem; font-weight:500; opacity:1; margin-top:1rem; text-shadow:0 0 8px rgba(139,30,58,0.65), 0 0 18px rgba(139,30,58,0.4); }
+
+  .stage-track { display:flex; align-items:center; margin-bottom:0.7rem; }
+  .stage-dot { flex:none; width:6px; height:6px; border-radius:50%; background:rgba(245,242,235,0.25); transition:background 0.2s, width 0.2s, height 0.2s; }
+  .stage-dot.active { width:8px; height:8px; background:var(--orange); }
+  .stage-line { flex:1; height:1px; background:rgba(245,242,235,0.15); margin:0 3px; }
+  .stage-line.active { height:1.5px; background:var(--orange); opacity:0.7; }
+  .stage-label { font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--orange); opacity:1; margin-bottom:1.6rem; }
+
+  .figure-icon { width:44%; max-width:280px; height:auto; opacity:1; }
+  .figure-icon.float-left { float:left; margin:0 1.8rem 1rem 0; }
+  .figure-icon.float-right { float:right; margin:0 0 1rem 1.8rem; }
+  .figure-icon.icon-sm { width:36%; max-width:210px; }
+  @media (max-width:560px) {
+    .figure-icon { float:none !important; width:65%; max-width:220px; margin:0 auto 1.4rem !important; display:block; }
+  }
+
+  .home-btn { position:fixed; top:0.6rem; right:1rem; z-index:200; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,242,235,0.35); background:rgba(10,10,10,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; color:var(--white); text-decoration:none; opacity:0.65; transition:opacity 0.2s, border-color 0.2s; }
+  .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
+  .home-btn svg { width:15px; height:15px; display:block; }
+  @media (max-width:640px) {
+    .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
+    .home-btn svg { width:13px; height:13px; }
+  }
+</style>
+</head>
+<body>
+<a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
+</a>
+
+<nav>
+  <a href="../../explore.html" class="nav-back" onclick="if(window.history.length>1){history.back();return false;}">← Back</a>
+  <div class="nav-center-links">
+    <a href="2026-7-info.html">Info</a>
+    <a href="2026-7.html">Intro</a>
+    <a href="2026-7-migrant-soil.html" class="active">The Figures of Migrant Soil</a>
+    <a href="2026-7-map.html">The Map</a>
+    <a href="2026-7-timeline.html">The Timeline</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <h1>The Figures of Migrant Soil</h1>
+  <p class="subtitle">Five ontological stages of ground in motion, from nomadic earth to civilized concrete.</p>
+  <hr class="rule">
+
+  <div class="body">
+    <p>As soil moves through Ankara's excavation apparatus, it is assigned five successive identities: nomadic, barbaric, vagabond, proletarianized, and civilized. Each is a distinct political condition, not a physical state; the same matter, read differently depending on where the human's laws have or have not yet reached it. What follows is the full text of each figure, gathered here from its own page.</p>
+  </div>
+
+  <div class="figure">
+    <div class="stage-track" aria-hidden="true">
+      <span class="stage-dot active"></span><span class="stage-line active"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span>
+    </div>
+    <div class="stage-label">Stage 1 / 5</div>
+    <h2>Nomad Soil</h2>
+    <img class="figure-icon float-right" src="../../2026-images/2026-p7/icons/ikon-nomad-metabolic-flow.webp" alt="Nomad">
+    <p>The first form of soil. Not the product of any order, but of a movement that obeys the laws of nature. This soil is nomadic because its movement, too, comes from that same source. Under the wind it lets its sediment be carried, under the rain it sets into form, under the earthquake it breaks. All of its migration is natural, and so the plants, the animals, the microorganisms that live upon it and within it obey what the soil obeys.</p>
+    <p>The crucial distinction here is the figure of the human, who pulls itself out from among the animals. The human sets itself apart, and transforms that same soil: sows it, reaps it. As Donna Haraway writes: "Humankind is self-made in the most literal sense. Our bodies are the product of the tool-using adaptation which pre-dates the genus Homo. We actively determined our design through tools that mediate the human exchange with nature." Yet the tool does not lift the human out of nature; it is how the human enters the exchange, not how it escapes. The human works the soil and is worked by it in return. The human does not stand above what it works: soil is an actor in the exchange between nature and the human. And it is here that the nomad shows itself. It is nomadic only because nothing yet holds it in place, no line has been drawn, no parcel has been cut. As the soil migrates with everything it carries, the living things upon it and within it remain bound to it.</p>
+    <p>The name of this exchange is metabolism, Stoffwechsel. What the human sows, it reaps and eats, or feeds to its animals, and the waste returns again to the soil. In this exchange all matter remains within the same geography; the human does not interfere with the movement of the soil. This is the order of nature. The human grows old and dies, and is given back to the soil, and so do its animals, so do its plants. After a time the soil can no longer give the human enough. The season turns, the waterways shift. As the human ages, so the soil ages. When the human's relation to the soil falls into suspension, the human does not resent it, and migrates to another geography until the soil gathers itself again. The soil, in its own way, dies and is reborn in the meantime: new sediment arrives, the old drifts away. This exchange goes on without end, at times in excess, at times scarce, but always in measure. The human knows that it will die; the soil knows that it will migrate.</p>
+  </div>
+
+  <div class="figure">
+    <div class="stage-track" aria-hidden="true">
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot active"></span><span class="stage-line active"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span>
+    </div>
+    <div class="stage-label">Stage 2 / 5</div>
+    <h2>Barbaric Soil</h2>
+    <img class="figure-icon float-left" src="../../2026-images/2026-p7/icons/ikon-barbarian.webp" alt="Barbaric">
+    <p>When the human forgets that it will die, it controls its surroundings. Right here, in this moment, it begins to see its own laws as higher than nature. The feeling runs so deep that it orders and fixes everything around it, as if all of it would stay the same forever. For the human, what stays inside, where its laws apply, is enough; whatever does otherwise is thrown outside the borders, outside the polis.</p>
+    <p>So everything carried away is the barbarian: the soil that threatens the laws the human built while feeling immortal, the soil that will not comply. The nomad's free mobility appears here as political punishment. This too is not nature, it is a human decision. The soil is reworked in places far from sight, and in the meantime it is forgotten. Some barbarians may be taken back into the order, if they have passed through the right regulation. Others cannot. The human has reworked the soil. But at what cost?</p>
+    <p>Debris is not a subject or an object, but a record of a moment. It is in a constant state of transformation. Unlike "rubble," which implies reusable or identifiable building pieces, debris refers to matter dispersed by violence or disaster. It captures not only the physical remnants but the broader spatial transformation caused by destruction.</p>
+  </div>
+
+  <div class="figure">
+    <div class="stage-track" aria-hidden="true">
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot active"></span><span class="stage-line active"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span>
+    </div>
+    <div class="stage-label">Stage 3 / 5</div>
+    <h2>Vagabond Soil</h2>
+    <img class="figure-icon float-left icon-sm" src="../../2026-images/2026-p7/icons/ikon-vagabond-1.webp" alt="Vagabond">
+    <p>The vagabond, unlike the barbarian, is the one that stays inside. It is the soil the system will not accept yet will not remove: soil without hope. It shows itself in the areas the human's laws have not yet ordered or transformed. There it is a dump, there it is barren, there it is isolated and dangerous. The vagabond looks for no hope under the human's laws, and cannot reach the laws of nature, for the human's laws no longer carry the laws of nature and metabolism the way they once did, nor do they let the laws of nature be felt alongside their own.</p>
+    <p>The greatest sign of this rupture is that the human no longer cares for the soil, and looks down on it. It does not know the soil, expects nothing from it, and gives it no hope in return. The rupture has cut the soil's movement: it is static, and idle. The human's law is seen on the map, but it is not in the ledger.</p>
+  </div>
+
+  <div class="figure">
+    <div class="stage-track" aria-hidden="true">
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot active"></span><span class="stage-line active"></span>
+      <span class="stage-dot"></span>
+    </div>
+    <div class="stage-label">Stage 4 / 5</div>
+    <h2>Proletariat Soil</h2>
+    <img class="figure-icon float-right" src="../../2026-images/2026-p7/icons/ikon-proletarian.webp" alt="Proletariat">
+    <p>The proletarian, unlike the vagabond, is not left idle but put to work. The human no longer moves this soil to be rid of it, it moves it to build: extracted, crushed, mixed, laid down. The metabolism that once held all matter within the same geography is gone, and in its place there is only extraction. This soil is no longer nature, it is produced. "(Social) space is a (social) product," Lefebvre writes, and this is the matter that product is made of: gravel stirred into petroleum for the asphalt, pressed flat beneath the tiling of a park. The only place it is still called nature is the surface laid out for the eye, and even there nothing is exchanged beneath it.</p>
+    <p>The worker who raises the building cannot live in it, and the soil that holds up the city will never inhabit it. It produces the place and is shut out of it: it carries everything, and owns nothing. And here is the strange thing: the building is also soil. The tower is the same matter laid beneath the asphalt, crushed and bound and put to work, so the civilized and the proletarian are not two soils but one, shown from two sides: the named front the human calls civilization, and the working back that is never seen. The barbarian still moved. The vagabond still sat as nature, however idle. This soil does neither: it cannot migrate, and it can no longer die. What rises on top of it, the human calls civilized.</p>
+  </div>
+
+  <div class="figure">
+    <div class="stage-track" aria-hidden="true">
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot"></span><span class="stage-line"></span>
+      <span class="stage-dot active"></span>
+    </div>
+    <div class="stage-label">Stage 5 / 5</div>
+    <h2>Civilized Soil</h2>
+    <p class="subtitle">What is this civilized soil? What does it even mean? Can soil be civilized?</p>
+
+    <h3>The Crime of the Word</h3>
+    <p>Naming something is not an innocent act. Civil derives from civitas, a decision to coexist, a gathering under common law. But the moment civitas defines self-existence, it produces its outside. What is included is named; what remains outside does not require a name. It simply becomes the other, the unnamed, the unqualified.</p>
+    <p>Civilized soil operates through the same logic. It is not a neutral description but a judgement. The moment soil receives this qualification, a coordinate, a parcel, a title, it ceases to be soil. It becomes a numerical entity, a legal abstraction.</p>
+    <p>The process is called civil engineering, a discipline that orders nature and arrests flow, as if the act of building were inseparable from the act of civilization. What it actually does is excavate, transport, pour, compress, and seal, finalizing civilization.</p>
+    <p>This is where the category of civilized soil reveals its structural dishonesty. It is the end product of a chain: nomad as soil metabolized freely, barbaric as soil extracted and displaced, vagabond as soil discarded or warehoused, proletariat as soil disciplined and redeployed. So it appears as if none of this ever happened. The form veils itself from its origin.</p>
+    <p>The moment soil forgets itself, civilization appears.</p>
+
+    <h3>Modernity and Excavation</h3>
+    <p>Modernism does not simply use civilized soil, it produces it. The tabula rasa is not a metaphor; it is an operational requirement. Before building, you must demolish. Before civilizing, you must excavate.</p>
+    <p>Modernism cannot build on what already exists. It requires a ground voided of prior claims, untamed, uncontrolled. Nomad soil resists this: it flows, settles, and accumulates without asking permission. So it must first be declared illegible, then invalid, then removed. This is not incidental to modernism, it is its mechanism.</p>
+    <p>The Babylon tower does not arrive on empty ground by accident, but as the unity of one language reaching for the gods'. Civilized soil speaks that same language today: glass, steel, concrete, repeated until the punishment is issued. Despite the coexistence of differences, it acts as if it were a single, supreme language, blended with the arrogance of capital.</p>
+    <p>Soil is the labyrinth, and not because of any danger inside it, since that danger left long ago. What remains is the walk: every step landing on something different, every layer carrying a different density, a different memory, a different smell. No one knows where it leads, which is not a warning. That is the offer.</p>
+    <p>Civilized soil is the material residue of the disciplined voice of arrogance.</p>
+
+    <h3>The Most Civilized Thing in the Room</h3>
+    <p>Somebody excavated this ground. Somebody loaded it onto a truck, drove it to the edge of the city, and dumped it where nobody would ask questions. Somebody else brought new soil back, cleaned, compacted, chemically adjusted, stripped of everything that made it, and transformed it into a designed landscape, a tower wall, a playground in the kids' park.</p>
+    <p>It is designated through the taxonomy of civil.</p>
+    <p>The tower does not know its own biography. It does not know which valley was filled to level its foundation, which hill was carved to feed its concrete, which hands compacted the soil it stands on. It does not know, because it was not built to know. It was built to stand.</p>
+    <p>And standing, for civilized soil, is enough. To stand is to have already won the competition. The height itself becomes the evidence.</p>
+    <div class="dialogue">
+      <p><em>"Look how far we have come," the tower says.</em></p>
+      <p><em>"Look how civilized," from every mouth.</em></p>
+      <p><em>"But come from where? From whom?"</em></p>
+      <p><em>"Belong who? For what reason has it become civilized?"</em></p>
+    </div>
+    <p class="maroon-line">This is not a metaphor. This is a construction document.</p>
+  </div>
+</div>
+</body>
+</html>

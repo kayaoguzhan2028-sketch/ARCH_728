@@ -22,11 +22,6 @@
   .nav-center-links a { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); text-decoration:none; opacity:0.5; padding-bottom:0.3em; border-bottom:1px solid transparent; transition:opacity 0.2s,border-color 0.2s; white-space:nowrap; }
   .nav-center-links a:hover { opacity:1; }
   .nav-center-links a.active { opacity:1; border-bottom-color:var(--white); }
-  .nav-dropdown { position:relative; display:flex; align-items:center; }
-  .nav-dropdown-menu { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:0.55rem; padding:0.9rem 1.1rem 0.8rem; margin-top:0.4rem; background:var(--black); border:1px solid var(--border); opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
-  .nav-dropdown:hover .nav-dropdown-menu { opacity:1; pointer-events:auto; }
-  .nav-dropdown-menu .dropdown-label { font-size:0.56rem; letter-spacing:0.18em; text-transform:uppercase; opacity:0.35; white-space:nowrap; }
-  .nav-dropdown-menu a { display:block; font-size:0.64rem; white-space:nowrap; }
 
   #map { position:fixed; top:52px; left:0; right:0; bottom:0; z-index:0; background:var(--black); }
   #map.dimmed .leaflet-tile-pane { filter: brightness(0.32) contrast(0.85) saturate(0.5); transition: filter 0.4s; }
@@ -210,17 +205,7 @@
   <div class="nav-center-links" lang="en">
     <a href="2026-7-info.html">Info</a>
     <a href="2026-7.html">Intro</a>
-    <div class="nav-dropdown">
-      <a href="2026-7-nomad-soil.html">The Figures of Migrant Soil</a>
-      <div class="nav-dropdown-menu">
-        <span class="dropdown-label">Soil Types</span>
-        <a href="2026-7-nomad-soil.html">Nomad Soil</a>
-        <a href="2026-7-barbaric-soil.html">Barbaric Soil</a>
-        <a href="2026-7-vagabond-soil.html">Vagabond Soil</a>
-        <a href="2026-7-proletariat-soil.html">Proletariat Soil</a>
-        <a href="2026-7-civilized-soil.html">Civilized Soil</a>
-      </div>
-    </div>
+    <a href="2026-7-migrant-soil.html">The Figures of Migrant Soil</a>
     <a href="2026-7-map.html" class="active">The Map</a>
     <a href="2026-7-timeline.html">The Timeline</a>
   </div>
