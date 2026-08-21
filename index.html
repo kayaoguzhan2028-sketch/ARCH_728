@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/webp" href="must-images/favicon/Mimfak.webp">
-<title>METU Landscape Architecture Lab — ARCH 728</title>
-<meta name="description" content="METU (ODTÜ) Department of Architecture, Landscape Architecture Lab. ARCH 728 is a graduate (MSc/PhD) studio atlas: nine projects mapping soil, industry, and landscape change across Ankara, from Çayırhan to Imrahor Valley.">
+<title>METU Landscape Architecture Lab</title>
+<meta name="description" content="METU (ODTÜ) Department of Architecture — Landscape Architecture Lab. A BArch/MSc/PhD studio: nine projects mapping soil, industry, and landscape change across Ankara, from Çayırhan to Imrahor Valley.">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Newsreader&family=Source+Serif+4&family=Literata&family=Spectral&family=IBM+Plex+Serif&family=Charis+SIL&family=Libertinus+Serif&family=Alegreya&family=Alegreya+Sans&family=Inter&family=IBM+Plex+Sans&family=Source+Sans+3&family=Libre+Franklin&family=Archivo&family=Public+Sans&family=Atkinson+Hyperlegible&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&family=Newsreader&family=Source+Serif+4&family=Literata&family=Spectral&family=IBM+Plex+Serif&family=Charis+SIL&family=Libertinus+Serif&family=Alegreya&family=Alegreya+Sans&family=Inter&family=IBM+Plex+Sans&family=Source+Sans+3&family=Libre+Franklin&family=Archivo&family=Public+Sans&family=Atkinson+Hyperlegible&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'EB Garamond',Georgia,serif; --font-heading:'EB Garamond',Georgia,serif; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'Newsreader',Georgia,serif; --font-heading:'Newsreader',Georgia,serif; }
   html,body { width:100%; background:var(--black); color:var(--white); font-family:var(--font); }
   .hero-screen { position:relative; width:100%; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .hero-content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; text-align:center; }
@@ -55,38 +55,9 @@
     .credits { padding:3rem 1.4rem 2rem; gap:2rem 1.4rem; }
     footer { padding:1.8rem 1.4rem; }
   }
-  /* TEMPORARY — font picker for review, remove #font-picker block + script + this rule when done */
-  #font-picker { position:fixed; top:0; left:0; right:0; z-index:2000; display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:0.55rem 1rem; background:rgba(10,10,10,0.94); border-bottom:1px solid var(--border); font-family:Georgia,serif; }
-  #font-picker label { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white); opacity:0.55; }
-  #font-picker select { background:var(--black); color:var(--white); border:1px solid rgba(245,242,235,0.3); padding:0.3rem 0.6rem; font-size:0.82rem; font-family:Georgia,serif; cursor:pointer; }
 </style>
 </head>
 <body>
-<div id="font-picker">
-  <label for="font-select">Font</label>
-  <select id="font-select">
-    <option data-heading="'EB Garamond',Georgia,serif" data-body="'EB Garamond',Georgia,serif" selected>EB Garamond (mevcut)</option>
-    <optgroup label="Pairs (Serif başlık + Sans gövde)">
-      <option data-heading="'IBM Plex Serif',Georgia,serif" data-body="'IBM Plex Sans',Arial,sans-serif">IBM Plex</option>
-      <option data-heading="'Alegreya',Georgia,serif" data-body="'Alegreya Sans',Arial,sans-serif">Alegreya</option>
-      <option data-heading="'Source Serif 4',Georgia,serif" data-body="'Source Sans 3',Arial,sans-serif">Source</option>
-    </optgroup>
-    <optgroup label="Serif">
-      <option data-heading="'Newsreader',Georgia,serif" data-body="'Newsreader',Georgia,serif">Newsreader</option>
-      <option data-heading="'Literata',Georgia,serif" data-body="'Literata',Georgia,serif">Literata</option>
-      <option data-heading="'Spectral',Georgia,serif" data-body="'Spectral',Georgia,serif">Spectral</option>
-      <option data-heading="'Charis SIL',Georgia,serif" data-body="'Charis SIL',Georgia,serif">Charis SIL</option>
-      <option data-heading="'Libertinus Serif',Georgia,serif" data-body="'Libertinus Serif',Georgia,serif">Libertinus Serif</option>
-    </optgroup>
-    <optgroup label="Sans">
-      <option data-heading="'Inter',Arial,sans-serif" data-body="'Inter',Arial,sans-serif">Inter</option>
-      <option data-heading="'Libre Franklin',Arial,sans-serif" data-body="'Libre Franklin',Arial,sans-serif">Libre Franklin</option>
-      <option data-heading="'Archivo',Arial,sans-serif" data-body="'Archivo',Arial,sans-serif">Archivo</option>
-      <option data-heading="'Public Sans',Arial,sans-serif" data-body="'Public Sans',Arial,sans-serif">Public Sans</option>
-      <option data-heading="'Atkinson Hyperlegible',Arial,sans-serif" data-body="'Atkinson Hyperlegible',Arial,sans-serif">Atkinson Hyperlegible</option>
-    </optgroup>
-  </select>
-</div>
 <div class="hero-screen">
   <div class="hero-content">
     <h1 class="hero-title">Reflections on Landscape</h1>
@@ -109,20 +80,6 @@
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur — excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 </section>
-<section class="quotes">
-  <div class="quote-item">
-    <p class="quote-text">"When does soil become visible — and when is it rendered invisible in the city?"</p>
-    <p class="quote-attr">— Visibility</p>
-  </div>
-  <div class="quote-item">
-    <p class="quote-text">"When is soil alive, inert, or waste? And whose labor sustains it?"</p>
-    <p class="quote-attr">— (In)Habitability</p>
-  </div>
-  <div class="quote-item">
-    <p class="quote-text">"What does soil carry and transform as it moves?"</p>
-    <p class="quote-attr">— Transportability</p>
-  </div>
-</section>
 <div class="credits">
   <div class="credit-group">
     <h3>Curated and Taught by</h3>
@@ -141,12 +98,6 @@
 <script>
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') window.location.href = 'explore.html';
-  });
-  // TEMPORARY — remove with the #font-picker block above when review is done
-  document.getElementById('font-select').addEventListener('change', function(e) {
-    const opt = e.target.selectedOptions[0];
-    document.documentElement.style.setProperty('--font', opt.dataset.body);
-    document.documentElement.style.setProperty('--font-heading', opt.dataset.heading);
   });
 </script>
 </body>

@@ -4,24 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/webp" href="must-images/favicon/Mimfak.webp">
-<title>Atlas — METU Landscape Architecture Lab</title>
-<meta name="description" content="Explore the METU (ODTÜ) Department of Architecture Landscape Architecture Lab atlas — a graduate architecture studio on soil, infrastructure, and urban transformation in Ankara.">
+<title>Explore — METU Landscape Architecture Lab</title>
+<meta name="description" content="Explore the METU (ODTÜ) Department of Architecture Landscape Architecture Lab — a BArch/MSc/PhD studio on soil, infrastructure, and urban transformation in Ankara.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --black: #0a0a0a; --white: #f5f2eb; --mid: #d4cebc; --muted: rgba(245,242,235,0.45); --border: rgba(245,242,235,0.12); --node-size: 8px; }
   html, body { height: 100%; overflow: hidden; }
-  body { background: var(--black); color: var(--white); font-family: 'EB Garamond', Georgia, serif; display: flex; flex-direction: column; }
+  body { background: var(--black); color: var(--white); font-family: 'Newsreader', Georgia, serif; display: flex; flex-direction: column; }
 
   nav { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 52px; border-bottom: 1px solid var(--border); background: var(--black); z-index: 50; }
   .nav-left { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85; }
   .nav-left a { color: var(--white); text-decoration: none; opacity: 0.85; transition: opacity 0.2s; }
   .nav-left a:hover { opacity: 1; }
   .view-tabs { display: flex; gap: 0; list-style: none; }
-  .view-tabs li button { background: none; border: none; border-bottom: 2px solid transparent; padding: 0.4rem 1.4rem; font-family: 'EB Garamond', serif; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.4; cursor: pointer; transition: opacity 0.2s, border-color 0.2s; }
+  .view-tabs li button { background: none; border: none; border-bottom: 2px solid transparent; padding: 0.4rem 1.4rem; font-family: 'Newsreader', serif; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); opacity: 0.4; cursor: pointer; transition: opacity 0.2s, border-color 0.2s; }
   .view-tabs li button:hover { opacity: 0.75; }
   .view-tabs li button.active { opacity: 1; border-bottom-color: var(--white); }
 
@@ -32,7 +32,7 @@
   #view-map { align-items: stretch; }
   .map-container { position: relative; width: 100%; height: 100%; overflow: hidden; }
   .zoom-controls { position: absolute; bottom: 1.4rem; right: 1.4rem; display: flex; flex-direction: column; gap: 4px; z-index: 1000; }
-  .zoom-btn { width: 32px; height: 32px; background: rgba(10,10,10,0.7); border: 1px solid rgba(245,242,235,0.2); color: var(--white); font-family: 'EB Garamond', serif; font-size: 1.1rem; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: border-color 0.2s, opacity 0.2s; opacity: 0.6; display: flex; align-items: center; justify-content: center; }
+  .zoom-btn { width: 32px; height: 32px; background: rgba(10,10,10,0.7); border: 1px solid rgba(245,242,235,0.2); color: var(--white); font-family: 'Newsreader', serif; font-size: 1.1rem; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: border-color 0.2s, opacity 0.2s; opacity: 0.6; display: flex; align-items: center; justify-content: center; }
   .zoom-btn:hover { opacity: 1; border-color: rgba(245,242,235,0.5); }
 
   .node { position: relative; display: inline-block; pointer-events: all; touch-action: manipulation; cursor: pointer; }
@@ -88,7 +88,7 @@
      swaps what's shown on the right (renderCluster() in the JS), instead of
      trying to fit every theme on screen at once. */
   .theme-list { position: absolute; top: 0; bottom: 0; left: 0; width: 150px; display: flex; flex-direction: column; justify-content: center; gap: 1rem; padding-left: 2rem; z-index: 10; }
-  .theme-btn { background: none; border: none; color: var(--white); font-family: 'EB Garamond', serif; font-size: 1.1rem; letter-spacing: 0.16em; text-transform: uppercase; text-align: left; cursor: pointer; opacity: 0.32; transition: opacity 0.2s; padding: 0.15rem 0; }
+  .theme-btn { background: none; border: none; color: var(--white); font-family: 'Newsreader', serif; font-size: 1.1rem; letter-spacing: 0.16em; text-transform: uppercase; text-align: left; cursor: pointer; opacity: 0.32; transition: opacity 0.2s; padding: 0.15rem 0; }
   .theme-btn:hover { opacity: 0.7; }
   .theme-btn.active { opacity: 1; font-weight: 700; }
   @media (max-width: 900px) {
@@ -289,7 +289,7 @@
 
   footer { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 48px; border-top: 1px solid var(--border); background: var(--black); }
   .footer-meta { font-size: 0.72rem; letter-spacing: 0.1em; color: var(--white); opacity: 0.22; }
-  .btn-library { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.38rem 1.2rem; border: 1px solid rgba(245,242,235,0.25); background: none; color: var(--white); font-family: 'EB Garamond', serif; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: border-color 0.2s, opacity 0.2s; opacity: 0.6; }
+  .btn-library { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.38rem 1.2rem; border: 1px solid rgba(245,242,235,0.25); background: none; color: var(--white); font-family: 'Newsreader', serif; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: border-color 0.2s, opacity 0.2s; opacity: 0.6; }
   .btn-library:hover { opacity: 1; border-color: rgba(245,242,235,0.6); }
   .btn-library svg { width: 11px; height: 11px; opacity: 0.7; }
 
@@ -323,7 +323,7 @@
   .map-panel-link { display: inline-block; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white); text-decoration: none; border: 1px solid rgba(245,242,235,0.28); padding: 0.28em 0.7em; opacity: 0.65; transition: opacity 0.18s, border-color 0.18s; }
   .map-panel-link:hover { opacity: 1; border-color: rgba(245,242,235,0.55); }
   .map-panel-actions { display: flex; justify-content: flex-start; align-items: center; margin-top: 0.75rem; gap: 0.5rem; }
-  .map-panel-back { display: none; font-family: 'EB Garamond', serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; background: none; border: 1px solid rgba(245,242,235,0.28); color: var(--white); cursor: pointer; padding: 0.28em 0.7em; opacity: 0.65; transition: opacity 0.18s, border-color 0.18s; }
+  .map-panel-back { display: none; font-family: 'Newsreader', serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; background: none; border: 1px solid rgba(245,242,235,0.28); color: var(--white); cursor: pointer; padding: 0.28em 0.7em; opacity: 0.65; transition: opacity 0.18s, border-color 0.18s; }
   .map-panel-back:hover { opacity: 1; border-color: rgba(245,242,235,0.55); }
   .map-panel-text { margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.78rem; line-height: 1.65; opacity: 0.55; white-space: pre-line; }
   .map-panel-text a { color: var(--white); text-decoration: underline; opacity: 0.8; transition: opacity 0.18s; }
@@ -344,10 +344,10 @@
     .node::before, .lens-node::before { content: ''; position: absolute; inset: -14px; z-index: 1; }
   }
 
-  #map-theme-btn { background: none; border: 1px solid rgba(245,242,235,0.25); color: var(--white); font-family: 'EB Garamond', serif; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.2em 0.65em; cursor: pointer; opacity: 0.45; transition: opacity 0.2s; min-width: 4.6rem; text-align: center; }
+  #map-theme-btn { background: none; border: 1px solid rgba(245,242,235,0.25); color: var(--white); font-family: 'Newsreader', serif; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.2em 0.65em; cursor: pointer; opacity: 0.45; transition: opacity 0.2s; min-width: 4.6rem; text-align: center; }
   #map-theme-btn:hover { opacity: 1; }
 
-  .leaflet-tooltip.map-shape-tooltip { background: rgba(10,10,10,0.88); border: 1px solid rgba(245,242,235,0.12); color: var(--white); font-family: 'EB Garamond', Georgia, serif; font-size: 0.82rem; letter-spacing: 0.04em; padding: 0.35rem 0.75rem; backdrop-filter: blur(4px); box-shadow: none; border-radius: 0; }
+  .leaflet-tooltip.map-shape-tooltip { background: rgba(10,10,10,0.88); border: 1px solid rgba(245,242,235,0.12); color: var(--white); font-family: 'Newsreader', Georgia, serif; font-size: 0.82rem; letter-spacing: 0.04em; padding: 0.35rem 0.75rem; backdrop-filter: blur(4px); box-shadow: none; border-radius: 0; }
   .leaflet-tooltip.map-shape-tooltip::before { display: none; }
 </style>
 </head>
@@ -355,7 +355,7 @@
 
 <nav>
   <div class="nav-left">
-    <a href="index.html">← Atlas</a>
+    <a href="index.html">← Manifesto</a>
   </div>
   <ul class="view-tabs">
     <li><button class="active" data-view="map">By Map</button></li>
