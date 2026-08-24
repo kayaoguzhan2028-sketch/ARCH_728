@@ -91,8 +91,31 @@
   .theme-btn { background: none; border: none; color: var(--white); font-family: 'Newsreader', serif; font-size: 1.1rem; letter-spacing: 0.16em; text-transform: uppercase; text-align: left; cursor: pointer; opacity: 0.32; transition: opacity 0.2s; padding: 0.15rem 0; }
   .theme-btn:hover { opacity: 0.7; }
   .theme-btn.active { opacity: 1; font-weight: 700; }
-  @media (max-width: 900px) {
-    .theme-list { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.6rem 1.4rem; padding: 1rem 1rem 0; width: 100%; }
+  /* `, (hover: none) and (pointer: coarse)` added alongside the width check —
+     a touch phone's CSS viewport width depends on its own display-scale
+     setting, not just its physical size, and can land on either side of
+     900px regardless of orientation (a Galaxy A50 measured over 900px CSS px
+     in *both* portrait and landscape during testing). Without this, such a
+     phone would keep the desktop absolute .theme-list (no stacking, no
+     padding-left clearance on .icon-grid-wrap below) even though it has no
+     mouse — the two blocks below need to agree on which devices get "mobile"
+     treatment, so both key off the same touch signal now, not raw width. */
+  @media (max-width: 900px), (hover: none) and (pointer: coarse) {
+    /* #view-content is a flex row by default (desktop: theme-list floats
+       absolutely, so row/column never mattered there); on mobile
+       theme-list becomes a static, full-width item, so without switching
+       to column here it sat side-by-side with .icon-grid-wrap instead of
+       stacking above it, squeezing the grid into half the screen width. */
+    /* justify-content:center is set on #view-content's base rule for the
+       desktop row layout (centers horizontally there); in column mode its
+       axis flips to vertical, which centered the whole stack instead of
+       starting it at the top — with content taller than the viewport
+       (typical in landscape, where height is short), that clipped the
+       theme-list bar above the visible area since scrollTop can't go
+       negative to reach it. flex-start keeps it anchored to the top. */
+    #view-content { flex-direction: column; justify-content: flex-start; }
+    .theme-list { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.6rem 1.4rem; padding: 1rem 1rem 0; width: 100%; flex-shrink: 0; }
+    .icon-grid-wrap { width: 100%; }
   }
 
   .icon-grid-wrap { position: relative; width: 100%; max-width: 1500px; margin: 0 auto; padding: 1.5rem 2rem; }
@@ -112,9 +135,23 @@
      pieces laid out loosely on a table. .icon-slot only carries that static
      placement; .icon-cell inside it is still the GSAP target for the 3D
      tilt/parallax, so the two transforms never fight over the same
-     element's `transform` property. */
-  .icon-grid.scattered { display: block; }
-  @media (min-width: 901px) {
+     element's `transform` property.
+     Scoped to the min-width:901px block below — `display:block` used to
+     apply unconditionally, which beat the mobile grid-template-columns
+     rules above on specificity and left every icon stacked in one long
+     column (portrait and landscape both) instead of the intended
+     3-col/2-col grid. */
+  /* `and (hover: hover) and (pointer: fine)` added — this branch assumes a
+     mouse (fixed single-screen-fit canvas, overflow-y:hidden since nothing
+     is ever meant to need scrolling). Width alone isn't a reliable proxy for
+     "has a mouse": a touch phone's CSS viewport width depends on its own
+     display-scale setting and can cross 901px in either orientation (seen on
+     a real Galaxy A50) while still being touch-only — such a phone used to
+     get this fixed-height + hidden-overflow treatment and end up with icons
+     positioned below the fold that could never be scrolled to. Gating on
+     hover/pointer keeps this to genuine mouse viewports; see the touch
+     branch right after it for the equivalent on everything else. */
+  @media (min-width: 901px) and (hover: hover) and (pointer: fine) {
     /* Only the active theme's icons are ever rendered (see renderCluster()
        in the JS), so each one gets the full canvas to itself — no more
        splitting the width between simultaneous clusters. Canvas height is
@@ -123,7 +160,24 @@
        reasonable window height. Left padding clears .theme-list. */
     #view-content { overflow-y: hidden; }
     .icon-grid-wrap { padding-left: 11rem; }
-    .icon-grid.scattered { position: relative; height: calc(100vh - 180px); min-height: 460px; max-height: 720px; }
+    .icon-grid.scattered { display: block; position: relative; height: calc(100vh - 180px); min-height: 460px; max-height: 720px; }
+    .icon-grid.scattered .icon-slot {
+      position: absolute; left: var(--sx); top: var(--sy);
+      transform: translate(-50%, -50%) rotate(var(--srot));
+    }
+  }
+  /* Touch — same hand-placed/rotated scatter as desktop above (the whole
+     point is that this reads as pieces loosely laid on a table, not a tidy
+     grid; a plain CSS-grid fallback here would lose that on purpose), just
+     without the desktop's "always fits one screen" assumption: taller
+     min-height so the same sx/sy spread has room to breathe on a narrow
+     portrait phone instead of clumping in the top slice of a much taller
+     viewport, no max-height cap, and overflow-y left at its default `auto`
+     (see #view-content's base rule above) instead of hidden — so a short
+     landscape phone can still scroll down to whichever icons don't fit
+     rather than losing them the way the width-keyed rule used to. */
+  @media (hover: none) and (pointer: coarse) {
+    .icon-grid.scattered { display: block; position: relative; height: calc(100vh - 260px); min-height: 640px; }
     .icon-grid.scattered .icon-slot {
       position: absolute; left: var(--sx); top: var(--sy);
       transform: translate(-50%, -50%) rotate(var(--srot));
@@ -149,6 +203,16 @@
      edge) scopes this cell's layout/counter recalculation to itself,
      without touching how it paints. */
   .icon-cell { position: relative; width: 100%; max-width: 81px; cursor: pointer; will-change: transform; transform-style: preserve-3d; contain: layout style; }
+  /* Smaller on touch — the scattered sx/sy spots above are hand-placed
+     percentages of the canvas width, so the same spacing that reads as
+     loosely-scattered on a ~1400px desktop canvas is much tighter in
+     absolute px on a ~360-400px phone; shrinking the coin itself (the glow/
+     rim/notch below are all sized as a % of this box, so they scale down
+     with it automatically) keeps neighboring icons from overlapping instead
+     of having to touch every sx/sy value per screen size. */
+  @media (hover: none) and (pointer: coarse) {
+    .icon-cell { max-width: 58px; }
+  }
   /* height:auto here used to make .icon-figure's box follow each source
      image's own (non-square) aspect ratio — which made .icon-glow's circle
      render as a squashed ellipse on anything but a perfectly square source.
@@ -215,6 +279,13 @@
      the coin's corners-on-the-circle relationship true whether the icon is
      resting or hovered, not just at rest. */
   .icon-cell:hover .icon-glow { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-glow, -4px)) scale(1.86); }
+  /* Touch equivalent of the :hover rule above — real `:hover` doesn't fire
+     reliably on touch, so AutoHoverFx (JS below) toggles this class instead
+     when it's that coin's turn in the sequence. 1.3 instead of 1.86 — with
+     no cursor to explain *why* a coin is popping, and 8 of them doing this
+     nonstop on a small screen, the full desktop pop read as too loud; scale
+     value here must stay in sync with SCALE_TOUCH in the JS. */
+  .icon-cell.auto-hover .icon-glow { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-glow, -4px)) scale(1.3); }
   /* Rim — gives the coin a little cylindrical thickness instead of reading
      as a flat disc: a darker, slightly WIDER circle sitting a few px behind
      .icon-glow in the same 3D space (.icon-figure already has
@@ -232,6 +303,7 @@
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   }
   .icon-cell:hover .icon-glow-rim { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-rim, -14px)) scale(1.86); }
+  .icon-cell.auto-hover .icon-glow-rim { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-rim, -14px)) scale(1.3); }
   /* Coin color variants — not applied to any CLUSTERS item right now (Soil
      stays all-orange per request), kept here since the palette itself was
      liked and may get switched back on later. Opt in per item via `coin:`
@@ -283,6 +355,7 @@
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   }
   .icon-cell:hover .icon-glow-notch { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-notch, -10px)) scale(1.86); }
+  .icon-cell.auto-hover .icon-glow-notch { opacity: 1; transform: translate(-50%, -50%) translateZ(var(--coin-z-notch, -10px)) scale(1.3); }
 
   #shape-tooltip { position: fixed; background: rgba(10,10,10,0.88); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.82rem; letter-spacing: 0.05em; opacity: 0; pointer-events: none; transition: opacity 0.18s; backdrop-filter: blur(4px); white-space: nowrap; z-index: 20; }
   #shape-tooltip.visible { opacity: 1; }
@@ -1337,6 +1410,75 @@
     }
   }
 
+  // AutoHoverFx — touch stand-in for TiltFx + MagneticImage + the CSS
+  // :hover glow. There's no cursor on a phone, so none of those three ever
+  // fire there (see the !isTouch guards below); without this the 8 coins on
+  // a touch device just sit flat and static forever, and the whole "coin"
+  // effect the rest of this feature is built around never shows at all on
+  // the devices most visitors actually use. Instead of hovering, this walks
+  // the current theme's coins one at a time — never more than one active at
+  // once, so it stays a quiet background detail instead of 8 things popping
+  // together — holding each briefly with the *same* rotateX/Y/z + x/y/scale
+  // properties TiltFx/MagneticImage would have written from a real hover,
+  // just driven by a random per-coin angle instead of real cursor position
+  // (see runNext below) so consecutive coins don't all lean the same way.
+  // Smaller/gentler than real hover throughout (SCALE_TOUCH/TILT_TOUCH/
+  // PULL_TOUCH below, and .icon-cell.auto-hover's 1.3 in the CSS vs.
+  // :hover's 1.86) — full desktop intensity, looping forever with nothing
+  // to explain it, read as too attention-grabbing on a small screen.
+  let autoHoverToken = 0; // bumped on every call so a stale chain from the previous theme (renderCluster() already tore its DOM down) stops immediately instead of coasting on its own timers
+  function setupAutoHoverFx(shapes) {
+    const myToken = ++autoHoverToken;
+    if (!shapes.length || !window.gsap) return;
+    const ACTIVE_MS = 2000;   // "1 tanesi 2 saniye" — how long a coin holds its pose before the next one's turn
+    const GAP_MS = 350;       // quiet beat between one coin easing out and the next easing in, so they don't visually blend into one another
+    const SCALE_TOUCH = 1.3;  // keep in sync with .icon-cell.auto-hover in the CSS
+    const TILT_TOUCH = 22;    // degrees — vs TiltFx's 50, gentler since there's no cursor position to justify a sharp tilt
+    const PULL_TOUCH = 13;    // px — vs MagneticImage's 26px clamp, scaled down roughly with the touch coin's smaller 58px size (see .icon-cell media rule)
+    // Order reshuffled fresh each call (page load, and again on every theme
+    // switch) — "her yüklendiğinde farklı olsun": which coin goes first
+    // differs every time, on top of each activation's own random angle
+    // below.
+    const order = shapes.slice();
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    let i = 0;
+    function runNext() {
+      if (myToken !== autoHoverToken) return; // superseded by a newer theme's setupAutoHoverFx call
+      // Tab isn't visible right now (user's on By Map) — don't bother
+      // animating hidden elements, just recheck shortly instead of
+      // advancing the queue.
+      if (!contentView.classList.contains('active')) { setTimeout(runNext, 500); return; }
+      const cell = order[i % order.length];
+      i++;
+      if (!cell.isConnected) { runNext(); return; } // this theme's DOM was replaced mid-cycle
+      const figure = cell.querySelector('.icon-figure');
+      const img = cell.querySelector('.icon-img');
+      const coin = cell.querySelector('.icon-coin');
+      if (!figure || !img) { runNext(); return; }
+      // A fresh random direction every activation — "farklı açıları olsun,
+      // hepsini aynı hareket takip etmesin" — instead of a real cursor
+      // position, this angle stands in for "where the imaginary cursor is."
+      const angle = Math.random() * Math.PI * 2;
+      const dx = Math.cos(angle), dy = Math.sin(angle);
+      cell.classList.add('auto-hover');
+      gsap.to(figure, { duration: 0.5, ease: 'expo', rotateX: -dy * TILT_TOUCH, rotateY: dx * TILT_TOUCH, z: 10, transformPerspective: 400 });
+      gsap.to(img, { duration: 0.5, ease: 'expo', x: dx * PULL_TOUCH, y: dy * PULL_TOUCH, scale: SCALE_TOUCH });
+      if (coin) gsap.to(coin, { duration: 0.5, ease: 'expo', x: dx * PULL_TOUCH, y: dy * PULL_TOUCH });
+      setTimeout(() => {
+        if (myToken !== autoHoverToken) return;
+        cell.classList.remove('auto-hover');
+        gsap.to(figure, { duration: 1, ease: 'elastic.out(1, 0.4)', rotateX: 0, rotateY: 0, z: 0 });
+        gsap.to(img, { duration: 1, ease: 'power4', x: 0, y: 0, scale: 1 });
+        if (coin) gsap.to(coin, { duration: 1, ease: 'power4', x: 0, y: 0 });
+        setTimeout(runNext, GAP_MS);
+      }, ACTIVE_MS);
+    }
+    runNext();
+  }
+
   // Wires GridItem3D/TiltFx/click/tooltip onto whatever .icon-cell elements
   // are currently in #icon-grid — called once at startup and again every
   // time the active theme changes (renderCluster() replaces the DOM, so
@@ -1351,6 +1493,8 @@
 
     if (!isTouch && window.gsap) {
       shapes.forEach(cell => { new GridItem3D(cell, applyDrift); new TiltFx(cell); });
+    } else if (isTouch && window.gsap) {
+      setupAutoHoverFx(shapes);
     }
 
     shapes.forEach(el => {

@@ -35,7 +35,10 @@
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
 
-  .figure { margin-bottom:5rem; }
+  /* scroll-margin-top keeps a #nomad/#barbaric/etc jump-link target from
+     landing under the fixed 52px nav (see `nav { position:fixed }` above) —
+     the hotspot map on 2026-7.html links straight into these sections now. */
+  .figure { margin-bottom:5rem; scroll-margin-top:70px; }
   .figure:last-child { margin-bottom:0; }
   .figure::after { content:''; display:table; clear:both; }
   .figure h2 { font-size:1.7rem; font-weight:400; letter-spacing:0.03em; margin-bottom:1.4rem; color:var(--orange); }
@@ -71,6 +74,7 @@
 </style>
 </head>
 <body>
+<a href="../../index.html" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Manifesto</a>
 <a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
 </a>
@@ -95,7 +99,7 @@
     <p>As soil moves through Ankara's excavation apparatus, it is assigned five successive identities: nomadic, barbaric, vagabond, proletarianized, and civilized. Each is a distinct political condition, not a physical state; the same matter, read differently depending on where the human's laws have or have not yet reached it. What follows is the full text of each figure, gathered here from its own page.</p>
   </div>
 
-  <div class="figure">
+  <div class="figure" id="nomad">
     <div class="stage-track" aria-hidden="true">
       <span class="stage-dot active"></span><span class="stage-line active"></span>
       <span class="stage-dot"></span><span class="stage-line"></span>
@@ -111,7 +115,7 @@
     <p>The name of this exchange is metabolism, Stoffwechsel. What the human sows, it reaps and eats, or feeds to its animals, and the waste returns again to the soil. In this exchange all matter remains within the same geography; the human does not interfere with the movement of the soil. This is the order of nature. The human grows old and dies, and is given back to the soil, and so do its animals, so do its plants. After a time the soil can no longer give the human enough. The season turns, the waterways shift. As the human ages, so the soil ages. When the human's relation to the soil falls into suspension, the human does not resent it, and migrates to another geography until the soil gathers itself again. The soil, in its own way, dies and is reborn in the meantime: new sediment arrives, the old drifts away. This exchange goes on without end, at times in excess, at times scarce, but always in measure. The human knows that it will die; the soil knows that it will migrate.</p>
   </div>
 
-  <div class="figure">
+  <div class="figure" id="barbaric">
     <div class="stage-track" aria-hidden="true">
       <span class="stage-dot"></span><span class="stage-line"></span>
       <span class="stage-dot active"></span><span class="stage-line active"></span>
@@ -127,7 +131,7 @@
     <p>Debris is not a subject or an object, but a record of a moment. It is in a constant state of transformation. Unlike "rubble," which implies reusable or identifiable building pieces, debris refers to matter dispersed by violence or disaster. It captures not only the physical remnants but the broader spatial transformation caused by destruction.</p>
   </div>
 
-  <div class="figure">
+  <div class="figure" id="vagabond">
     <div class="stage-track" aria-hidden="true">
       <span class="stage-dot"></span><span class="stage-line"></span>
       <span class="stage-dot"></span><span class="stage-line"></span>
@@ -142,7 +146,7 @@
     <p>The greatest sign of this rupture is that the human no longer cares for the soil, and looks down on it. It does not know the soil, expects nothing from it, and gives it no hope in return. The rupture has cut the soil's movement: it is static, and idle. The human's law is seen on the map, but it is not in the ledger.</p>
   </div>
 
-  <div class="figure">
+  <div class="figure" id="proletariat">
     <div class="stage-track" aria-hidden="true">
       <span class="stage-dot"></span><span class="stage-line"></span>
       <span class="stage-dot"></span><span class="stage-line"></span>
@@ -157,7 +161,7 @@
     <p>The worker who raises the building cannot live in it, and the soil that holds up the city will never inhabit it. It produces the place and is shut out of it: it carries everything, and owns nothing. And here is the strange thing: the building is also soil. The tower is the same matter laid beneath the asphalt, crushed and bound and put to work, so the civilized and the proletarian are not two soils but one, shown from two sides: the named front the human calls civilization, and the working back that is never seen. The barbarian still moved. The vagabond still sat as nature, however idle. This soil does neither: it cannot migrate, and it can no longer die. What rises on top of it, the human calls civilized.</p>
   </div>
 
-  <div class="figure">
+  <div class="figure" id="civilized">
     <div class="stage-track" aria-hidden="true">
       <span class="stage-dot"></span><span class="stage-line"></span>
       <span class="stage-dot"></span><span class="stage-line"></span>

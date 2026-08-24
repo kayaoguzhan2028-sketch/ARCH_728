@@ -210,8 +210,13 @@ const LayerManager = (function() {
       }
     });
 
+    // Mapping katmanları (bina/yol/yeşil/su/yıkım/gecekondu) sadece çalışma
+    // çemberinin içinde çizilsin — animasyon katmanları (ANIMATION_KEYS) bu
+    // kırpmaya dahil değil, taban harita da (tile layer) etkilenmiyor çünkü
+    // clipCircle sadece bu sketchLayer'ın kendi canvas'ını kırpıyor (bkz. sketch.js _redraw).
+    const _clipCircle = { center: CIRCLE_CENTER, radius: CIRCLE_RADIUS };
     YEAR_KEYS.forEach((key, i) => {
-      _yearLayers[key] = sketchLayer(datas[i], CONFIGS[key]);
+      _yearLayers[key] = sketchLayer(datas[i], Object.assign({}, CONFIGS[key], { clipCircle: _clipCircle }));
       if (_visible[key]) _yearLayers[key].addTo(_map);
     });
 

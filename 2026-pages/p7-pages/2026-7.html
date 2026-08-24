@@ -56,6 +56,7 @@
 </style>
 </head>
 <body>
+<a href="../../index.html" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Manifesto</a>
 <a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
 </a>
@@ -191,17 +192,17 @@ mapInner.addEventListener('mouseleave', () => {
 let genericBuildingClicks = 0;
 mapInner.addEventListener('click', () => {
   if (activeSoilHit && activeSoilHit.id === '02') {
-    window.location.href = '2026-7-barbaric-soil.html';
+    window.location.href = '2026-7-migrant-soil.html#barbaric';
   } else if (activeSoilHit && activeSoilHit.id === '07') {
-    window.location.href = '2026-7-nomad-soil.html';
+    window.location.href = '2026-7-migrant-soil.html#nomad';
   } else if (activeSoilHit && activeSoilHit.id === '06') {
-    window.location.href = '2026-7-vagabond-soil.html';
+    window.location.href = '2026-7-migrant-soil.html#vagabond';
   } else if (activeSoilHit && activeSoilHit.id === '03') {
-    window.location.href = '2026-7-proletariat-soil.html';
+    window.location.href = '2026-7-migrant-soil.html#proletariat';
   } else if (activeSoilHit && activeSoilHit.id === '04') {
     genericBuildingClicks++;
     if (genericBuildingClicks >= 5) {
-      window.location.href = '2026-7-civilized-soil.html';
+      window.location.href = '2026-7-migrant-soil.html#civilized';
     }
   }
 });

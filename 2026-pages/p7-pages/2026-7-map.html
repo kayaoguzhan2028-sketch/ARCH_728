@@ -195,6 +195,7 @@
 </style>
 </head>
 <body>
+<a href="../../index.html" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Manifesto</a>
 <a href="../../explore.html" class="home-btn" aria-label="Home" title="Home">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10"/></svg>
 </a>
@@ -238,11 +239,11 @@
   </div>
 </div>
 
-<script src="../../2026-images/2026-p7/Map/harita/js/sketch.js"></script>
-<script src="../../2026-images/2026-p7/Map/harita/js/animation.js"></script>
-<script src="../../2026-images/2026-p7/Map/harita/js/proletariat.js"></script>
-<script src="../../2026-images/2026-p7/Map/harita/js/nomadic.js"></script>
-<script src="../../2026-images/2026-p7/Map/harita/js/layers.js"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/sketch.js?v=202608241504"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/animation.js?v=202608241504"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/proletariat.js?v=202608241504"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/nomadic.js?v=202608241504"></script>
+<script src="../../2026-images/2026-p7/Map/harita/js/layers.js?v=202608241504"></script>
 
 <script>
   const CIRCLE_CENTER = L.latLng(39.8572724, 32.8407268);
@@ -375,12 +376,16 @@
   layerPanel.appendChild(animationLabel);
 
   // Her soil sayfasından metin çekmek için: hangi seçiciden paragraf alınacak, kaç tane, başlık nereden gelecek.
+  // Bu beş ayrı sayfa (nomad/barbaric/vagabond/proletariat/civilized) kaldırıldı — hepsi zaten
+  // 2026-7-migrant-soil.html içinde kendi id'li section'ları olarak birleştirilmişti (#nomad,
+  // #barbaric, #vagabond, #proletariat, #civilized). O yüzden hepsi aynı tek sayfadan, kendi
+  // section'larına scope'lanmış bir seçiciyle (`#id p`) çekiliyor artık.
   const SOIL_INFO = {
-    nomadic:           { url: '2026-7-nomad-soil.html',       selector: '.columns p' },
-    hafriyat_guzergah: { url: '2026-7-barbaric-soil.html',     selector: '#sec-block .body p', limit: 2, titleOverride: 'Barbaric Soil' },
-    vagabond:          { url: '2026-7-vagabond-soil.html',    selector: '.columns p' },
-    proletariat:       { url: '2026-7-proletariat-soil.html', selector: '.columns p' },
-    civilized:         { url: '2026-7-civilized-soil.html',   selector: '.columns p' },
+    nomadic:           { url: '2026-7-migrant-soil.html', selector: '#nomad p' },
+    hafriyat_guzergah: { url: '2026-7-migrant-soil.html', selector: '#barbaric p', titleOverride: 'Barbaric Soil' },
+    vagabond:          { url: '2026-7-migrant-soil.html', selector: '#vagabond p' },
+    proletariat:       { url: '2026-7-migrant-soil.html', selector: '#proletariat p' },
+    civilized:         { url: '2026-7-migrant-soil.html', selector: '#civilized p' },
   };
 
   const soilOverlay = document.getElementById('soil-info-overlay');

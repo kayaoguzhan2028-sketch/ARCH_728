@@ -1,1 +1,22 @@
 DirectoryIndex index.html
+
+<IfModule mod_headers.c>
+  # HTML pages: always revalidate with the server instead of trusting a
+  # cached copy, so a deploy reaches visitors on their next load without
+  # needing a hard refresh (Ctrl+Shift+R).
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Static assets: cache hard for a year. Safe alongside the no-cache HTML
+  # rule above because HTML always revalidates, and every <link>/<script> tag
+  # in this project's HTML carries a ?v= query string (see bump-version.sh) —
+  # bumping that version changes the URL, so a new deploy is fetched fresh
+  # even though the old URL stays cached. Images are NOT auto-versioned by
+  # that script, so replacing an image file in place (same filename) won't
+  # reach visitors until this cache expires — rename the file (or add your
+  # own ?v=) if an image needs to invalidate immediately.
+  <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|webp|woff|woff2|ttf|otf|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
