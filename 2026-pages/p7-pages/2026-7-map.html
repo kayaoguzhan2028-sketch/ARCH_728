@@ -8,6 +8,14 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- MapLibre GL + Leaflet köprüsü: altlık artık vektör karo (OpenFreeMap
+     "dark" — Dark Matter türevi). CARTO anahtarsız erişimi kapattığı için
+     raster dark_nolabels yerine bunu kullanıyoruz. Köprü GL canvas'ını
+     Leaflet'in tilePane'ine koyduğu için #map.dimmed filtresi aynen çalışır.
+     maplibre-gl 5.x'e sabit: 6.x sadece ESM ve köprü window.maplibregl bekliyor. -->
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
 <script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
 
 <style>
@@ -254,10 +262,22 @@
 
   const map = L.map('map', { center: CIRCLE_CENTER, zoom: 15 });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıda bulunanlar © <a href="https://carto.com/attributions">CARTO</a>',
-  }).addTo(map);
+  // Altlık: OpenFreeMap "dark" stili, symbol (etiket) katmanları ayıklanmış —
+  // eski dark_nolabels'ın karşılığı. Stil JSON'u önce çekiliyor ki etiketler
+  // bir kare bile görünüp sonra kaybolmasın.
+  const BASE_STYLE = 'https://tiles.openfreemap.org/styles/dark';
+  const baseAttrib = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıda bulunanlar © <a href="https://openfreemap.org">OpenFreeMap</a>';
+
+  fetch(BASE_STYLE)
+    .then(r => r.json())
+    .then(style => {
+      style.layers = style.layers.filter(l => l.type !== 'symbol');
+      return style;
+    })
+    .catch(() => BASE_STYLE) // stil çekilemezse etiketli haliyle yine de göster
+    .then(style => {
+      L.maplibreGL({ style: style, attribution: baseAttrib }).addTo(map);
+    });
 
   // Çalışma çemberi: tüm çizimler bunun içinde — dashed, en altta, sönük
   const boundaryCircle = L.circle(CIRCLE_CENTER, {

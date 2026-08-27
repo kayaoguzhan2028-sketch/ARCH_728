@@ -8,6 +8,14 @@
 <meta name="description" content="Explore the METU (ODTÜ) Department of Architecture Landscape Architecture Lab — a BArch/MSc/PhD studio on soil, infrastructure, and urban transformation in Ankara.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<!-- MapLibre GL + the Leaflet bridge: the basemap is vector tiles (OpenFreeMap's
+     "dark" style, a Dark Matter descendant) rendered into Leaflet's tilePane, so
+     every marker/geoJSON/flyTo below keeps working exactly as before. Pinned to
+     maplibre-gl 5.x because 6.x ships ESM-only and the bridge needs the
+     window.maplibregl global. -->
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" crossorigin=""/>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js" crossorigin=""></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js" crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap');
@@ -380,10 +388,12 @@
   .library-index { font-size: 0.72rem; letter-spacing: 0.15em; opacity: 0.5; min-width: 1.6em; }
 
   #leaflet-map { position: absolute; inset: 0; }
-  .leaflet-container { background: var(--black); }
-  .leaflet-tile-pane { filter: brightness(1.75) contrast(1.05); }
-  body.map-light .leaflet-tile-pane { filter: brightness(1) contrast(1); }
-  body.map-light .leaflet-container { background: #e8e4da; }
+  /* Matches the vector style's own background-color, so the gap before the
+     first frame paints doesn't flash a different shade. No CSS filter here
+     any more — the GL style ships the right colors natively. */
+  .leaflet-container { background: rgb(12,12,12); }
+  body.map-light .leaflet-container { background: rgb(242,243,240); }
+  .maplibregl-ctrl-attrib, .maplibregl-ctrl-logo { display: none !important; }
   .leaflet-control-attribution { background: rgba(10,10,10,0.6) !important; color: rgba(245,242,235,0.22) !important; font-size: 0.55rem !important; }
   .leaflet-control-attribution a { color: rgba(245,242,235,0.22) !important; }
   .leaflet-attribution-flag { display: none !important; }
@@ -431,8 +441,8 @@
     <a href="index.html">← Manifesto</a>
   </div>
   <ul class="view-tabs">
-    <li><button class="active" data-view="map">By Map</button></li>
-    <li><button data-view="content">By Content</button></li>
+    <li><button class="active" data-view="content">By Content</button></li>
+    <li><button data-view="map">By Map</button></li>
   </ul>
   <button id="map-theme-btn">bright</button>
 </nav>
@@ -440,7 +450,7 @@
 <div class="content">
 
   <!-- BY MAP -->
-  <div class="view active" id="view-map">
+  <div class="view" id="view-map">
     <div class="map-container" id="map-container">
       <div id="leaflet-map"></div>
       <div class="zoom-controls">
@@ -477,7 +487,7 @@
        renderBg() in the JS). The grid markup below is intentionally just
        an empty mount point — see renderCluster()/initIconInteractions()
        in the JS. -->
-  <div class="view" id="view-content">
+  <div class="view active" id="view-content">
     <div class="content-bg" id="content-bg">
       <svg viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true"></svg>
     </div>
@@ -527,22 +537,117 @@
 
     setTimeout(() => window._leafletMap.invalidateSize(), 0);
 
-    const tileAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
-    let activeTile = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: tileAttrib, subdomains: 'abcd', maxZoom: 19
-    }).addTo(window._leafletMap);
+    const tileAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://openfreemap.org">OpenFreeMap</a>';
+    const STYLES = {
+      dark:  'https://tiles.openfreemap.org/styles/dark',
+      light: 'https://tiles.openfreemap.org/styles/positron'
+    };
+
+    // The old raster basemap was CARTO's tiles run through a CSS
+    // `brightness(1.75) contrast(1.05)` filter, so what actually shipped was
+    // always brighter than CARTO's own palette. That filter can't come back
+    // here: it would lift the background too and wash the map back out to the
+    // flat grey we moved off. So each role is scaled on its own, in the style
+    // JSON, by the factor that lands it on that old brighter look — measured
+    // per role rather than guessed:
+    //   background  12.0 vs 19.3 old  -> x1.6
+    //   water       27.2 vs 54.3 old  -> x2.0
+    // Roads already ship at/above the old values (body 24 vs 13.8, casing 60
+    // vs 57.9), so their 1.2 is a deliberate boost past the old look rather
+    // than a restoration — roads and labels are what should read first here.
+    // Tune any of these; 1 = the style's own colors, untouched. Light mode had
+    // no filter before and gets none now, so positron is used as-is.
+    const TONE = { background: 1.6, water: 2.0, road: 1.2, label: 1.2 };
+
+    // Scales one CSS color's brightness by k, keeping its format and alpha.
+    function scaleColor(css, k) {
+      if (typeof css !== 'string' || k === 1) return css;
+      const ch = v => Math.max(0, Math.min(255, Math.round(v * k)));
+      let m;
+      if ((m = css.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i))) {
+        let h = m[1];
+        if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        return '#' + [0, 2, 4]
+          .map(i => ch(parseInt(h.substr(i, 2), 16)).toString(16).padStart(2, '0'))
+          .join('');
+      }
+      if ((m = css.match(/^rgba?\(([^)]+)\)$/i))) {
+        const p = m[1].split(/[,\s]+/).filter(Boolean);
+        const rgb = p.slice(0, 3).map(v => ch(parseFloat(v)));
+        return p.length > 3 ? `rgba(${rgb.join(',')},${p[3]})` : `rgb(${rgb.join(',')})`;
+      }
+      if ((m = css.match(/^hsla?\(([^)]+)\)$/i))) {
+        const p = m[1].split(/[,\s]+/).filter(Boolean);
+        const l = Math.max(0, Math.min(100, parseFloat(p[2]) * k)) + '%';
+        return p.length > 3 ? `hsla(${p[0]},${p[1]},${l},${p[3]})` : `hsl(${p[0]},${p[1]},${l})`;
+      }
+      return css;
+    }
+
+    // Paint values can be plain colors or expressions with colors nested inside
+    // (e.g. highway_motorway_inner's zoom interpolate), so walk arrays too.
+    // Non-color strings in an expression ("interpolate", "zoom") don't match
+    // any color pattern above and come back untouched.
+    function scaleColorValue(v, k) {
+      if (typeof v === 'string') return scaleColor(v, k);
+      if (Array.isArray(v)) return v.map(x => scaleColorValue(x, k));
+      return v;
+    }
+
+    function roleOf(layer) {
+      if (layer.type === 'symbol') return 'label';
+      const id = layer.id;
+      if (id === 'background') return 'background';
+      if (/^(water|waterway)/.test(id)) return 'water';
+      if (/^(highway|road|aeroway|railway)/.test(id)) return 'road';
+      return null;
+    }
+
+    function tuneStyle(style, tone) {
+      style.layers.forEach(layer => {
+        const k = tone[roleOf(layer)];
+        if (!k || k === 1 || !layer.paint) return;
+        Object.keys(layer.paint).forEach(prop => {
+          if (prop.includes('color')) layer.paint[prop] = scaleColorValue(layer.paint[prop], k);
+        });
+      });
+      return style;
+    }
+
+    // Fetched once per theme and kept — toggling back and forth shouldn't
+    // re-download. On a network hiccup we fall back to handing maplibre the
+    // URL, which just means an untuned (still correct) basemap.
+    const styleCache = {};
+    function loadStyle(key) {
+      if (!styleCache[key]) {
+        styleCache[key] = fetch(STYLES[key])
+          .then(r => r.json())
+          .then(s => (key === 'dark' ? tuneStyle(s, TONE) : s))
+          .catch(() => STYLES[key]);
+      }
+      return styleCache[key];
+    }
 
     let isLight = false;
+    let glLayer = null;
+    loadStyle('dark').then(style => {
+      // One GL layer for the life of the page — the theme toggle swaps the
+      // style on the underlying maplibre map rather than tearing the layer
+      // down, so there's no canvas re-create flash between dark and bright.
+      glLayer = L.maplibreGL({ style: style, attribution: tileAttrib })
+        .addTo(window._leafletMap);
+    });
+
     document.getElementById('map-theme-btn').addEventListener('click', () => {
       isLight = !isLight;
-      activeTile.remove();
-      activeTile = L.tileLayer(
-        isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-                : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        { attribution: tileAttrib, subdomains: 'abcd', maxZoom: 19 }
-      ).addTo(window._leafletMap);
       document.body.classList.toggle('map-light', isLight);
       document.getElementById('map-theme-btn').textContent = isLight ? 'dark' : 'bright';
+      const want = isLight;
+      loadStyle(want ? 'light' : 'dark').then(style => {
+        if (want !== isLight) return; // toggled again while this one loaded
+        const gl = glLayer && glLayer.getMaplibreMap && glLayer.getMaplibreMap();
+        if (gl) gl.setStyle(style);
+      });
     });
 
     function makeIcon(html, size = 8) {
@@ -555,8 +660,17 @@
     const mapPanelBack  = document.getElementById('map-panel-back');
     const mapPanelText  = document.getElementById('map-panel-text');
 
-    let activeShape = null, activeMarkerEl = null, initialBounds = null;
+    let activeShape = null, activeMarkerEl = null, initialBounds = null, initialFitDone = false;
     let prevView = null, mapLocked = false, allMarkers = [], hiddenMarkers = [], lensParent = null;
+
+    window._fitInitialMapView = function () {
+      if (initialFitDone || !initialBounds) return;
+      if (!document.getElementById('view-map').classList.contains('active')) return;
+      window._leafletMap.invalidateSize();
+      const fitZoom = window._leafletMap.getBoundsZoom(initialBounds) - 1;
+      window._leafletMap.setView(CENTER, fitZoom);
+      initialFitDone = true;
+    };
 
     function lockMap() {
       mapLocked = true;
@@ -850,9 +964,8 @@
       allMarkers = markers;
       if (markers.length) {
         initialBounds = L.featureGroup(markers).getBounds().pad(0.4);
-        const fitZoom = window._leafletMap.getBoundsZoom(initialBounds) - 1;
-        window._leafletMap.setView(CENTER, fitZoom);
       }
+      window._fitInitialMapView();
     });
 
     document.getElementById('zoom-in').addEventListener('click',    () => window._leafletMap.zoomIn());
@@ -874,7 +987,10 @@
       views.forEach(v => v.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('view-' + target).classList.add('active');
-      if (target === 'map' && window._leafletMap) window._leafletMap.invalidateSize();
+      if (target === 'map' && window._leafletMap) {
+        window._leafletMap.invalidateSize();
+        window._fitInitialMapView();
+      }
       if (target !== 'content' && window._resetContentView) window._resetContentView();
     });
   });
