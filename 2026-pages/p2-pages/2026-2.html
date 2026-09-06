@@ -9,7 +9,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --border:rgba(245,242,235,0.1); --font:'Newsreader',Georgia,serif; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --accent:#c9b8a8; --orange:#d97a3f; --border:rgba(245,242,235,0.1); --font:'Newsreader',Georgia,serif; }
   html,body { background:var(--black); color:var(--white); font-family:var(--font); min-height:100vh; }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:52px; border-bottom:1px solid var(--border); background:var(--black); }
@@ -41,8 +41,8 @@
   .body blockquote { border-left:1px solid var(--accent); padding-left:1.4rem; margin:2.5rem 0; font-style:italic; opacity:0.75; }
 
   .info-rule { border:none; border-top:1px solid var(--border); margin:4rem 0 3.5rem; }
-  .project-title { font-size:clamp(1.5rem,3.5vw,2.4rem); font-weight:400; line-height:1.2; letter-spacing:0.03em; color:#c87530; margin-bottom:0.5rem; }
-  .project-subtitle { font-size:1rem; font-style:italic; color:#c87530; opacity:0.8; line-height:1.5; margin-bottom:2.5rem; }
+  .project-title { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:400; line-height:1.15; letter-spacing:0.04em; color:var(--orange); margin-bottom:0.5rem; }
+  .project-subtitle { font-size:1.05rem; font-style:italic; color:var(--orange); line-height:1.6; margin-bottom:2.5rem; }
   .author-line { font-size:0.78rem; letter-spacing:0.12em; opacity:0.45; margin-bottom:2.8rem; }
 
   .meta { margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:2.5rem; }
