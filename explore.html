@@ -493,9 +493,14 @@
     </div>
     <div class="theme-list" id="theme-list">
       <button class="theme-btn active" data-cluster="Soil">Soil</button>
-      <button class="theme-btn" data-cluster="Air">Air</button>
-      <button class="theme-btn" data-cluster="Water">Water</button>
-      <button class="theme-btn" data-cluster="Waste">Waste</button>
+      <!-- Air / Water / Waste geçici olarak gizli: CLUSTERS'taki karşılıkları
+           hâlâ placeholder (href yok, tıklayınca bir şey olmuyor), o yüzden
+           boş sekme gibi duruyorlardı. İçerik gelince geri açmak için tek iş:
+           aşağıdaki üç satırdan `hidden` sözcüğünü sil. Butonlar, CSS'leri ve
+           CLUSTERS kayıtları yerinde duruyor, hiçbiri kaldırılmadı. -->
+      <button class="theme-btn" data-cluster="Air" hidden>Air</button>
+      <button class="theme-btn" data-cluster="Water" hidden>Water</button>
+      <button class="theme-btn" data-cluster="Waste" hidden>Waste</button>
     </div>
     <div class="icon-grid-wrap">
       <div class="icon-grid scattered" id="icon-grid"></div>
