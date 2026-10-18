@@ -248,9 +248,14 @@
     .landing-left { flex:0 0 auto; border-right:none; border-bottom:1px solid var(--border); padding:3rem 1.6rem 3.5rem; min-height:0; }
     .landing-right { overflow:visible; scroll-snap-type:none; -webkit-mask-image:none; mask-image:none; }
     .panel { min-height:0; scroll-snap-align:none; }
-    .scroll-progress { display:none; }
+    /* Oklar ve ilerleme izi burada kapalı: ikisi de sağ panelin KENDİ
+       kaydırmasına ait. Mobilde o panel kaymıyor (overflow:visible), sayfanın
+       kendisi kayıyor — yani oklar hem yanlış yere konumlanıyordu (left:75%
+       artık tüm genişliğin dörtte üçü) hem de tıklanınca hiçbir şey
+       yapmıyorlardı, çünkü scrollTo çağrıldığı eleman kaydırılabilir değil. */
+    .scroll-progress, .scroll-arrow { display:none; }
     .description, .contributors { padding-left:1.6rem; padding-right:1.6rem; }
-    .description { max-width:none; padding-top:3.5rem; }
+    .description, .contributors { max-width:none; padding-top:3.5rem; }
   }
 
   @media (max-width: 640px) {
