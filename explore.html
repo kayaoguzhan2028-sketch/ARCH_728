@@ -122,8 +122,13 @@
        theme-list bar above the visible area since scrollTop can't go
        negative to reach it. flex-start keeps it anchored to the top. */
     #view-content { flex-direction: column; justify-content: flex-start; }
-    .theme-list { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.6rem 1.4rem; padding: 1rem 1rem 0; width: 100%; flex-shrink: 0; }
-    .icon-grid-wrap { width: 100%; }
+    /* Üst boşluk iki kuraldan birikiyordu: buradaki 1rem + .icon-grid-wrap'in
+       ana kuralındaki 1.5rem = 2.5rem, üstüne tema satırının kendi yüksekliği.
+       Dar bir telefonda bu, ikonlar başlamadan önce ekranın ciddi bir
+       kısmını yiyordu. Air/Water/Waste gizli olduğu için tema satırında tek
+       düğme kaldı, o kadar nefes alanına da ihtiyacı yok. */
+    .theme-list { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.6rem 1.4rem; padding: 0.4rem 1rem 0; width: 100%; flex-shrink: 0; }
+    .icon-grid-wrap { width: 100%; padding-top: 0.5rem; }
   }
 
   .icon-grid-wrap { position: relative; width: 100%; max-width: 1500px; margin: 0 auto; padding: 1.5rem 2rem; }
@@ -187,7 +192,18 @@
   @media (hover: none) and (pointer: coarse) {
     .icon-grid.scattered { display: block; position: relative; height: calc(100vh - 260px); min-height: 640px; }
     .icon-grid.scattered .icon-slot {
-      position: absolute; left: var(--sx); top: var(--sy);
+      position: absolute; left: var(--sx);
+      /* Dikey yayılım merkeze doğru sıkıştırılıyor. sy değerleri üst grupta
+         %16-30, alt grupta %68-82 — yani aradaki %38 boş kalıyor ve 640px'lik
+         kapta bu ~243px ölü alan demek, dar bir telefonda ekranın üçte biri.
+         Formül her ikonu %50'ye doğru 0.72 oranında çekiyor: %30 → %36,
+         %68 → %62.6, yani ara boşluk %38'den ~%27'ye iniyor. Gruplar kendi
+         içinde de hafif sıkışıyor ama ikonlar yatayda zaten ayrı sütunlarda
+         (sx %14/%37/%60/%83) olduğu için üst üste binmiyorlar.
+         Neden burada: --sy JS'ten inline style olarak geliyor ve inline,
+         stylesheet'i ezdiği için CSS'te --sy'yi yeniden tanımlamak işe
+         yaramazdı; `top` ise buradan geldiği için formül ona uygulanıyor. */
+      top: calc(50% + (var(--sy) - 50%) * 0.72);
       transform: translate(-50%, -50%) rotate(var(--srot));
     }
   }
