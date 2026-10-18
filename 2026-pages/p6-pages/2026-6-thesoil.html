@@ -71,6 +71,11 @@
   .home-btn:hover { opacity:1; border-color:rgba(245,242,235,0.6); }
   .home-btn svg { width:15px; height:15px; display:block; }
   @media (max-width:640px) {
+    /* Telefonda metin ekranın kenarına yapışıyordu: bu sayfalarda
+       .wrap yalnızca padding-top taşıyor, yanlarda hiç boşluk yok.
+       Değer sitedeki diğer 36 sayfayla aynı. Masaüstü kuralına
+       dokunulmadı; orada iç kaplar kendi boşluğunu veriyor. */
+    .wrap { padding-left:1.4rem; padding-right:1.4rem; }
     .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
     .home-btn svg { width:13px; height:13px; }
   }
@@ -255,5 +260,6 @@
     });
   });
 </script>
+<script src="../../js/nav-pencere.js"></script>
 </body>
 </html>
