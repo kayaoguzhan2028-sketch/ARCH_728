@@ -79,6 +79,13 @@
     .home-btn { top:0.5rem; right:0.6rem; width:30px; height:30px; }
     .home-btn svg { width:13px; height:13px; }
   }
+
+  /* Mobil yan boşluk EN SONDA duruyor, bilerek. Bu sayfalarda medya
+     sorgusu .wrap'in ana kuralından ÖNCE yazılmış; oradaki
+     `padding: 5rem 0 6rem` kısayolu sol/sağı tekrar 0'a çekiyor ve
+     aynı özgüllükte sonra gelen kural kazandığı için mobil boşluk
+     hiç uygulanmıyordu. Kuralı sona almak sırayı tersine çeviriyor. */
+  @media (max-width:640px) { .wrap { padding-left:1.4rem; padding-right:1.4rem; } }
 </style>
 </head>
 <body>
@@ -393,6 +400,5 @@
   window.addEventListener('resize', fitLayer);
   new ResizeObserver(fitLayer).observe(stage);
 </script>
-<script src="../../js/nav-pencere.js"></script>
 </body>
 </html>
