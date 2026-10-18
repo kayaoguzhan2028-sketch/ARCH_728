@@ -30,7 +30,16 @@
   .hotspot-overlay svg { width:100%; height:100%; display:block; }
   .hotspot-overlay path, .hotspot-overlay circle, .hotspot-overlay rect, .hotspot-overlay polygon, .hotspot-overlay ellipse { fill:var(--accent); opacity:0; pointer-events:fill; cursor:pointer; transition:opacity 0.25s ease; }
   .hotspot-overlay path:hover, .hotspot-overlay circle:hover, .hotspot-overlay rect:hover, .hotspot-overlay polygon:hover, .hotspot-overlay ellipse:hover { opacity:0.3; }
-  .hotspot-pulse-shape { fill:none; stroke:var(--accent); stroke-width:2.5; opacity:0.85; pointer-events:none; transform-box:fill-box; transform-origin:center; animation:hotspotPulseShape 2.2s ease-out infinite; }
+  /* Seçici .hotspot-overlay ile nitelenmek ZORUNDA. Çıplak .hotspot-pulse-shape
+     (0,1,0) önceliğinde kalıyor ve bir üstteki `.hotspot-overlay polygon`
+     (0,1,1) kuralına yeniliyordu — dosyada sonra gelmesi kurtarmıyor. Sonuç:
+     nabız klonu fill/opacity/pointer-events değerlerini oradan alıyor,
+     opacity:0 ile görünmez oluyor ama pointer-events:fill ile tıklamayı
+     yakalıyordu. Klon asıl shape'in hemen arkasına eklendiği için (JS'teki
+     insertBefore) üstte çiziliyor; click dinleyicisi ise sadece asıl shape'te
+     ve klon onun kardeşi, dolayısıyla olay hiç ona ulaşmıyordu. Altı hotspot
+     da bu yüzden açılmıyordu. */
+  .hotspot-overlay .hotspot-pulse-shape { fill:none; stroke:var(--accent); stroke-width:2.5; opacity:0.85; pointer-events:none; transform-box:fill-box; transform-origin:center; animation:hotspotPulseShape 2.2s ease-out infinite; }
   @keyframes hotspotPulseShape { 0% { transform:scale(0.8); opacity:0.9; } 100% { transform:scale(1.7); opacity:0; } }
 
   .modal-overlay { position:fixed; inset:0; z-index:200; background:rgba(10,10,10,0.92); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
@@ -42,7 +51,7 @@
   .modal-close:hover { opacity:1; }
 
   .wrap { max-width:620px; margin:0 auto; padding:2rem 0 6rem; }
-  .body { font-size:1.1rem; line-height:1.95; }
+  .body { font-size:1.1rem; line-height:1.95; opacity:0.82; }
   .body p { margin-bottom:1.6rem; }
   .body p:last-child { margin-bottom:0; }
 

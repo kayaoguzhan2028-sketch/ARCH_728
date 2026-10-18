@@ -9,96 +9,472 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&family=Newsreader&family=Source+Serif+4&family=Literata&family=Spectral&family=IBM+Plex+Serif&family=Charis+SIL&family=Libertinus+Serif&family=Alegreya&family=Alegreya+Sans&family=Inter&family=IBM+Plex+Sans&family=Source+Sans+3&family=Libre+Franklin&family=Archivo&family=Public+Sans&family=Atkinson+Hyperlegible&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'Newsreader',Georgia,serif; --font-heading:'Newsreader',Georgia,serif; }
+  :root { --black:#0a0a0a; --white:#f5f2eb; --mid:#d4cebc; --border:rgba(245,242,235,0.1); --font:'Newsreader',Georgia,serif; --font-heading:'Newsreader',Georgia,serif;
+    /* İKİ SÜTUNUN ORTAK ÜST HİZASI — metin bu yükseklikten başlıyor.
+       Hem sol künye bloğu hem sağdaki her bölüm bunu kullanıyor, o yüzden
+       hizayı kaydırmak için değiştirilecek TEK yer burası.
+       vh: ekran yüksekliğiyle birlikte ölçekleniyor. Sabit rem olsaydı
+       yalnızca tek bir ekran boyunda tutar, kısa/uzun ekranda kayardı. */
+    --ust-hiza: 12vh; }
   html,body { width:100%; background:var(--black); color:var(--white); font-family:var(--font); }
-  .hero-screen { position:relative; width:100%; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-  .hero-content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; text-align:center; }
-  .hero-title { font-family:var(--font-heading); font-size:clamp(3.0rem,8vw,5rem); font-weight:400; letter-spacing:0.16em; text-transform:uppercase; line-height:1.15; color:var(--white); margin-bottom:0.55rem; }
-  .hero-subtitle { font-size:clamp(0.9rem,2vw,1.2rem); font-style:italic; color:var(--mid); letter-spacing:0.04em; margin-bottom:2rem; }
-  .hero-editors { font-size:0.82rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); opacity:0.65; margin-bottom:3.2rem; line-height:2; }
+
+  /* ── GİRİŞ DÜZENİ ────────────────────────────────────────────────────────
+     Solda kimlik (başlık, künye, Explore) sabit duruyor; sağda metin kendi
+     içinde kayıyor. Önceki kurulumda hero `height:100vh` ile tüm ekranı
+     kaplayan bir kapıydı ve 399 kelimelik giriş metni fold'un altında
+     kalıyordu — yani kimse görmüyordu. Feral Atlas (feralatlas.org) aynı
+     türden bir dijital atlas ve orada da başlık, künye ve giriş metni ilk
+     ekranda birlikte duruyor; tam ekran kapı yok. Düzen oradan.
+     ──────────────────────────────────────────────────────────────────────── */
+  /* Sayfa dikeyde iki parça: üstte tam genişlik başlık şeridi, altında iki
+     sütunlu alan. İkisi birlikte tam 100vh — başlık kendi yüksekliğini alıyor
+     (flex:0 0 auto), kalan her şeyi .landing-split dolduruyor. */
+  /* ARKA PLAN — explore.html'deki By Content kontur katmanının aynısı.
+     inset:-6% kenar payı bırakıyor ki parallax kaydığında kenarda boşluk
+     açılmasın. position:fixed çünkü sağ panel kendi içinde kayıyor; arka plan
+     sayfayla değil, sadece fareyle hareket etmeli. */
+  /* opacity: explore.html'de 0.16; burada 0.24'e (x1.5), sonra 0.26'ya (x1.1)
+     çıkarıldı. Orada çizgiler ikon ızgarasının arkasında duruyor, burada
+     arkada başka bir şey yok — daha görünür olabilir. */
+  .content-bg { position:fixed; inset:-6%; opacity:0.26; pointer-events:none; z-index:0; will-change:transform; }
+  .content-bg svg { width:100%; height:100%; }
+  .content-bg path { fill:none; stroke:var(--mid); stroke-width:1; }
+
+  .landing { position:relative; z-index:1; display:flex; flex-direction:column; width:100%; height:100vh; overflow:hidden; }
+
+  /* Üstteki boşluk başlığın ekranın tepesine ne kadar yakın duracağını
+     belirleyen TEK değer — aşağı/yukarı oynatmak için sadece burayı değiştir. */
+  .landing-header { flex:0 0 auto; padding:7rem 2.5rem 1.5rem; text-align:center; }
+  /* Alt başlık: araştırmanın üç ekseni. Sağdaki kaydırma bölümleriyle
+     birebir aynı üç ad, yani ziyaretçi ne okuyacağını baştan görüyor. */
+  /* Sönüklük artık satırda değil, tek tek kelimelerde (.tag-item). Satırda
+     kalsaydı çocuklarının opaklığı onunkiyle çarpılırdı ve kelime 1'e kadar
+     parlayamazdı — 0.75 x 1 yine 0.75 eder. */
+  .hero-tagline { margin-top:1rem; font-size:0.78rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); }
+  .tag-item { opacity:0.55; }
+
+  /* ── AÇILIŞ PARILTISI ───────────────────────────────────────────────────
+     Bir kez çalışır (iteration-count varsayılanı 1), sonra biter. Sıra:
+       0.3s  başlık yanar  →  2.1s'de söner
+       +3s   sessizlik
+       5.1s  Visibility · 7.3s (In)habitability · 9.5s Transportability
+     Kelimeler 1.4s sürüyor ve 2.2s arayla geliyor; süre aralıktan kısa
+     olduğu için ikisi üst üste binmiyor, arada ~0.8s sessizlik kalıyor.
+     Başlık zaten tam beyaz, opaklıkla daha fazla parlayamaz; o yüzden onun
+     parıltısı text-shadow ile — hem çok hafif kalıyor hem yerleşimi
+     oynatmıyor. Kelimeler ise 0.55'ten geldiği için opaklıkla parlayabiliyor.
+     fill-mode kullanılmıyor: animasyon bitince ikisi de kendi normal
+     durumunda kalsın, son karede donmasın. */
+  @keyframes baslik-parilti {
+    0%, 100% { text-shadow:none; }
+    50%      { text-shadow:0 0 22px rgba(245,242,235,0.4); }
+  }
+  @keyframes etiket-parilti {
+    0%, 100% { opacity:0.55; }
+    50%      { opacity:1; }
+  }
+
+  .hero-title { animation:baslik-parilti 1.8s ease-in-out 0.3s; }
+  .tag-item:nth-child(1) { animation:etiket-parilti 1.4s ease-in-out 5.1s; }
+  .tag-item:nth-child(2) { animation:etiket-parilti 1.4s ease-in-out 7.3s; }
+  .tag-item:nth-child(3) { animation:etiket-parilti 1.4s ease-in-out 9.5s; }
+
+  /* Hareket hassasiyeti olan ziyaretçide kapalı — dekoratif bir efekt için
+     standart karşılık. Arka plan parallax'ı JS tarafında ayrıca kapanıyor. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-title, .tag-item { animation:none; }
+  }
+
+  /* min-height:0 şart: flex çocuğunun varsayılan min-height'ı `auto`, bu da
+     içindeki .landing-right'ın kendi kaydırma alanını oluşturmasını engelleyip
+     taşmasına yol açıyor. Sıfırlanınca sağ panel yine kendi içinde kayıyor. */
+  .landing-split { position:relative; flex:1 1 auto; display:flex; width:100%; min-height:0; overflow:hidden; }
+
+  /* Bölüm okları — çerçevesiz, sadece çizgi. Kutu/daire yok: buton arka planı
+     ve kenarlığı sıfırlandı, geriye yalnızca çatı (^) ve v biçimi kalıyor.
+     .landing-right'ın İÇİNDE değiller; orada kenar solması (mask) onları da
+     soldururdu, o yüzden panelin üstünde ayrı bir katman olarak duruyorlar. */
+  /* left:75% — sağ yarının ortası (sağ yarı %50'den %100'e uzanıyor, ortası
+     %75). translateX(-50%) ile kendi genişliğinin yarısı kadar geri alınıyor,
+     böylece metin kolonuyla aynı eksende duruyorlar. Panelin içinde değil
+     üstünde: içeride olsalar bölümlerle birlikte kayıp giderlerdi. */
+  .scroll-arrow { position:absolute; left:75%; transform:translateX(-50%); z-index:3;
+    background:none; border:none; padding:0.3rem; cursor:pointer; color:var(--white);
+    opacity:0.5; transition:opacity 0.2s; }
+  .scroll-arrow:hover { opacity:1; }
+  .scroll-arrow:disabled { opacity:0.12; cursor:default; }
+  /* Yatayda 1.5x, dikeyde 1.2x — 17px tabandan 25.5 x 20.4px. Çizim bu orana
+     esnesin diye SVG'de preserveAspectRatio="none" var; yoksa kare viewBox
+     içinde oranını koruyup sadece ortalanırdı. Çizgi kalınlığının esnemeyle
+     bozulmaması için polyline'da vector-effect="non-scaling-stroke". */
+  .scroll-arrow svg { width:25.5px; height:20.4px; display:block; }
+  #arrow-up { top:1.6rem; }
+  #arrow-down { bottom:1.6rem; }
+
+  /* Tam yarı yarıya. flex-basis:50% + flex-grow:0 ile sağ panel kalan %50'yi
+     alıyor; sınır çizgisi border-box sayesinde genişliğin içinde kalıyor,
+     yani iki yarı birbirine eşit. */
+  /* padding iki blokta da 2.5rem — metin ortadaki ayırıcı çizgiden iki yanda
+     da aynı mesafede başlıyor. Önceden sol 3rem/2.5rem, sağ 4rem/3rem idi;
+     yatayda 0.5rem'lik fark çizginin iki yanını asimetrik gösteriyordu. */
+  /* Üstten --ust-hiza kadar boşlukla başlıyor, ortalama YOK. Ortalandığında
+     konum kendi içerik yüksekliğine bağlı kalıyordu; sağ sütun farklı
+     yükseklikte olduğu için ikisini aynı hizaya getirmenin matematiksel bir
+     yolu olmuyordu. İkisi de aynı değişkeni kullanınca hiza kilitleniyor.
+     Sağ padding 2.5 → 1.5rem: ortaya bakan kenardan 1rem alındı. */
+  .landing-left { flex:0 0 50%; display:flex; align-items:flex-start; justify-content:center; padding:var(--ust-hiza) 0.5rem 2.5rem 2.5rem; }
+  /* 30rem idi: üç eğitmen adı + ayraçlar ~34.4rem yer istiyor, sığmayınca
+     "Ebru Evin" alt satıra düşüyordu. 38rem ikisine de yetiyor.
+     Not: ~1270px altındaki ekranlarda sol yarının kendisi bu kadar geniş
+     olmadığı için satır yine kırılır — ama .ad üzerindeki nowrap sayesinde
+     kırılma isimler ARASINDAKİ ayraçta olur, ismin ortasında değil. */
+  .landing-left-inner { display:flex; flex-direction:column; align-items:center; text-align:center; max-width:38rem; }
+
+  /* Sağ yarı kendi içinde kayıyor. Scrollbar gizli — çubuk istenmedi.
+     Gizlemek erişilebilirliği bozmuyor: tekerlek, klavye (sekme/ok tuşları,
+     aşağıdaki tabindex sayesinde) ve dokunmatik aynen çalışıyor. */
+  .landing-right { flex:1 1 auto; overflow-y:auto; scroll-behavior:smooth; scrollbar-width:none; -ms-overflow-style:none; position:relative;
+    /* Bölüm bölüm geçiş (Feral Atlas'taki gibi): metin serbest akmıyor, her
+       bölüm kendi durağına oturuyor. `proximity` değil `mandatory`: proximity
+       yakın durağa çekiyor ama arada da bırakabiliyor, yarım bölümde asılı
+       kalınıyordu. Durak hizası start — bölümün üstü panelin üstüne gelir. */
+    scroll-snap-type:y mandatory;
+    /* Üstte ve altta metin sert kesilmek yerine soluyor — kaydırılacak
+       içerik olduğunun sessiz işareti, çubuk koymadan. */
+    -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 3.5rem, #000 calc(100% - 3.5rem), transparent 100%);
+    mask-image:linear-gradient(to bottom, transparent 0, #000 3.5rem, #000 calc(100% - 3.5rem), transparent 100%); }
+  .landing-right::-webkit-scrollbar { display:none; }
+  .landing-right:focus-visible { outline:none; }
+
+  /* İnce ilerleme çizgisi — iki yarının arasındaki sınırın üstünde büyüyor.
+     Sürüklenebilir bir çubuk değil, sadece nerede olduğunu gösteren bir iz. */
+  .scroll-progress { position:absolute; top:0; left:0; width:1px; height:0; background:var(--white); opacity:0.55; z-index:5; transition:height 0.1s linear; }
+
+  /* Artık tam genişlikte duruyor, dar kolona sıkışmıyor — üst sınır 3.4rem'den
+     4.2rem'e çıkarıldı ki geniş ekranda şeridin içinde küçük kalmasın. */
+  .hero-title { font-family:var(--font-heading); font-size:clamp(2rem,4.6vw,4.2rem); font-weight:400; letter-spacing:0.16em; text-transform:uppercase; line-height:1.15; color:var(--white); margin:0; }
+  .hero-subtitle { font-size:clamp(0.9rem,1.5vw,1.1rem); font-style:italic; color:var(--mid); letter-spacing:0.04em; margin-bottom:2rem; }
+  /* opacity:1 — sağdaki .description p ile aynı. 0.85 iken sol taraf gözle
+     görülür biçimde sönük kalıyordu. Alttaki "Powered and Developed by"
+     bloğu kendi satır içi opacity'siyle bilerek daha sönük kalmaya devam
+     ediyor; o ikincil künye, ana eğitmen satırıyla eşit olmamalı. */
+  .hero-editors { font-size:0.82rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); opacity:1; margin-bottom:2.6rem; line-height:2; }
   .hero-editors .label { display:block; font-size:0.68rem; opacity:0.9; margin-bottom:0.2rem; }
+  /* Bir isim ortadan bölünmesin: satır sonu ancak isimler ARASINDAKİ
+     ayraçta olur, "Ebru Evin"in "Evin"i alt satıra düşmez. Punto, satır
+     yüksekliği ve kolon genişliği değişmiyor — sadece kırılma noktası. */
+  .hero-editors .ad { white-space:nowrap; }
+  /* İkincil künye. Akademik sıralama: dersi yürüten hocalar önde, siteyi
+     geliştiren arkada. Önceden ikisi de 0.82rem'di ve ayrım yalnızca satır
+     içi opacity'den geliyordu — aynı puntoda olunca eşit ağırlıkta okunuyordu.
+     Şimdi punto ve opaklık birlikte düşüyor, fark tek bakışta görülüyor. */
+  .hero-editors--ikincil { font-size:0.7rem; opacity:0.5; margin-bottom:2.4rem; }
+  .hero-editors--ikincil .label { font-size:0.62rem; }
   .btn-enter { display:inline-block; padding:0.85rem 3.8rem; border:1px solid rgba(245,242,235,0.4); color:var(--white); font-family:var(--font); font-size:0.92rem; letter-spacing:0.28em; text-transform:uppercase; text-decoration:none; position:relative; overflow:hidden; transition:border-color 0.3s; cursor:pointer; }
   .btn-enter::before { content:''; position:absolute; inset:0; background:var(--white); transform:translateY(101%); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1); z-index:0; }
   .btn-enter span { position:relative; z-index:1; transition:color 0.35s; }
   .btn-enter:hover { border-color:var(--white); }
   .btn-enter:hover::before { transform:translateY(0); }
   .btn-enter:hover span { color:var(--black); }
-  .scroll-hint { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.2; z-index:1; }
-  .description { max-width:680px; margin:0 auto; padding:5rem 2rem 4rem; border-top:1px solid var(--border); }
-  .description h2 { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--mid); opacity:0.7; font-weight:400; margin-bottom:1.6rem; }
-  .description p { font-size:1.1rem; line-height:1.85; opacity:0.82; margin-bottom:1.5rem; font-style:italic; }
+  /* Opaklıklar bu blokta 1.3 katına çıkarıldı (1'de kırpılarak): metin koyu
+     zeminde sönük kalıyordu. 0.82 → 1, 0.75 → 0.98, 0.58 → 0.75 gibi. */
+  /* Her durak en az panel yüksekliğinde; içerik uzunsa büyüyor, kısaysa
+       dikeyde ortalanıyor ki tek paragraflık bölüm üstte asılı kalmasın.
+     scroll-snap-stop:always — hızlı tekerlek hareketinde bölüm atlanmasın. */
+  /* justify-content:flex-start — ortalama DEĞİL. Ortalandığında her bölüm
+     kendi metin uzunluğuna göre farklı yükseklikten başlıyordu: kısa bölüm
+     aşağıda, uzun bölüm yukarıda. Üste sabitlenince hepsi aynı hizadan
+     (padding-top) başlıyor ve soldaki künye bloğuyla da eşleşiyor. */
+  .panel { min-height:100%; display:flex; flex-direction:column; justify-content:flex-start; scroll-snap-align:start; scroll-snap-stop:always; }
+  .panel + .panel { border-top:1px solid var(--border); }
+
+  /* margin:0 auto — blok panelin içinde yatayda ortalanıyor, sola
+     yaslanmıyor. width:100% gerekli: .panel bir flex kolonu, auto margin
+     çalışsın diye kutunun kendi genişliğini alması lazım. */
+  .description { max-width:40rem; margin:0 auto; padding:var(--ust-hiza) 2.5rem 2.5rem 0.5rem; width:100%; }
+  .description h2 { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--mid); opacity:0.91; font-weight:400; margin-bottom:1.6rem; }
+  /* text-align:justify — iki yana yaslı. hyphens:auto onun tamamlayıcısı,
+     süs değil: 40rem'lik dar bir kolonda tireleme olmadan uzun kelimeler
+     satır içinde büyük beyaz boşluklar ("nehirler") bırakıyor. <html lang="en">
+     tanımlı olduğu için tarayıcı doğru dilde heceliyor. */
+  /* font-style YOK. Burada italic vardı ama o, bu alanda duran Lorem ipsum
+     yer tutucusundan kalmaydı — kaynak docx'in gövde paragraflarında hiç
+     italik geçmiyor. İtalik yalnızca kavram sorularına ait (.concept-question),
+     metnin kendi vurgusu orada. */
+  .description p { font-size:1.05rem; line-height:1.85; opacity:1; margin-bottom:1.5rem; text-align:justify; hyphens:auto; -webkit-hyphens:auto; }
   .description p:last-child { margin-bottom:0; }
-  .quotes { max-width:720px; margin:0 auto; padding:2rem 2rem 5rem; }
-  .quote-item { padding:2.2rem 0; border-top:1px solid var(--border); }
-  .quote-item:last-child { border-bottom:1px solid var(--border); }
-  .quote-text { font-size:1.05rem; font-style:italic; line-height:1.8; opacity:0.78; margin-bottom:0.6rem; }
-  .quote-attr { font-size:0.8rem; letter-spacing:0.08em; color:var(--mid); opacity:0.7; }
-  .credits { padding:4rem 2rem 3rem; border-top:1px solid var(--border); max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:3rem 2rem; }
-  .credit-group h3 { font-family:var(--font-heading); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); opacity:0.8; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); font-weight:400; }
-  .credit-group ul { list-style:none; }
-  .credit-group li { font-size:0.88rem; line-height:1.9; opacity:0.85; }
-  footer { border-top:1px solid var(--border); padding:2rem 2.5rem; text-align:center; font-size:0.78rem; opacity:0.35; letter-spacing:0.05em; line-height:2; }
+  /* Üç kavram bloğu (visibility / (in)habitability / transportability).
+     Metnin kendi yapısı: başlık, altında soru, altında gövde. .description p
+     italik olduğu için gövde burada roman'a çekiliyor — yoksa soruyu ayıran
+     italik vurgu kayboluyor, blok tek bir italik yığına dönüyordu.
+     Seçiciler .description ile başlıyor ki yukarıdaki p kuralını geçsinler. */
+  .description.concept h3 { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; font-weight:400; opacity:0.98; margin-bottom:0.7rem; }
+  .description .concept-question { font-style:italic; opacity:0.75; margin-bottom:0.9rem; }
+  .description .concept-body { font-style:normal; }
+
+  /* EMEĞİ GEÇENLER — 26 öğrenci, alt alta liste değil yan yana akan tek blok.
+     Ayraç CSS'ten (::after) geliyor, metne elle "·" yazılmıyor: son isimden
+     sonra ayraç kalmasın diye :last-child ile kapatılıyor, ve ekran okuyucu
+     isimlerin arasına noktalama uydurmuyor. */
+  .contributors { max-width:40rem; margin:0 auto; padding:var(--ust-hiza) 2.5rem 2.5rem 0.5rem; width:100%; text-align:center; }
+  .contributors h3 { font-family:var(--font-heading); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); margin-bottom:1.2rem; font-weight:400; }
+  /* display:inline — flex DEĞİL. Flex'te her <li> ayrı bir öğe olduğu için
+     her grup kendi satırına düşüyor ve madde listesi gibi duruyordu. Inline
+     olunca isimler sürekli metin gibi akıyor, satır dolunca kırılıyor. */
+  .contributor-names { list-style:none; font-size:0.88rem; line-height:1.9; opacity:1; }
+  .contributor-names li { display:inline; }
+  /* Noktanın iki yanındaki boşluk 0.55em idi — toplam 1.1em, grup arası ayrım
+     isim arası virgüllere göre fazla keskin kalıyordu. 0.3em (toplam 0.6em)
+     ayrımı koruyor ama satırı tek akış olarak okutuyor. */
+  .contributor-names li::after { content:'·'; opacity:0.4; margin:0 0.3em; }
+  .contributor-names li:last-child::after { content:''; margin:0; }
+
+  /* Alttaki tam genişlik şerit — üstteki .landing-header'ın karşılığı.
+     flex:0 0 auto ile kendi yüksekliğini alıyor, kalan yeri .landing-split
+     dolduruyor. Çerçeve çizgisi yok: üstteki başlık şeridinde de yok. */
+  .landing-footer { flex:0 0 auto; padding:0 2.5rem 2.5rem; text-align:center; font-size:0.78rem; opacity:0.46; letter-spacing:0.05em; }
+
+  /* Dar ekranda yan yana düzen çökertiliyor: iki sütun alt alta geliyor ve
+     kaydırma sağ panelden sayfanın kendisine devrediliyor. İç kaydırmayı
+     telefonda bırakmak, sayfa içinde ikinci bir kaydırma alanı yaratıp
+     parmağın hangi katmanı kaydırdığını belirsizleştiriyordu. Kenar solması
+     ve ilerleme çizgisi de burada kapatılıyor — ikisi de iç kaydırmaya ait. */
+  @media (max-width: 900px) {
+    .landing { height:auto; overflow:visible; }
+    .landing-header { padding:3.5rem 1.6rem 0; }
+    /* İki sütun alt alta iniyor ve kaydırma sağ panelden sayfanın kendisine
+       devrediliyor — telefonda iç içe iki kaydırma alanı parmağı şaşırtıyor. */
+    .landing-split { flex-direction:column; min-height:0; overflow:visible; }
+    .landing-left { flex:0 0 auto; border-right:none; border-bottom:1px solid var(--border); padding:3rem 1.6rem 3.5rem; min-height:0; }
+    .landing-right { overflow:visible; scroll-snap-type:none; -webkit-mask-image:none; mask-image:none; }
+    .panel { min-height:0; scroll-snap-align:none; }
+    .scroll-progress { display:none; }
+    .description, .contributors { padding-left:1.6rem; padding-right:1.6rem; }
+    .description { max-width:none; padding-top:3.5rem; }
+  }
 
   @media (max-width: 640px) {
-    .hero-title { font-size:clamp(2.4rem,11vw,3.2rem); letter-spacing:0.1em; }
+    .hero-title { font-size:clamp(2rem,9vw,2.8rem); letter-spacing:0.1em; }
     .hero-subtitle { font-size:1rem; margin-bottom:1.6rem; }
     .hero-editors { font-size:0.8rem; margin-bottom:2.4rem; line-height:1.9; }
     .btn-enter { padding:0.85rem 2.4rem; font-size:0.85rem; letter-spacing:0.2em; }
     .btn-enter:active::before { transform:translateY(0); }
     .btn-enter:active span { color:var(--black); }
     .btn-enter:active { border-color:var(--white); }
-    .scroll-hint { display:none; }
-    .description { padding:3.5rem 1.4rem 3rem; }
     .description p { font-size:1rem; }
-    .quotes { padding:1rem 1.4rem 3.5rem; }
-    .quote-text { font-size:1rem; }
-    .credits { padding:3rem 1.4rem 2rem; gap:2rem 1.4rem; }
-    footer { padding:1.8rem 1.4rem; }
+    .landing-footer { padding:0 1.6rem 2rem; }
   }
 </style>
 </head>
 <body>
-<div class="hero-screen">
-  <div class="hero-content">
-    <h1 class="hero-title">Reflections on Landscape</h1>
+<!-- Kontur çizgileri: explore.html'deki By Content arka planının Soil
+     desenindeki beş eğrinin aynısı. Orada JS ile basılıyor çünkü tema
+     değiştikçe desen de değişiyor; burada tek desen olduğu için doğrudan
+     markup'a yazıldı, üretecek bir şey yok. -->
+<div class="content-bg" id="content-bg" aria-hidden="true">
+  <svg viewBox="0 0 1000 700" preserveAspectRatio="none">
+    <path d="M -50,120 C 150,60 350,180 550,110 S 900,40 1050,100"></path>
+    <path d="M -50,230 C 180,170 320,290 560,220 S 880,160 1050,210"></path>
+    <path d="M -50,340 C 160,300 380,400 540,330 S 900,280 1050,330"></path>
+    <path d="M -50,450 C 200,390 340,480 580,410 S 860,370 1050,440"></path>
+    <path d="M -50,560 C 170,510 360,600 550,530 S 900,490 1050,550"></path>
+    <!-- Bu ikisi explore.html'de yok, bu sayfaya özel. Oradaki beş eğri
+         y=120..560 arasında duruyor ve 560'ın altı boş kalıyordu — tam da sol
+         sütunun bittiği, sayfanın boşaldığı bölge. Aralık da 110'dan ~60'a
+         iniyor: çizgiler aşağı doğru sıklaşıyor, zemin kalınlaşıyor gibi
+         okunuyor. viewBox 700 ile sınırlı, kontrol noktaları onu aşmıyor
+         yoksa eğrinin tepesi kırpılırdı. -->
+    <path d="M -50,618 C 185,562 360,668 545,598 S 885,548 1050,612"></path>
+    <path d="M -50,676 C 170,628 365,700 540,656 S 900,610 1050,670"></path>
+  </svg>
+</div>
+
+<div class="landing">
+
+<!-- Ders adı iki bloğun da üstünde, tam genişlikte. Solun içindeyken 30rem'lik
+     kolona sıkışıp üç satıra kırılıyordu; burada tek satıra sığıyor ve iki
+     sütunun ortak başlığı olduğu okunuyor. -->
+<header class="landing-header">
+  <h1 class="hero-title">Reflections on Landscape</h1>
+  <!-- Üçü ayrı <span>: her biri kendi gecikmesiyle tek tek parlayacak.
+       Ayraçlar span'lerin dışında, onlar yanmıyor. -->
+  <p class="hero-tagline">
+    <span class="tag-item">Visibility</span> ·
+    <span class="tag-item">(In)habitability</span> ·
+    <span class="tag-item">Transportability</span>
+  </p>
+</header>
+
+<div class="landing-split">
+<div class="landing-left">
+  <div class="landing-left-inner">
     <div class="hero-editors">
       <span class="label">Curated and Taught by</span>
-      Funda Baş Bütüner, Gizem Deniz Güneri Söğüt, Ebru Evin<br>
+      <span class="ad">Funda Baş Bütüner</span> · <span class="ad">Gizem Deniz Güneri Söğüt</span> · <span class="ad">Ebru Evin</span><br>
       METU · Department of Architecture
     </div>
-    <div class="hero-editors" style="margin-bottom:2.4rem;opacity:0.5;">
+    <div class="hero-editors hero-editors--ikincil">
       <span class="label">Powered and Developed by</span>
       Oğuzhan Kaya
     </div>
     <a href="explore.html" class="btn-enter"><span>Explore</span></a>
     <p class="hero-subtitle" style="margin-bottom:0;margin-top:2rem;">Urban Soil Metabolism · Spring 2026</p>
   </div>
-  <p class="scroll-hint">&#8595; scroll</p>
 </div>
-<section class="description">
+
+<!-- tabindex: scrollbar gizli olduğu için bu panelin klavyeyle de
+     kaydırılabilmesi gerekiyor; odaklanabilir olmadan ok tuşları işlemiyor. -->
+<div class="landing-right" id="landing-right" tabindex="0">
+<div class="scroll-progress" id="scroll-progress"></div>
+<!-- Her <section class="panel"> bir kaydırma durağı: panel yukarıdaki
+     scroll-snap-type ile bölümden bölüme geçiyor, metin serbest akmıyor.
+     Künye bloğu (Curated and Taught by / Institution / Powered and Developed
+     by) buradan kaldırıldı — aynı bilgi solda zaten duruyordu. -->
+<section class="panel description">
   <h2>Reflections on Landscape</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur — excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <p>“Urban Soil Metabolism” examines soil as a living, active urban medium — continuously produced, displaced, transformed, and regulated through intertwined human and non-human forces. Developed within the graduate course ARCH 728: Reflections on Landscape at the METU Department of Architecture, the research traces the multiscalar, temporal, and processual dimensions of landscape by bringing landscape knowledge into dialogue with architecture, urbanism, infrastructure, and ecology. Focusing on Ankara, it foregrounds soil’s agency, revealing the ground as an active site of planetary environmental crises and urban transformation.</p>
+  <p>Through this lens, soil is approached not as a stable substrate but as a medium whose presence, vitality, and movement are continuously negotiated within the city. The research unfolds around three interconnected concepts — visibility, (in)habitability, and transportability — each tracing a distinct dimension of soil’s urban agency.</p>
 </section>
-<div class="credits">
-  <div class="credit-group">
-    <h3>Curated and Taught by</h3>
-    <ul><li>Funda Baş Bütüner</li><li>Gizem Deniz Güneri Söğüt</li><li>Ebru Evin</li></ul>
-  </div>
-  <div class="credit-group">
-    <h3>Institution</h3>
-    <ul><li>METU · Department of Architecture</li></ul>
-  </div>
-  <div class="credit-group">
-    <h3>Powered and Developed by</h3>
-    <ul><li>Oğuzhan Kaya</li></ul>
-  </div>
-</div>
-<footer><p>© 2026 METU · ARCH 728 · Spring Semester</p></footer>
+
+<section class="panel description concept">
+  <h3>Visibility</h3>
+  <p class="concept-question">When does soil become visible — and when is it rendered invisible in the city?</p>
+  <p class="concept-body">Soil becomes visible at moments of disruption, failure, or intervention, and recedes from view through stabilization, coverage, and standardization. Excavation, contamination, and infrastructural breakdown bring soil to the surface of urban attention, while in everyday conditions it is aestheticized, sealed, or folded into the background of urban life. The projects trace the practices, representations, and thresholds through which soil enters — and exits — public awareness.</p>
+</section>
+
+<section class="panel description concept">
+  <h3>(In)habitability</h3>
+  <p class="concept-question">When is soil alive, inert, or waste? And whose labor sustains it?</p>
+  <p class="concept-body">Across urban processes, soil shifts between conditions that enable or restrict its capacity to host life. What is treated as a living medium in one context may be rendered inert or disposable in another through changes in structure, compaction, contamination, and management. This distinction is not merely biological but political: it rests on a regime of care, sustained by often unseen labor, in which certain grounds are maintained as valuable landscape while others are cast as “matter out of place” to justify their neglect. The projects examine how social definitions of purity and waste shape the conditions under which soil becomes inhabitable — or is actively rendered otherwise.</p>
+</section>
+
+<section class="panel description concept">
+  <h3>Transportability</h3>
+  <p class="concept-question">What does soil carry and transform as it moves?</p>
+  <p class="concept-body">As soil circulates through the city, it transports more than matter. It carries traces of previous sites, ecological relations, and social decisions. Transport alters its composition, meaning, and potential as materials are displaced, mixed, and reassembled. The projects follow soil as a carrier, reading transformation through movement rather than origin alone.</p>
+</section>
+
+<section class="panel contributors">
+  <h3>Contributors</h3>
+  <!-- Her <li> bir proje grubu: grup içindeki isimler virgülle, gruplar
+       birbirinden CSS'teki ::after noktasıyla ayrılıyor. Böylece tek satır
+       akışı korunurken sekiz ekibin sınırı görünüyor. Yıl başlıkta duruyor
+       çünkü liste her dönem büyüyecek. -->
+  <ul class="contributor-names">
+    <li>Bilge Nur Ateş, Elif Bilge Küçükkülahlı, İrem Çiçen</li>
+    <li>Nisa Gezer, Selen İlhan, Serda Buket Erol, Ülkü Karakaş</li>
+    <li>Sude Songur, Daria Świech, Marta Winnicka</li>
+    <li>Ece Begüm Kokudal, Fatma Fulya Akın, Elif Nur Bek, Ceren Gül Sungun</li>
+    <li>Ömür Buğra Gündüz, Nil Erdem</li>
+    <li>Elif Ceyhan, Hatice Köksal, İnci Ergün, İpek Deniz Alpdoğan Kaya</li>
+    <li>Ali Onur Demirçalı, Nisa Keleş, Oğuzhan Kaya</li>
+    <li>Alp Sayın, Zeynep Kurd, Talha Boz</li>
+  </ul>
+</section>
+</div><!-- /.landing-right -->
+
+<button class="scroll-arrow" id="arrow-up" type="button" aria-label="Previous section">
+  <svg viewBox="0 0 24 24" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15" vector-effect="non-scaling-stroke"></polyline></svg>
+</button>
+<button class="scroll-arrow" id="arrow-down" type="button" aria-label="Next section">
+  <svg viewBox="0 0 24 24" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" vector-effect="non-scaling-stroke"></polyline></svg>
+</button>
+</div><!-- /.landing-split -->
+
+<!-- Telif satırı sağ panelin içinde, contributors'ın altındaydı; oraya
+     ulaşmak için kaydırmak gerekiyordu. Üstteki başlık şeridiyle simetrik
+     olarak en alta, iki sütunun da altına tam genişlikte alındı. -->
+<footer class="landing-footer"><p>© 2026 METU · ARCH 728 · Spring Semester</p></footer>
+</div><!-- /.landing -->
 <script>
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') window.location.href = 'explore.html';
   });
+
+  // Arka plan parallax — explore.html'dekiyle aynı davranış: fare merkezden
+  // uzaklaştıkça kontur katmanı çok az kayıyor (BG_RATIO 0.03) ve lerp ile
+  // yumuşatılıyor, böylece imleci takip etmiyor, ağır ağır peşinden geliyor.
+  // Orada GSAP kullanılıyor; burada tek bir transform için kütüphane yüklemek
+  // yerine aynı iş saf JS ile yapılıyor — gsap.set(el,{x:'%',y:'%'}) zaten
+  // translate()'e çevriliyordu.
+  (function () {
+    var bg = document.getElementById('content-bg');
+    if (!bg) return;
+    // Dokunmatikte imleç yok: efekt çalışmaz, boşuna kare döndürmeyelim.
+    if (window.matchMedia('(hover: none)').matches) return;
+
+    var BG_RATIO = 0.03, hedefX = 0, hedefY = 0, x = 0, y = 0;
+
+    window.addEventListener('mousemove', function (e) {
+      hedefX = (e.clientX - window.innerWidth / 2) * BG_RATIO;
+      hedefY = (e.clientY - window.innerHeight / 2) * BG_RATIO;
+    }, { passive: true });
+
+    (function dongu() {
+      x += (hedefX - x) * 0.03;          // lerp
+      y += (hedefY - y) * 0.03;
+      bg.style.transform = 'translate(' + x + '%,' + y + '%)';
+      requestAnimationFrame(dongu);
+    })();
+  })();
+
+  // Sağ panelin kaydırma ilerlemesini iki yarının arasındaki çizgiye yazar.
+  // Mobilde panel kendi içinde kaymıyor (bkz. 900px media query) ve çizgi
+  // zaten gizli, o yüzden orada boşuna çalışmasın diye kaydırma miktarı
+  // sıfırsa çıkılıyor.
+  (function () {
+    var panel = document.getElementById('landing-right');
+    var bar = document.getElementById('scroll-progress');
+    if (!panel || !bar) return;
+
+    function update() {
+      var kaydirilabilir = panel.scrollHeight - panel.clientHeight;
+      if (kaydirilabilir <= 0) { bar.style.height = '0'; return; }
+      bar.style.height = (panel.scrollTop / kaydirilabilir * 100) + '%';
+    }
+
+    panel.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+
+    // ── Bölüm okları ──────────────────────────────────────────────────────
+    // Sayfayı piksel piksel değil, bölümden bölüme taşıyor — sağ panelde
+    // zaten scroll-snap var, oklar da aynı duraklara gidiyor.
+    var yukari = document.getElementById('arrow-up');
+    var asagi = document.getElementById('arrow-down');
+    var bolumler = Array.prototype.slice.call(panel.querySelectorAll('.panel'));
+    if (!yukari || !asagi || !bolumler.length) return;
+
+    // O an hangi bölümdeyiz: üstü panelin tepesine en yakın olan.
+    function aktifIndeks() {
+      var en = 0, enYakin = Infinity;
+      bolumler.forEach(function (b, i) {
+        var fark = Math.abs(b.offsetTop - panel.scrollTop);
+        if (fark < enYakin) { enYakin = fark; en = i; }
+      });
+      return en;
+    }
+
+    function git(yon) {
+      var h = aktifIndeks() + yon;
+      if (h < 0 || h >= bolumler.length) return;
+      panel.scrollTo({ top: bolumler[h].offsetTop, behavior: 'smooth' });
+    }
+
+    yukari.addEventListener('click', function () { git(-1); });
+    asagi.addEventListener('click', function () { git(1); });
+
+    // İlk/son bölümde ilgili ok sönükleşip devre dışı kalıyor — tıklayınca
+    // hiçbir şey olmayan bir düğme bırakmamak için.
+    function oklariGuncelle() {
+      var i = aktifIndeks();
+      yukari.disabled = (i === 0);
+      asagi.disabled = (i === bolumler.length - 1);
+    }
+    panel.addEventListener('scroll', oklariGuncelle, { passive: true });
+    window.addEventListener('resize', oklariGuncelle);
+    oklariGuncelle();
+  })();
 </script>
 </body>
 </html>

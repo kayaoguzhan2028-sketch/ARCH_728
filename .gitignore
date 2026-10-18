@@ -1,1 +1,7 @@
 pages-word/
+
+# Metin kaynakları — sayfaların içeriği bunlardan yazılıyor ama sitenin
+# parçası değiller, repoya girmesinler. (ör. 728_web_intro.docx — anasayfadaki
+# giriş metninin kaynağı.)
+*.docx
+*.doc
